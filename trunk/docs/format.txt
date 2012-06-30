@@ -32,6 +32,9 @@ string_without_spaces_does_not_need_to_be_enclosed_in_double_quotes
 	//Property is declared as: <name> = <value>
 	"some property" = "object"
 
+	//TODO: do we need properties at all?
+	xy = "123.32, 3212"
+	xy{"123123, 323"}
 
 	//Property name does not need double quotes if it satisfies similar rules for strings:
 	property_name_with_no_spaces = "Property value"
