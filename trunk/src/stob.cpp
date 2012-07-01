@@ -58,11 +58,20 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 				case '\r':
 				case '\n':
 				case '\t':
+				case '{':
+				case '}':
 					//string end
 					listener.OnStringParsed(reinterpret_cast<char*>(this->buf->Begin()), this->p - this->buf->Begin());
 					this->arrayBuf.Reset();
 					this->buf = &this->staticBuf;
 					this->state = IDLE;
+					
+					if(c == '{'){
+						//TODO:
+					}else if(c == '}'){
+						//TODO:
+					}
+					
 					return;
 //					break;
 				default:
@@ -92,6 +101,7 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 
 void Parser::ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& listener){
 	for(const ting::u8* s = chunk.Begin(); s != chunk.End(); ++s){
+		TRACE(<< "Parser::ParseDataChunk(): *s = " << (*s) << std::endl)
 		
 		//skip comments if needed
 		if(this->commentState != NO_COMMENT){
