@@ -108,6 +108,103 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 
 
 
+void Parser::PreParseChar(ting::u8 c, ParseListener& listener){
+	if(this->prevChar != 0){
+		if(this->prevChar == '/'){//possible comment sequence
+			if(c == '/'){
+				this->commentState = LINE_COMMENT;
+			}else if(c == '*'){
+				this->commentState = MULTILINE_COMMENT;
+			}else{
+				this->ParseChar('/', listener);
+
+				//TODO: check if QUOTED_STRING and c == '"'
+				this->ParseChar(c, listener);
+			}
+		}else{
+			switch(this->state){
+				case IDLE:
+				case UNQUOTED_STRING:
+					ASSERT(false)
+					break;
+				case QUOTED_STRING:
+					ASSERT(this->prevChar == '\\')//escape sequence
+					switch(c){
+						case '\\'://backslash
+							this->ParseChar('\\', listener);
+							break;
+						case '/'://slash
+							this->ParseChar('/', listener);
+							break;
+						case '"':
+							this->ParseChar('"', listener);
+							break;
+						case 'n':
+							this->ParseChar('\n', listener);
+							break;
+						case 't':
+							this->ParseChar('\t', listener);
+							break;
+						default:
+							{
+								std::stringstream ss;
+								ss << "Malformed document. Unknown escape sequence on line: ";
+								ss << this->curLine;
+								throw stob::Exc(ss.str());
+							}
+							break;
+					}
+					break;
+				default:
+					ASSERT(false)
+					break;
+			}
+		}
+		this->prevChar = 0;
+	}else{//~if(this->prevChar == 0)
+		if(c == '/'){//possible comment sequence
+			this->prevChar = '/';
+		}else{
+			switch(this->state){
+				case QUOTED_STRING:
+					switch(c){
+						case '\\': //escape sequence
+							this->prevChar = '\\';
+							break;
+						case '"':
+//								TRACE(<< "qsp = " << std::string(reinterpret_cast<char*>(this->buf->Begin()), 11) << std::endl)
+							//string end
+							listener.OnStringParsed(reinterpret_cast<char*>(this->buf->Begin()), this->p - this->buf->Begin());
+							this->arrayBuf.Reset();
+							this->buf = &this->staticBuf;
+							this->p = this->buf->Begin();
+							this->state = IDLE;
+							break;
+						case '\n':
+							++this->curLine;
+						case '\r':
+						case '\t':
+							//ignore
+							break;
+						default:
+							this->ParseChar(c, listener);
+							break;
+					}
+					break;
+				case UNQUOTED_STRING:
+				case IDLE:
+					this->ParseChar(c, listener);
+					break;
+				default:
+					ASSERT(false)
+					break;
+			}
+		}
+	}
+}
+
+
+
 void Parser::ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& listener){
 	for(const ting::u8* s = chunk.Begin(); s != chunk.End(); ++s){
 //		TRACE(<< "Parser::ParseDataChunk(): *s = " << (*s) << std::endl)
@@ -146,102 +243,24 @@ void Parser::ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& 
 			continue;
 		}
 		
-		
-		
-		if(this->prevChar != 0){
-			if(this->prevChar == '/'){//possible comment sequence
-				if(*s == '/'){
-					this->commentState = LINE_COMMENT;
-				}else if(*s == '*'){
-					this->commentState = MULTILINE_COMMENT;
-				}else{
-					this->ParseChar('/', listener);
-					
-					//TODO: check if QUOTED_STRING and *s == '"'
-					this->ParseChar(*s, listener);
-				}
-			}else{
-				switch(this->state){
-					case IDLE:
-					case UNQUOTED_STRING:
-						ASSERT(false)
-						break;
-					case QUOTED_STRING:
-						ASSERT(this->prevChar == '\\')//escape sequence
-						switch(*s){
-							case '\\'://backslash
-								this->ParseChar('\\', listener);
-								break;
-							case '/'://slash
-								this->ParseChar('/', listener);
-								break;
-							case '"':
-								this->ParseChar('"', listener);
-								break;
-							case 'n':
-								this->ParseChar('\n', listener);
-								break;
-							case 't':
-								this->ParseChar('\t', listener);
-								break;
-							default:
-								{
-									std::stringstream ss;
-									ss << "Malformed document. Unknown escape sequence on line: ";
-									ss << this->curLine;
-									throw stob::Exc(ss.str());
-								}
-								break;
-						}
-						break;
-					default:
-						ASSERT(false)
-						break;
-				}
-			}
-			this->prevChar = 0;
-		}else{//~if(this->prevChar == 0)
-			if(*s == '/'){//possible comment sequence
-				this->prevChar = '/';
-			}else{
-				switch(this->state){
-					case QUOTED_STRING:
-						switch(*s){
-							case '\\': //escape sequence
-								this->prevChar = '\\';
-								break;
-							case '"':
-//								TRACE(<< "qsp = " << std::string(reinterpret_cast<char*>(this->buf->Begin()), 11) << std::endl)
-								//string end
-								listener.OnStringParsed(reinterpret_cast<char*>(this->buf->Begin()), this->p - this->buf->Begin());
-								this->arrayBuf.Reset();
-								this->buf = &this->staticBuf;
-								this->p = this->buf->Begin();
-								this->state = IDLE;
-								break;
-							case '\n':
-								++this->curLine;
-							case '\r':
-							case '\t':
-								//ignore
-								break;
-							default:
-								this->ParseChar(*s, listener);
-								break;
-						}
-						break;
-					case UNQUOTED_STRING:
-					case IDLE:
-						this->ParseChar(*s, listener);
-						break;
-					default:
-						ASSERT(false)
-						break;
-				}
-			}
-		}
+		this->PreParseChar(*s, listener);
 		
 	}//~for(s)
+}
+
+
+
+void Parser::EndOfData(ParseListener& listener){
+	if(this->state != IDLE){
+		//add new line at the end of data
+		this->PreParseChar('\n', listener);
+	}
+	
+	if(this->nestingLevel != 0 || this->state != IDLE){
+		throw stob::Exc("Malformed stob document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
+	}
+	
+	//TODO: reset parser
 }
 
 
@@ -263,10 +282,8 @@ void stob::Parse(ting::fs::File& fi, ParseListener& listener){
 				listener
 			);
 	}while(bytesRead == buf.Size());
-	
-	if(parser.IsInProgress()){
-		throw stob::Exc("Malformed stob document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
-	}
+
+	parser.EndOfData(listener);
 }
 
 

@@ -51,6 +51,7 @@ void Run(){
 	l.actions.push_back(T_Pair(STRING, "test string"));
 	l.actions.push_back(T_Pair(STRING, "another string"));
 	l.actions.push_back(T_Pair(STRING, "unquotedString"));
+	l.actions.push_back(T_Pair(STRING, "UnquotedStringAtTheVeryEndOfTheFile"));
 	
 	ting::fs::FSFile fi("test.stob");
 	
