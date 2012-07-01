@@ -1,1 +1,5 @@
-"test string" "another string" unquotedString UnquotedStringAtTheVeryEndOfTheFile
+"test string" "another string" unquotedString
+
+"string with empty children list"{}unquoted_string_with_empty_children_list{}
+
+UnquotedStringAtTheVeryEndOfTheFile
