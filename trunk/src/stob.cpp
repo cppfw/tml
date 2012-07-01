@@ -52,11 +52,35 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 					break;
 			}
 			break;
-		case QUOTED_STRING:
-			//TODO:
-			break;
 		case UNQUOTED_STRING:
-			//TODO:
+			switch(c){
+				case ' ':
+				case '\r':
+				case '\n':
+				case '\t':
+					//string end
+					listener.OnStringParsed(reinterpret_cast<char*>(this->buf->Begin()), this->p - this->buf->Begin());
+					this->arrayBuf.Reset();
+					this->buf = &this->staticBuf;
+					this->state = IDLE;
+					return;
+//					break;
+				default:
+					break;
+			}
+			//fall-through
+		case QUOTED_STRING:
+			*this->p = c;
+			++this->p;
+			if(this->p == this->buf->End()){
+				ting::Array<ting::u8> a(this->buf->Size() * 2);
+				memcpy(a.Begin(), this->buf->Begin(), this->buf->SizeInBytes());
+				
+				this->p = a.Begin() + this->buf->Size();
+				
+				this->arrayBuf = a;
+				this->buf = &this->arrayBuf; //set reference
+			}
 			break;
 		default:
 			ASSERT(false)
@@ -67,64 +91,137 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 
 
 void Parser::ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& listener){
-	for(ting::u8* s = chunk.Begin(); s != chunk.End(); ++s){
-//		if(this->prevChar != 0){
-		if(this->prevChar == '/'){//check if possible comment sequence
-			ASSERT(this->commentState == NO_COMMENT)
-			switch(*s){
-				case '/':
-					this->commentState = LINE_COMMENT;
-					++s;
-					break;
-				case '*':
-					this->commentState = MULTILINE_COMMENT;
-					++s;
-					break;
+	for(const ting::u8* s = chunk.Begin(); s != chunk.End(); ++s){
+		
+		//skip comments if needed
+		if(this->commentState != NO_COMMENT){
+			switch(this->commentState){
+				case LINE_COMMENT:
+					for(; s != chunk.End(); ++s){
+						if(*s == '\n'){
+							this->commentState = NO_COMMENT;
+							break;
+						}
+					}
+					break;//~switch
+				case MULTILINE_COMMENT:
+					if(this->prevChar == '*'){
+						if(*s == '/'){
+							this->commentState = NO_COMMENT;
+							break;//~switch()
+						}else{
+							this->prevChar = 0;
+						}
+					}
+					for(; s != chunk.End(); ++s){
+						if(*s == '*'){
+							this->prevChar = '*';
+							break;//~for()
+						}
+					}
+					break;//~switch
 				default:
-					//do nothing
+					ASSERT(false)
 					break;
-			}
-			
-			//skip comments if needed
-			if(this->commentState != NO_COMMENT){
-				switch(this->commentState){
-					case LINE_COMMENT:
-						for(; s != chunk.End(); ++s){
-							if(*s == '\n'){
-								this->commentState = NO_COMMENT;
-								++s;
-								break;
-							}
-						}
-						break;//~switch
-					case MULTILINE_COMMENT:
-						for(; s != chunk.End(); ++s){
-							if(*s == '*'){
-								++s;
-								if(s != chunk.End()){
-									if(*s == '/'){
-										this->commentState = NO_COMMENT;
-										++s;
-										break;
-									}
-								}else{
-									break;
-								}
-							}
-						}
-						break;//~switch
-				}
 			}
 			continue;
 		}
 		
-		//TODO:
-	}
+		
+		
+		if(this->prevChar != 0){
+			if(this->prevChar == '/'){//possible comment sequence
+				if(*s == '/'){
+					this->commentState = LINE_COMMENT;
+				}else if(*s == '*'){
+					this->commentState = MULTILINE_COMMENT;
+				}else{
+					this->ParseChar('/', listener);
+					
+					//TODO: check if QUOTED_STRING and *s == '"'
+					this->ParseChar(*s, listener);
+				}
+			}else{
+				switch(this->state){
+					case IDLE:
+					case UNQUOTED_STRING:
+						ASSERT(false)
+						break;
+					case QUOTED_STRING:
+						ASSERT(this->prevChar == '\\')//escape sequence
+						switch(*s){
+							case '\\'://backslash
+								this->ParseChar('\\', listener);
+								break;
+							case '/'://slash
+								this->ParseChar('/', listener);
+								break;
+							case '"':
+								this->ParseChar('"', listener);
+								break;
+							case 'n':
+								this->ParseChar('\n', listener);
+								break;
+							case 't':
+								this->ParseChar('\t', listener);
+								break;
+							default:
+								{
+									std::stringstream ss;
+									ss << "Malformed document. Unknown escape sequence on line: ";
+									ss << this->curLine;
+									throw stob::Exc(ss.str());
+								}
+								break;
+						}
+						break;
+					default:
+						ASSERT(false)
+						break;
+				}
+			}
+			this->prevChar = 0;
+		}else{//~if(this->prevChar == 0)
+			if(*s == '/'){//possible comment sequence
+				this->prevChar = '/';
+			}else{
+				switch(this->state){
+					case QUOTED_STRING:
+						switch(*s){
+							case '\\': //escape sequence
+								this->prevChar = '\\';
+								break;
+							case '"':
+								//string end
+								listener.OnStringParsed(reinterpret_cast<char*>(this->buf->Begin()), this->p - this->buf->Begin());
+								this->arrayBuf.Reset();
+								this->buf = &this->staticBuf;
+								this->state = IDLE;
+								break;
+							case '\r':
+							case '\n':
+							case '\t':
+								//ignore
+								break;
+						}
+						break;
+					case UNQUOTED_STRING:
+					case IDLE:
+						this->ParseChar(*s, listener);
+						break;
+					default:
+						ASSERT(false)
+						break;
+				}
+			}
+		}
+		
+	}//~for(s)
 }
 
 
 
-void Parse(ting::fs::File& fi, ParseListener& listener){
+void stob::Parse(ting::fs::File& fi, ParseListener& listener){
 	ting::fs::File::Guard fileGuard(fi, ting::fs::File::READ);
 	
 	stob::Parser parser;
@@ -151,4 +248,6 @@ void Parse(ting::fs::File& fi, ParseListener& listener){
 
 ting::Ptr<stob::Node> Load(ting::fs::File& fi){
 	//TODO:
+	
+	return ting::Ptr<stob::Node>();
 }

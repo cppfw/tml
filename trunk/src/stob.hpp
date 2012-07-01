@@ -64,9 +64,9 @@ public:
 class Parser{
 	ting::Inited<unsigned, 0> curLine;//current line into the document being parsed, used for pointing place of format error.
 	
-	ting::Buffer<ting::u8>& buf;
 	ting::StaticBuffer<ting::u8, 256> staticBuf; //string buffer
 	ting::Array<ting::u8> arrayBuf;
+	ting::Buffer<ting::u8>* buf;
 	
 	ting::u8* p; //current position into the string buffer
 	
@@ -97,14 +97,14 @@ class Parser{
 	void ParseChar(ting::u8 c, ParseListener& listener);
 public:
 	Parser() :
-			buf(this->staticBuf),
-			p(this->buf.Begin())
+			buf(&this->staticBuf),
+			p(this->buf->Begin())
 	{}
 	
 	void ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& listener);
 	
 	inline bool IsInProgress()const throw(){
-		return this->nestingLevel != 0 || this->commentNestingLevel != 0 || this->state != IDLE;
+		return this->nestingLevel != 0 || this->state != IDLE;
 	}
 };
 

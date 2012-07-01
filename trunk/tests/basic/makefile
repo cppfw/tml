@@ -40,7 +40,7 @@ test: $(binary_name)
 
 $(binary_name): main.cpp ../../src/stob.cpp
 	@echo Building $@...
-	@g++ -o $@ $(cf) $< $(includes) $(libs)
+	@g++ -o $@ $(cf) $^ $(includes) $(libs)
 
 
 
