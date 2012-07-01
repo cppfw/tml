@@ -87,7 +87,7 @@ void Parse(ting::fs::File& fi, ParseListener& listener);
 
 
 
-class Node : public ting::PoolStored<Node, 4096 / sizeof(Node)>{
+class Node : public ting::PoolStored<Node, 4096 / (4 * sizeof(void*))>{
 	ting::Ptr<const char> value; //node value
 	
 	ting::Ptr<Node> next; //next sibling node
