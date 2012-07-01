@@ -25,37 +25,14 @@ comment */
 string_without_spaces_does_not_need_to_be_enclosed_in_double_quotes
 
 
-//Object (which is string) can have properties and children
-//those are optionally specified in curly braces right after the string:
+//Object (which is string) can have children.
+//Those are optionally specified in curly braces right after the string:
 
 "some string"{
-	//Property is declared as: <name> = <value>
-	"some property" = "object"
-
-	//TODO: do we need properties at all?
-	xy = "123.32, 3212"
-	xy{"123123, 323"}
-
-	//Property name does not need double quotes if it satisfies similar rules for strings:
-	property_name_with_no_spaces = "Property value"
-	
-
-	//Property name cannot have following curly braces.
-	//Property value can:
-	ComplexProperty = PropertyValue{
-		prop1 = value1 prop2 = "value 2" prop_3 = ValueThree
-	}
-
-
-	//Property names are unique throughout the parent object.
-
-
-	//Child objects are specified simply and can be interlieved with properties:
+	//Child objects are specified simply:
 	ChildString{
 		"Nested child string"
 	}
-
-	ExampleProperty = -2343.53
 
 	"another child string"
 
@@ -68,11 +45,3 @@ string_without_spaces_does_not_need_to_be_enclosed_in_double_quotes
 ""{
 	"child object"{} //empty curly braces are ok
 }
-
-
-//"global" objects are still not global, those are considered as children of,
-//so called, root object. Root object is an empty string and contents of the
-//curly braces after that string are contents of this file.
-//Root object can also have properties:
-
-QuasiGlobalProperty = PropertyValue
