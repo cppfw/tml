@@ -95,19 +95,20 @@ class Parser{
 	ting::Inited<bool, false> stringParsed;
 	
 	void ParseChar(ting::u8 c, ParseListener& listener);
+	void PreParseChar(ting::u8 c, ParseListener& listener);
 	
 	void AppendCharToString(ting::u8 c);
 public:
 	Parser() :
 			buf(&this->staticBuf),
 			p(this->buf->Begin())
-	{}
+	{
+		//TODO: reset parser
+	}
 	
 	void ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& listener);
 	
-	inline bool IsInProgress()const throw(){
-		return this->nestingLevel != 0 || this->state != IDLE;
-	}
+	void EndOfData(ParseListener& listener);
 };
 
 
