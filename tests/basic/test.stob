@@ -2,4 +2,38 @@
 
 "string with empty children list"{}unquoted_string_with_empty_children_list{}
 
+/*
+multiline comment
+//tralivali
+*/
+
+	// /* 
+
+// /* 
+// 
+// */
+
+/* tgtg
+/* /* 
+/* /* */
+
+	""{
+		"child string"
+
+		"aaa"{}
+
+		bbb
+
+		//comment trololo
+
+		ccc{
+			"ddd"
+		}
+	}
+
+//comment blah blah
+
+//Escape sequences
+"Tab\t Backslash\\ Slash/ Doubleslash\// Newline\n Carriagereturn\r Doublequotes\" {}{}/*{}{}*/{}{}"
+
 UnquotedStringAtTheVeryEndOfTheFile
