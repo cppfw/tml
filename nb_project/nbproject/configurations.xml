@@ -16,6 +16,7 @@
   <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
   <sourceRootList>
     <Elem>../src</Elem>
+    <Elem>../tests</Elem>
   </sourceRootList>
   <projectmakefile>../makefile</projectmakefile>
   <confs>
