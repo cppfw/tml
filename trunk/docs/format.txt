@@ -6,7 +6,11 @@
 "string is an object"
 
 
-"escape sequences inside strings: \\ \" \n \t"
+"escape sequences inside strings: \\ \/ \" \n \t"
+
+//Note that \/ escape sequence inside quoted string is not always needed,
+//one have to use it only to avoid unwanted commenting when // or /* or */
+//sequences appear in the strings. I.e. for example string "up/down" is ok.
 
 
 //comment
@@ -20,8 +24,8 @@ comment */
 
 
 //If string does not contain spaces ' ', tabs '\t', new lines '\n',
-//curly braces '{' and '}', double quotes '"', then it does
-//not have to be enclosed in double quotes:
+//carriage returns '\r', curly braces '{' and '}', double quotes '"',
+//then it does not have to be enclosed in double quotes:
 
 string_without_spaces_does_not_need_to_be_enclosed_in_double_quotes
 

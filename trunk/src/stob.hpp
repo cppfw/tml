@@ -70,13 +70,22 @@ class Parser{
 	
 	ting::Inited<unsigned, 0> nestingLevel;
 	
+	ting::Inited<unsigned, 0> commentNestingLevel;
+	
 	enum E_State{
 		IDLE,
-		PARSING_QUOTED_STRING,
-		PARSING_UNQUOTED_STRING,
+		QUOTED_STRING,
+		UNQUOTED_STRING,
+		LINE_COMMENT,
+		MULTILINE_COMMENT
 	};
 	
 	ting::Inited<E_State, IDLE> state;
+	
+	//This flag indicates that a string has been parsed before but its children list is not yet parsed.
+	//This is used to detect cases when curly braces go right after another curly braces, thus omitting the string declaration
+	//which is not allowed by the STOB format.
+	ting::Inited<bool, false> stringParsed;
 public:
 	Parser() :
 			buf(this->staticBuf),
@@ -86,8 +95,7 @@ public:
 	void ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& listener);
 	
 	inline bool IsInProgress()const throw(){
-		//TODO:
-		return this->nestingLevel != 0;
+		return this->nestingLevel != 0 || this->commentNestingLevel != 0 || this->state != IDLE;
 	}
 };
 

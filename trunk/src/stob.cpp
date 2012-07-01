@@ -11,11 +11,38 @@ using namespace stob;
 
 void Parser::ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& listener){
 	for(ting::u8* s = chunk.Begin(); s != chunk.End(); ++s){
-		switch(*s){
-			case '"':
+		switch(this->state){
+			case IDLE:
+				switch(*s){
+					case '"':
+						this->state = QUOTED_STRING;
+						break;
+					case '{':
+						if(this->nestingLevel == unsigned(-1)){
+							throw stob::Exc("Malformed STOB document. Nesting level is too high");
+						}
+						++this->nestingLevel;
+						this->stringParsed = false;
+						listener.OnChildrenParseStarted();
+					default:
+						this->state = UNQUOTED_STRING;
+						break;
+				}
+				break;
+			case QUOTED_STRING:
+				//TODO:
+				break;
+			case UNQUOTED_STRING:
+				//TODO:
+				break;
+			case LINE_COMMENT:
+				//TODO:
+				break;
+			case MULTILINE_COMMENT:
+				//TODO:
 				break;
 			default:
-				//TODO:
+				ASSERT(false)
 				break;
 		}
 	}

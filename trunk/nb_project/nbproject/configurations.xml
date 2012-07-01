@@ -5,12 +5,36 @@
       <in>stob.cpp</in>
       <in>stob.hpp</in>
     </df>
+    <df name="tests" root="../tests">
+      <df name="basic">
+        <df name=".svn">
+          <df name="prop-base">
+          </df>
+          <df name="props">
+          </df>
+          <df name="text-base">
+          </df>
+          <df name="tmp">
+            <df name="prop-base">
+            </df>
+            <df name="props">
+            </df>
+            <df name="text-base">
+            </df>
+          </df>
+          <in>entries</in>
+        </df>
+        <in>main.cpp</in>
+      </df>
+    </df>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false"
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>../docs/format.txt</itemPath>
       <itemPath>../makefile</itemPath>
+      <itemPath>../subdirs.mk</itemPath>
+      <itemPath>../targets.mk</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
