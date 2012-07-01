@@ -10,7 +10,15 @@ using namespace stob;
 
 
 void Parser::ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& listener){
-	
+	for(ting::u8* s = chunk.Begin(); s != chunk.End(); ++s){
+		switch(*s){
+			case '"':
+				break;
+			default:
+				//TODO:
+				break;
+		}
+	}
 }
 
 
