@@ -60,6 +60,27 @@ void Run(){
 	l.actions.push_back(T_Pair(CHILDREN_START, ""));
 	l.actions.push_back(T_Pair(CHILDREN_END, ""));
 	
+	
+	l.actions.push_back(T_Pair(STRING, ""));
+	l.actions.push_back(T_Pair(CHILDREN_START, ""));
+	
+	l.actions.push_back(T_Pair(STRING, "child string"));
+	
+	l.actions.push_back(T_Pair(STRING, "aaa"));
+	l.actions.push_back(T_Pair(CHILDREN_START, ""));
+	l.actions.push_back(T_Pair(CHILDREN_END, ""));
+	
+	l.actions.push_back(T_Pair(STRING, "bbb"));
+	
+	l.actions.push_back(T_Pair(STRING, "ccc"));
+	l.actions.push_back(T_Pair(CHILDREN_START, ""));
+	l.actions.push_back(T_Pair(STRING, "ddd"));
+	l.actions.push_back(T_Pair(CHILDREN_END, ""));
+	
+	l.actions.push_back(T_Pair(CHILDREN_END, ""));
+	
+	l.actions.push_back(T_Pair(STRING, "Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Carriagereturn\r Doublequotes\" {}{}/*{}{}*/{}{}"));
+	
 	l.actions.push_back(T_Pair(STRING, "UnquotedStringAtTheVeryEndOfTheFile"));
 	
 	ting::fs::FSFile fi("test.stob");

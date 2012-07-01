@@ -107,9 +107,10 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 					return;
 //					break;
 				default:
+					this->AppendCharToString(c);
 					break;
 			}
-			//fall-through
+			break;
 		case QUOTED_STRING:
 			this->AppendCharToString(c);
 			break;
@@ -229,6 +230,7 @@ void Parser::ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& 
 				case LINE_COMMENT:
 					for(; s != chunk.End(); ++s){
 						if(*s == '\n'){
+							++this->curLine;
 							this->commentState = NO_COMMENT;
 							break;
 						}
@@ -236,15 +238,16 @@ void Parser::ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& 
 					break;//~switch
 				case MULTILINE_COMMENT:
 					if(this->prevChar == '*'){
+						this->prevChar = 0;
 						if(*s == '/'){
 							this->commentState = NO_COMMENT;
 							break;//~switch()
-						}else{
-							this->prevChar = 0;
 						}
 					}
 					for(; s != chunk.End(); ++s){
-						if(*s == '*'){
+						if(*s == '\n'){
+							++this->curLine;
+						}else if(*s == '*'){
 							this->prevChar = '*';
 							break;//~for()
 						}
