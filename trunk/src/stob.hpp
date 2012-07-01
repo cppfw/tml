@@ -72,7 +72,8 @@ class Parser{
 	
 	ting::Inited<unsigned, 0> nestingLevel;
 	
-	ting::Inited<bool, false> commentSeqenceStarted; //this flag means that first '/' character has been encountered.
+	//Previous character, used to detect two character sequences like //, /*, */, escape sequences.
+	ting::Inited<ting::u8, 0> prevChar;
 	
 	enum E_CommentState{
 		NO_COMMENT,
@@ -92,6 +93,8 @@ class Parser{
 	//This is used to detect cases when curly braces go right after another curly braces, thus omitting the string declaration
 	//which is not allowed by the STOB format.
 	ting::Inited<bool, false> stringParsed;
+	
+	void ParseChar(ting::u8 c, ParseListener& listener);
 public:
 	Parser() :
 			buf(this->staticBuf),
