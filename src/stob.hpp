@@ -95,6 +95,8 @@ class Parser{
 	ting::Inited<bool, false> stringParsed;
 	
 	void ParseChar(ting::u8 c, ParseListener& listener);
+	
+	void AppendCharToString(ting::u8 c);
 public:
 	Parser() :
 			buf(&this->staticBuf),
