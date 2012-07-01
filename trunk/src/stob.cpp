@@ -65,6 +65,7 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 					listener.OnStringParsed(reinterpret_cast<char*>(this->buf->Begin()), this->p - this->buf->Begin());
 					this->arrayBuf.Reset();
 					this->buf = &this->staticBuf;
+					this->p = this->buf->Begin();
 					this->state = IDLE;
 					
 					if(c == '{'){
@@ -208,6 +209,7 @@ void Parser::ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& 
 								listener.OnStringParsed(reinterpret_cast<char*>(this->buf->Begin()), this->p - this->buf->Begin());
 								this->arrayBuf.Reset();
 								this->buf = &this->staticBuf;
+								this->p = this->buf->Begin();
 								this->state = IDLE;
 								break;
 							case '\n':
