@@ -50,6 +50,7 @@ void Run(){
 	typedef std::pair<E_Action, std::string> T_Pair;
 	l.actions.push_back(T_Pair(STRING, "test string"));
 	l.actions.push_back(T_Pair(STRING, "another string"));
+	l.actions.push_back(T_Pair(STRING, "unquotedString"));
 	
 	ting::fs::FSFile fi("test.stob");
 	

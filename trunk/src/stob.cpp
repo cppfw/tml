@@ -11,6 +11,22 @@ using namespace stob;
 
 
 
+void Parser::AppendCharToString(ting::u8 c){
+	*this->p = c;
+	++this->p;
+	if(this->p == this->buf->End()){
+		ting::Array<ting::u8> a(this->buf->Size() * 2);
+		memcpy(a.Begin(), this->buf->Begin(), this->buf->SizeInBytes());
+
+		this->p = a.Begin() + this->buf->Size();
+
+		this->arrayBuf = a;
+		this->buf = &this->arrayBuf; //set reference
+	}
+}
+
+
+
 void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 	switch(this->state){
 		case IDLE:
@@ -49,6 +65,7 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 					break;
 				default:
 					this->state = UNQUOTED_STRING;
+					this->AppendCharToString(c);
 					break;
 			}
 			break;
@@ -81,17 +98,7 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 			}
 			//fall-through
 		case QUOTED_STRING:
-			*this->p = c;
-			++this->p;
-			if(this->p == this->buf->End()){
-				ting::Array<ting::u8> a(this->buf->Size() * 2);
-				memcpy(a.Begin(), this->buf->Begin(), this->buf->SizeInBytes());
-				
-				this->p = a.Begin() + this->buf->Size();
-				
-				this->arrayBuf = a;
-				this->buf = &this->arrayBuf; //set reference
-			}
+			this->AppendCharToString(c);
 			break;
 		default:
 			ASSERT(false)
