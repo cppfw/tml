@@ -23,12 +23,36 @@ THE SOFTWARE. */
 #pragma once
 
 
+#include <ting/Ptr.hpp>
+#include <ting/PoolStored.hpp>
+
+
 
 namespace stob{
 
 
 
-//TODO:
+class Node : public ting::PoolStored<Node, 4096 / sizeof(Node)>{
+	ting::Ptr<const char> value; //node value
+	
+	ting::Ptr<Node> next; //next sibling node
+	Node* prev; //previous sibling node
+	
+	ting::Ptr<Node> children; //pointer to the first child
+public:
+	
+	const char* Value()const throw(){
+		return this->value.operator->();
+	}
+	
+	//TODO: as int, as uint, as float, as double, as boolean
+	
+	//TODO: get children
+	
+	//TODO: insert after/before
+	
+	//TODO: pull out (remove)
+};
 
 
 
