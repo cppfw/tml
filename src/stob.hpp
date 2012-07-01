@@ -67,6 +67,16 @@ class Parser{
 	ting::Array<ting::u8> arrayBuf;
 	
 	ting::u8* p; //current position into the string buffer
+	
+	ting::Inited<unsigned, 0> nestingLevel;
+	
+	enum E_State{
+		IDLE,
+		PARSING_QUOTED_STRING,
+		PARSING_UNQUOTED_STRING,
+	};
+	
+	ting::Inited<E_State, IDLE> state;
 public:
 	Parser() :
 			buf(this->staticBuf),
@@ -77,7 +87,7 @@ public:
 	
 	inline bool IsInProgress()const throw(){
 		//TODO:
-		return false;
+		return this->nestingLevel != 0;
 	}
 };
 
