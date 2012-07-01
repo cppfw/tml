@@ -54,9 +54,10 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 			break;
 		case UNQUOTED_STRING:
 			switch(c){
+				case '\n':
+					++this->curLine;
 				case ' ':
 				case '\r':
-				case '\n':
 				case '\t':
 				case '{':
 				case '}':
@@ -101,7 +102,7 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 
 void Parser::ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& listener){
 	for(const ting::u8* s = chunk.Begin(); s != chunk.End(); ++s){
-		TRACE(<< "Parser::ParseDataChunk(): *s = " << (*s) << std::endl)
+//		TRACE(<< "Parser::ParseDataChunk(): *s = " << (*s) << std::endl)
 		
 		//skip comments if needed
 		if(this->commentState != NO_COMMENT){
@@ -202,16 +203,21 @@ void Parser::ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& 
 								this->prevChar = '\\';
 								break;
 							case '"':
+//								TRACE(<< "qsp = " << std::string(reinterpret_cast<char*>(this->buf->Begin()), 11) << std::endl)
 								//string end
 								listener.OnStringParsed(reinterpret_cast<char*>(this->buf->Begin()), this->p - this->buf->Begin());
 								this->arrayBuf.Reset();
 								this->buf = &this->staticBuf;
 								this->state = IDLE;
 								break;
-							case '\r':
 							case '\n':
+								++this->curLine;
+							case '\r':
 							case '\t':
 								//ignore
+								break;
+							default:
+								this->ParseChar(*s, listener);
 								break;
 						}
 						break;
