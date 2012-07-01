@@ -19,11 +19,18 @@ void Parser::ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& 
 						break;
 					case '{':
 						if(this->nestingLevel == unsigned(-1)){
-							throw stob::Exc("Malformed STOB document. Nesting level is too high");
+							throw stob::Exc("Malformed STOB document. Nesting level is too high.");
+						}
+						if(!this->stringParsed){
+							throw stob::Exc("Malformed STOB document. Curly braces without preceding string declaraction encountered.");
 						}
 						++this->nestingLevel;
 						this->stringParsed = false;
 						listener.OnChildrenParseStarted();
+						break;
+					case '}':
+						
+						break;
 					default:
 						this->state = UNQUOTED_STRING;
 						break;
