@@ -62,6 +62,8 @@ public:
 
 
 class Parser{
+	ting::Inited<unsigned, 0> curLine;//current line into the document being parsed, used for pointing place of format error.
+	
 	ting::Buffer<ting::u8>& buf;
 	ting::StaticBuffer<ting::u8, 256> staticBuf; //string buffer
 	ting::Array<ting::u8> arrayBuf;
@@ -70,16 +72,20 @@ class Parser{
 	
 	ting::Inited<unsigned, 0> nestingLevel;
 	
-	ting::Inited<unsigned, 0> commentNestingLevel;
+	ting::Inited<bool, false> commentSeqenceStarted; //this flag means that first '/' character has been encountered.
+	
+	enum E_CommentState{
+		NO_COMMENT,
+		LINE_COMMENT,
+		MULTILINE_COMMENT
+	};
+	ting::Inited<E_CommentState, NO_COMMENT> commentState;
 	
 	enum E_State{
 		IDLE,
 		QUOTED_STRING,
 		UNQUOTED_STRING,
-		LINE_COMMENT,
-		MULTILINE_COMMENT
 	};
-	
 	ting::Inited<E_State, IDLE> state;
 	
 	//This flag indicates that a string has been parsed before but its children list is not yet parsed.

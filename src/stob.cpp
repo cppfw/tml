@@ -1,5 +1,7 @@
 #include "stob.hpp"
 
+#include <sstream>
+
 #include <ting/debug.hpp>
 #include <ting/Buffer.hpp>
 
@@ -11,6 +13,57 @@ using namespace stob;
 
 void Parser::ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& listener){
 	for(ting::u8* s = chunk.Begin(); s != chunk.End(); ++s){
+		//TODO:
+		if(this->commentSeqenceStarted){
+			ASSERT(this->commentState == NO_COMMENT)
+			switch(*s){
+				case '/':
+					this->commentState = LINE_COMMENT;
+					++s;
+					break;
+				case '*':
+					this->commentState = MULTILINE_COMMENT;
+					++s;
+					break;
+				default:
+					//do nothing
+					break;
+			}
+			this->commentSeqenceStarted = false;
+			
+			//skip comments if needed
+			if(this->commentState != NO_COMMENT){
+				switch(this->commentState){
+					case LINE_COMMENT:
+						for(; s != chunk.End(); ++s){
+							if(*s == '\n'){
+								this->commentState = NO_COMMENT;
+								++s;
+								break;
+							}
+						}
+						break;//~switch
+					case MULTILINE_COMMENT:
+						for(; s != chunk.End(); ++s){
+							if(*s == '*'){
+								++s;
+								if(s != chunk.End()){
+									if(*s == '/'){
+										this->commentState = NO_COMMENT;
+										++s;
+										break;
+									}
+								}else{
+									break;
+								}
+							}
+						}
+						break;//~switch
+				}
+			}
+			continue;
+		}
+		
 		switch(this->state){
 			case IDLE:
 				switch(*s){
@@ -22,14 +75,30 @@ void Parser::ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& 
 							throw stob::Exc("Malformed STOB document. Nesting level is too high.");
 						}
 						if(!this->stringParsed){
-							throw stob::Exc("Malformed STOB document. Curly braces without preceding string declaraction encountered.");
+							throw stob::Exc("Malformed STOB document. Curly braces without preceding string declaration encountered.");
 						}
 						++this->nestingLevel;
 						this->stringParsed = false;
 						listener.OnChildrenParseStarted();
 						break;
 					case '}':
-						
+						if(this->nestingLevel == 0){
+							std::stringstream ss;
+							ss << "Malformed STOB document. Unexpected '}' at line: ";
+							ss << this->curLine;
+							throw stob::Exc(ss.str());
+						}
+						break;
+					case '\n':
+						++this->curLine;
+						break;
+					case '\r':
+					case ' ':
+					case '\t':
+						//ignore
+						break;
+					case '/':
+						this->commentSeqenceStarted = true;
 						break;
 					default:
 						this->state = UNQUOTED_STRING;
@@ -40,12 +109,6 @@ void Parser::ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& 
 				//TODO:
 				break;
 			case UNQUOTED_STRING:
-				//TODO:
-				break;
-			case LINE_COMMENT:
-				//TODO:
-				break;
-			case MULTILINE_COMMENT:
 				//TODO:
 				break;
 			default:
