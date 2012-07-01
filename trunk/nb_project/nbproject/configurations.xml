@@ -7,23 +7,6 @@
     </df>
     <df name="tests" root="../tests">
       <df name="basic">
-        <df name=".svn">
-          <df name="prop-base">
-          </df>
-          <df name="props">
-          </df>
-          <df name="text-base">
-          </df>
-          <df name="tmp">
-            <df name="prop-base">
-            </df>
-            <df name="props">
-            </df>
-            <df name="text-base">
-            </df>
-          </df>
-          <in>entries</in>
-        </df>
         <in>main.cpp</in>
       </df>
     </df>
