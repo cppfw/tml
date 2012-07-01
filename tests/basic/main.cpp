@@ -79,7 +79,11 @@ void Run(){
 	
 	l.actions.push_back(T_Pair(CHILDREN_END, ""));
 	
-	l.actions.push_back(T_Pair(STRING, "Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Carriagereturn\r Doublequotes\" {}{}/*{}{}*/{}{}"));
+	l.actions.push_back(T_Pair(STRING, "Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Carriagereturn\r Doublequotes\" {}{}{}{}"));
+	
+	l.actions.push_back(T_Pair(STRING, "quoted string with trailing slash /"));
+	
+	l.actions.push_back(T_Pair(STRING, "tralala tro lo lo tre lele"));
 	
 	l.actions.push_back(T_Pair(STRING, "UnquotedStringAtTheVeryEndOfTheFile"));
 	

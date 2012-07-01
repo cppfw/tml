@@ -156,13 +156,16 @@ void Parser::PreParseChar(ting::u8 c, ParseListener& listener){
 						case 'n':
 							this->ParseChar('\n', listener);
 							break;
+						case 'r':
+							this->ParseChar('\r', listener);
+							break;
 						case 't':
 							this->ParseChar('\t', listener);
 							break;
 						default:
 							{
 								std::stringstream ss;
-								ss << "Malformed document. Unknown escape sequence on line: ";
+								ss << "Malformed document. Unknown escape sequence (\\" << c << ") on line: ";
 								ss << this->curLine;
 								throw stob::Exc(ss.str());
 							}
@@ -197,9 +200,13 @@ void Parser::PreParseChar(ting::u8 c, ParseListener& listener){
 							break;
 						case '\n':
 							++this->curLine;
+							//TODO:insert space?
+							break;
 						case '\r':
-						case '\t':
 							//ignore
+							break;
+						case '\t':
+							//TODO: ignore?
 							break;
 						default:
 							this->ParseChar(c, listener);
