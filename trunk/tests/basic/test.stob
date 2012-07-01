@@ -36,4 +36,12 @@ multiline comment
 //Escape sequences
 "Tab\t Backslash\\ Slash/ Doubleslash\// Newline\n Carriagereturn\r Doublequotes\" {}{}/*{}{}*/{}{}"
 
+//multiline string
+
+"quoted string with trailing slash /"
+
+"tralala
+tro lo lo
+	tre lele"
+
 UnquotedStringAtTheVeryEndOfTheFile
