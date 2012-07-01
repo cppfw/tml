@@ -51,6 +51,15 @@ void Run(){
 	l.actions.push_back(T_Pair(STRING, "test string"));
 	l.actions.push_back(T_Pair(STRING, "another string"));
 	l.actions.push_back(T_Pair(STRING, "unquotedString"));
+	
+	l.actions.push_back(T_Pair(STRING, "string with empty children list"));
+	l.actions.push_back(T_Pair(CHILDREN_START, ""));
+	l.actions.push_back(T_Pair(CHILDREN_END, ""));
+	
+	l.actions.push_back(T_Pair(STRING, "unquoted_string_with_empty_children_list"));
+	l.actions.push_back(T_Pair(CHILDREN_START, ""));
+	l.actions.push_back(T_Pair(CHILDREN_END, ""));
+	
 	l.actions.push_back(T_Pair(STRING, "UnquotedStringAtTheVeryEndOfTheFile"));
 	
 	ting::fs::FSFile fi("test.stob");

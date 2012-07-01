@@ -27,6 +27,33 @@ void Parser::AppendCharToString(ting::u8 c){
 
 
 
+void Parser::HandleLeftCurlyBracket(ParseListener& listener){
+	if(this->nestingLevel == unsigned(-1)){
+		throw stob::Exc("Malformed STOB document. Nesting level is too high.");
+	}
+	if(!this->stringParsed){
+		throw stob::Exc("Malformed STOB document. Curly braces without preceding string declaration encountered.");
+	}
+	++this->nestingLevel;
+	this->stringParsed = false;
+	listener.OnChildrenParseStarted();
+}
+
+
+
+void Parser::HandleRightCurlyBracket(ParseListener& listener){
+	if(this->nestingLevel == 0){
+		std::stringstream ss;
+		ss << "Malformed STOB document. Unexpected '}' at line: ";
+		ss << this->curLine;
+		throw stob::Exc(ss.str());
+	}
+	--this->nestingLevel;
+	listener.OnChildrenParseFinished();
+}
+
+
+
 void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 	switch(this->state){
 		case IDLE:
@@ -35,25 +62,10 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 					this->state = QUOTED_STRING;
 					break;
 				case '{':
-					if(this->nestingLevel == unsigned(-1)){
-						throw stob::Exc("Malformed STOB document. Nesting level is too high.");
-					}
-					if(!this->stringParsed){
-						throw stob::Exc("Malformed STOB document. Curly braces without preceding string declaration encountered.");
-					}
-					++this->nestingLevel;
-					this->stringParsed = false;
-					listener.OnChildrenParseStarted();
+					this->HandleLeftCurlyBracket(listener);
 					break;
 				case '}':
-					if(this->nestingLevel == 0){
-						std::stringstream ss;
-						ss << "Malformed STOB document. Unexpected '}' at line: ";
-						ss << this->curLine;
-						throw stob::Exc(ss.str());
-					}
-					--this->nestingLevel;
-					listener.OnChildrenParseFinished();
+					this->HandleRightCurlyBracket(listener);
 					break;
 				case '\n':
 					++this->curLine;
@@ -83,12 +95,13 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 					this->arrayBuf.Reset();
 					this->buf = &this->staticBuf;
 					this->p = this->buf->Begin();
+					this->stringParsed = true;
 					this->state = IDLE;
 					
 					if(c == '{'){
-						//TODO:
+						this->HandleLeftCurlyBracket(listener);
 					}else if(c == '}'){
-						//TODO:
+						this->HandleRightCurlyBracket(listener);
 					}
 					
 					return;
@@ -178,6 +191,7 @@ void Parser::PreParseChar(ting::u8 c, ParseListener& listener){
 							this->arrayBuf.Reset();
 							this->buf = &this->staticBuf;
 							this->p = this->buf->Begin();
+							this->stringParsed = true;
 							this->state = IDLE;
 							break;
 						case '\n':

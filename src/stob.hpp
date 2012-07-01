@@ -62,7 +62,7 @@ public:
 
 
 class Parser{
-	ting::Inited<unsigned, 0> curLine;//current line into the document being parsed, used for pointing place of format error.
+	ting::Inited<unsigned, 1> curLine;//current line into the document being parsed, used for pointing place of format error.
 	
 	ting::StaticBuffer<ting::u8, 256> staticBuf; //string buffer
 	ting::Array<ting::u8> arrayBuf;
@@ -98,6 +98,9 @@ class Parser{
 	void PreParseChar(ting::u8 c, ParseListener& listener);
 	
 	void AppendCharToString(ting::u8 c);
+	
+	void HandleLeftCurlyBracket(ParseListener& listener);
+	void HandleRightCurlyBracket(ParseListener& listener);
 public:
 	Parser() :
 			buf(&this->staticBuf),
