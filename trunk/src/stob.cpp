@@ -91,6 +91,7 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 				case '{':
 				case '}':
 					//string end
+					//TODO: move to separate function
 					listener.OnStringParsed(reinterpret_cast<char*>(this->buf->Begin()), this->p - this->buf->Begin());
 					this->arrayBuf.Reset();
 					this->buf = &this->staticBuf;
