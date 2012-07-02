@@ -1,4 +1,4 @@
-#include "../../src/stob.hpp"
+#include "../../src/stob/parser.hpp"
 
 #include <string>
 #include <deque>
