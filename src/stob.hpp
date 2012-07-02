@@ -101,6 +101,8 @@ class Parser{
 	
 	void HandleLeftCurlyBracket(ParseListener& listener);
 	void HandleRightCurlyBracket(ParseListener& listener);
+	
+	void HandleStringEnd(ParseListener& listener);
 public:
 	Parser() :
 			buf(&this->staticBuf),
