@@ -1,9 +1,8 @@
-#include "stob.hpp"
+#include "parser.hpp"
 
 #include <sstream>
 
 #include <ting/debug.hpp>
-#include <ting/Buffer.hpp>
 
 
 
@@ -306,12 +305,4 @@ void stob::Parse(ting::fs::File& fi, ParseListener& listener){
 	}while(bytesRead == buf.Size());
 
 	parser.EndOfData(listener);
-}
-
-
-
-ting::Ptr<stob::Node> Load(ting::fs::File& fi){
-	//TODO:
-	
-	return ting::Ptr<stob::Node>();
 }

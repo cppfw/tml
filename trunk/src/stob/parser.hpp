@@ -23,25 +23,14 @@ THE SOFTWARE. */
 #pragma once
 
 
-#include <ting/Ptr.hpp>
-#include <ting/PoolStored.hpp>
-#include <ting/Exc.hpp>
-#include <ting/fs/File.hpp>
+
 #include <ting/Buffer.hpp>
 #include <ting/Array.hpp>
+#include <ting/fs/File.hpp>
 
 
 
 namespace stob{
-
-
-
-class Exc : public ting::Exc{
-public:
-	Exc(const std::string& message) :
-			ting::Exc(message)
-	{}
-};
 
 
 
@@ -128,47 +117,6 @@ public:
 
 
 void Parse(ting::fs::File& fi, ParseListener& listener);
-
-
-
-class Node : public ting::PoolStored<Node, 4096 / (4 * sizeof(void*))>{
-	ting::Ptr<const char> value; //node value
-	
-	ting::Ptr<Node> next; //next sibling node
-	Node* prev; //previous sibling node
-	
-	ting::Ptr<Node> children; //pointer to the first child
-	
-	//constructor is private, no inheritance.
-	Node(){}
-public:
-	
-	static inline ting::Ptr<Node> New(){
-		return ting::Ptr<Node>(new Node());
-	}
-	
-	inline const char* Value()const throw(){
-		return this->value.operator->();
-	}
-	
-	inline void SetValue(ting::Ptr<const char> value)throw(){
-		this->value = value;
-	}
-	
-	//TODO: as int, as uint, as float, as double, as boolean
-	
-	//TODO: get children
-	
-	//TODO: insert after/before
-	
-	//TODO: pull out (remove)
-	
-	void Write(ting::fs::File& fi);
-};
-
-
-
-ting::Ptr<Node> Load(ting::fs::File& fi);
 
 
 
