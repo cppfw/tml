@@ -38,7 +38,7 @@ test: $(binary_name)
 	@echo running $^...
 	@LD_LIBRARY_PATH=../../src ./$^
 
-$(binary_name): main.cpp ../../src/stob.cpp
+$(binary_name): main.cpp ../../src/stob/parser.cpp
 	@echo Building $@...
 	@g++ -o $@ $(cf) $^ $(includes) $(libs)
 
