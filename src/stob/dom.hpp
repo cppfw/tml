@@ -70,19 +70,48 @@ public:
 		this->children = first;
 	}
 	
-	inline ting::Ptr<Node> ExtractChildren()throw(){
+	inline ting::Ptr<Node> RemoveChildren()throw(){
 		return this->children;
 	}
 	
-	inline Node* Child()throw(){
+	inline ting::Ptr<Node> RemoveFirstChild()throw(){
+		ting::Ptr<Node> ret = this->children;
+		if(ret.IsValid()){
+			this->children = ret->next;
+		}
+		return ret;
+	}
+	
+	inline Node* Children()throw(){
 		return this->children.operator->();
 	}
 	
-	//TODO: get children by name etc.
+	Node* Child(const std::string& value)throw();
 	
-	//TODO: insert after/before
+	inline Node* Next()throw(){
+		return this->next.operator->();
+	}
 	
-	//TODO: pull out (remove)
+	Node* Next(const std::string& value)throw();
+	
+	inline void InsertNext(const ting::Ptr<Node>& node)throw(){
+		if(node.IsValid()){
+			node->next = this->next;
+		}
+		this->next = node;
+	}
+	
+	inline ting::Ptr<Node> RemoveNext()throw(){
+		ting::Ptr<Node> ret = this->next;
+		if(ret.IsValid()){
+			this->next = ret->next;
+		}
+		return ret;
+	}
+	
+	inline ting::Ptr<Node> ChopNext()throw(){
+		return this->next;
+	}
 	
 	void Write(ting::fs::File& fi);
 };
