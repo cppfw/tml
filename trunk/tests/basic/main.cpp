@@ -87,6 +87,8 @@ void Run(){
 	
 	l.actions.push_back(T_Pair(STRING, "tralala tro lo lo tre lele"));
 	
+	l.actions.push_back(T_Pair(STRING, "-1213.33"));
+	
 	l.actions.push_back(T_Pair(STRING, "UnquotedStringAtTheVeryEndOfTheFile"));
 	
 	ting::fs::FSFile fi("test.stob");
