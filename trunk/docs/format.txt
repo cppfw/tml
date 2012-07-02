@@ -18,7 +18,7 @@
 /* multi line
 comment */
 
-/* /* nested comment */ */
+// /* /* nested comments are not allowed */ */
 
 //comment is NOT an object, unlike in XML, it is ignored by parser.
 
@@ -50,3 +50,9 @@ string_without_spaces_does_not_need_to_be_enclosed_in_double_quotes
 ""{
 	"child object"{} //empty curly braces are ok
 }
+
+
+//In multi line strings tabs are ignored, new line characters are replaced with space character, carriage returns are ignored.
+//Use escape sequences to place those characters to the string explicitly.
+"multiline
+	string"
