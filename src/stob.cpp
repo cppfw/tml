@@ -202,13 +202,12 @@ void Parser::PreParseChar(ting::u8 c, ParseListener& listener){
 							break;
 						case '\n':
 							++this->curLine;
-							//TODO: insert space?
+							//insert space instead of new line character
+							this->ParseChar(' ', listener);
 							break;
 						case '\r':
-							//ignore
-							break;
 						case '\t':
-							//TODO: ignore?
+							//ignore
 							break;
 						default:
 							this->ParseChar(c, listener);
