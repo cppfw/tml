@@ -286,7 +286,7 @@ void Parser::EndOfData(ParseListener& listener){
 		throw stob::Exc("Malformed stob document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
 	}
 	
-	//TODO: reset parser
+	this->Reset();
 }
 
 

@@ -62,7 +62,7 @@ public:
 
 
 class Parser{
-	ting::Inited<unsigned, 1> curLine;//current line into the document being parsed, used for pointing place of format error.
+	unsigned curLine;//current line into the document being parsed, used for pointing place of format error.
 	
 	ting::StaticBuffer<ting::u8, 256> staticBuf; //string buffer
 	ting::Array<ting::u8> arrayBuf;
@@ -70,29 +70,29 @@ class Parser{
 	
 	ting::u8* p; //current position into the string buffer
 	
-	ting::Inited<unsigned, 0> nestingLevel;
+	unsigned nestingLevel;
 	
 	//Previous character, used to detect two character sequences like //, /*, */, escape sequences.
-	ting::Inited<ting::u8, 0> prevChar;
+	ting::u8 prevChar;
 	
 	enum E_CommentState{
 		NO_COMMENT,
 		LINE_COMMENT,
 		MULTILINE_COMMENT
 	};
-	ting::Inited<E_CommentState, NO_COMMENT> commentState;
+	E_CommentState commentState;
 	
 	enum E_State{
 		IDLE,
 		QUOTED_STRING,
 		UNQUOTED_STRING,
 	};
-	ting::Inited<E_State, IDLE> state;
+	E_State state;
 	
 	//This flag indicates that a string has been parsed before but its children list is not yet parsed.
 	//This is used to detect cases when curly braces go right after another curly braces, thus omitting the string declaration
 	//which is not allowed by the STOB format.
-	ting::Inited<bool, false> stringParsed;
+	bool stringParsed;
 	
 	void ParseChar(ting::u8 c, ParseListener& listener);
 	void PreParseChar(ting::u8 c, ParseListener& listener);
@@ -104,11 +104,20 @@ class Parser{
 	
 	void HandleStringEnd(ParseListener& listener);
 public:
-	Parser() :
-			buf(&this->staticBuf),
-			p(this->buf->Begin())
-	{
-		//TODO: reset parser
+	Parser(){
+		this->Reset();
+	}
+	
+	void Reset(){
+		this->curLine = 1;
+		this->buf = &this->staticBuf;
+		this->arrayBuf.Reset();
+		this->p = this->buf->Begin();
+		this->nestingLevel = 0;
+		this->prevChar = 0;
+		this->commentState = NO_COMMENT;
+		this->state = IDLE;
+		this->stringParsed = false;
 	}
 	
 	void ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& listener);
