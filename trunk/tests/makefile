@@ -1,5 +1,6 @@
 subdirs :=
-subdirs += basic
+subdirs += parser
+subdirs += dom
 
 
 

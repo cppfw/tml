@@ -23,6 +23,7 @@ THE SOFTWARE. */
 #pragma once
 
 
+#include <string>
 
 #include <ting/PoolStored.hpp>
 #include <ting/Ref.hpp>
@@ -34,7 +35,7 @@ namespace stob{
 
 
 class Node{
-	ting::Ptr<const char> value; //node value
+	std::string value; //node value
 	
 	ting::Ptr<Node> next; //next sibling node
 	Node* prev; //previous sibling node
@@ -53,11 +54,11 @@ public:
 		return ting::Ptr<Node>(new Node());
 	}
 	
-	inline const char* Value()const throw(){
-		return this->value.operator->();
+	inline const std::string& Value()const throw(){
+		return this->value;
 	}
 	
-	inline void SetValue(ting::Ptr<const char> value)throw(){
+	inline void SetValue(const std::string& value)throw(){
 		this->value = value;
 	}
 	
