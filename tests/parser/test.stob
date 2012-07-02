@@ -1,0 +1,55 @@
+"test string" "another string" unquotedString
+
+"string with empty children list"{}unquoted_string_with_empty_children_list{}
+
+/*
+multiline comment
+//tralivali
+*/
+
+	// /* 
+
+// /* 
+// 
+// */
+
+/* tgtg
+/* /* 
+/* /* */
+
+	""{
+		"child string"
+
+		"aaa"{}
+
+		bbb
+
+		//comment trololo
+
+		ccc{
+			"ddd"
+		}
+	}
+
+//comment blah blah
+
+//Escape sequences
+"Tab\t Backslash\\ Slash/ Doubleslash\// Newline\n Carriagereturn\r Doublequotes\" {}{}/*{}{}*/{}{}"
+
+//multiline string
+
+"quoted string with trailing slash /"
+
+//line comment inside of a multiline string
+"fff 
+//eee
+ggg"
+
+"tralala 
+tro lo	 lo\n
+	tre lele"
+
+//number
+-1213.33
+
+UnquotedStringAtTheVeryEndOfTheFile
