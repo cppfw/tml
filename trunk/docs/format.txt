@@ -52,7 +52,7 @@ string_without_spaces_does_not_need_to_be_enclosed_in_double_quotes
 }
 
 
-//In multi line strings tabs are ignored, new line characters are replaced with space character, carriage returns are ignored.
+//In multi line strings tabs, new line characters, carriage returns are ignored.
 //Use escape sequences to place those characters to the string explicitly.
-"multiline
+"multiline 
 	string"

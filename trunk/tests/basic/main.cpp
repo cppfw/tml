@@ -8,7 +8,7 @@
 
 
 
-namespace TestSimpleQuotedStringParsing{
+namespace TestBasicParsing{
 
 enum E_Action{
 	CHILDREN_START,
@@ -85,7 +85,7 @@ void Run(){
 	
 	l.actions.push_back(T_Pair(STRING, "fff ggg"));
 	
-	l.actions.push_back(T_Pair(STRING, "tralala tro lo lo tre lele"));
+	l.actions.push_back(T_Pair(STRING, "tralala tro lo lo\ntre lele"));
 	
 	l.actions.push_back(T_Pair(STRING, "-1213.33"));
 	
@@ -105,7 +105,7 @@ void Run(){
 
 int main(int argc, char** argv){
 
-	TestSimpleQuotedStringParsing::Run();
+	TestBasicParsing::Run();
 	
 	
 	return 0;
