@@ -2,6 +2,8 @@
 
 #include <ting/debug.hpp>
 
+#include "parser.hpp"
+
 
 
 using namespace stob;
@@ -28,8 +30,35 @@ void Node::operator delete(void* p)throw(){
 
 
 
-ting::Ptr<stob::Node> Load(ting::fs::File& fi){
-	//TODO:
+ting::Ptr<stob::Node> stob::Load(ting::fs::File& fi){
+	class Listener : public stob::ParseListener{
+		//override
+		void OnChildrenParseFinished(){
+			
+		}
+
+		//override
+		void OnChildrenParseStarted(){
+			
+		}
+
+		//override
+		void OnStringParsed(const char* s, ting::u32 size){
+			ting::Ptr<Node> node = Node::New();
+			node->SetValue(std::string(s, size));
+		}
+		
+		Node* curParent;
+		
+	public:
+		ting::Ptr<Node> root;
+		
+		Listener() :
+				root(Node::New())
+		{
+			this->curParent = this->root.operator->();
+		}
+	};
 	
 	return ting::Ptr<stob::Node>();
 }
