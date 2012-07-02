@@ -137,8 +137,11 @@ void Parser::PreParseChar(ting::u8 c, ParseListener& listener){
 			}else{
 				this->ParseChar('/', listener);
 
-				//TODO: check if QUOTED_STRING and c == '"'
-				this->ParseChar(c, listener);
+				if(this->state == QUOTED_STRING && c == '"'){
+					this->HandleStringEnd(listener);
+				}else{
+					this->ParseChar(c, listener);
+				}
 			}
 		}else{
 			switch(this->state){
