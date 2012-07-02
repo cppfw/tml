@@ -54,6 +54,17 @@ void Parser::HandleRightCurlyBracket(ParseListener& listener){
 
 
 
+void Parser::HandleStringEnd(ParseListener& listener){
+	listener.OnStringParsed(reinterpret_cast<char*>(this->buf->Begin()), this->p - this->buf->Begin());
+	this->arrayBuf.Reset();
+	this->buf = &this->staticBuf;
+	this->p = this->buf->Begin();
+	this->stringParsed = true;
+	this->state = IDLE;
+}
+
+
+
 void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 	switch(this->state){
 		case IDLE:
@@ -90,14 +101,7 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 				case '\t':
 				case '{':
 				case '}':
-					//string end
-					//TODO: move to separate function
-					listener.OnStringParsed(reinterpret_cast<char*>(this->buf->Begin()), this->p - this->buf->Begin());
-					this->arrayBuf.Reset();
-					this->buf = &this->staticBuf;
-					this->p = this->buf->Begin();
-					this->stringParsed = true;
-					this->state = IDLE;
+					this->HandleStringEnd(listener);
 					
 					if(c == '{'){
 						this->HandleLeftCurlyBracket(listener);
@@ -191,17 +195,11 @@ void Parser::PreParseChar(ting::u8 c, ParseListener& listener){
 							break;
 						case '"':
 //								TRACE(<< "qsp = " << std::string(reinterpret_cast<char*>(this->buf->Begin()), 11) << std::endl)
-							//string end
-							listener.OnStringParsed(reinterpret_cast<char*>(this->buf->Begin()), this->p - this->buf->Begin());
-							this->arrayBuf.Reset();
-							this->buf = &this->staticBuf;
-							this->p = this->buf->Begin();
-							this->stringParsed = true;
-							this->state = IDLE;
+							this->HandleStringEnd(listener);
 							break;
 						case '\n':
 							++this->curLine;
-							//TODO:insert space?
+							//TODO: insert space?
 							break;
 						case '\r':
 							//ignore
