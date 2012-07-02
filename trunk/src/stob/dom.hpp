@@ -24,11 +24,16 @@ THE SOFTWARE. */
 
 
 
+#include <ting/PoolStored.hpp>
+#include <ting/Ref.hpp>
+
+
+
 namespace stob{
 
 
 
-class Node : public ting::PoolStored<Node, 4096 / (4 * sizeof(void*))>{
+class Node{
 	ting::Ptr<const char> value; //node value
 	
 	ting::Ptr<Node> next; //next sibling node
@@ -38,7 +43,11 @@ class Node : public ting::PoolStored<Node, 4096 / (4 * sizeof(void*))>{
 	
 	//constructor is private, no inheritance.
 	Node(){}
+	
+	static void* operator new(size_t size);
+		
 public:
+	static void operator delete(void *p)throw();
 	
 	static inline ting::Ptr<Node> New(){
 		return ting::Ptr<Node>(new Node());
