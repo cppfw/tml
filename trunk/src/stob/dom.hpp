@@ -26,7 +26,10 @@ THE SOFTWARE. */
 #include <string>
 
 #include <ting/PoolStored.hpp>
-#include <ting/Ref.hpp>
+#include <ting/Ptr.hpp>
+#include <ting/fs/File.hpp>
+
+#include "Exc.hpp"
 
 
 
@@ -38,7 +41,6 @@ class Node{
 	std::string value; //node value
 	
 	ting::Ptr<Node> next; //next sibling node
-	Node* prev; //previous sibling node
 	
 	ting::Ptr<Node> children; //pointer to the first child
 	
@@ -64,7 +66,19 @@ public:
 	
 	//TODO: as int, as uint, as float, as double, as boolean
 	
-	//TODO: get children
+	void SetChildren(const ting::Ptr<Node>& first)throw(){
+		this->children = first;
+	}
+	
+	inline ting::Ptr<Node> ExtractChildren()throw(){
+		return this->children;
+	}
+	
+	inline Node* Child()throw(){
+		return this->children.operator->();
+	}
+	
+	//TODO: get children by name etc.
 	
 	//TODO: insert after/before
 	
