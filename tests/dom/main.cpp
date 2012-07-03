@@ -102,16 +102,107 @@ void Run(){
 	
 	ASSERT_ALWAYS(!n->Next())
 }
+}//~namespace
 
+
+
+namespace TestWriting{
+void Run(){
+	ting::Ptr<stob::Node> root = stob::Node::New();
+	
+	{
+		root->SetChildren(stob::Node::New());
+		stob::Node* n = root->Children();
+		ASSERT_ALWAYS(n)
+		n->SetValue("test string");
+		
+		n->InsertNext(stob::Node::New());
+		n = n->Next();
+		ASSERT_ALWAYS(n)
+		n->SetValue("Unquoted_String");
+		
+		n->InsertNext(stob::Node::New());
+		n = n->Next();
+		ASSERT_ALWAYS(n)
+		n->SetValue("Escapes: \n \r \t \\ \" {}");
+
+		n->InsertNext(stob::Node::New());
+		n = n->Next();
+		ASSERT_ALWAYS(n)
+		n->SetValue("Quoted{String");
+		{
+			n->SetChildren(stob::Node::New());
+			stob::Node* n1 = n->Children();
+			ASSERT_ALWAYS(n1)
+			//n1 has no value (empty string)
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
+			n1->SetValue("Child2");
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
+			n1->SetValue("Child_third");
+			{
+				n1->SetChildren(stob::Node::New());
+				stob::Node* n2 = n1->Children();
+				ASSERT_ALWAYS(n2)
+				n2->SetValue("only one child");
+			}
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
+			n1->SetValue("Child fourth");
+			{
+				n1->SetChildren(stob::Node::New());
+				stob::Node* n2 = n1->Children();
+				ASSERT_ALWAYS(n2)
+				n2->SetValue("subchild1");
+				
+				n2->InsertNext(stob::Node::New());
+				n2 = n2->Next();
+				ASSERT_ALWAYS(n2)
+				n2->SetValue("subchild 2");
+			}
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
+			n1->SetValue("");
+			{
+				n1->SetChildren(stob::Node::New());
+				stob::Node* n2 = n1->Children();
+				ASSERT_ALWAYS(n2)
+				n2->SetValue("-3213.43");
+			}
+		}
+		
+		n->InsertNext(stob::Node::New());
+		n = n->Next();
+		ASSERT_ALWAYS(n)
+		n->SetValue("Another}QuotedString");
+
+		n->InsertNext(stob::Node::New());
+		n = n->Next();
+		ASSERT_ALWAYS(n)
+		n->SetValue("Last{String}InTheFile");
+	}
+	
+	ting::fs::FSFile file("out.stob");
+	
+	root->Write(file, true);
 }
-
+}//~namespace
 
 
 
 int main(int argc, char** argv){
 
 	TestBasicParsing::Run();
-	
+	TestWriting::Run();
 	
 	return 0;
 }
