@@ -64,7 +64,21 @@ public:
 		this->value = value;
 	}
 	
-	//TODO: as int, as uint, as float, as double, as boolean
+	ting::s32 AsS32()throw();
+	
+	ting::u32 AsU32()throw();
+	
+	ting::s64 AsS64()throw();
+	
+	ting::u64 AsU64()throw();
+	
+	float AsFloat()throw();
+	
+	double AsDouble()throw();
+	
+	inline bool AsBool()throw(){
+		return this->Value() == "true";
+	}
 	
 	void SetChildren(const ting::Ptr<Node>& first)throw(){
 		this->children = first;
