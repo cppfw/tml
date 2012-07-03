@@ -38,8 +38,8 @@ class ParseListener{
 public:
 	/**
 	 * TODO:
-     * @param s - pointer to null-terminated string.
-     * @param size - string length without terminating 0.
+     * @param s - pointer to string data, not null-terminated.
+     * @param size - string length.
      */
 	virtual void OnStringParsed(const char* s, ting::u32 size) = 0;
 	

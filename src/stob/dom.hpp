@@ -100,13 +100,25 @@ public:
 		return this->children.operator->();
 	}
 	
+	inline const Node* Children()const throw(){
+		return this->children.operator->();
+	}
+	
 	Node* Child(const std::string& value)throw();
+	
+	const Node* Child(const std::string& value)const throw();
 	
 	inline Node* Next()throw(){
 		return this->next.operator->();
 	}
 	
+	inline const Node* Next()const throw(){
+		return this->next.operator->();
+	}
+	
 	Node* Next(const std::string& value)throw();
+	
+	const Node* Next(const std::string& value)const throw();
 	
 	inline void InsertNext(const ting::Ptr<Node>& node)throw(){
 		if(node.IsValid()){
@@ -127,7 +139,7 @@ public:
 		return this->next;
 	}
 	
-	void Write(ting::fs::File& fi);
+	void Write(ting::fs::File& fi, bool formatted = true);
 };
 
 
