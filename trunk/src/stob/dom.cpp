@@ -74,9 +74,17 @@ const Node* Node::Child(const std::string& value)const throw(){
 namespace{
 
 bool CanStringBeUnquoted(const std::string& s, unsigned& numEscapes){
+//	TRACE(<< "CanStringBeUnquoted(): enter" << std::endl)
+	
 	numEscapes = 0;
+	
+	if(s.size() == 0){//empty string is always quoted
+		return false;
+	}
+	
 	bool ret = true;
-	for(const char* c = s.c_str(); c != 0; ++c){
+	for(const char* c = s.c_str(); *c != 0; ++c){
+//		TRACE(<< "CanStringBeUnquoted(): c = " << (*c) << std::endl)
 		switch(*c){
 			case '\t':
 			case '\n':
@@ -98,7 +106,7 @@ bool CanStringBeUnquoted(const std::string& s, unsigned& numEscapes){
 
 void MakeEscapedString(const std::string& str, ting::Buffer<ting::u8>& out){
 	ting::u8 *p = out.Begin();
-	for(const char* c = str.c_str(); c != 0; ++c){
+	for(const char* c = str.c_str(); *c != 0; ++c){
 		ASSERT(p != out.End())
 		
 		switch(*c){
@@ -142,26 +150,31 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 	quote[0] = '"';
 	
 	ting::StaticBuffer<ting::u8, 1> lcurly;
-	quote[0] = '{';
+	lcurly[0] = '{';
 	
 	ting::StaticBuffer<ting::u8, 1> rcurly;
-	quote[0] = '}';
+	rcurly[0] = '}';
 	
 	ting::StaticBuffer<ting::u8, 1> space;
-	quote[0] = ' ';
+	space[0] = ' ';
 	
 	ting::StaticBuffer<ting::u8, 1> tab;
-	quote[0] = '\t';
+	tab[0] = '\t';
 	
 	ting::StaticBuffer<ting::u8, 1> newLine;
-	quote[0] = '\n';
+	newLine[0] = '\n';
 	
+	//used to detect case of two adjacent unquoted strings without children, need to insert space between them
+	bool prevWasUnquotedWithoutChildren = false;
 	
 	for(const Node* n = node->Children(); n; n = n->Next()){
 		//indent
-		for(unsigned i = 0; i != indentation; ++i){
-			fi.Write(tab);
+		if(formatted){
+			for(unsigned i = 0; i != indentation; ++i){
+				fi.Write(tab);
+			}
 		}
+		
 		
 		//write node value
 		
@@ -186,6 +199,11 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 			
 			fi.Write(quote);
 		}else{
+			//unquoted string
+			if(!formatted && prevWasUnquotedWithoutChildren){
+				fi.Write(space);
+			}
+			
 			ASSERT(numEscapes == 0)
 			fi.Write(ting::Buffer<ting::u8>(
 					const_cast<ting::u8*>(reinterpret_cast<const ting::u8*>(n->Value().c_str())),
@@ -197,7 +215,10 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 			if(formatted){
 				fi.Write(newLine);
 			}
+			prevWasUnquotedWithoutChildren = unqouted;
 			continue;
+		}else{
+			prevWasUnquotedWithoutChildren = false;
 		}
 		
 		if(!formatted){
