@@ -41,6 +41,12 @@ string_without_spaces_does_not_need_to_be_enclosed_in_double_quotes
 
 	"another child string"
 
+	property{ value }
+
+	x { 10 }
+
+	"long property" {"long value"}
+
 	AndOneMore_Child
 }
 
