@@ -304,6 +304,8 @@ ting::Ptr<stob::Node> stob::Load(ting::fs::File& fi){
 				chain(Node::New()),//create root node
 				lastInChain(this->chain.operator->())
 		{}
+		
+		~Listener()throw(){}
 	} listener;
 	
 	listener.OnChildrenParseStarted();
