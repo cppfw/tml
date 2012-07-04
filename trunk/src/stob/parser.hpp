@@ -23,28 +23,60 @@ THE SOFTWARE. */
 #pragma once
 
 
-
 #include <ting/Buffer.hpp>
 #include <ting/Array.hpp>
 #include <ting/fs/File.hpp>
 
 
 
+/**
+ * STOB is a very simple markup language. It is used to describe object
+ * hierarchies. The only kind of objects present in STOB are Strings.
+ * The name of the language comes from "STring OBjects".
+ * Objects (which are strings) can have arbitrary number of child objects.
+ * Example:
+ * @code
+ * "String object"
+ * AnotherStringObject
+ * "String with children"{
+ *	"child 1"
+ *	Child2
+ *	"child three"{
+ *		SubChild1
+ *		"Subchild two"
+ *	}
+ * }
+ * @endcode
+ */
 namespace stob{
 
 
 
+/**
+ * @brief Listener interface for STOB parser.
+ * During the STOB document parsing the Parser notifies this listener object
+ * about parsed tokens.
+ */
 class ParseListener{
 public:
 	/**
-	 * TODO:
+	 * @brief A string token has been parsed.
+	 * This method is called by Parser when String token has been parsed.
      * @param s - pointer to string data, not null-terminated.
      * @param size - string length.
      */
 	virtual void OnStringParsed(const char* s, ting::u32 size) = 0;
 	
+	/**
+	 * @brief Children list parsing started.
+	 * This method is called by Parser when '{' token has been parsed.
+     */
 	virtual void OnChildrenParseStarted() = 0;
 	
+	/**
+	 * @brief Children list parsing finished.
+	 * This method is called by Parser when '}' token has been parsed.
+     */
 	virtual void OnChildrenParseFinished() = 0;
 	
 	virtual ~ParseListener()throw(){}
@@ -52,6 +84,11 @@ public:
 
 
 
+/**
+ * @brief STOB Parser.
+ * This is a class of STOB parser. It is used for event-based parsing of STOB
+ * documents.
+ */
 class Parser{
 	unsigned curLine;//current line into the document being parsed, used for pointing place of format error.
 	
@@ -95,10 +132,18 @@ class Parser{
 	
 	void HandleStringEnd(ParseListener& listener);
 public:
+	/**
+	 * @brief Constructor.
+	 * Creates an initially reset Parser object.
+     */
 	Parser(){
 		this->Reset();
 	}
 	
+	/**
+	 * @brief Reset parser.
+	 * Resets the parser to initial state, discarding all the temporary parsed data and state.
+     */
 	void Reset(){
 		this->curLine = 1;
 		this->buf = &this->staticBuf;
@@ -111,13 +156,34 @@ public:
 		this->stringParsed = false;
 	}
 	
+	/**
+	 * @brief Parse chink of STOB data.
+	 * Use this method to feed the STOB data to the parser.
+     * @param chunk - data chunk to parse.
+     * @param listener - listener object which will receive notifications about parsed tokens.
+	 * @throw stob::Exc - in case of malformed STOB document.
+     */
 	void ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& listener);
 	
+	/**
+	 * @brief Finalize parsing.
+	 * Call this method to finalize parsing after all the available STOB data has been fed to the parser.
+	 * This will tell parser that there will be no more data and the temporary stored data should be interpreted as it is.
+     * @param listener - listener object which will receive notifications about parsed tokens.
+	 * @throw stob::Exc - in case of malformed STOB document.
+     */
 	void EndOfData(ParseListener& listener);
 };
 
 
 
+/**
+ * @brief Parse STOB document provided by given file interface.
+ * Use this function to parse the STOB document from file.
+ * @param fi - file interface to use for getting the data to parse.
+ * @param listener - listener object which will receive notifications about parsed tokens.
+ * @throw stob::Exc - in case of malformed STOB document.
+ */
 void Parse(ting::fs::File& fi, ParseListener& listener);
 
 
