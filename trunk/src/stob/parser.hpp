@@ -46,6 +46,8 @@ public:
 	virtual void OnChildrenParseStarted() = 0;
 	
 	virtual void OnChildrenParseFinished() = 0;
+	
+	virtual ~ParseListener()throw(){}
 };
 
 

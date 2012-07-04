@@ -40,6 +40,7 @@ class Listener : public stob::ParseListener{
 	}
 	
 public:
+	~Listener()throw(){}
 	
 	std::deque<std::pair<E_Action, std::string> > actions;
 };
