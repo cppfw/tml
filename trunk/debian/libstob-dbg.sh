@@ -1,8 +1,8 @@
 #!/bin/sh
 
-soName=1
+soName=0
 
-packageName=libting${soName}-dbg
+packageName=libstob${soName}-dbg
 
 baseDir=debian/out/$packageName
 mkdir -p $baseDir
@@ -11,7 +11,7 @@ mkdir -p $baseDir
 libDir=$baseDir/usr/lib/debug/usr/lib
 mkdir -p $libDir
 
-libFileName=libting.so
+libFileName=libstob.so
 
 cp src/$libFileName.$soName $libDir
 

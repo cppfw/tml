@@ -1,15 +1,15 @@
 #!/bin/sh
 
-packageName=libting-doc
+packageName=libstob-doc
 
 baseDir=debian/out/$packageName
 mkdir -p $baseDir
 
 #copy files
-docDir=$baseDir/usr/share/doc/libting
+docDir=$baseDir/usr/share/doc/libstob
 mkdir -p $docDir
 
-cp docs/index.htm $docDir
+#cp docs/index.htm $docDir
 cp -r docs/html_doc_files $docDir
 
 
