@@ -21,7 +21,7 @@ build_config := release
 
 name := libstob
 
-so_name := 1
+so_name := 0
 
 ifeq ($(platform), linux)
     name := $(name).so
@@ -116,7 +116,7 @@ ifeq ($(platform), maemo_linux)
     libs := 
 endif
 ifeq ($(platform), linux)
-    libs := 
+    libs := -lting -lpthread
 endif
 ifeq ($(platform), win32)
     libs := 
