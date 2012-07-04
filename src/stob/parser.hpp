@@ -50,8 +50,8 @@ THE SOFTWARE. */
  * 
  *		//comment
  * 
- *		/* multi line
- *		   comment * /
+ *		/ * multi line
+ *		   comments as in C * /
  * 
  *		"Escape sequences \" \n \r \t \\ \/"
  *	}
