@@ -44,6 +44,9 @@ THE SOFTWARE. */
  *	"child three"{
  *		SubChild1
  *		"Subchild two"
+ * 
+ *		Property1 {Value1}
+ *		"Property two" {"Value 2"}
  *	}
  * }
  * @endcode
