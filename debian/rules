@@ -1,0 +1,15 @@
+#!/usr/bin/make -f
+
+build:
+	$(MAKE)
+
+clean:
+	$(MAKE) clean
+	rm -f debian/files
+	rm -rf debian/out
+
+binary:
+	./debian/libting.sh
+	./debian/libting-dbg.sh
+	./debian/libting-dev.sh
+	./debian/libting-doc.sh
