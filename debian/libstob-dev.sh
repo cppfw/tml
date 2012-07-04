@@ -1,10 +1,10 @@
 #!/bin/sh
 
-packageName=libting-dev
+packageName=libstob-dev
 
-soName=1
+soName=0
 
-libFileName=libting.so
+libFileName=libstob.so
 
 baseDir=debian/out/$packageName
 mkdir -p $baseDir
@@ -13,16 +13,9 @@ mkdir -p $baseDir
 #copy files
 
 #copy header files
-incDir=$baseDir/usr/include/ting
+incDir=$baseDir/usr/include/stob
 mkdir -p $incDir
-cp src/ting/*.hpp $incDir
-cp src/ting/*.h $incDir
-
-mkdir -p $incDir/fs
-cp src/ting/fs/*.hpp $incDir/fs
-
-mkdir -p $incDir/net
-cp src/ting/net/*.hpp $incDir/net
+cp src/stob/*.hpp $incDir
 
 #create symbolic .so link to latest .so name
 libDir=$baseDir/usr/lib
