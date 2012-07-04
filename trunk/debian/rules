@@ -9,7 +9,7 @@ clean:
 	rm -rf debian/out
 
 binary:
-	./debian/libting.sh
-	./debian/libting-dbg.sh
-	./debian/libting-dev.sh
-	./debian/libting-doc.sh
+	./debian/libstob.sh
+	./debian/libstob-dbg.sh
+	./debian/libstob-dev.sh
+	./debian/libstob-doc.sh
