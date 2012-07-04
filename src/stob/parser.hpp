@@ -47,6 +47,13 @@ THE SOFTWARE. */
  * 
  *		Property1 {Value1}
  *		"Property two" {"Value 2"}
+ * 
+ *		//comment
+ * 
+ *		/* multi line
+ *		   comment * /
+ * 
+ *		"Escape sequences \" \n \r \t \\ \/"
  *	}
  * }
  * @endcode
