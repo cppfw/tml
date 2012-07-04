@@ -18,7 +18,7 @@ ifeq ($(platform),darwin)
     remove := rm -rf
 endif
 ifeq ($(platform),linux)
-    libs := -lting
+    libs := -lting ../../src/libstob.so
     includes :=
     remove := rm -rf
 endif
@@ -38,7 +38,7 @@ test: $(binary_name)
 	@echo running $^...
 	@LD_LIBRARY_PATH=../../src ./$^
 
-$(binary_name): main.cpp ../../src/stob/parser.cpp ../../src/stob/dom.cpp
+$(binary_name): main.cpp
 	@echo Building $@...
 	@g++ -o $@ $(cf) $^ $(includes) $(libs)
 
