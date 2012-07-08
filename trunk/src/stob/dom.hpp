@@ -92,6 +92,63 @@ public:
 	}
 	
 	/**
+	 * TODO:
+     * @param value
+     */
+	inline void SetValue(ting::s32 value)throw(){
+		//TODO:
+	}
+	
+	/**
+	 * TODO:
+     * @param value
+     */
+	inline void SetValue(ting::u32 value)throw(){
+		//TODO:
+	}
+	
+	/**
+	 * TODO:
+     * @param value
+     */
+	inline void SetValue(ting::s64 value)throw(){
+		//TODO:
+	}
+	
+	/**
+	 * TODO:
+     * @param value
+     */
+	inline void SetValue(ting::u64 value)throw(){
+		//TODO:
+	}
+	
+	/**
+	 * TODO:
+     * @param value
+     */
+	inline void SetValue(float value)throw(){
+		//TODO:
+	}
+	
+	/**
+	 * TODO:
+     * @return 
+     */
+	inline void SetValue(double value)throw(){
+		//TODO:
+	}
+	
+	/**
+	 * TODO:
+     * @param value
+     * @return 
+     */
+	inline vois SetValue(bool value)throw(){
+		//TODO:
+	}
+	
+	/**
 	 * @brief Get node value as signed 32bit integer.
 	 * Tries to parse the string as signed 32bit integer.
      * @return Result of parsing node value as signed 32bit integer.
