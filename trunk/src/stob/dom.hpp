@@ -31,7 +31,9 @@ THE SOFTWARE. */
 
 #include <string>
 #include <cstdlib>
+#include <cstdio>
 
+#include <ting/config.hpp>
 #include <ting/PoolStored.hpp>
 #include <ting/Ptr.hpp>
 #include <ting/fs/File.hpp>
@@ -176,9 +178,12 @@ public:
 		char buf[64];
 		
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
+		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
 		//snprintf() is available
 		int res = snprintf(buf, sizeof(buf), "%i", v);
-#else //TODO: check for MSVC specific stuff
+#elif M_COMPILER == M_COMPILER_MSVC
+		int res = _snprintf(buf, sizeof(buf), "%i", v);
+#else
 		int res = sprintf(buf, "%i", v);
 #endif
 		if(res < 0 || res > int(sizeof(buf))){
@@ -198,9 +203,12 @@ public:
 		char buf[64];
 		
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
+		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
 		//snprintf() is available
 		int res = snprintf(buf, sizeof(buf), "%u", v);
-#else //TODO: check for MSVC specific stuff
+#elif M_COMPILER == M_COMPILER_MSVC
+		int res = _snprintf(buf, sizeof(buf), "%u", v);
+#else
 		int res = sprintf(buf, "%u", v);
 #endif
 		if(res < 0 || res > int(sizeof(buf))){
@@ -220,9 +228,12 @@ public:
 		char buf[64];
 		
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
+		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
 		//snprintf() is available
 		int res = snprintf(buf, sizeof(buf), "%lli", v);
-#else //TODO: check for MSVC specific stuff
+#elif M_COMPILER == M_COMPILER_MSVC
+		int res = _snprintf(buf, sizeof(buf), "%lli", v);
+#else
 		int res = sprintf(buf, "%lli", v);
 #endif
 		if(res < 0 || res > int(sizeof(buf))){
@@ -242,9 +253,12 @@ public:
 		char buf[64];
 		
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
+		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
 		//snprintf() is available
 		int res = snprintf(buf, sizeof(buf), "%llu", v);
-#else //TODO: check for MSVC specific stuff
+#elif M_COMPILER == M_COMPILER_MSVC
+		int res = _snprintf(buf, sizeof(buf), "%llu", v);
+#else
 		int res = sprintf(buf, "%llu", v);
 #endif
 		if(res < 0 || res > int(sizeof(buf))){
@@ -264,9 +278,12 @@ public:
 		char buf[64];
 		
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
+		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
 		//snprintf() is available
 		int res = snprintf(buf, sizeof(buf), "%f", double(v));
-#else //TODO: check for MSVC specific stuff
+#elif M_COMPILER == M_COMPILER_MSVC
+		int res = _snprintf(buf, sizeof(buf), "%f", double(v));
+#else
 		int res = sprintf(buf, "%f", double(v));
 #endif
 		if(res < 0 || res > int(sizeof(buf))){
@@ -286,9 +303,12 @@ public:
 		char buf[64];
 		
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
+		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
 		//snprintf() is available
 		int res = snprintf(buf, sizeof(buf), "%f", v);
-#else //TODO: check for MSVC specific stuff
+#elif M_COMPILER == M_COMPILER_MSVC
+		int res = _snprintf(buf, sizeof(buf), "%f", v);
+#else
 		int res = sprintf(buf, "%f", v);
 #endif
 		if(res < 0 || res > int(sizeof(buf))){
@@ -308,9 +328,12 @@ public:
 		char buf[128];
 		
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
+		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
 		//snprintf() is available
 		int res = snprintf(buf, sizeof(buf), "%Lf", v);
-#else //TODO: check for MSVC specific stuff
+#elif M_COMPILER == M_COMPILER_MSVC
+		int res = _snprintf(buf, sizeof(buf), "%Lf", v);
+#else
 		int res = sprintf(buf, "%Lf", v);
 #endif
 		if(res < 0 || res > int(sizeof(buf))){
