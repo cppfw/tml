@@ -1,7 +1,6 @@
 #include "dom.hpp"
 
 #include <vector>
-#include <cstdlib>
 
 #include <ting/debug.hpp>
 #include <ting/Array.hpp>
@@ -313,40 +312,4 @@ ting::Ptr<stob::Node> stob::Load(ting::fs::File& fi){
 	listener.OnChildrenParseFinished();
 	
 	return listener.chain;
-}
-
-
-
-ting::s32 Node::AsS32()throw(){
-	return ting::s32(strtol(this->Value().c_str(), 0, 0));
-}
-
-
-
-ting::u32 Node::AsU32()throw(){
-	return ting::u32(strtoul(this->Value().c_str(), 0, 0));
-}
-
-
-
-ting::s64 Node::AsS64()throw(){
-	return ting::s64(strtoll(this->Value().c_str(), 0 , 0));
-}
-
-
-
-ting::u64 Node::AsU64()throw(){
-	return ting::u64(strtoull(this->Value().c_str(), 0 , 0));
-}
-
-
-
-double Node::AsDouble()throw(){
-	return strtod(this->Value().c_str(), 0);
-}
-
-
-
-float Node::AsFloat()throw(){
-	return float(this->AsDouble());
 }

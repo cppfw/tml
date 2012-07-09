@@ -30,6 +30,7 @@ THE SOFTWARE. */
 
 
 #include <string>
+#include <cstdlib>
 
 #include <ting/PoolStored.hpp>
 #include <ting/Ptr.hpp>
@@ -84,111 +85,67 @@ public:
 	}
 	
 	/**
-	 * @brief Set value of the node.
-     * @param value - string to set as a node value.
-     */
-	inline void SetValue(const std::string& value)throw(){
-		this->value = value;
-	}
-	
-	/**
-	 * TODO:
-     * @param value
-     */
-	inline void SetValue(ting::s32 value)throw(){
-		//TODO:
-	}
-	
-	/**
-	 * TODO:
-     * @param value
-     */
-	inline void SetValue(ting::u32 value)throw(){
-		//TODO:
-	}
-	
-	/**
-	 * TODO:
-     * @param value
-     */
-	inline void SetValue(ting::s64 value)throw(){
-		//TODO:
-	}
-	
-	/**
-	 * TODO:
-     * @param value
-     */
-	inline void SetValue(ting::u64 value)throw(){
-		//TODO:
-	}
-	
-	/**
-	 * TODO:
-     * @param value
-     */
-	inline void SetValue(float value)throw(){
-		//TODO:
-	}
-	
-	/**
-	 * TODO:
-     * @return 
-     */
-	inline void SetValue(double value)throw(){
-		//TODO:
-	}
-	
-	/**
-	 * TODO:
-     * @param value
-     * @return 
-     */
-	inline vois SetValue(bool value)throw(){
-		//TODO:
-	}
-	
-	/**
 	 * @brief Get node value as signed 32bit integer.
 	 * Tries to parse the string as signed 32bit integer.
      * @return Result of parsing node value as signed 32bit integer.
      */
-	ting::s32 AsS32()throw();
+	inline ting::s32 AsS32()throw(){
+		return ting::s32(strtol(this->Value().c_str(), 0, 0));
+	}
 	
 	/**
 	 * @brief Get node value as unsigned 32bit integer.
 	 * Tries to parse the string as unsigned 32bit integer.
      * @return Result of parsing node value as unsigned 32bit integer.
      */
-	ting::u32 AsU32()throw();
+	inline ting::u32 AsU32()throw(){
+		return ting::u32(strtoul(this->Value().c_str(), 0, 0));
+	}
 	
 	/**
 	 * @brief Get node value as signed 64bit integer.
 	 * Tries to parse the string as signed 64bit integer.
      * @return Result of parsing node value as signed 64bit integer.
      */
-	ting::s64 AsS64()throw();
+	inline ting::s64 AsS64()throw(){
+		return ting::s64(strtoll(this->Value().c_str(), 0 , 0));
+	}
 	
 	/**
 	 * @brief Get node value as unsigned 64bit integer.
 	 * Tries to parse the string as unsigned 64bit integer.
      * @return Result of parsing node value as unsigned 64bit integer.
      */
-	ting::u64 AsU64()throw();
+	inline ting::u64 AsU64()throw(){
+		return ting::u64(strtoull(this->Value().c_str(), 0 , 0));
+	}
 	
 	/**
 	 * @brief Get node value as float value (32bits).
 	 * Tries to parse the string as float value (32bits).
      * @return Result of parsing node value as float value (32bits).
      */
-	float AsFloat()throw();
+	inline float AsFloat()throw(){
+		return float(this->AsDouble());
+	}
 	
 	/**
 	 * @brief Get node value as double precision float value (64bits).
 	 * Tries to parse the string as double precision float value (64bits).
      * @return Result of parsing node value as double precision float value (64bits).
      */
-	double AsDouble()throw();
+	inline double AsDouble()throw(){
+		return strtod(this->Value().c_str(), 0);
+	}
+	
+	/**
+	 * @brief Get node value as long double precision float value (64bits).
+	 * Tries to parse the string as long double precision float value (64bits).
+     * @return Result of parsing node value as long double precision float value (64bits).
+     */
+	inline long double AsLongDouble()throw(){
+		return strtold(this->Value().c_str(), 0);
+	}
 	
 	/**
 	 * @brief Get node value as boolean value.
@@ -199,6 +156,178 @@ public:
      */
 	inline bool AsBool()throw(){
 		return this->Value() == "true";
+	}
+	
+	/**
+	 * @brief Set value of the node.
+     * @param v - string to set as a node value.
+     */
+	inline void SetValue(const std::string& v)throw(){
+		this->value = v;
+	}
+	
+	/**
+	 * @brief Set value from signed 32 bit integer.
+	 * Sets value from signed 32 bit integer. The value is converted to string
+	 * and then the resulting string is set as a value of the node.
+     * @param v - signed 32 bit integer to set as a value of the node.
+     */
+	inline void SetS32(ting::s32 v)throw(){
+		char buf[64];
+		
+#if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
+		//snprintf() is available
+		int res = snprintf(buf, sizeof(buf), "%i", v);
+#else //TODO: check for MSVC specific stuff
+		int res = sprintf(buf, "%i", v);
+#endif
+		if(res < 0 || res > int(sizeof(buf))){
+			this->SetValue(std::string());
+		}else{
+			this->SetValue(std::string(buf, res));
+		}
+	}
+	
+	/**
+	 * @brief Set value from unsigned 32 bit integer.
+	 * Sets value from unsigned 32 bit integer. The value is converted to string
+	 * and then the resulting string is set as a value of the node.
+     * @param v - unsigned 32 bit integer to set as a value of the node.
+     */
+	inline void SetU32(ting::u32 v)throw(){
+		char buf[64];
+		
+#if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
+		//snprintf() is available
+		int res = snprintf(buf, sizeof(buf), "%u", v);
+#else //TODO: check for MSVC specific stuff
+		int res = sprintf(buf, "%u", v);
+#endif
+		if(res < 0 || res > int(sizeof(buf))){
+			this->SetValue(std::string());
+		}else{
+			this->SetValue(std::string(buf, res));
+		}
+	}
+	
+	/**
+	 * @brief Set value from signed 64 bit integer.
+	 * Sets value from signed 64 bit integer. The value is converted to string
+	 * and then the resulting string is set as a value of the node.
+     * @param v - signed 64 bit integer to set as a value of the node.
+     */
+	inline void SetS64(ting::s64 v)throw(){
+		char buf[64];
+		
+#if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
+		//snprintf() is available
+		int res = snprintf(buf, sizeof(buf), "%lli", v);
+#else //TODO: check for MSVC specific stuff
+		int res = sprintf(buf, "%lli", v);
+#endif
+		if(res < 0 || res > int(sizeof(buf))){
+			this->SetValue(std::string());
+		}else{
+			this->SetValue(std::string(buf, res));
+		}
+	}
+	
+	/**
+	 * @brief Set value from unsigned 64 bit integer.
+	 * Sets value from unsigned 64 bit integer. The value is converted to string
+	 * and then the resulting string is set as a value of the node.
+     * @param v - unsigned 64 bit integer to set as a value of the node.
+     */
+	inline void SetU64(ting::u64 v)throw(){
+		char buf[64];
+		
+#if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
+		//snprintf() is available
+		int res = snprintf(buf, sizeof(buf), "%llu", v);
+#else //TODO: check for MSVC specific stuff
+		int res = sprintf(buf, "%llu", v);
+#endif
+		if(res < 0 || res > int(sizeof(buf))){
+			this->SetValue(std::string());
+		}else{
+			this->SetValue(std::string(buf, res));
+		}
+	}
+	
+	/**
+	 * @brief Set value from 'float'.
+	 * Sets value from 'float'. The value is converted to string
+	 * and then the resulting string is set as a value of the node.
+     * @param v - 'float' to set as a value of the node.
+     */
+	inline void SetFloat(float v)throw(){
+		char buf[64];
+		
+#if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
+		//snprintf() is available
+		int res = snprintf(buf, sizeof(buf), "%f", double(v));
+#else //TODO: check for MSVC specific stuff
+		int res = sprintf(buf, "%f", double(v));
+#endif
+		if(res < 0 || res > int(sizeof(buf))){
+			this->SetValue(std::string());
+		}else{
+			this->SetValue(std::string(buf, res));
+		}
+	}
+	
+	/**
+	 * @brief Set value from 'double'.
+	 * Sets value from 'double'. The value is converted to string
+	 * and then the resulting string is set as a value of the node.
+     * @param v - 'double' to set as a value of the node.
+     */
+	inline void SetDouble(double v)throw(){
+		char buf[64];
+		
+#if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
+		//snprintf() is available
+		int res = snprintf(buf, sizeof(buf), "%f", v);
+#else //TODO: check for MSVC specific stuff
+		int res = sprintf(buf, "%f", v);
+#endif
+		if(res < 0 || res > int(sizeof(buf))){
+			this->SetValue(std::string());
+		}else{
+			this->SetValue(std::string(buf, res));
+		}
+	}
+	
+	/**
+	 * @brief Set value from 'long double'.
+	 * Sets value from 'long double'. The value is converted to string
+	 * and then the resulting string is set as a value of the node.
+     * @param v - 'long double' to set as a value of the node.
+     */
+	inline void SetLongDouble(long double v)throw(){
+		char buf[128];
+		
+#if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
+		//snprintf() is available
+		int res = snprintf(buf, sizeof(buf), "%Lf", v);
+#else //TODO: check for MSVC specific stuff
+		int res = sprintf(buf, "%Lf", v);
+#endif
+		if(res < 0 || res > int(sizeof(buf))){
+			this->SetValue(std::string());
+		}else{
+			this->SetValue(std::string(buf, res));
+		}
+	}
+	
+	/**
+	 * @brief Set value from 'bool'.
+	 * Sets value from 'bool'. The value is converted to string
+	 * and then the resulting string is set as a value of the node.
+     * @param v - 'bool' to set as a value of the node.
+     */
+	inline void SetBool(bool v)throw(){
+		this->SetValue(v ? "true" : "false");
 	}
 	
 	/**

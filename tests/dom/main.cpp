@@ -178,6 +178,56 @@ void Run(){
 				ASSERT_ALWAYS(n2)
 				n2->SetValue("-3213.43");
 			}
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
+			n1->SetS32(315);
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
+			n1->SetS32(-426);
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
+			n1->SetU32(4000100315);
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
+			n1->SetU32(-426);
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
+			n1->SetU64(1234567890123LL);
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
+			n1->SetS64(-1234567890123LL);
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
+			n1->SetFloat(315.34f);
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
+			n1->SetDouble(-315.3);
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
+			n1->SetBool(true);
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
+			n1->SetBool(false);
 		}
 		
 		n->InsertNext(stob::Node::New());
