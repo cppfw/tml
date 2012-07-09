@@ -217,7 +217,22 @@ void Run(){
 			n1->InsertNext(stob::Node::New());
 			n1 = n1->Next();
 			ASSERT_ALWAYS(n1)
+			n1->SetFloat(0.00006f);
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
 			n1->SetDouble(-315.3);
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
+			n1->SetDouble(-31523355325.3);
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
+			n1->SetLongDouble(-315.33L);
 			
 			n1->InsertNext(stob::Node::New());
 			n1 = n1->Next();
