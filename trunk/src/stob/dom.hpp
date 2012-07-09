@@ -280,11 +280,11 @@ public:
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
 		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
 		//snprintf() is available
-		int res = snprintf(buf, sizeof(buf), "%.8g", double(v));
+		int res = snprintf(buf, sizeof(buf), "%.8G", double(v));
 #elif M_COMPILER == M_COMPILER_MSVC
-		int res = _snprintf(buf, sizeof(buf), "%.8g", double(v));
+		int res = _snprintf(buf, sizeof(buf), "%.8G", double(v));
 #else
-		int res = sprintf(buf, "%.8g", double(v));
+		int res = sprintf(buf, "%.8G", double(v));
 #endif
 		if(res < 0 || res > int(sizeof(buf))){
 			this->SetValue(std::string());
@@ -305,11 +305,11 @@ public:
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
 		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
 		//snprintf() is available
-		int res = snprintf(buf, sizeof(buf), "%.17g", v);
+		int res = snprintf(buf, sizeof(buf), "%.17G", v);
 #elif M_COMPILER == M_COMPILER_MSVC
-		int res = _snprintf(buf, sizeof(buf), "%.17g", v);
+		int res = _snprintf(buf, sizeof(buf), "%.17G", v);
 #else
-		int res = sprintf(buf, "%.17g", v);
+		int res = sprintf(buf, "%.17G", v);
 #endif
 		if(res < 0 || res > int(sizeof(buf))){
 			this->SetValue(std::string());
@@ -330,11 +330,11 @@ public:
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
 		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
 		//snprintf() is available
-		int res = snprintf(buf, sizeof(buf), "%.31Lg", v);
+		int res = snprintf(buf, sizeof(buf), "%.31LG", v);
 #elif M_COMPILER == M_COMPILER_MSVC
-		int res = _snprintf(buf, sizeof(buf), "%.31Lg", v);
+		int res = _snprintf(buf, sizeof(buf), "%.31LG", v);
 #else
-		int res = sprintf(buf, "%.31Lg", v);
+		int res = sprintf(buf, "%.31LG", v);
 #endif
 		if(res < 0 || res > int(sizeof(buf))){
 			this->SetValue(std::string());
