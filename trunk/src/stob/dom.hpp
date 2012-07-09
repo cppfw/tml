@@ -277,6 +277,7 @@ public:
 	inline void SetFloat(float v)throw(){
 		char buf[64];
 		
+		//NOTE: useing capital G in format string as it should be non-locale aware (in contrast with small g).
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
 		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
 		//snprintf() is available
