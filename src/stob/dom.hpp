@@ -388,7 +388,7 @@ public:
 	 * @brief Get list of child nodes.
      * @return pointer to the first child node.
      */
-	inline Node* Children()throw(){
+	inline Node* Child()throw(){
 		return this->children.operator->();
 	}
 	
@@ -396,7 +396,7 @@ public:
 	 * @brief Get constant list of child nodes.
      * @return constant pointer to the first child node.
      */
-	inline const Node* Children()const throw(){
+	inline const Node* Child()const throw(){
 		return this->children.operator->();
 	}
 	

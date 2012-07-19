@@ -166,7 +166,7 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 	//used to detect case of two adjacent unquoted strings without children, need to insert space between them
 	bool prevWasUnquotedWithoutChildren = false;
 	
-	for(const Node* n = node->Children(); n; n = n->Next()){
+	for(const Node* n = node->Child(); n; n = n->Next()){
 		//indent
 		if(formatted){
 			for(unsigned i = 0; i != indentation; ++i){
@@ -210,7 +210,7 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 				));
 		}
 		
-		if(n->Children() == 0){
+		if(n->Child() == 0){
 			if(formatted){
 				fi.Write(newLine);
 			}
@@ -227,7 +227,7 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 			
 			fi.Write(rcurly);
 		}else{
-			if(n->Children()->Next() == 0 && n->Children()->Children() == 0){
+			if(n->Child()->Next() == 0 && n->Child()->Child() == 0){
 				//if only one child and that child has no children
 				fi.Write(space);
 				fi.Write(lcurly);
