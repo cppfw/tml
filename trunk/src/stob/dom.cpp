@@ -33,30 +33,31 @@ void Node::operator delete(void* p)throw(){
 
 
 
-Node* Node::Next(const std::string& value)throw(){
-	for(Node* n = this->Next(); n; n = n->Next()){
+std::pair<Node*, Node*> Node::Next(const std::string& value)throw(){
+	Node* prev = this;
+	for(Node* n = this->Next(); n; prev = n, n = n->Next()){
 		if(n->Value() == value){
-			return n;
+			return std::pair<Node*, Node*>(prev, n);
 		}
 	}
-	return 0;
+	return std::pair<Node*, Node*>(0, 0);
 }
 
 
 
-const Node* Node::Next(const std::string& value)const throw(){
+std::pair<const Node*, const Node*> Node::Next(const std::string& value)const throw(){
 	return const_cast<Node const*>(this)->Next(value);
 }
 
 
 
-Node* Node::Child(const std::string& value)throw(){
+std::pair<Node*, Node*> Node::Child(const std::string& value)throw(){
 	if(this->children.IsNotValid()){
-		return 0;
+		return std::pair<Node*, Node*>(0, 0);
 	}
 	
 	if(this->children->Value() == value){
-		return this->children.operator->();
+		return std::pair<Node*, Node*>(0, this->children.operator->());
 	}
 	
 	return this->children->Next(value);
@@ -64,7 +65,7 @@ Node* Node::Child(const std::string& value)throw(){
 
 
 
-const Node* Node::Child(const std::string& value)const throw(){
+std::pair<const Node*, const Node*> Node::Child(const std::string& value)const throw(){
 	return const_cast<Node const*>(this)->Child(value);
 }
 
