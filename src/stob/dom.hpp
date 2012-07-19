@@ -32,6 +32,7 @@ THE SOFTWARE. */
 #include <string>
 #include <cstdlib>
 #include <cstdio>
+#include <utility>
 
 #include <ting/config.hpp>
 #include <ting/PoolStored.hpp>
@@ -403,18 +404,20 @@ public:
 	/**
 	 * @brief Get child node holding the given value.
      * @param value - value to search for among children.
-     * @return Pointer to the first found child node with the given value.
-	 * @return null-pointer if no child with given value was found.
+     * @return std::pair holding two pointers to Node.
+	 *         The second value is a pointer to the first child node which holds the given value, it can be 0 if no such child node found.
+	 *         The first value is a pointer to previous node, it can be 0 if the very first child node is returned as a second value of the pair.
      */
-	Node* Child(const std::string& value)throw();
+	std::pair<Node*, Node*> Child(const std::string& value)throw();
 	
 	/**
 	 * @brief Get constant child node holding the given value.
      * @param value - value to search for among children.
-     * @return Constant pointer to the first found child node with the given value.
-	 * @return null-pointer if no child with given value was found.
+     * @return std::pair holding two constant pointers to Node.
+	 *         The second value is a pointer to the first child node which holds the given value, it can be 0 if no such child node found.
+	 *         The first value is a pointer to previous node, it can be 0 if the very first child node is returned as a second value of the pair.
      */
-	const Node* Child(const std::string& value)const throw();
+	std::pair<const Node*, const Node*> Child(const std::string& value)const throw();
 	
 	/**
 	 * @brief Get next node in the single-linked list.
@@ -438,19 +441,21 @@ public:
 	 * @brief Get next node holding the given value.
 	 * Get next closest node in the single-linked list which holds the given value.
      * @param value - value to look for.
-     * @return Pointer to the next closest node in the single-linked list which holds the given value.
-	 * @return null-pointer if there are no nodes with the given value found.
+     * @return std::pair holding two pointers to Node.
+	 *         The second value is a pointer to the next closest node in the single-linked list which holds the given value, it can be 0 if no node found.
+	 *         The first value is a pointer to previous node, it is always a valid pointer.
      */
-	Node* Next(const std::string& value)throw();
+	std::pair<Node*, Node*> Next(const std::string& value)throw();
 	
 	/**
 	 * @brief Get constant next node holding the given value.
 	 * Get constant next closest node in the single-linked list which holds the given value.
      * @param value - value to look for.
-     * @return Constant pointer to the next closest node in the single-linked list which holds the given value.
-	 * @return null-pointer if there are no nodes with the given value found.
+     * @return std::pair holding two constant pointers to Node.
+	 *         The second value is a pointer to the next closest node in the single-linked list which holds the given value, it can be 0 if no node found.
+	 *         The first value is a pointer to previous node, it is always a valid pointer.
      */
-	const Node* Next(const std::string& value)const throw();
+	std::pair<const Node*, const Node*> Next(const std::string& value)const throw();
 	
 	/**
 	 * @brief Insert node into the single-linked list.
