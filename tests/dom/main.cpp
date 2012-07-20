@@ -109,7 +109,8 @@ void Run(){
 		ASSERT_ALWAYS(ch->Value() == "test string")
 	}
 	{
-		stob::Node* ch = root->Child("unquotedString").second;
+		const stob::Node* constRoot = root.operator->();
+		const stob::Node* ch = constRoot->Child("unquotedString").second;
 		ASSERT_ALWAYS(ch)
 		ASSERT_ALWAYS(ch->Value() == "unquotedString")
 	}
