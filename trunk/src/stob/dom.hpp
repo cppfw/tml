@@ -360,7 +360,7 @@ public:
 	 * Sets the children nodes list for this node. Previously set list will be discarded if any.
      * @param first - auto-pointer to the first node of the children single.linked list.
      */
-	void SetChildren(const ting::Ptr<Node>& first)throw(){
+	void SetChildren(ting::Ptr<Node> first)throw(){
 		this->children = first;
 	}
 	
@@ -466,7 +466,7 @@ public:
 	 * Insert the node to the single-linked list as a next node after this Node.
      * @param node - node to insert.
      */
-	inline void InsertNext(const ting::Ptr<Node>& node)throw(){
+	inline void InsertNext(ting::Ptr<Node> node)throw(){
 		if(node.IsValid()){
 			node->next = this->next;
 		}
@@ -492,6 +492,15 @@ public:
      */
 	inline ting::Ptr<Node> ChopNext()throw(){
 		return this->next;
+	}
+	
+	/**
+	 * @brief Set tail of the single-linked list.
+	 * Sets the next node for this node to the specified node.
+     * @param node - node to set as the next node.
+     */
+	inline void SetNext(ting::Ptr<Node> node)throw(){
+		this->next = node;
 	}
 	
 	/**
