@@ -406,7 +406,8 @@ public:
      * @param value - value to search for among children.
      * @return std::pair holding two pointers to Node.
 	 *         The second value is a pointer to the first child node which holds the given value, it can be 0 if no such child node found.
-	 *         The first value is a pointer to previous node, it can be 0 if the very first child node is returned as a second value of the pair.
+	 *         The first value is a pointer to previous node, it can be 0 if the very first child node is returned as a second value of the pair or the node has no children at all.
+	 *         If second value holds 0 and first one is not 0, then the first value holds pointer to the last node in the single-linked list.
      */
 	std::pair<Node*, Node*> Child(const std::string& value)throw();
 	
@@ -415,7 +416,8 @@ public:
      * @param value - value to search for among children.
      * @return std::pair holding two constant pointers to Node.
 	 *         The second value is a pointer to the first child node which holds the given value, it can be 0 if no such child node found.
-	 *         The first value is a pointer to previous node, it can be 0 if the very first child node is returned as a second value of the pair.
+	 *         The first value is a pointer to previous node, it can be 0 if the very first child node is returned as a second value of the pair or the node has no children at all.
+	 *         If second value holds 0 and first one is not 0, then the first value holds pointer to the last node in the single-linked list.
      */
 	std::pair<const Node*, const Node*> Child(const std::string& value)const throw();
 	
@@ -444,6 +446,7 @@ public:
      * @return std::pair holding two pointers to Node.
 	 *         The second value is a pointer to the next closest node in the single-linked list which holds the given value, it can be 0 if no node found.
 	 *         The first value is a pointer to previous node, it is always a valid pointer.
+	 *         If second value holds 0, then first holds pointer to the last node in the single-linked list.
      */
 	std::pair<Node*, Node*> Next(const std::string& value)throw();
 	
@@ -454,6 +457,7 @@ public:
      * @return std::pair holding two constant pointers to Node.
 	 *         The second value is a pointer to the next closest node in the single-linked list which holds the given value, it can be 0 if no node found.
 	 *         The first value is a pointer to previous node, it is always a valid pointer.
+	 *         If second value holds 0, then first holds pointer to the last node in the single-linked list.
      */
 	std::pair<const Node*, const Node*> Next(const std::string& value)const throw();
 	
