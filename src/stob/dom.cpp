@@ -40,7 +40,7 @@ std::pair<Node*, Node*> Node::Next(const std::string& value)throw(){
 			return std::pair<Node*, Node*>(prev, n);
 		}
 	}
-	return std::pair<Node*, Node*>(0, 0);
+	return std::pair<Node*, Node*>(prev, 0);
 }
 
 
