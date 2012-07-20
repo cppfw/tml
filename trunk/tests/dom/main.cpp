@@ -101,6 +101,18 @@ void Run(){
 	ASSERT_ALWAYS(!n->Child())
 	
 	ASSERT_ALWAYS(!n->Next())
+	
+	
+	{
+		stob::Node* ch = root->Child("test string").second;
+		ASSERT_ALWAYS(ch)
+		ASSERT_ALWAYS(ch->Value() == "test string")
+	}
+	{
+		stob::Node* ch = root->Child("unquotedString").second;
+		ASSERT_ALWAYS(ch)
+		ASSERT_ALWAYS(ch->Value() == "unquotedString")
+	}
 }
 }//~namespace
 
