@@ -45,12 +45,6 @@ std::pair<Node*, Node*> Node::Next(const std::string& value)throw(){
 
 
 
-std::pair<const Node*, const Node*> Node::Next(const std::string& value)const throw(){
-	return const_cast<Node const*>(this)->Next(value);
-}
-
-
-
 std::pair<Node*, Node*> Node::Child(const std::string& value)throw(){
 	if(this->children.IsNotValid()){
 		return std::pair<Node*, Node*>(0, 0);
@@ -61,12 +55,6 @@ std::pair<Node*, Node*> Node::Child(const std::string& value)throw(){
 	}
 	
 	return this->children->Next(value);
-}
-
-
-
-std::pair<const Node*, const Node*> Node::Child(const std::string& value)const throw(){
-	return const_cast<Node const*>(this)->Child(value);
 }
 
 
