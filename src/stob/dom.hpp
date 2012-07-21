@@ -92,7 +92,7 @@ public:
 	 * Tries to parse the string as signed 32bit integer.
      * @return Result of parsing node value as signed 32bit integer.
      */
-	inline ting::s32 AsS32()throw(){
+	inline ting::s32 AsS32()const throw(){
 		return ting::s32(strtol(this->Value().c_str(), 0, 0));
 	}
 	
@@ -101,7 +101,7 @@ public:
 	 * Tries to parse the string as unsigned 32bit integer.
      * @return Result of parsing node value as unsigned 32bit integer.
      */
-	inline ting::u32 AsU32()throw(){
+	inline ting::u32 AsU32()const throw(){
 		return ting::u32(strtoul(this->Value().c_str(), 0, 0));
 	}
 	
@@ -110,7 +110,7 @@ public:
 	 * Tries to parse the string as signed 64bit integer.
      * @return Result of parsing node value as signed 64bit integer.
      */
-	inline ting::s64 AsS64()throw(){
+	inline ting::s64 AsS64()const throw(){
 		return ting::s64(strtoll(this->Value().c_str(), 0 , 0));
 	}
 	
@@ -119,7 +119,7 @@ public:
 	 * Tries to parse the string as unsigned 64bit integer.
      * @return Result of parsing node value as unsigned 64bit integer.
      */
-	inline ting::u64 AsU64()throw(){
+	inline ting::u64 AsU64()const throw(){
 		return ting::u64(strtoull(this->Value().c_str(), 0 , 0));
 	}
 	
@@ -128,7 +128,7 @@ public:
 	 * Tries to parse the string as float value (32bits).
      * @return Result of parsing node value as float value (32bits).
      */
-	inline float AsFloat()throw(){
+	inline float AsFloat()const throw(){
 		return float(this->AsDouble());
 	}
 	
@@ -137,7 +137,7 @@ public:
 	 * Tries to parse the string as double precision float value (64bits).
      * @return Result of parsing node value as double precision float value (64bits).
      */
-	inline double AsDouble()throw(){
+	inline double AsDouble()const throw(){
 		return strtod(this->Value().c_str(), 0);
 	}
 	
@@ -146,7 +146,7 @@ public:
 	 * Tries to parse the string as long double precision float value (64bits).
      * @return Result of parsing node value as long double precision float value (64bits).
      */
-	inline long double AsLongDouble()throw(){
+	inline long double AsLongDouble()const throw(){
 		return strtold(this->Value().c_str(), 0);
 	}
 	
@@ -157,7 +157,7 @@ public:
      * @return true if string is "true".
 	 * @return false otherwise.
      */
-	inline bool AsBool()throw(){
+	inline bool AsBool()const throw(){
 		return this->Value() == "true";
 	}
 	
