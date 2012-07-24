@@ -170,8 +170,11 @@ void Run(){
 			ASSERT_ALWAYS(n1)
 			n1->SetValue("Child fourth");
 			{
-				n1->SetChildren(stob::Node::New());
+				n1->AddProperty("Property")->SetValue("value");
+				
 				stob::Node* n2 = n1->Child();
+				n2->InsertNext(stob::Node::New());
+				n2 = n2->Next();
 				ASSERT_ALWAYS(n2)
 				n2->SetValue("subchild1");
 				
@@ -179,6 +182,8 @@ void Run(){
 				n2 = n2->Next();
 				ASSERT_ALWAYS(n2)
 				n2->SetValue("subchild 2");
+				
+				n1->AddProperty("Prop")->SetBool("true");
 			}
 			
 			n1->InsertNext(stob::Node::New());
