@@ -61,19 +61,13 @@ std::pair<Node*, Node*> Node::Child(const std::string& value)throw(){
 
 Node* Node::AddProperty(const std::string& propName){
 	ting::Ptr<Node> p = Node::New();
-	Node* prop = p.operator->();
+	p->SetValue(propName);
+	p->SetNext(this->RemoveChildren());
+	this->SetChildren(p);
 
-	prop->SetValue(propName);
+	this->Child()->SetChildren(Node::New());
 
-	if(!this->Child()){
-		this->SetChildren(p);
-	}else{
-		this->Child()->InsertNext(p);
-	}
-
-	prop->SetChildren(Node::New());
-
-	return prop->Child();
+	return this->Child()->Child();
 }
 
 
