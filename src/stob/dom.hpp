@@ -466,6 +466,50 @@ public:
 	}
 	
 	/**
+	 * @brief Get property.
+	 * This is a convenience method which searches for the first child node with
+	 * specified name (property name) and returns its first child node.
+     * @param propName - name of the property to get.
+     * @return pointer to a node representing property value.
+	 * @return zero pointer if no property with a given name found or property has no value.
+     */
+	Node* GetProperty(const std::string& propName)throw(){
+		Node* prop = this->Child(propName).second;
+		if(!prop){
+			return 0;
+		}
+
+		return prop->Child();
+	}
+	
+	/**
+	 * @brief Get constant property.
+	 * This is a convenience method which searches for the first child node with
+	 * specified name (property name) and returns its first child node.
+     * @param propName - name of the property to get.
+     * @return constant pointer to a node representing property value.
+	 * @return zero pointer if no property with a given name found or property has no value.
+     */
+	const Node* GetProperty(const std::string& propName)const throw(){
+		return const_cast<Node* const>(this)->GetProperty(propName);
+	}
+	
+	/**
+	 * @brief Add new property to the node.
+	 * This is a convenience method which adds a new child with a given value (property name)
+	 * to this node and adds one child node (property value) to that added child. It then
+	 * returns a pointer to the node representing property value.
+	 * Note, that it does not check if property with a given name already exists.
+	 * In case the property with a given name already exists this method will just add another
+	 * property with the same name, so there will be two (or more) child nodes having that
+	 * property name.
+     * @param propName - name of the new property.
+     * @return pointer to a node representing value of the newly created property.
+	 *         The returned pointer is always valid.
+     */
+	Node* AddProperty(const std::string& propName);
+	
+	/**
 	 * @brief Insert node into the single-linked list.
 	 * Insert the node to the single-linked list as a next node after this Node.
      * @param node - node to insert.
