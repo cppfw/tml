@@ -59,6 +59,25 @@ std::pair<Node*, Node*> Node::Child(const std::string& value)throw(){
 
 
 
+Node* Node::AddProperty(const std::string& propName){
+	ting::Ptr<Node> p = Node::New();
+	Node* prop = p.operator->();
+
+	prop->SetValue(propName);
+
+	if(!this->Child()){
+		this->SetChildren(p);
+	}else{
+		this->Child()->InsertNext(p);
+	}
+
+	prop->SetChildren(Node::New());
+
+	return prop->Child();
+}
+
+
+
 namespace{
 
 bool CanStringBeUnquoted(const std::string& s, unsigned& numEscapes){
