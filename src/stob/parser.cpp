@@ -138,11 +138,8 @@ void Parser::PreParseChar(ting::u8 c, ParseListener& listener){
 			}else{
 				this->ParseChar('/', listener);
 
-				if(this->state == QUOTED_STRING && c == '"'){
-					this->HandleStringEnd(listener);
-				}else{
-					this->ParseChar(c, listener);
-				}
+				ASSERT(this->state != QUOTED_STRING)
+				this->ParseChar(c, listener);
 			}
 		}else{
 			switch(this->state){
@@ -188,7 +185,7 @@ void Parser::PreParseChar(ting::u8 c, ParseListener& listener){
 		}
 		this->prevChar = 0;
 	}else{//~if(this->prevChar == 0)
-		if(c == '/'){//possible comment sequence
+		if(c == '/' && this->state != QUOTED_STRING){//possible comment sequence
 			this->prevChar = '/';
 		}else{
 			switch(this->state){
