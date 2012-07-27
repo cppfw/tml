@@ -503,6 +503,7 @@ public:
 	 * In case the property with a given name already exists this method will just add another
 	 * property with the same name, so there will be two (or more) child nodes having that
 	 * property name.
+	 * The property node is added to the beginning of the children list.
      * @param propName - name of the new property.
      * @return pointer to a node representing value of the newly created property.
 	 *         The returned pointer is always valid.
