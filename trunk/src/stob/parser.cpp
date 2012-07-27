@@ -191,7 +191,7 @@ void Parser::PreParseChar(ting::u8 c, ParseListener& listener){
 						this->prevChar = '\\';
 						break;
 					case '"':
-//								TRACE(<< "qsp = " << std::string(reinterpret_cast<char*>(this->buf->Begin()), 11) << std::endl)
+//							TRACE(<< "qsp = " << std::string(reinterpret_cast<char*>(this->buf->Begin()), 11) << std::endl)
 						this->HandleStringEnd(listener);
 						break;
 					case '\n':
