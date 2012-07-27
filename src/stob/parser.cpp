@@ -184,40 +184,40 @@ void Parser::PreParseChar(ting::u8 c, ParseListener& listener){
 			}
 		}
 		this->prevChar = 0;
-	}else{//~if(this->prevChar == 0)
-		if(c == '/' && this->state != QUOTED_STRING){//possible comment sequence
-			this->prevChar = '/';
-		}else{
-			switch(this->state){
-				case QUOTED_STRING:
-					switch(c){
-						case '\\': //escape sequence
-							this->prevChar = '\\';
-							break;
-						case '"':
+	}else{//~if(this->prevChar != 0)
+		switch(this->state){
+			case QUOTED_STRING:
+				switch(c){
+					case '\\': //escape sequence
+						this->prevChar = '\\';
+						break;
+					case '"':
 //								TRACE(<< "qsp = " << std::string(reinterpret_cast<char*>(this->buf->Begin()), 11) << std::endl)
-							this->HandleStringEnd(listener);
-							break;
-						case '\n':
-							++this->curLine;
-						case '\r':
-						case '\t':
-							//ignore
-							break;
-						default:
-							this->ParseChar(c, listener);
-							break;
-					}
-					break;
-				case UNQUOTED_STRING:
-				case IDLE:
+						this->HandleStringEnd(listener);
+						break;
+					case '\n':
+						++this->curLine;
+					case '\r':
+					case '\t':
+						//ignore
+						break;
+					default:
+						this->ParseChar(c, listener);
+						break;
+				}
+				break;
+			case UNQUOTED_STRING:
+			case IDLE:
+				if(c == '/'){//possible comment sequence
+					this->prevChar = '/';
+				}else{
 					this->ParseChar(c, listener);
-					break;
-				default:
-					ASSERT(false)
-					break;
-			}
-		}
+				}
+				break;
+			default:
+				ASSERT(false)
+				break;
+		}//~switch
 	}
 }
 
