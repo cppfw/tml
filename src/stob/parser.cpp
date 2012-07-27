@@ -130,58 +130,57 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 
 void Parser::PreParseChar(ting::u8 c, ParseListener& listener){
 	if(this->prevChar != 0){
-		if(this->prevChar == '/'){//possible comment sequence
-			if(c == '/'){
-				this->commentState = LINE_COMMENT;
-			}else if(c == '*'){
-				this->commentState = MULTILINE_COMMENT;
-			}else{
-				this->ParseChar('/', listener);
-
-				ASSERT(this->state != QUOTED_STRING)
-				this->ParseChar(c, listener);
-			}
-		}else{
-			switch(this->state){
-				case IDLE:
-				case UNQUOTED_STRING:
-					ASSERT(false)
-					break;
-				case QUOTED_STRING:
-					ASSERT(this->prevChar == '\\')//escape sequence
-					switch(c){
-						case '\\'://backslash
-							this->ParseChar('\\', listener);
-							break;
-						case '/'://slash
-							this->ParseChar('/', listener);
-							break;
-						case '"':
-							this->ParseChar('"', listener);
-							break;
-						case 'n':
-							this->ParseChar('\n', listener);
-							break;
-						case 'r':
-							this->ParseChar('\r', listener);
-							break;
-						case 't':
-							this->ParseChar('\t', listener);
-							break;
-						default:
-							{
-								std::stringstream ss;
-								ss << "Malformed document. Unknown escape sequence (\\" << c << ") on line: ";
-								ss << this->curLine;
-								throw stob::Exc(ss.str());
-							}
-							break;
-					}
-					break;
-				default:
-					ASSERT(false)
-					break;
-			}
+		switch(this->state){
+			case IDLE:
+			case UNQUOTED_STRING:
+				ASSERT(this->prevChar == '/')//possible comment sequence
+				switch(c){
+					case '/':
+						this->commentState = LINE_COMMENT;
+						break;
+					case '*':
+						this->commentState = MULTILINE_COMMENT;
+						break;
+					default:
+						this->ParseChar('/', listener);
+						this->ParseChar(c, listener);
+						break;
+				}
+				break;
+			case QUOTED_STRING:
+				ASSERT(this->prevChar == '\\')//escape sequence
+				switch(c){
+					case '\\'://backslash
+						this->ParseChar('\\', listener);
+						break;
+					case '/'://slash
+						this->ParseChar('/', listener);
+						break;
+					case '"':
+						this->ParseChar('"', listener);
+						break;
+					case 'n':
+						this->ParseChar('\n', listener);
+						break;
+					case 'r':
+						this->ParseChar('\r', listener);
+						break;
+					case 't':
+						this->ParseChar('\t', listener);
+						break;
+					default:
+						{
+							std::stringstream ss;
+							ss << "Malformed document. Unknown escape sequence (\\" << c << ") on line: ";
+							ss << this->curLine;
+							throw stob::Exc(ss.str());
+						}
+						break;
+				}
+				break;
+			default:
+				ASSERT(false)
+				break;
 		}
 		this->prevChar = 0;
 	}else{//~if(this->prevChar != 0)
