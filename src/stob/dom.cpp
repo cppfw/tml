@@ -14,7 +14,7 @@ using namespace stob;
 
 
 namespace{
-ting::MemoryPool<sizeof(Node), 4096 / sizeof(Node)> memoryPool;
+ting::MemoryPool<sizeof(Node), 100> memoryPool;
 }
 
 
