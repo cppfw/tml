@@ -17,7 +17,7 @@ import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 
 @MultiViewElement.Registration(
-    displayName = "#LBL_STOB_VISUAL",
+    displayName = "STOB",
 iconBase = "org/stobml/nbcolorer/fileIcon.png",
 mimeType = "text/x-stob",
 persistenceType = TopComponent.PERSISTENCE_NEVER,

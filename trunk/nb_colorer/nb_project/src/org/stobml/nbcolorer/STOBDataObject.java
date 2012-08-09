@@ -97,7 +97,7 @@ public class STOBDataObject extends MultiDataObject {
 	}
 
 	@MultiViewElement.Registration(
-        displayName = "#LBL_STOB_EDITOR",
+        displayName = "STOB",
 	iconBase = "org/stobml/nbcolorer/fileIcon.png",
 	mimeType = "text/x-stob",
 	persistenceType = TopComponent.PERSISTENCE_ONLY_OPENED,
