@@ -1,1 +1,13 @@
+/*
+ * A new stob document!
+ */
 
+"New STOB document"
+
+//sample string
+String1{
+
+	property {"Hello STOB!"}
+
+	
+}

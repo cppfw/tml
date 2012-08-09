@@ -9,7 +9,7 @@ import org.stobml.lexer.STOBTokenId;
 public class STOBLanguage extends DefaultLanguageConfig {
 
     @Override
-    public Language getLexerLanguage() {
+    public Language<STOBTokenId> getLexerLanguage() {
         return STOBTokenId.getLanguage();
     }
 
