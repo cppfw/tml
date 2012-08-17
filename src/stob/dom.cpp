@@ -315,3 +315,26 @@ ting::Ptr<stob::Node> stob::Load(ting::fs::File& fi){
 	
 	return listener.chain;
 }
+
+
+
+ting::Ptr<stob::Node> Node::Clone()const{
+	ting::Ptr<Node> ret = Node::New(this->Value());
+	
+	if(!this->Child()){
+		return ret;
+	}
+	
+	ting::Ptr<stob::Node> c = this->Child()->Clone();
+	
+	{
+		stob::Node* curChild = c.operator->();
+		for(const stob::Node *p = this->Child()->Next(); p; p = p->Next(), curChild = curChild->Next()){
+			ASSERT(curChild)
+			curChild->InsertNext(p->Clone());
+		}
+	}
+	
+	ret->SetChildren(c);
+	return ret;
+}
