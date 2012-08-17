@@ -52,7 +52,7 @@ namespace stob{
  * This class represents a node of the STOB document object model.
  * The Node objects can be organized to a single-linked list. There are methods for managing it.
  * The Node objects can hold a list of child nodes, i.e. a single-linked list of child Node objects.
- * The Node class has overriden operators new and delete to allocate the memore for the objects from
+ * The Node class has overridden operators new and delete to allocate the memory for the objects from
  * a memory pool to avoid memory fragmentation.
  */
 class Node{
@@ -63,19 +63,26 @@ class Node{
 	ting::Ptr<Node> children; //pointer to the first child
 	
 	//constructor is private, no inheritance.
-	Node(){}
+	Node(const std::string& value = std::string()) :
+			value(value)
+	{}
+	
+	//no copying
+	Node(const Node&);
+	Node& operator=(const Node&);
 	
 	static void* operator new(size_t size);
-		
+	
 public:
 	static void operator delete(void *p)throw();
 	
 	/**
 	 * @brief Create new node object.
+	 * @param value - value to set for the newly created node.
      * @return An auto-pointer to a newly created Node object.
      */
-	static inline ting::Ptr<Node> New(){
-		return ting::Ptr<Node>(new Node());
+	static inline ting::Ptr<Node> New(const std::string& value = std::string()){
+		return ting::Ptr<Node>(new Node(value));
 	}
 	
 	/**
@@ -551,6 +558,13 @@ public:
 	inline void SetNext(ting::Ptr<Node> node)throw(){
 		this->next = node;
 	}
+	
+	/**
+	 * @brief Create a deep copy of the Node.
+	 * Clones this node and all the underlying nodes hierarchy.
+     * @return A deep copy of this Node.
+     */
+	ting::Ptr<Node> Clone()const;
 	
 	/**
 	 * @brief Write this document-object model to the file interface as STOB document.
