@@ -154,7 +154,11 @@ public:
      * @return Result of parsing node value as long double precision float value (64bits).
      */
 	inline long double AsLongDouble()const throw(){
+#if _XOPEN_SOURCE >= 600 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
 		return strtold(this->Value().c_str(), 0);
+#else//strtold() not supported
+		return (long double)(this->AsDouble());
+#endif
 	}
 	
 	/**
