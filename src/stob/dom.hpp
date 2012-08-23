@@ -567,6 +567,18 @@ public:
 	ting::Ptr<Node> Clone()const;
 	
 	/**
+	 * @brief Check if value starts with capital latin letter.
+	 * This is just a convenience method.
+	 * Checks if the first character of the value is one of the capital latin letters from A to Z. 
+     * @return true if the first character of the node's value is a capital letter of latin alphabet.
+	 * @return false otherwise.
+	 * @return false if the value is an empty string.
+     */
+	inline bool IsCapital()const throw(){
+		return this->value.size() != 0 && 'A' <= this->value[0] && this->value[0] <= 'Z';
+	}
+	
+	/**
 	 * @brief Write this document-object model to the file interface as STOB document.
      * @param fi - file interface to write to.
      * @param formatted - if true then the STOB document will be written with formatting.
