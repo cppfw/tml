@@ -389,11 +389,31 @@ public:
      * @return auto-pointer to the node which was the first child.
      */
 	inline ting::Ptr<Node> RemoveFirstChild()throw(){
-		ting::Ptr<Node> ret = this->children;
-		if(ret.IsValid()){
-			this->children = ret->next;
+		if(!this->children){
+			return ting::Ptr<Node>();
 		}
+		
+		ting::Ptr<Node> ret = this->children;
+		this->children = ret->next;
+
 		return ret;
+	}
+	
+	/**
+	 * @brief Remove child hilding given value.
+	 * Removes the first child which holds given value.
+     * @param value - value to search for among children.
+     * @return auto-pointer to the removed node.
+	 * @return invalid auto-pointer if there was no child with given value found.
+     */
+	inline ting::Ptr<Node> RemoveChild(const std::string& value)throw(){
+		std::pair<Node*, Node*> f = this->Child(value);
+		
+		if(f.first){
+			return f.first->RemoveNext();
+		}
+		
+		return this->RemoveFirstChild();
 	}
 	
 	/**
@@ -417,7 +437,7 @@ public:
      * @param value - value to search for among children.
      * @return std::pair holding two pointers to Node.
 	 *         The second value is a pointer to the first child node which holds the given value, it can be 0 if no such child node found.
-	 *         The first value is a pointer to previous node, it can be 0 if the very first child node is returned as a second value of the pair or the node has no children at all.
+	 *         The first value is a pointer to previous node, it is 0 if the very first child node is returned as a second value of the pair or the node has no children at all.
 	 *         If second value holds 0 and first one is not 0, then the first value holds pointer to the last node in the single-linked list.
      */
 	std::pair<Node*, Node*> Child(const std::string& value)throw();
