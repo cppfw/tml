@@ -176,7 +176,7 @@ public:
 	 * @brief Set value of the node.
      * @param v - string to set as a node value.
      */
-	inline void SetValue(const std::string& v)throw(){
+	inline void SetValue(const std::string& v = std::string())throw(){
 		this->value = v;
 	}
 	
