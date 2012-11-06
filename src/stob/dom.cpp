@@ -33,10 +33,10 @@ void Node::operator delete(void* p)throw(){
 
 
 
-std::pair<Node*, Node*> Node::Next(const std::string& value)throw(){
+std::pair<Node*, Node*> Node::Next(const char* value)throw(){
 	Node* prev = this;
 	for(Node* n = this->Next(); n; prev = n, n = n->Next()){
-		if(n->Value() == value){
+		if(n->operator ==(value)){
 			return std::pair<Node*, Node*>(prev, n);
 		}
 	}
@@ -45,12 +45,12 @@ std::pair<Node*, Node*> Node::Next(const std::string& value)throw(){
 
 
 
-std::pair<Node*, Node*> Node::Child(const std::string& value)throw(){
+std::pair<Node*, Node*> Node::Child(const char* value)throw(){
 	if(this->children.IsNotValid()){
 		return std::pair<Node*, Node*>(0, 0);
 	}
 	
-	if(this->children->Value() == value){
+	if(this->children->operator==(value)){
 		return std::pair<Node*, Node*>(0, this->children.operator->());
 	}
 	
@@ -59,7 +59,7 @@ std::pair<Node*, Node*> Node::Child(const std::string& value)throw(){
 
 
 
-Node* Node::AddProperty(const std::string& propName){
+Node* Node::AddProperty(const char* propName){
 	ting::Ptr<Node> p = Node::New();
 	p->SetValue(propName);
 	p->SetNext(this->RemoveChildren());
@@ -74,19 +74,20 @@ Node* Node::AddProperty(const std::string& propName){
 
 namespace{
 
-bool CanStringBeUnquoted(const std::string& s, unsigned& numEscapes){
+bool CanStringBeUnquoted(const char* s, size_t& length, unsigned& numEscapes){
 //	TRACE(<< "CanStringBeUnquoted(): enter" << std::endl)
 	
 	numEscapes = 0;
+	length = 0;
 	
-	if(s.size() == 0){//empty string is always quoted
+	if(s == 0){//empty string is always quoted
 		return false;
 	}
 	
 	bool ret = true;
-	for(const char* c = s.c_str(); *c != 0; ++c){
+	for(; *s != 0; ++s, ++length){
 //		TRACE(<< "CanStringBeUnquoted(): c = " << (*c) << std::endl)
-		switch(*c){
+		switch(*s){
 			case '\t':
 			case '\n':
 			case '\r':
@@ -105,9 +106,9 @@ bool CanStringBeUnquoted(const std::string& s, unsigned& numEscapes){
 }
 
 
-void MakeEscapedString(const std::string& str, ting::Buffer<ting::u8>& out){
+void MakeEscapedString(const char* str, ting::Buffer<ting::u8>& out){
 	ting::u8 *p = out.Begin();
-	for(const char* c = str.c_str(); *c != 0; ++c){
+	for(const char* c = str; *c != 0; ++c){
 		ASSERT(p != out.End())
 		
 		switch(*c){
@@ -180,18 +181,19 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 		//write node value
 		
 		unsigned numEscapes;
-		bool unqouted = CanStringBeUnquoted(n->Value(), numEscapes);
+		size_t length;
+		bool unqouted = CanStringBeUnquoted(n->Value(), length, numEscapes);
 		
 		if(!unqouted){
 			fi.Write(quote);
 			
 			if(numEscapes == 0){
 				fi.Write(ting::Buffer<ting::u8>(
-						const_cast<ting::u8*>(reinterpret_cast<const ting::u8*>(n->Value().c_str())),
-						n->Value().size()
+						const_cast<ting::u8*>(reinterpret_cast<const ting::u8*>(n->Value())),
+						length
 					));
 			}else{
-				ting::Array<ting::u8> buf(n->Value().size() + numEscapes);
+				ting::Array<ting::u8> buf(length + numEscapes);
 				
 				MakeEscapedString(n->Value(), buf);
 				
@@ -207,8 +209,8 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 			
 			ASSERT(numEscapes == 0)
 			fi.Write(ting::Buffer<ting::u8>(
-					const_cast<ting::u8*>(reinterpret_cast<const ting::u8*>(n->Value().c_str())),
-					n->Value().size()
+					const_cast<ting::u8*>(reinterpret_cast<const ting::u8*>(n->Value())),
+					length
 				));
 		}
 		
@@ -286,8 +288,7 @@ ting::Ptr<stob::Node> stob::Load(ting::fs::File& fi){
 
 		//override
 		void OnStringParsed(const char* s, ting::u32 size){
-			ting::Ptr<Node> node = Node::New();
-			node->SetValue(std::string(s, size));
+			ting::Ptr<Node> node = Node::New(s, size);
 			
 			if(this->chain.IsNotValid()){
 				this->chain = node;

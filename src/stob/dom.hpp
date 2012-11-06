@@ -29,7 +29,6 @@ THE SOFTWARE. */
 #pragma once
 
 
-#include <string>
 #include <cstdlib>
 #include <cstdio>
 #include <utility>
@@ -56,16 +55,27 @@ namespace stob{
  * a memory pool to avoid memory fragmentation.
  */
 class Node{
-	std::string value; //node value
+	char* value; //node value
 	
 	ting::Ptr<Node> next; //next sibling node
 	
 	ting::Ptr<Node> children; //pointer to the first child
 	
 	//constructor is private, no inheritance.
-	Node(const std::string& value = std::string()) :
-			value(value)
-	{}
+	Node(const char* value, size_t size){
+		this->SetValueInternal(value, size);
+	}
+	
+	inline void SetValueInternal(const char* v, size_t size){
+		if(v == 0){
+			this->value = 0;
+			return;
+		}
+		
+		this->value = new char[size + 1];
+		memcpy(this->value, v, size);
+		this->value[size] = 0;//null-terminate
+	}
 	
 	//no copying
 	Node(const Node&);
@@ -74,23 +84,47 @@ class Node{
 	static void* operator new(size_t size);
 	
 public:
+	~Node()throw(){
+		delete[] this->value;
+	}
+	
 	static void operator delete(void *p)throw();
 	
 	/**
 	 * @brief Create new node object.
-	 * @param value - value to set for the newly created node.
+	 * @param value - buffer holding the value to set for the created node.
+	 * @param size - size of the value buffer in bytes.
      * @return An auto-pointer to a newly created Node object.
      */
-	static inline ting::Ptr<Node> New(const std::string& value = std::string()){
-		return ting::Ptr<Node>(new Node(value));
+	static inline ting::Ptr<Node> New(const char* value, size_t size){
+		return ting::Ptr<Node>(new Node(value, size));
+	}
+	
+	/**
+	 * @brief Create new node object.
+	 * @param value - null-terminated string holding the value to set for the created node.
+     * @return An auto-pointer to a newly created Node object.
+     */
+	static inline ting::Ptr<Node> New(const char* value){
+		return Node::New(value, strlen(value));
+	}
+	
+	/**
+	 * @brief Create new node object.
+	 * The value is set to empty string.
+     * @return An auto-pointer to a newly created Node object.
+     */
+	static inline ting::Ptr<Node> New(){
+		return Node::New(0, 0);
 	}
 	
 	/**
 	 * @brief Value stored by this node.
 	 * Returns the value stored by this node, i.e. string value.
+	 * Return value can be 0;
      * @return A string representing this node.
      */
-	inline const std::string& Value()const throw(){
+	inline const char* Value()const throw(){
 		return this->value;
 	}
 	
@@ -100,7 +134,7 @@ public:
      * @return Result of parsing node value as signed 32bit integer.
      */
 	inline ting::s32 AsS32()const throw(){
-		return ting::s32(strtol(this->Value().c_str(), 0, 0));
+		return ting::s32(strtol(this->Value(), 0, 0));
 	}
 	
 	/**
@@ -109,7 +143,7 @@ public:
      * @return Result of parsing node value as unsigned 32bit integer.
      */
 	inline ting::u32 AsU32()const throw(){
-		return ting::u32(strtoul(this->Value().c_str(), 0, 0));
+		return ting::u32(strtoul(this->Value(), 0, 0));
 	}
 	
 	/**
@@ -118,7 +152,7 @@ public:
      * @return Result of parsing node value as signed 64bit integer.
      */
 	inline ting::s64 AsS64()const throw(){
-		return ting::s64(strtoll(this->Value().c_str(), 0 , 0));
+		return ting::s64(strtoll(this->Value(), 0 , 0));
 	}
 	
 	/**
@@ -127,7 +161,7 @@ public:
      * @return Result of parsing node value as unsigned 64bit integer.
      */
 	inline ting::u64 AsU64()const throw(){
-		return ting::u64(strtoull(this->Value().c_str(), 0 , 0));
+		return ting::u64(strtoull(this->Value(), 0 , 0));
 	}
 	
 	/**
@@ -145,7 +179,7 @@ public:
      * @return Result of parsing node value as double precision float value (64bits).
      */
 	inline double AsDouble()const throw(){
-		return strtod(this->Value().c_str(), 0);
+		return strtod(this->Value(), 0);
 	}
 	
 	/**
@@ -155,7 +189,7 @@ public:
      */
 	inline long double AsLongDouble()const throw(){
 #if _XOPEN_SOURCE >= 600 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
-		return strtold(this->Value().c_str(), 0);
+		return strtold(this->Value(), 0);
 #else//strtold() not supported
 		return (long double)(this->AsDouble());
 #endif
@@ -169,15 +203,29 @@ public:
 	 * @return false otherwise.
      */
 	inline bool AsBool()const throw(){
-		return this->Value() == "true";
+		return strcmp(this->Value(), "true") == 0;
 	}
 	
 	/**
 	 * @brief Set value of the node.
-     * @param v - string to set as a node value.
+	 * Set the value of the node. Value is copied from passed buffer.
+     * @param v - null-terminated string to set as a node value.
      */
-	inline void SetValue(const std::string& v = std::string())throw(){
-		this->value = v;
+	inline void SetValue(const char* v = 0)throw(){
+		size_t size = strlen(v);
+		this->SetValue(v, size);
+	}
+	
+	/**
+	 * @brief Set value of the node.
+	 * Set the value of the node. Value is copied from passed buffer.
+     * @param v - string to set as a node value.
+	 * @param size - size of the buffer holding the string in bytes.
+     */
+	inline void SetValue(const char* v, size_t size){
+		delete[] this->value;
+		
+		this->SetValueInternal(v, size);
 	}
 	
 	/**
@@ -199,9 +247,9 @@ public:
 		int res = sprintf(buf, "%i", v);
 #endif
 		if(res < 0 || res > int(sizeof(buf))){
-			this->SetValue(std::string());
+			this->SetValue(0, 0);
 		}else{
-			this->SetValue(std::string(buf, res));
+			this->SetValue(buf, res);
 		}
 	}
 	
@@ -224,9 +272,9 @@ public:
 		int res = sprintf(buf, "%u", v);
 #endif
 		if(res < 0 || res > int(sizeof(buf))){
-			this->SetValue(std::string());
+			this->SetValue(0, 0);
 		}else{
-			this->SetValue(std::string(buf, res));
+			this->SetValue(buf, res);
 		}
 	}
 	
@@ -249,9 +297,9 @@ public:
 		int res = sprintf(buf, "%lli", v);
 #endif
 		if(res < 0 || res > int(sizeof(buf))){
-			this->SetValue(std::string());
+			this->SetValue(0, 0);
 		}else{
-			this->SetValue(std::string(buf, res));
+			this->SetValue(buf, res);
 		}
 	}
 	
@@ -274,9 +322,9 @@ public:
 		int res = sprintf(buf, "%llu", v);
 #endif
 		if(res < 0 || res > int(sizeof(buf))){
-			this->SetValue(std::string());
+			this->SetValue(0, 0);
 		}else{
-			this->SetValue(std::string(buf, res));
+			this->SetValue(buf, res);
 		}
 	}
 	
@@ -300,9 +348,9 @@ public:
 		int res = sprintf(buf, "%.8G", double(v));
 #endif
 		if(res < 0 || res > int(sizeof(buf))){
-			this->SetValue(std::string());
+			this->SetValue(0, 0);
 		}else{
-			this->SetValue(std::string(buf, res));
+			this->SetValue(buf, res);
 		}
 	}
 	
@@ -325,9 +373,9 @@ public:
 		int res = sprintf(buf, "%.17G", v);
 #endif
 		if(res < 0 || res > int(sizeof(buf))){
-			this->SetValue(std::string());
+			this->SetValue(0, 0);
 		}else{
-			this->SetValue(std::string(buf, res));
+			this->SetValue(buf, res);
 		}
 	}
 	
@@ -350,9 +398,9 @@ public:
 		int res = sprintf(buf, "%.31LG", v);
 #endif
 		if(res < 0 || res > int(sizeof(buf))){
-			this->SetValue(std::string());
+			this->SetValue(0, 0);
 		}else{
-			this->SetValue(std::string(buf, res));
+			this->SetValue(buf, res);
 		}
 	}
 	
@@ -364,6 +412,10 @@ public:
      */
 	inline void SetBool(bool v)throw(){
 		this->SetValue(v ? "true" : "false");
+	}
+	
+	inline bool operator==(const char* str)const throw(){
+		return strcmp(this->Value(), str) == 0;
 	}
 	
 	/**
@@ -406,7 +458,7 @@ public:
      * @return auto-pointer to the removed node.
 	 * @return invalid auto-pointer if there was no child with given value found.
      */
-	inline ting::Ptr<Node> RemoveChild(const std::string& value)throw(){
+	inline ting::Ptr<Node> RemoveChild(const char* value)throw(){
 		std::pair<Node*, Node*> f = this->Child(value);
 		
 		if(f.first){
@@ -440,7 +492,7 @@ public:
 	 *         The first value is a pointer to previous node, it is 0 if the very first child node is returned as a second value of the pair or the node has no children at all.
 	 *         If second value holds 0 and first one is not 0, then the first value holds pointer to the last node in the single-linked list.
      */
-	std::pair<Node*, Node*> Child(const std::string& value)throw();
+	std::pair<Node*, Node*> Child(const char* value)throw();
 	
 	/**
 	 * @brief Get constant child node holding the given value.
@@ -450,7 +502,7 @@ public:
 	 *         The first value is a pointer to previous node, it can be 0 if the very first child node is returned as a second value of the pair or the node has no children at all.
 	 *         If second value holds 0 and first one is not 0, then the first value holds pointer to the last node in the single-linked list.
      */
-	inline std::pair<const Node*, const Node*> Child(const std::string& value)const throw(){
+	inline std::pair<const Node*, const Node*> Child(const char* value)const throw(){
 		return const_cast<Node* const>(this)->Child(value);
 	}
 	
@@ -481,7 +533,7 @@ public:
 	 *         The first value is a pointer to previous node, it is always a valid pointer.
 	 *         If second value holds 0, then first holds pointer to the last node in the single-linked list.
      */
-	std::pair<Node*, Node*> Next(const std::string& value)throw();
+	std::pair<Node*, Node*> Next(const char* value)throw();
 	
 	/**
 	 * @brief Get constant next node holding the given value.
@@ -492,7 +544,7 @@ public:
 	 *         The first value is a pointer to previous node, it is always a valid pointer.
 	 *         If second value holds 0, then first holds pointer to the last node in the single-linked list.
      */
-	inline std::pair<const Node*, const Node*> Next(const std::string& value)const throw(){
+	inline std::pair<const Node*, const Node*> Next(const char* value)const throw(){
 		return const_cast<Node* const>(this)->Next(value);
 	}
 	
@@ -504,7 +556,7 @@ public:
      * @return pointer to a node representing property value.
 	 * @return zero pointer if no property with a given name found or property has no value.
      */
-	Node* GetProperty(const std::string& propName)throw(){
+	Node* GetProperty(const char* propName)throw(){
 		Node* prop = this->Child(propName).second;
 		if(!prop){
 			return 0;
@@ -521,7 +573,7 @@ public:
      * @return constant pointer to a node representing property value.
 	 * @return zero pointer if no property with a given name found or property has no value.
      */
-	const Node* GetProperty(const std::string& propName)const throw(){
+	const Node* GetProperty(const char* propName)const throw(){
 		return const_cast<Node* const>(this)->GetProperty(propName);
 	}
 	
@@ -535,11 +587,11 @@ public:
 	 * property with the same name, so there will be two (or more) child nodes having that
 	 * property name.
 	 * The property node is added to the beginning of the children list.
-     * @param propName - name of the new property.
+     * @param propName - name of the new property, null-terminated string.
      * @return pointer to a node representing value of the newly created property.
 	 *         The returned pointer is always valid.
      */
-	Node* AddProperty(const std::string& propName);
+	Node* AddProperty(const char* propName);
 	
 	/**
 	 * @brief Insert node into the single-linked list.
@@ -599,7 +651,7 @@ public:
 	 * @return false if the value is an empty string.
      */
 	inline bool IsCapital()const throw(){
-		return this->value.size() != 0 && 'A' <= this->value[0] && this->value[0] <= 'Z';
+		return this->value != 0 && 'A' <= this->value[0] && this->value[0] <= 'Z';
 	}
 	
 	/**
