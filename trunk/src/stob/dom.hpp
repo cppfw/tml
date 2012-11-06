@@ -37,6 +37,7 @@ THE SOFTWARE. */
 #include <ting/PoolStored.hpp>
 #include <ting/Ptr.hpp>
 #include <ting/fs/File.hpp>
+#include <ting/utf8.hpp>
 
 #include "Exc.hpp"
 
@@ -126,6 +127,14 @@ public:
      */
 	inline const char* Value()const throw(){
 		return this->value;
+	}
+	
+	/**
+	 * @brief Get node value as utf8 string.
+     * @return UTF-8 iterator to iterate through the string.
+     */
+	inline ting::utf8::Iterator AsUTF8()const throw(){
+		return ting::utf8::Iterator(this->Value());
 	}
 	
 	/**
