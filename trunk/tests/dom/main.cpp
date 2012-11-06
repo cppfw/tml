@@ -16,54 +16,54 @@ void Run(){
 	
 	stob::Node* n = root->Child();
 	ASSERT_ALWAYS(n)
-	ASSERT_ALWAYS(n->Value() == "test string")
+	ASSERT_ALWAYS(*n == "test string")
 	ASSERT_ALWAYS(!n->Child())
 	
 	n = n->Next();
 	ASSERT_ALWAYS(n)
-	ASSERT_ALWAYS(n->Value() == "another string")
+	ASSERT_ALWAYS(*n == "another string")
 	ASSERT_ALWAYS(!n->Child())
 	
 	n = n->Next();
 	ASSERT_ALWAYS(n)
-	ASSERT_ALWAYS(n->Value() == "unquotedString")
+	ASSERT_ALWAYS(*n == "unquotedString")
 	ASSERT_ALWAYS(!n->Child())
 	
 	n = n->Next();
 	ASSERT_ALWAYS(n)
-	ASSERT_ALWAYS(n->Value() == "string with empty children list")
+	ASSERT_ALWAYS(*n == "string with empty children list")
 	ASSERT_ALWAYS(!n->Child())
 	
 	n = n->Next();
 	ASSERT_ALWAYS(n)
-	ASSERT_ALWAYS(n->Value() == "unquoted_string_with_empty_children_list")
+	ASSERT_ALWAYS(*n == "unquoted_string_with_empty_children_list")
 	ASSERT_ALWAYS(!n->Child())
 	
 	n = n->Next();
 	ASSERT_ALWAYS(n)
-	ASSERT_ALWAYS(n->Value() == "")
+	ASSERT_ALWAYS(*n == "")
 	{
 		stob::Node * n1 = n->Child();
 		ASSERT_ALWAYS(n1)
-		ASSERT_ALWAYS(n1->Value() == "child string")
+		ASSERT_ALWAYS(*n1 == "child string")
 		
 		n1 = n1->Next();
 		ASSERT_ALWAYS(n1)
-		ASSERT_ALWAYS(n1->Value() == "aaa")
+		ASSERT_ALWAYS(*n1 == "aaa")
 		ASSERT_ALWAYS(!n1->Child())
 		
 		n1 = n1->Next();
 		ASSERT_ALWAYS(n1)
-		ASSERT_ALWAYS(n1->Value() == "bbb")
+		ASSERT_ALWAYS(*n1 == "bbb")
 		ASSERT_ALWAYS(!n1->Child())
 		
 		n1 = n1->Next();
 		ASSERT_ALWAYS(n1)
-		ASSERT_ALWAYS(n1->Value() == "ccc")
+		ASSERT_ALWAYS(*n1 == "ccc")
 		{
 			stob::Node* n2 = n1->Child();
 			ASSERT_ALWAYS(n2)
-			ASSERT_ALWAYS(n2->Value() == "ddd")
+			ASSERT_ALWAYS(*n2 == "ddd")
 			ASSERT_ALWAYS(!n2->Next())
 		}
 		
@@ -72,32 +72,32 @@ void Run(){
 	
 	n = n->Next();
 	ASSERT_ALWAYS(n)
-	ASSERT_ALWAYS(n->Value() == "Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Carriagereturn\r Doublequotes\" {}{}{}{}")
+	ASSERT_ALWAYS(*n == "Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Carriagereturn\r Doublequotes\" {}{}{}{}")
 	ASSERT_ALWAYS(!n->Child())
 	
 	n = n->Next();
 	ASSERT_ALWAYS(n)
-	ASSERT_ALWAYS(n->Value() == "quoted string with trailing slash /")
+	ASSERT_ALWAYS(*n == "quoted string with trailing slash /")
 	ASSERT_ALWAYS(!n->Child())
 	
 	n = n->Next();
 	ASSERT_ALWAYS(n)
-	ASSERT_ALWAYS(n->Value() == "fff ggg")
+	ASSERT_ALWAYS(*n == "fff ggg")
 	ASSERT_ALWAYS(!n->Child())
 	
 	n = n->Next();
 	ASSERT_ALWAYS(n)
-	ASSERT_ALWAYS(n->Value() == "tralala tro lo lo\ntre lele")
+	ASSERT_ALWAYS(*n == "tralala tro lo lo\ntre lele")
 	ASSERT_ALWAYS(!n->Child())
 	
 	n = n->Next();
 	ASSERT_ALWAYS(n)
-	ASSERT_ALWAYS(n->Value() == "-1213.33")
+	ASSERT_ALWAYS(*n == "-1213.33")
 	ASSERT_ALWAYS(!n->Child())
 	
 	n = n->Next();
 	ASSERT_ALWAYS(n)
-	ASSERT_ALWAYS(n->Value() == "UnquotedStringAtTheVeryEndOfTheFile")
+	ASSERT_ALWAYS(*n == "UnquotedStringAtTheVeryEndOfTheFile")
 	ASSERT_ALWAYS(!n->Child())
 	
 	ASSERT_ALWAYS(!n->Next())
@@ -106,13 +106,13 @@ void Run(){
 	{
 		stob::Node* ch = root->Child("test string").second;
 		ASSERT_ALWAYS(ch)
-		ASSERT_ALWAYS(ch->Value() == "test string")
+		ASSERT_ALWAYS(*ch == "test string")
 	}
 	{
 		const stob::Node* constRoot = root.operator->();
 		const stob::Node* ch = constRoot->Child("unquotedString").second;
 		ASSERT_ALWAYS(ch)
-		ASSERT_ALWAYS(ch->Value() == "unquotedString")
+		ASSERT_ALWAYS(*ch == "unquotedString")
 	}
 }
 }//~namespace
