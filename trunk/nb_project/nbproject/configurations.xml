@@ -6,6 +6,8 @@
         <df name="1">
           <df name="2">
             <df name="stob">
+              <in>dom.d</in>
+              <in>parser.d</in>
             </df>
           </df>
         </df>
