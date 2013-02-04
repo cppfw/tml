@@ -18,4 +18,5 @@ LOCAL_LDLIBS := -llog -landroid
 
 LOCAL_SHARED_LIBRARIES := ting
 
-include $(BUILD_SHARED_LIBRARY)
+#include $(BUILD_SHARED_LIBRARY)
+include $(BUILD_STATIC_LIBRARY)
