@@ -210,7 +210,7 @@ void Run(){
 			n1->InsertNext(stob::Node::New());
 			n1 = n1->Next();
 			ASSERT_ALWAYS(n1)
-			n1->SetU32(4000100315);
+			n1->SetU32(4000100315u);
 			
 			n1->InsertNext(stob::Node::New());
 			n1 = n1->Next();
