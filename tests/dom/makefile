@@ -1,5 +1,10 @@
 platform := linux
 
+operating_system := $(shell uname -o)
+ifeq ($(operating_system), Msys)
+    platform := win32
+endif
+
 binary_name := tests
 
 ifeq ($(platform),win32)
@@ -8,19 +13,16 @@ endif
 
 
 ifeq ($(platform),win32)
-    libs := 
+    libs := ../../src/libstob.a -lting -L/usr/lib
     includes := -I"../../../ting/src"
-    remove := del /Q /F
 endif
 ifeq ($(platform),darwin)
     libs := 
     includes :=
-    remove := rm -rf
 endif
 ifeq ($(platform),linux)
     libs := -lting ../../src/libstob.so
     includes :=
-    remove := rm -rf
 endif
 
 #external compiler flags (to be passed to make from command line)
@@ -29,6 +31,7 @@ ecf :=
 #compiler flags
 cf := $(ecf)
 cf += -Wall
+cf += -Wno-format #no warnings about format
 cf += -DDEBUG
 cf += -fstrict-aliasing #strict aliasing!!!
 
@@ -45,6 +48,6 @@ $(binary_name): main.cpp
 
 
 clean:
-	@$(remove) $(binary_name)
+	@rm -rf $(binary_name)
 
 include ../../targets.mk
