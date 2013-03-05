@@ -14,3 +14,7 @@ endif
 
 include ./targets.mk
 include ./subdirs.mk
+
+
+install:
+	@./msys_install.sh
