@@ -9,4 +9,6 @@
 	- debian/control
 	- debian/libstob*.sh
 
+* add version tag in version control system
+
 * generate debian package using dpkg-buildpackage
