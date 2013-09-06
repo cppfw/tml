@@ -6,8 +6,10 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := stob
 
-LOCAL_SRC_FILES := stob/parser.cpp
-LOCAL_SRC_FILES += stob/dom.cpp
+SRC_BASE_DIR := ../../../src/
+
+LOCAL_SRC_FILES := $(SRC_BASE_DIR)stob/parser.cpp
+LOCAL_SRC_FILES += $(SRC_BASE_DIR)stob/dom.cpp
 
 LOCAL_CFLAGS := -Wno-div-by-zero #disable integer division by zero warning as it is sometimes useful when working with templates
 LOCAL_CFLAGS += -DDEBUG
