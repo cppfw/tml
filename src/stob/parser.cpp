@@ -296,10 +296,8 @@ void stob::Parse(ting::fs::File& fi, ParseListener& listener){
 	do{
 		bytesRead = fi.Read(buf);
 		
-		parser.ParseDataChunk(
-				ting::Buffer<ting::u8>(buf.Begin(), bytesRead),
-				listener
-			);
+		ting::Buffer<ting::u8> b(buf.Begin(), bytesRead);
+		parser.ParseDataChunk(b, listener);
 	}while(bytesRead == buf.Size());
 
 	parser.EndOfData(listener);
