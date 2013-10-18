@@ -17,4 +17,4 @@ include ./subdirs.mk
 
 
 install:
-	@./msys_install.sh
+	@./install.sh
