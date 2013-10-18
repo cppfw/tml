@@ -12,17 +12,9 @@
 #    maemo_linux
 #    win32
 #    win32cross
-platform := linux
+include ../platform.mk
 
-operating_system := $(shell uname -o)
-ifeq ($(operating_system), Msys)
-    platform := win32
-endif
-
-#build configuration:
-#    debug
-#    release
-build_config := release
+debug := false
 
 name := libstob
 
@@ -31,10 +23,10 @@ so_name := 0
 ifeq ($(platform), linux)
     name := $(name).so
 endif
-ifeq ($(platform), win32)
-    name := $(name).dll
+ifeq ($(platform), macosx)
+    name := $(name).so
 endif
-ifeq ($(platform), win32cross)
+ifeq ($(platform), windows)
     name := $(name).dll
 endif
 
@@ -49,7 +41,7 @@ srcs += stob/dom.cpp
 
 defines :=
 
-ifeq ($(build_config), debug)
+ifeq ($(debug), true)
     defines += -DDEBUG
 endif
 
@@ -80,7 +72,7 @@ endif
 ifeq ($(platform), maemo_linux)
     compiler_flags += -fPIC # Since we are building shared library, we need Position-Independend Code
 endif
-ifeq ($(platform), win32)
+ifeq ($(platform), windows)
     compiler_flags += -Wno-format #due to bugs in some g++ versions it warns about format when not needed, so disable format warnings
 endif
 
@@ -90,11 +82,8 @@ linker_flags := -shared
 ifeq ($(platform), linux)
     linker_flags += -Wl,-soname,$(name).$(so_name)
 endif
-ifeq ($(platform), win32)
+ifeq ($(platform), windows)
     linker_flags += -s
-endif
-ifeq ($(platform), win32cross)
-    linker_flags +=
 endif
 
 
@@ -108,11 +97,8 @@ endif
 ifeq ($(platform), linux)
     include_dirs :=
 endif
-ifeq ($(platform), win32)
+ifeq ($(platform), windows)
     include_dirs := -I/usr/include
-endif
-ifeq ($(platform), win32cross)
-    include_dirs :=
 endif
 
 
@@ -126,11 +112,11 @@ endif
 ifeq ($(platform), linux)
     libs := -lting -lpthread
 endif
-ifeq ($(platform), win32)
+ifeq ($(platform), windows)
     libs := -L/usr/lib -lting
 endif
-ifeq ($(platform), win32cross)
-    libs :=
+ifeq ($(platform), macosx)
+    libs := -lting
 endif
 
 
@@ -161,7 +147,7 @@ create-obj-dir:
 #find all .cpp files and get an .o file name for it to get dependencies for this target
 $(name): $(addprefix $(obj_dir)/,$(patsubst %.cpp,%.o,$(srcs)))
 	@echo Linking $@...
-ifeq ($(platform), win32)
+ifeq ($(platform), windows)
 	@ar cr $(patsubst %.dll,%.a,$@) $^
 	@$(compiler) $^ -o "$@" $(libs) $(linker_flags)
 else
@@ -203,7 +189,7 @@ test:
 #it is an abstract target (not a file), declare as .PHONY
 .PHONY: clean
 clean:
-ifeq ($(platform),win32)
+ifeq ($(platform),windows)
 	@rm -rf $(name)
 	@rm -rf obj
 else
