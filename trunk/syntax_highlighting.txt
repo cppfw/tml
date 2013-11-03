@@ -1,0 +1,11 @@
+1. Comments // and /* */
+
+2. Strings in double quotes
+
+3. escaped characters inside ""
+
+4. Unquoted strings starting with small letter, highlight only if first string on the line and has {}.
+
+5. Unquoted strings starting with capital letter, highlight only if first string on the line and has {}.
+
+6. Numbers, decimal 123.3, 32.4e-32, 0xffaa45
