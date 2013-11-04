@@ -1,11 +1,18 @@
-1. Comments // and /* */
+a) It should be possible to configure the font style (normal, bold, italic, color) for different items of the document.
+   There should be some configuration file for that or, possibly a GUI menu, but not mandatory.
 
-2. Strings in double quotes
+b) The items which should be highlighted with their own configurable font style
 
-3. escaped characters inside ""
+   1. Comments // and /* */
 
-4. Unquoted strings starting with small letter, highlight only if first string on the line and has {}.
+   2. Strings in double quotes
 
-5. Unquoted strings starting with capital letter, highlight only if first string on the line and has {}.
+   3. escaped characters inside "": \" \n \r \t \\ \/
 
-6. Numbers, decimal 123.3, 32.4e-32, 0xffaa45
+   4. Unquoted strings starting with small letter, highlight only if first string on the line and has '{' after it ('{' may be on next line).
+
+   5. Unquoted strings starting with capital letter, highlight only if first string on the line and has '{' after it ('{' may be on next line).
+
+   6. Strings representing a number: decimal and hexadecimal. Examples: 123.3, 32.4e-32, 0xffaa45
+
+c) Editor should recognize STOB files by '*.stob' file extension. The files should appear having a specific icon in the File nvigator. It is ok to use some dummy icon for that.
