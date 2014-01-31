@@ -16,3 +16,10 @@ b) The items which should be highlighted with their own configurable font style
    6. Strings representing a number: decimal and hexadecimal. Examples: 123.3, 32.4e-32, 0xffaa45
 
 c) Editor should recognize STOB files by '*.stob' file extension. The files should appear having a specific icon in the File nvigator. It is ok to use some dummy icon for that.
+
+d) Deliveries include:
+
+   1. all the source code for the plugin
+   
+   2. short instruction of how to build and install the plugin to NetBeans
+   
