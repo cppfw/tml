@@ -768,15 +768,14 @@ public:
 	ting::Ptr<Node> Clone()const;
 
 	/**
-	 * @brief Check if value starts with capital latin letter.
+	 * @brief Check if the Node is a property.
 	 * This is just a convenience method.
-	 * Checks if the first character of the value is one of the capital latin letters from A to Z. 
-	 * @return true if the first character of the node's value is a capital letter of latin alphabet.
-	 * @return false otherwise.
-	 * @return false if the value is an empty string.
+	 * Checks if the first character of the value is one of the capital Latin alphabet letters from A to Z. 
+	 * @return false if the first character of the node's value is a capital letter of Latin alphabet.
+	 * @return true otherwise.
 	 */
-	inline bool IsCapital()const throw(){
-		return this->value != 0 && 'A' <= this->value[0] && this->value[0] <= 'Z';
+	inline bool IsProperty()const throw(){
+		return this->value == 0 || this->value[0] < 'A' || 'Z' < this->value[0];
 	}
 
 	/**

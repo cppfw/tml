@@ -64,7 +64,7 @@ stob::Node::NodeAndPrev Node::ChildNonProperty()throw(){
 		return NodeAndPrev(0, 0);
 	}
 
-	if(this->children->IsCapital()){
+	if(this->children->IsProperty()){
 		return NodeAndPrev(0, this->children.operator->());
 	}
 
@@ -78,7 +78,7 @@ stob::Node::NodeAndPrev Node::ChildProperty()throw(){
 		return NodeAndPrev(0, 0);
 	}
 
-	if(!this->children->IsCapital()){
+	if(!this->children->IsProperty()){
 		return NodeAndPrev(0, this->children.operator->());
 	}
 
@@ -90,7 +90,7 @@ stob::Node::NodeAndPrev Node::ChildProperty()throw(){
 stob::Node::NodeAndPrev Node::NextNonProperty()throw(){
 	Node* prev = this;
 	for(Node* n = this->Next(); n; prev = n, n = n->Next()){
-		if(n->IsCapital()){
+		if(n->IsProperty()){
 			return NodeAndPrev(prev, n);
 		}
 	}
@@ -102,7 +102,7 @@ stob::Node::NodeAndPrev Node::NextNonProperty()throw(){
 stob::Node::NodeAndPrev Node::NextProperty()throw(){
 	Node* prev = this;
 	for(Node* n = this->Next(); n; prev = n, n = n->Next()){
-		if(!n->IsCapital()){
+		if(!n->IsProperty()){
 			return NodeAndPrev(prev, n);
 		}
 	}
