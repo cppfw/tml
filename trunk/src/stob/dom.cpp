@@ -33,25 +33,25 @@ void Node::operator delete(void* p)throw(){
 
 
 
-std::pair<Node*, Node*> Node::Next(const char* value)throw(){
+stob::Node::NodeAndPrev Node::Next(const char* value)throw(){
 	Node* prev = this;
 	for(Node* n = this->Next(); n; prev = n, n = n->Next()){
 		if(n->operator ==(value)){
-			return std::pair<Node*, Node*>(prev, n);
+			return NodeAndPrev(prev, n);
 		}
 	}
-	return std::pair<Node*, Node*>(prev, 0);
+	return NodeAndPrev(prev, 0);
 }
 
 
 
-std::pair<Node*, Node*> Node::Child(const char* value)throw(){
+stob::Node::NodeAndPrev Node::Child(const char* value)throw(){
 	if(this->children.IsNotValid()){
-		return std::pair<Node*, Node*>(0, 0);
+		return NodeAndPrev(0, 0);
 	}
 
 	if(this->children->operator==(value)){
-		return std::pair<Node*, Node*>(0, this->children.operator->());
+		return NodeAndPrev(0, this->children.operator->());
 	}
 
 	return this->children->Next(value);
