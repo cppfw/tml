@@ -1,6 +1,6 @@
 /* The MIT License:
 
-Copyright (c) 2012 Ivan Gagis
+Copyright (c) 2012-2014 Ivan Gagis
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -488,10 +488,10 @@ public:
 	 * @return invalid auto-pointer if there was no child with given value found.
 	 */
 	inline ting::Ptr<Node> RemoveChild(const char* value)throw(){
-		std::pair<Node*, Node*> f = this->Child(value);
+		NodeAndPrev f = this->Child(value);
 
-		if(f.first){
-			return f.first->RemoveNext();
+		if(f.prev()){
+			return f.prev()->RemoveNext();
 		}
 
 		return this->RemoveFirstChild();
@@ -514,27 +514,75 @@ public:
 	}
 
 	/**
+	 * @brief Node and its previous node.
+	 * Class holding a pointer to a Node and pointer to its previous Node in
+	 * the single linked list.
+	 * If 'node' is not 0 and 'prev' is not 0, then prev()->Next() is same as 'node'.
+	 * If 'prev' is 0 and 'node' is not 0, then 'node' points to the very first node in the single-linked list.
+	 * If 'node' is 0 and 'prev' is not 0, then 'prev' points to the last node in the single-linked list.
+	 */
+	class NodeAndPrev{
+		friend class stob::Node;
+		
+		Node* prevNode;
+		Node* theNode;
+		
+		NodeAndPrev(Node* prev, Node* node) :
+			prevNode(prev),
+			theNode(node)
+		{}
+	public:
+		/**
+		 * @brief Get pointer to Node.
+         * @return Pointer to Node.
+         */
+		Node* node()throw(){
+			return this->theNode;
+		}
+		
+		/**
+		 * @brief Get constant pointer to Node.
+         * @return Constant pointer to Node.
+         */
+		const Node* node()const throw(){
+			return this->theNode;
+		}
+		
+		/**
+		 * @brief Get pointer to previous Node.
+         * @return Pointer to previous Node.
+         */
+		Node* prev()throw(){
+			return this->prevNode;
+		}
+		
+		/**
+		 * @brief Get constant pointer to previous Node.
+         * @return Constant pointer to previous Node.
+         */
+		const Node* prev()const throw(){
+			return this->prevNode;
+		}
+	};
+	
+	/**
 	 * @brief Get child node holding the given value.
 	 * @param value - value to search for among children.
-	 * @return std::pair holding two pointers to Node.
-	 *         The second value is a pointer to the first child node which holds the given value, it can be 0 if no such child node found.
-	 *         The first value is a pointer to previous node, it is 0 if the very first child node is returned as a second value of the pair or the node has no children at all.
-	 *         If second value holds 0 and first one is not 0, then the first value holds pointer to the last node in the single-linked list.
+	 * @return instance of NodeAndPrev structure holding information about found Node.
 	 */
-	std::pair<Node*, Node*> Child(const char* value)throw();
+	NodeAndPrev Child(const char* value)throw();
 
 	/**
 	 * @brief Get constant child node holding the given value.
 	 * @param value - value to search for among children.
-	 * @return std::pair holding two constant pointers to Node.
-	 *         The second value is a pointer to the first child node which holds the given value, it can be 0 if no such child node found.
-	 *         The first value is a pointer to previous node, it can be 0 if the very first child node is returned as a second value of the pair or the node has no children at all.
-	 *         If second value holds 0 and first one is not 0, then the first value holds pointer to the last node in the single-linked list.
+	 * @return constant instance of NodeAndPrev structure holding information about found Node.
 	 */
-	inline std::pair<const Node*, const Node*> Child(const char* value)const throw(){
+	inline const NodeAndPrev Child(const char* value)const throw(){
 		return const_cast<Node* const>(this)->Child(value);
 	}
 
+	
+	
 	/**
 	 * @brief Get next node in the single-linked list.
 	 * Get next sibling node in the single-linked list of nodes.
@@ -557,23 +605,17 @@ public:
 	 * @brief Get next node holding the given value.
 	 * Get next closest node in the single-linked list which holds the given value.
 	 * @param value - value to look for.
-	 * @return std::pair holding two pointers to Node.
-	 *         The second value is a pointer to the next closest node in the single-linked list which holds the given value, it can be 0 if no node found.
-	 *         The first value is a pointer to previous node, it is always a valid pointer.
-	 *         If second value holds 0, then first holds pointer to the last node in the single-linked list.
+	 * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
 	 */
-	std::pair<Node*, Node*> Next(const char* value)throw();
+	NodeAndPrev Next(const char* value)throw();
 
 	/**
 	 * @brief Get constant next node holding the given value.
 	 * Get constant next closest node in the single-linked list which holds the given value.
 	 * @param value - value to look for.
-	 * @return std::pair holding two constant pointers to Node.
-	 *         The second value is a pointer to the next closest node in the single-linked list which holds the given value, it can be 0 if no node found.
-	 *         The first value is a pointer to previous node, it is always a valid pointer.
-	 *         If second value holds 0, then first holds pointer to the last node in the single-linked list.
+	 * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
 	 */
-	inline std::pair<const Node*, const Node*> Next(const char* value)const throw(){
+	inline const NodeAndPrev Next(const char* value)const throw(){
 		return const_cast<Node* const>(this)->Next(value);
 	}
 
@@ -586,7 +628,7 @@ public:
 	 * @return zero pointer if no property with a given name found or property has no value.
 	 */
 	Node* GetProperty(const char* propName)throw(){
-		Node* prop = this->Child(propName).second;
+		Node* prop = this->Child(propName).node();
 		if(!prop){
 			return 0;
 		}
