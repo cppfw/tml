@@ -59,6 +59,58 @@ stob::Node::NodeAndPrev Node::Child(const char* value)throw(){
 
 
 
+stob::Node::NodeAndPrev Node::ChildNonProperty()throw(){
+	if(this->children.IsNotValid()){
+		return NodeAndPrev(0, 0);
+	}
+
+	if(this->children->IsCapital()){
+		return NodeAndPrev(0, this->children.operator->());
+	}
+
+	return this->children->NextNonProperty();
+}
+
+
+
+stob::Node::NodeAndPrev Node::ChildProperty()throw(){
+	if(this->children.IsNotValid()){
+		return NodeAndPrev(0, 0);
+	}
+
+	if(!this->children->IsCapital()){
+		return NodeAndPrev(0, this->children.operator->());
+	}
+
+	return this->children->NextProperty();
+}
+
+
+
+stob::Node::NodeAndPrev Node::NextNonProperty()throw(){
+	Node* prev = this;
+	for(Node* n = this->Next(); n; prev = n, n = n->Next()){
+		if(n->IsCapital()){
+			return NodeAndPrev(prev, n);
+		}
+	}
+	return NodeAndPrev(prev, 0);
+}
+
+
+
+stob::Node::NodeAndPrev Node::NextProperty()throw(){
+	Node* prev = this;
+	for(Node* n = this->Next(); n; prev = n, n = n->Next()){
+		if(!n->IsCapital()){
+			return NodeAndPrev(prev, n);
+		}
+	}
+	return NodeAndPrev(prev, 0);
+}
+
+
+
 Node* Node::AddProperty(const char* propName){
 	ting::Ptr<Node> p = Node::New();
 	p->SetValue(propName);

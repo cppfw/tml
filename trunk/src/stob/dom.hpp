@@ -525,11 +525,11 @@ public:
 		friend class stob::Node;
 		
 		Node* prevNode;
-		Node* theNode;
+		Node* curNode;
 		
 		NodeAndPrev(Node* prev, Node* node) :
-			prevNode(prev),
-			theNode(node)
+				prevNode(node),
+				curNode(node)
 		{}
 	public:
 		/**
@@ -537,7 +537,7 @@ public:
          * @return Pointer to Node.
          */
 		Node* node()throw(){
-			return this->theNode;
+			return this->curNode;
 		}
 		
 		/**
@@ -545,7 +545,7 @@ public:
          * @return Constant pointer to Node.
          */
 		const Node* node()const throw(){
-			return this->theNode;
+			return this->curNode;
 		}
 		
 		/**
@@ -581,12 +581,38 @@ public:
 		return const_cast<Node* const>(this)->Child(value);
 	}
 
+	/**
+	 * @brief Get first non-property child.
+	 * @return instance of NodeAndPrev structure holding information about found Node.
+	 */
+	NodeAndPrev ChildNonProperty()throw();
 	
+	/**
+	 * @brief Get constant first non-property child.
+	 * @return constant instance of NodeAndPrev structure holding information about found Node.
+	 */
+	const NodeAndPrev ChildNonProperty()const throw(){
+		return const_cast<Node* const>(this)->ChildNonProperty();
+	}
+	
+	/**
+	 * @brief Get first property child.
+     * @return instance of NodeAndPrev class holding information about found Node.
+     */
+	NodeAndPrev ChildProperty()throw();
+	
+	/**
+	 * @brief Get constant first property child.
+     * @return constant instance of NodeAndPrev class holding information about found Node.
+     */
+	const NodeAndPrev ChildProperty()const throw(){
+		return const_cast<Node* const>(this)->ChildProperty();
+	}
 	
 	/**
 	 * @brief Get next node in the single-linked list.
 	 * Get next sibling node in the single-linked list of nodes.
-	 * @return Pointer to the next node in the single-linked list.
+	 * @return pointer to the next node in the single-linked list.
 	 */
 	inline Node* Next()throw(){
 		return this->next.operator->();
@@ -595,7 +621,7 @@ public:
 	/**
 	 * @brief Get constant next node in the single-linked list.
 	 * Get constant next sibling node in the single-linked list of nodes.
-	 * @return Constant pointer tot the next node in the single-linked list.
+	 * @return constant pointer tot the next node in the single-linked list.
 	 */
 	inline const Node* Next()const throw(){
 		return this->next.operator->();
@@ -619,6 +645,34 @@ public:
 		return const_cast<Node* const>(this)->Next(value);
 	}
 
+	/**
+	 * @brief Get next non-property child.
+     * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
+     */
+	NodeAndPrev NextNonProperty()throw();
+	
+	/**
+	 * @brief Get constant next non-property child.
+     * @return constant instance of NodeAndPrev class holding information about found node, previous node is always valid.
+     */
+	const NodeAndPrev NextNonProperty()const throw(){
+		return const_cast<Node* const>(this)->NextNonProperty();
+	}
+	
+	/**
+	 * @brief Get next property child.
+     * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
+     */
+	NodeAndPrev NextProperty()throw();
+	
+	/**
+	 * @brief Get constant next property child.
+     * @return constant instance of NodeAndPrev class holding information about found node, previous node is always valid.
+     */
+	const NodeAndPrev NextProperty()const throw(){
+		return const_cast<Node* const>(this)->NextProperty();
+	}
+	
 	/**
 	 * @brief Get property.
 	 * This is a convenience method which searches for the first child node with
