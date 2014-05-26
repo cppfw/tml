@@ -528,7 +528,7 @@ public:
 		Node* curNode;
 		
 		NodeAndPrev(Node* prev, Node* node) :
-				prevNode(node),
+				prevNode(prev),
 				curNode(node)
 		{}
 	public:
