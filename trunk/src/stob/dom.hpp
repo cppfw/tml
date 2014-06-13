@@ -271,7 +271,7 @@ public:
 		//snprintf() is available
 		int res = snprintf(buf, sizeof(buf), "%i", v);
 #elif M_COMPILER == M_COMPILER_MSVC
-		int res = _snprintf(buf, sizeof(buf), "%i", v);
+		int res = _snprintf_s(buf, sizeof(buf), sizeof(buf), "%i", v);
 #else
 		int res = sprintf(buf, "%i", v);
 #endif
@@ -296,7 +296,7 @@ public:
 		//snprintf() is available
 		int res = snprintf(buf, sizeof(buf), "%u", v);
 #elif M_COMPILER == M_COMPILER_MSVC
-		int res = _snprintf(buf, sizeof(buf), "%u", v);
+		int res = _snprintf_s(buf, sizeof(buf), sizeof(buf), "%u", v);
 #else
 		int res = sprintf(buf, "%u", v);
 #endif
@@ -321,7 +321,7 @@ public:
 		//snprintf() is available
 		int res = snprintf(buf, sizeof(buf), "%lli", v);
 #elif M_COMPILER == M_COMPILER_MSVC
-		int res = _snprintf(buf, sizeof(buf), "%lli", v);
+		int res = _snprintf_s(buf, sizeof(buf), sizeof(buf), "%lli", v);
 #else
 		int res = sprintf(buf, "%lli", v);
 #endif
@@ -346,7 +346,7 @@ public:
 		//snprintf() is available
 		int res = snprintf(buf, sizeof(buf), "%llu", v);
 #elif M_COMPILER == M_COMPILER_MSVC
-		int res = _snprintf(buf, sizeof(buf), "%llu", v);
+		int res = _snprintf_s(buf, sizeof(buf), sizeof(buf), "%llu", v);
 #else
 		int res = sprintf(buf, "%llu", v);
 #endif
@@ -372,7 +372,7 @@ public:
 		//snprintf() is available
 		int res = snprintf(buf, sizeof(buf), "%.8G", double(v));
 #elif M_COMPILER == M_COMPILER_MSVC
-		int res = _snprintf(buf, sizeof(buf), "%.8G", double(v));
+		int res = _snprintf_s(buf, sizeof(buf), sizeof(buf), "%.8G", double(v));
 #else
 		int res = sprintf(buf, "%.8G", double(v));
 #endif
@@ -397,7 +397,7 @@ public:
 		//snprintf() is available
 		int res = snprintf(buf, sizeof(buf), "%.17G", v);
 #elif M_COMPILER == M_COMPILER_MSVC
-		int res = _snprintf(buf, sizeof(buf), "%.17G", v);
+		int res = _snprintf_s(buf, sizeof(buf), sizeof(buf), "%.17G", v);
 #else
 		int res = sprintf(buf, "%.17G", v);
 #endif
@@ -422,7 +422,7 @@ public:
 		//snprintf() is available
 		int res = snprintf(buf, sizeof(buf), "%.31LG", v);
 #elif M_COMPILER == M_COMPILER_MSVC
-		int res = _snprintf(buf, sizeof(buf), "%.31LG", v);
+		int res = _snprintf_s(buf, sizeof(buf), sizeof(buf), "%.31LG", v);
 #else
 		int res = sprintf(buf, "%.31LG", v);
 #endif
