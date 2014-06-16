@@ -8,7 +8,7 @@ Standards-Version: 3.9.2
 Package: libstob-dev
 Section: devel
 Architecture: any
-Depends: libstob0 (= ${binary:Version}), ${misc:Depends}
+Depends: libstob0 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
 Suggests: libstob-doc, libstob0-dbg (= ${binary:Version})
 Description: STOB markup language C++ library.
  STOB is a simple markup language.
