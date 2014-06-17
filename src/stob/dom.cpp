@@ -324,20 +324,20 @@ ting::Ptr<stob::Node> stob::Load(ting::fs::File& fi){
 
 	public:
 		ting::Ptr<Node> chains;
-		Node* lastInChain;
+		Node* lastChain;
 		
 		//override
 		void OnChildrenParseFinished(){
 			this->stack.back().second->SetChildren(this->chains);
 			this->chains = this->stack.back().first;
-			this->lastInChain = this->stack.back().second;
+			this->lastChain = this->stack.back().second;
 			this->stack.pop_back();
 		}
 
 		//override
 		void OnChildrenParseStarted(){
 			this->stack.push_back(
-					T_Pair(this->chains, this->lastInChain)
+					T_Pair(this->chains, this->lastChain)
 				);
 		}
 
@@ -347,16 +347,16 @@ ting::Ptr<stob::Node> stob::Load(ting::fs::File& fi){
 
 			if(this->chains.IsNotValid()){
 				this->chains = node;
-				this->lastInChain = this->chains.operator->();
+				this->lastChain = this->chains.operator->();
 			}else{
-				this->lastInChain->InsertNext(node);
-				this->lastInChain = this->lastInChain->Next();
+				this->lastChain->InsertNext(node);
+				this->lastChain = this->lastChain->Next();
 			}
 		}
 
 		Listener() :
 				chains(Node::New()),//create root node
-				lastInChain(this->chains.operator->())
+				lastChain(this->chains.operator->())
 		{}
 
 		~Listener()throw(){}
