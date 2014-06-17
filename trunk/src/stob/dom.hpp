@@ -93,7 +93,7 @@ public:
 
 	/**
 	 * @brief Create new node object.
-	 * @param value - buffer holding the value to set for the created node.
+	 * @param value - buffer holding the value to set for the created node, not null-terminated.
 	 * @param size - size of the value buffer in bytes.
 	 * @return An auto-pointer to a newly created Node object.
 	 */
@@ -313,7 +313,7 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - signed 64 bit integer to set as a value of the node.
 	 */
-	inline void SetS64(ting::s64 v)throw(){
+	void SetS64(ting::s64 v)throw(){
 		char buf[64];
 
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
@@ -338,7 +338,7 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - unsigned 64 bit integer to set as a value of the node.
 	 */
-	inline void SetU64(ting::u64 v)throw(){
+	void SetU64(ting::u64 v)throw(){
 		char buf[64];
 
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
@@ -363,7 +363,7 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - 'float' to set as a value of the node.
 	 */
-	inline void SetFloat(float v)throw(){
+	void SetFloat(float v)throw(){
 		char buf[64];
 
 		//NOTE: useing capital G in format string as it should be non-locale aware (in contrast with small g).
@@ -389,7 +389,7 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - 'double' to set as a value of the node.
 	 */
-	inline void SetDouble(double v)throw(){
+	void SetDouble(double v)throw(){
 		char buf[64];
 
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
@@ -414,7 +414,7 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - 'long double' to set as a value of the node.
 	 */
-	inline void SetLongDouble(long double v)throw(){
+	void SetLongDouble(long double v)throw(){
 		char buf[128];
 
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
@@ -439,11 +439,11 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - 'bool' to set as a value of the node.
 	 */
-	inline void SetBool(bool v)throw(){
+	void SetBool(bool v)throw(){
 		this->SetValue(v ? "true" : "false");
 	}
 
-	inline bool operator==(const char* str)const throw(){
+	bool operator==(const char* str)const throw(){
 		return strcmp(this->Value(), str) == 0;
 	}
 
@@ -461,7 +461,7 @@ public:
 	 * Removes the list of children from this node.
 	 * @return auto-pointer to the first node in the children list.
 	 */
-	inline ting::Ptr<Node> RemoveChildren()throw(){
+	ting::Ptr<Node> RemoveChildren()throw(){
 		return this->children;
 	}
 
@@ -469,7 +469,7 @@ public:
 	 * @brief Remove first child from the list of children.
 	 * @return auto-pointer to the node which was the first child.
 	 */
-	inline ting::Ptr<Node> RemoveFirstChild()throw(){
+	ting::Ptr<Node> RemoveFirstChild()throw(){
 		if(!this->children){
 			return ting::Ptr<Node>();
 		}
@@ -487,7 +487,7 @@ public:
 	 * @return auto-pointer to the removed node.
 	 * @return invalid auto-pointer if there was no child with given value found.
 	 */
-	inline ting::Ptr<Node> RemoveChild(const char* value)throw(){
+	ting::Ptr<Node> RemoveChild(const char* value)throw(){
 		NodeAndPrev f = this->Child(value);
 
 		if(f.prev()){
@@ -501,7 +501,7 @@ public:
 	 * @brief Get list of child nodes.
 	 * @return pointer to the first child node.
 	 */
-	inline Node* Child()throw(){
+	Node* Child()throw(){
 		return this->children.operator->();
 	}
 
@@ -509,7 +509,7 @@ public:
 	 * @brief Get constant list of child nodes.
 	 * @return constant pointer to the first child node.
 	 */
-	inline const Node* Child()const throw(){
+	const Node* Child()const throw(){
 		return this->children.operator->();
 	}
 
