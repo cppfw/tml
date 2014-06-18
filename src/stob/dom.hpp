@@ -67,7 +67,7 @@ class Node{
 		this->SetValueInternal(value, size);
 	}
 
-	inline void SetValueInternal(const char* v, size_t size){
+	void SetValueInternal(const char* v, size_t size){
 		if(v == 0){
 			this->value = 0;
 			return;
@@ -97,7 +97,7 @@ public:
 	 * @param size - size of the value buffer in bytes.
 	 * @return An auto-pointer to a newly created Node object.
 	 */
-	static inline ting::Ptr<Node> New(const char* value, size_t size){
+	static ting::Ptr<Node> New(const char* value, size_t size){
 		return ting::Ptr<Node>(new Node(value, size));
 	}
 
@@ -106,7 +106,7 @@ public:
 	 * @param value - null-terminated string holding the value to set for the created node.
 	 * @return An auto-pointer to a newly created Node object.
 	 */
-	static inline ting::Ptr<Node> New(const char* value){
+	static ting::Ptr<Node> New(const char* value){
 		if(value == 0){
 			return Node::New();
 		}
@@ -118,7 +118,7 @@ public:
 	 * The value is set to empty string.
 	 * @return An auto-pointer to a newly created Node object.
 	 */
-	static inline ting::Ptr<Node> New(){
+	static ting::Ptr<Node> New(){
 		return Node::New(0, 0);
 	}
 
@@ -128,7 +128,7 @@ public:
 	 * Return value can be 0;
 	 * @return A string representing this node.
 	 */
-	inline const char* Value()const throw(){
+	const char* Value()const throw(){
 		return this->value;
 	}
 
@@ -138,7 +138,7 @@ public:
 	 * Calculates value length in bytes excluding terminating 0 byte.
 	 * @return Value length in bytes.
 	 */
-	inline size_t ValueLength()const throw(){
+	size_t ValueLength()const throw(){
 		if(this->Value() == 0){
 			return 0;
 		}
@@ -149,7 +149,7 @@ public:
 	 * @brief Get node value as utf8 string.
 	 * @return UTF-8 iterator to iterate through the string.
 	 */
-	inline ting::utf8::Iterator AsUTF8()const throw(){
+	ting::utf8::Iterator AsUTF8()const throw(){
 		return ting::utf8::Iterator(this->Value());
 	}
 
@@ -158,7 +158,7 @@ public:
 	 * Tries to parse the string as signed 32bit integer.
 	 * @return Result of parsing node value as signed 32bit integer.
 	 */
-	inline ting::s32 AsS32()const throw(){
+	ting::s32 AsS32()const throw(){
 		return ting::s32(strtol(this->Value(), 0, 0));
 	}
 
@@ -167,7 +167,7 @@ public:
 	 * Tries to parse the string as unsigned 32bit integer.
 	 * @return Result of parsing node value as unsigned 32bit integer.
 	 */
-	inline ting::u32 AsU32()const throw(){
+	ting::u32 AsU32()const throw(){
 		return ting::u32(strtoul(this->Value(), 0, 0));
 	}
 
@@ -176,7 +176,7 @@ public:
 	 * Tries to parse the string as signed 64bit integer.
 	 * @return Result of parsing node value as signed 64bit integer.
 	 */
-	inline ting::s64 AsS64()const throw(){
+	ting::s64 AsS64()const throw(){
 		return ting::s64(strtoll(this->Value(), 0 , 0));
 	}
 
@@ -185,7 +185,7 @@ public:
 	 * Tries to parse the string as unsigned 64bit integer.
 	 * @return Result of parsing node value as unsigned 64bit integer.
 	 */
-	inline ting::u64 AsU64()const throw(){
+	ting::u64 AsU64()const throw(){
 		return ting::u64(strtoull(this->Value(), 0 , 0));
 	}
 
@@ -194,7 +194,7 @@ public:
 	 * Tries to parse the string as float value (32bits).
 	 * @return Result of parsing node value as float value (32bits).
 	 */
-	inline float AsFloat()const throw(){
+	float AsFloat()const throw(){
 		return float(this->AsDouble());
 	}
 
@@ -203,7 +203,7 @@ public:
 	 * Tries to parse the string as double precision float value (64bits).
 	 * @return Result of parsing node value as double precision float value (64bits).
 	 */
-	inline double AsDouble()const throw(){
+	double AsDouble()const throw(){
 		return strtod(this->Value(), 0);
 	}
 
@@ -212,7 +212,7 @@ public:
 	 * Tries to parse the string as long double precision float value (64bits).
 	 * @return Result of parsing node value as long double precision float value (64bits).
 	 */
-	inline long double AsLongDouble()const throw(){
+	long double AsLongDouble()const throw(){
 #if _XOPEN_SOURCE >= 600 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
 		return strtold(this->Value(), 0);
 #else//strtold() not supported
@@ -227,7 +227,7 @@ public:
 	 * @return true if string is "true".
 	 * @return false otherwise.
 	 */
-	inline bool AsBool()const throw(){
+	bool AsBool()const throw(){
 		return strcmp(this->Value(), "true") == 0;
 	}
 
@@ -236,13 +236,8 @@ public:
 	 * Set the value of the node. Value is copied from passed buffer.
 	 * @param v - null-terminated string to set as a node value.
 	 */
-	inline void SetValue(const char* v = 0)throw(){
-		if(v == 0){
-			this->value = 0;
-			return;
-		}
-		size_t size = strlen(v);
-		this->SetValue(v, size);
+	void SetValue(const char* v = 0)throw(){
+		this->SetValue(v, v == 0 ? 0 : strlen(v));
 	}
 
 	/**
@@ -251,7 +246,7 @@ public:
 	 * @param v - string to set as a node value.
 	 * @param size - size of the buffer holding the string in bytes.
 	 */
-	inline void SetValue(const char* v, size_t size){
+	void SetValue(const char* v, size_t size){
 		delete[] this->value;
 
 		this->SetValueInternal(v, size);
@@ -263,7 +258,7 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - signed 32 bit integer to set as a value of the node.
 	 */
-	inline void SetS32(ting::s32 v)throw(){
+	void SetS32(ting::s32 v)throw(){
 		char buf[64];
 
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
@@ -288,7 +283,7 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - unsigned 32 bit integer to set as a value of the node.
 	 */
-	inline void SetU32(ting::u32 v)throw(){
+	void SetU32(ting::u32 v)throw(){
 		char buf[64];
 
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
@@ -577,7 +572,7 @@ public:
 	 * @param value - value to search for among children.
 	 * @return constant instance of NodeAndPrev structure holding information about found Node.
 	 */
-	inline const NodeAndPrev Child(const char* value)const throw(){
+	const NodeAndPrev Child(const char* value)const throw(){
 		return const_cast<Node* const>(this)->Child(value);
 	}
 
@@ -614,7 +609,7 @@ public:
 	 * Get next sibling node in the single-linked list of nodes.
 	 * @return pointer to the next node in the single-linked list.
 	 */
-	inline Node* Next()throw(){
+	Node* Next()throw(){
 		return this->next.operator->();
 	}
 
@@ -623,7 +618,7 @@ public:
 	 * Get constant next sibling node in the single-linked list of nodes.
 	 * @return constant pointer tot the next node in the single-linked list.
 	 */
-	inline const Node* Next()const throw(){
+	const Node* Next()const throw(){
 		return this->next.operator->();
 	}
 
@@ -641,7 +636,7 @@ public:
 	 * @param value - value to look for.
 	 * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
 	 */
-	inline const NodeAndPrev Next(const char* value)const throw(){
+	const NodeAndPrev Next(const char* value)const throw(){
 		return const_cast<Node* const>(this)->Next(value);
 	}
 
@@ -723,7 +718,7 @@ public:
 	 * Insert the node to the single-linked list as a next node after this Node.
 	 * @param node - node to insert.
 	 */
-	inline void InsertNext(ting::Ptr<Node> node)throw(){
+	void InsertNext(ting::Ptr<Node> node)throw(){
 		if(node.IsValid()){
 			node->next = this->next;
 		}
@@ -734,7 +729,7 @@ public:
 	 * @brief Remove next node from single-linked list.
 	 * @return auto-pointer to the Node object which has been removed from the single-linked list.
 	 */
-	inline ting::Ptr<Node> RemoveNext()throw(){
+	ting::Ptr<Node> RemoveNext()throw(){
 		ting::Ptr<Node> ret = this->next;
 		if(ret.IsValid()){
 			this->next = ret->next;
@@ -747,7 +742,7 @@ public:
 	 * After this operation there will be no next node in this single-linked list.
 	 * @return auto-pointer to the first node of the single-linked list tail which has been chopped.
 	 */
-	inline ting::Ptr<Node> ChopNext()throw(){
+	ting::Ptr<Node> ChopNext()throw(){
 		return this->next;
 	}
 
@@ -756,7 +751,7 @@ public:
 	 * Sets the next node for this node to the specified node.
 	 * @param node - node to set as the next node.
 	 */
-	inline void SetNext(ting::Ptr<Node> node)throw(){
+	void SetNext(ting::Ptr<Node> node)throw(){
 		this->next = node;
 	}
 
@@ -774,7 +769,7 @@ public:
 	 * @return false if the first character of the node's value is a capital letter of Latin alphabet.
 	 * @return true otherwise.
 	 */
-	inline bool IsProperty()const throw(){
+	bool IsProperty()const throw(){
 		return this->value == 0 || this->value[0] < 'A' || 'Z' < this->value[0];
 	}
 
