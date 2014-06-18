@@ -63,12 +63,8 @@
         </ccTool>
       </folder>
       <item path="src/stob/dom.cpp" ex="false" tool="1" flavor2="0">
-        <ccTool flags="0">
-        </ccTool>
       </item>
       <item path="src/stob/parser.cpp" ex="false" tool="1" flavor2="0">
-        <ccTool flags="0">
-        </ccTool>
       </item>
       <item path="tests/dom/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -109,12 +105,8 @@
         </ccTool>
       </folder>
       <item path="src/stob/dom.cpp" ex="false" tool="1" flavor2="9">
-        <ccTool flags="0">
-        </ccTool>
       </item>
       <item path="src/stob/parser.cpp" ex="false" tool="1" flavor2="9">
-        <ccTool flags="0">
-        </ccTool>
       </item>
       <item path="tests/dom/main.cpp" ex="false" tool="1" flavor2="9">
       </item>
