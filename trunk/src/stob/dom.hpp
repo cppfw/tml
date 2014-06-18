@@ -770,7 +770,7 @@ public:
 	 * @return true otherwise.
 	 */
 	bool IsProperty()const throw(){
-		return this->value == 0 || this->value[0] < 'A' || 'Z' < this->value[0];
+		return this->Value() == 0 || this->Value()[0] < 'A' || 'Z' < this->Value()[0];
 	}
 
 	/**
