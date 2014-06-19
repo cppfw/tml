@@ -126,25 +126,25 @@ Node* Node::AddProperty(const char* propName){
 
 namespace{
 
-bool CanStringBeUnquoted(const char* s, size_t& length, unsigned& numEscapes){
+bool CanStringBeUnquoted(const char* s, size_t& out_length, unsigned& out_numEscapes){
 //	TRACE(<< "CanStringBeUnquoted(): enter" << std::endl)
 
-	numEscapes = 0;
-	length = 0;
+	out_numEscapes = 0;
+	out_length = 0;
 
-	if(s == 0){//empty string is always quoted
-		return false;
+	if(s == 0){//empty string is can be unquoted when it has children, so return true.
+		return true;
 	}
 
 	bool ret = true;
-	for(; *s != 0; ++s, ++length){
+	for(; *s != 0; ++s, ++out_length){
 //		TRACE(<< "CanStringBeUnquoted(): c = " << (*c) << std::endl)
 		switch(*s){
 			case '\t':
 			case '\n':
 			case '\r':
 			case '"':
-				++numEscapes;
+				++out_numEscapes;
 			case '{':
 			case '}':
 			case ' ':
@@ -220,6 +220,8 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 
 	//used to detect case of two adjacent unquoted strings without children, need to insert space between them
 	bool prevWasUnquotedWithoutChildren = false;
+	
+	bool prevHadChildren = true;
 
 	for(const Node* n = node->Child(); n; n = n->Next()){
 		//indent
@@ -259,14 +261,23 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 				fi.Write(space);
 			}
 
-			ASSERT(numEscapes == 0)
-			fi.Write(ting::Buffer<ting::u8>(
-					const_cast<ting::u8*>(reinterpret_cast<const ting::u8*>(n->Value())),
-					length
-				));
+			if(n->ValueLength() == 0){//if empty string
+				if(!n->Child() || !prevHadChildren){
+					fi.Write(quote);
+					fi.Write(quote);
+				}
+			}else{
+				ASSERT(numEscapes == 0)
+				fi.Write(ting::Buffer<ting::u8>(
+						const_cast<ting::u8*>(reinterpret_cast<const ting::u8*>(n->Value())),
+						length
+					));
+			}
 		}
 
+		prevHadChildren = (n->Child() != 0);
 		if(n->Child() == 0){
+			
 			if(formatted){
 				fi.Write(newLine);
 			}
@@ -285,7 +296,9 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 		}else{
 			if(n->Child()->Next() == 0 && n->Child()->Child() == 0){
 				//if only one child and that child has no children
-				fi.Write(space);
+				if(n->ValueLength() != 0){
+					fi.Write(space);
+				}
 				fi.Write(lcurly);
 				WriteNode(n, fi, false, 0);
 				fi.Write(rcurly);

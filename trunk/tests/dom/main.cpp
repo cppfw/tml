@@ -209,6 +209,7 @@ void Run(){
 				n2 = n2->Next();
 				ASSERT_ALWAYS(n2)
 				n2->SetValue("subchild1");
+				n2->SetChildren(stob::Node::New());
 				
 				n2->InsertNext(stob::Node::New());
 				n2 = n2->Next();
@@ -221,12 +222,13 @@ void Run(){
 			n1->InsertNext(stob::Node::New());
 			n1 = n1->Next();
 			ASSERT_ALWAYS(n1)
-			n1->SetValue("");
+			//n1->SetValue("");
 			{
 				n1->SetChildren(stob::Node::New());
 				stob::Node* n2 = n1->Child();
 				ASSERT_ALWAYS(n2)
 				n2->SetValue("-3213.43");
+				n2->InsertNext(stob::Node::New("fsd"));
 			}
 			
 			n1->InsertNext(stob::Node::New());
@@ -238,6 +240,8 @@ void Run(){
 			n1 = n1->Next();
 			ASSERT_ALWAYS(n1)
 			n1->SetS32(-426);
+			n1->SetChildren(stob::Node::New());
+			n1->Child()->SetChildren(stob::Node::New("trololo"));
 			
 			n1->InsertNext(stob::Node::New());
 			n1 = n1->Next();
