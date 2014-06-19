@@ -32,6 +32,7 @@ multiline comment
 		ccc{
 			"ddd"
 		}
+{}
 	}
 
 //comment blah blah
