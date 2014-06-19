@@ -94,6 +94,11 @@ void Run(){
 			ASSERT_ALWAYS(!n2->Next())
 		}
 		
+		n1 = n1->Next();
+		ASSERT_ALWAYS(n1)
+		ASSERT_ALWAYS(*n1 == "")
+		ASSERT_ALWAYS(!n1->Child())
+		
 		ASSERT_ALWAYS(!n1->Next())
 	}
 	

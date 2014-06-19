@@ -50,6 +50,7 @@ void Parser::HandleRightCurlyBracket(ParseListener& listener){
 		throw stob::Exc(ss.str());
 	}
 	--this->nestingLevel;
+	this->stringParsed = false;
 	listener.OnChildrenParseFinished();
 }
 
