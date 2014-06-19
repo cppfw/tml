@@ -42,6 +42,33 @@ void Run(){
 	n = n->Next();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "")
+	ASSERT_ALWAYS(n->Value() == 0)
+	ASSERT_ALWAYS(!n->Child())
+	
+	n = n->Next();
+	ASSERT_ALWAYS(n)
+	ASSERT_ALWAYS(*n == "")
+	ASSERT_ALWAYS(n->Value() == 0)
+	ASSERT_ALWAYS(n->Child())
+	{
+		stob::Node * n1 = n->Child();
+		ASSERT_ALWAYS(n1)
+		ASSERT_ALWAYS(*n1 == "")
+		ASSERT_ALWAYS(n1->Value() == 0)
+		ASSERT_ALWAYS(!n1->Child())
+		
+		n1 = n1->Next();
+		ASSERT_ALWAYS(n1)
+		ASSERT_ALWAYS(*n1 == "")
+		ASSERT_ALWAYS(n1->Value() == 0)
+		ASSERT_ALWAYS(!n1->Child())
+		
+		ASSERT_ALWAYS(!n1->Next())
+	}
+	
+	n = n->Next();
+	ASSERT_ALWAYS(n)
+	ASSERT_ALWAYS(*n == "")
 	{
 		stob::Node * n1 = n->Child();
 		ASSERT_ALWAYS(n1)

@@ -439,7 +439,16 @@ public:
 	}
 
 	bool operator==(const char* str)const throw(){
-		return strcmp(this->Value(), str) == 0;
+		if(this->Value()){
+			if(str){
+				return strcmp(this->Value(), str) == 0;
+			}
+			return strlen(this->Value()) == 0;
+		}
+		if(str){
+			return strlen(str) == 0;
+		}
+		return true;
 	}
 
 	/**

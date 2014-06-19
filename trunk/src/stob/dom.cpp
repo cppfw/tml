@@ -36,7 +36,7 @@ void Node::operator delete(void* p)throw(){
 stob::Node::NodeAndPrev Node::Next(const char* value)throw(){
 	Node* prev = this;
 	for(Node* n = this->Next(); n; prev = n, n = n->Next()){
-		if(n->operator ==(value)){
+		if(n->operator==(value)){
 			return NodeAndPrev(prev, n);
 		}
 	}

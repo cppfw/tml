@@ -56,7 +56,8 @@ void Parser::HandleRightCurlyBracket(ParseListener& listener){
 
 
 void Parser::HandleStringEnd(ParseListener& listener){
-	listener.OnStringParsed(reinterpret_cast<char*>(this->buf->Begin()), this->p - this->buf->Begin());
+	size_t size = this->p - this->buf->Begin();
+	listener.OnStringParsed(size == 0 ? 0 : reinterpret_cast<char*>(this->buf->Begin()), size);
 	this->arrayBuf.Reset();
 	this->buf = &this->staticBuf;
 	this->p = this->buf->Begin();
@@ -74,6 +75,11 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 					this->state = QUOTED_STRING;
 					break;
 				case '{':
+					if(!this->stringParsed){
+						//empty string with children
+						ASSERT(this->p == this->buf->Begin())
+						this->HandleStringEnd(listener);
+					}
 					this->HandleLeftCurlyBracket(listener);
 					break;
 				case '}':
