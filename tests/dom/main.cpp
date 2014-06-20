@@ -266,6 +266,12 @@ void Run(){
 			n1->InsertNext(stob::Node::New());
 			n1 = n1->Next();
 			ASSERT_ALWAYS(n1)
+			n1->SetChildren(stob::Node::New());
+			n1->Child()->SetChildren(stob::Node::New("trololo"));
+			
+			n1->InsertNext(stob::Node::New());
+			n1 = n1->Next();
+			ASSERT_ALWAYS(n1)
 			n1->SetFloat(315.34f);
 			
 			n1->InsertNext(stob::Node::New());
@@ -310,9 +316,19 @@ void Run(){
 		n->SetValue("Last{String}InTheFile");
 	}
 	
-	ting::fs::FSFile file("out.stob");
+	ting::fs::FSFile fileFormatted("out_formatted.stob");
+	ting::fs::FSFile fileNotFormatted("out_not_formatted.stob");
 	
-	root->Write(file, true);
+	root->Write(fileFormatted, true);
+	root->Write(fileNotFormatted, false);
+	
+	ting::Ptr<stob::Node> readFormatted = stob::Load(fileFormatted);
+	ASSERT_ALWAYS(root->operator==(*readFormatted))
+	
+	TRACE(<< "formatted read" << std::endl)
+	
+	ting::Ptr<stob::Node> readNotFormatted = stob::Load(fileNotFormatted);
+	ASSERT_ALWAYS(root->operator==(*readNotFormatted))
 }
 }//~namespace
 

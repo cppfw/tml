@@ -438,6 +438,13 @@ public:
 		this->SetValue(v ? "true" : "false");
 	}
 
+	/**
+	 * @brief Compare value of the node to given string.
+     * @param str - string to compare the value to.
+     * @return true if value and given string are equal, including cases when
+	 *         value is null-pointer and 'str' is an empty string and vice versa.
+	 * @return false otherwise.
+     */
 	bool operator==(const char* str)const throw(){
 		if(this->Value()){
 			if(str){
@@ -451,6 +458,16 @@ public:
 		return true;
 	}
 
+	/**
+	 * @brief Deep compare of this node to another node.
+	 * Performs deep comparison of a STOB tree represented by this node to
+	 * another STOB tree represented by given node.
+     * @param n - node to compare this node to.
+     * @return true if two STOB trees are completely equal.
+	 * @return false otherwise.
+     */
+	bool operator==(const Node& n)const throw();
+	
 	/**
 	 * @brief Set children list for this node.
 	 * Sets the children nodes list for this node. Previously set list will be discarded if any.
