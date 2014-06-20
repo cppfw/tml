@@ -325,10 +325,12 @@ void Run(){
 	ting::Ptr<stob::Node> readFormatted = stob::Load(fileFormatted);
 	ASSERT_ALWAYS(root->operator==(*readFormatted))
 	
-	TRACE(<< "formatted read" << std::endl)
+//	TRACE(<< "formatted read" << std::endl)
 	
 	ting::Ptr<stob::Node> readNotFormatted = stob::Load(fileNotFormatted);
 	ASSERT_ALWAYS(root->operator==(*readNotFormatted))
+	
+//	TRACE(<< "not formatted read" << std::endl)
 }
 }//~namespace
 
