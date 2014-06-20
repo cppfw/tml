@@ -309,9 +309,7 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 		}else{
 			if(n->Child()->Next() == 0 && n->Child()->Child() == 0){
 				//if only one child and that child has no children
-				if(n->ValueLength() != 0){
-					fi.Write(space);
-				}
+
 				fi.Write(lcurly);
 				WriteNode(n, fi, false, 0);
 				fi.Write(rcurly);
