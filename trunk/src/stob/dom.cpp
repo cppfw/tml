@@ -143,6 +143,7 @@ bool CanStringBeUnquoted(const char* s, size_t& out_length, unsigned& out_numEsc
 			case '\t':
 			case '\n':
 			case '\r':
+			case '\\':
 			case '"':
 				++out_numEscapes;
 			case '{':
@@ -181,6 +182,12 @@ void MakeEscapedString(const char* str, ting::Buffer<ting::u8>& out){
 				++p;
 				ASSERT(p != out.End())
 				*p = 'r';
+				break;
+			case '\\':
+				*p = '\\';
+				++p;
+				ASSERT(p != out.End())
+				*p = '\\';
 				break;
 			case '"':
 				*p = '\\';
@@ -231,7 +238,6 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 			}
 		}
 
-
 		//write node value
 
 		unsigned numEscapes;
@@ -256,13 +262,20 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 
 			fi.Write(quote);
 		}else{
+			bool isQuotedEmptyString = false;
+			if(n->ValueLength() == 0){//if empty string
+				if(!n->Child() || !prevHadChildren){
+					isQuotedEmptyString = true;
+				}
+			}
+			
 			//unquoted string
-			if(!formatted && prevWasUnquotedWithoutChildren){
+			if(!formatted && prevWasUnquotedWithoutChildren && !isQuotedEmptyString){
 				fi.Write(space);
 			}
 
 			if(n->ValueLength() == 0){//if empty string
-				if(!n->Child() || !prevHadChildren){
+				if(isQuotedEmptyString){
 					fi.Write(quote);
 					fi.Write(quote);
 				}
@@ -281,7 +294,7 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 			if(formatted){
 				fi.Write(newLine);
 			}
-			prevWasUnquotedWithoutChildren = unqouted;
+			prevWasUnquotedWithoutChildren = (unqouted && n->ValueLength() != 0);
 			continue;
 		}else{
 			prevWasUnquotedWithoutChildren = false;
@@ -404,3 +417,28 @@ ting::Ptr<stob::Node> Node::Clone()const{
 	ret->SetChildren(c);
 	return ret;
 }
+
+
+
+bool Node::operator==(const Node& n)const throw(){
+	if(!this->operator==(n.Value())){
+		return false;
+	}
+	
+	const stob::Node* c = this->Child();
+	const stob::Node* cn = n.Child();
+	for(; c && cn; c = c->Next(), cn = cn->Next()){
+		if(!c->operator==(cn->Value())){
+			return false;
+		}
+	}
+	
+	//if not equal number of children
+	if((c && !cn) || (!c && cn)){
+		return false;
+	}
+	
+	return true;
+}
+
+
