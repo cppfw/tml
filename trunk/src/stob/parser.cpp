@@ -109,16 +109,26 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 				case '\t':
 				case '{':
 				case '}':
+				case '"':
 					this->HandleStringEnd(listener);
 					
-					if(c == '{'){
-						this->HandleLeftCurlyBracket(listener);
-					}else if(c == '}'){
-						this->HandleRightCurlyBracket(listener);
+					switch(c){
+						case '{':
+							this->HandleLeftCurlyBracket(listener);
+							break;
+						case '}':
+							this->HandleRightCurlyBracket(listener);
+							break;
+						case '"':
+							//start parsing quoted string right a way
+							this->state = QUOTED_STRING;
+							this->stringParsed = false;
+							break;
+						default:
+							break;
 					}
-					
 					return;
-//					break;
+					
 				default:
 					this->AppendCharToString(c);
 					break;
