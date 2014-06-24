@@ -1,0 +1,21 @@
+libstob (2.0.0-1) stable; urgency=low
+
+  * Node cloning
+  * Node deep comparison
+  * memory leak fixed
+  * bug fixing
+  * minor changes
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 24 Jun 2014 16:51:00 +0200
+
+libstob (1.0.0-1) stable; urgency=low
+
+  * First stable release
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 07 Aug 2013 15:25:00 +0200
+
+libstob (0.1.0-1) stable; urgency=low
+
+  * Initial release
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 04 Jul 2012 13:18:00 +0300

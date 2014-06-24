@@ -1,0 +1,35 @@
+Source: libstob
+Section: devel
+Priority: extra
+Maintainer: Ivan Gagis <igagis@gmail.com>
+Build-Depends: debhelper (>= 9), libc6-dev, doxygen, libting-dev (>= 3.0.0)
+Standards-Version: 3.9.2
+
+Package: libstob-dev
+Section: devel
+Architecture: any
+Depends: libstob0 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Suggests: libstob-doc, libstob0-dbg (= ${binary:Version})
+Description: STOB markup language C++ library.
+ STOB is a simple markup language.
+ 
+Package: libstob0
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: STOB markup language C++ library.
+ STOB is a simple markup language.
+
+Package: libstob0-dbg
+Section: libdevel
+Architecture: any
+Depends: libstob0 (= ${binary:Version}), ${misc:Depends}
+Description: debugging symbols for libstob0 package.
+
+Package: libstob-doc
+Section: devel
+Architecture: all
+Depends: ${misc:Depends}
+Description: documentation for libstob - STOB markup language C++ library.
+ Documentation for libstob - STOB markup language C++ library.
+
