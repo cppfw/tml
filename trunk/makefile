@@ -5,12 +5,8 @@ subdirs += src
 subdirs += tests
 
 #build docs only from linux, because there is doxygen
-ifeq ($(platform),win32)
-
-else
-
-subdirs += docs
-
+ifeq ($(platform),linux)
+    subdirs += docs
 endif
 
 
@@ -35,3 +31,6 @@ install:
 #install docs
 	@install -d $(DESTDIR)$(PREFIX)/share/doc/lib$(lib_name)
 	@install docs/doxygen/* $(DESTDIR)$(PREFIX)/share/doc/lib$(lib_name)
+#install pkg-config files
+	@install -d $(DESTDIR)$(PREFIX)/lib/pkgconfig
+	@install pkg-config/*.pc $(DESTDIR)$(PREFIX)/lib/pkgconfig
