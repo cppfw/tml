@@ -78,10 +78,9 @@ public:
 	/**
 	 * @brief A string token has been parsed.
 	 * This method is called by Parser when String token has been parsed.
-     * @param s - pointer to string data, not null-terminated.
-     * @param size - string length.
+     * @param str - parsed string.
      */
-	virtual void OnStringParsed(const char* s, ting::u32 size) = 0;
+	virtual void OnStringParsed(const ting::Buffer<const char>& str) = 0;
 	
 	/**
 	 * @brief Children list parsing started.

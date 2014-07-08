@@ -5,6 +5,7 @@
 
 #include <ting/debug.hpp>
 #include <ting/fs/FSFile.hpp>
+#include <ting/util.hpp>
 
 
 
@@ -17,25 +18,22 @@ enum E_Action{
 };
 
 class Listener : public stob::ParseListener{
-	//override
-	void OnChildrenParseFinished(){
+	void OnChildrenParseFinished() OVERRIDE{
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == CHILDREN_END, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
 		this->actions.pop_front();
 	}
 	
-	//override
-	void OnChildrenParseStarted(){
+	void OnChildrenParseStarted() OVERRIDE{
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == CHILDREN_START, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
 		this->actions.pop_front();
 	}
 	
-	//override
-	void OnStringParsed(const char* s, ting::u32 size){
+	void OnStringParsed(const ting::Buffer<const char>& str) OVERRIDE{
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == STRING, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
-		ASSERT_INFO_ALWAYS(this->actions.front().second == std::string(s, size), "first = " << this->actions.front().first << " second = " << this->actions.front().second << " str = " << std::string(s, size))
+		ASSERT_INFO_ALWAYS(this->actions.front().second == std::string(str.Begin(), str.Size()), "first = " << this->actions.front().first << " second = " << this->actions.front().second << " str = " << std::string(str.Begin(), str.Size()))
 		this->actions.pop_front();
 	}
 	

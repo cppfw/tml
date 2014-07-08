@@ -38,6 +38,7 @@ THE SOFTWARE. */
 #include <ting/Ptr.hpp>
 #include <ting/fs/File.hpp>
 #include <ting/utf8.hpp>
+#include <ting/Buffer.hpp>
 
 #include "Exc.hpp"
 
@@ -62,20 +63,20 @@ class Node{
 
 	ting::Ptr<Node> children; //pointer to the first child
 
-	//constructor is private, no inheritance.
-	Node(const char* value, size_t size){
-		this->SetValueInternal(value, size);
-	}
-
-	void SetValueInternal(const char* v, size_t size){
-		if(v == 0){
+	void SetValueInternal(const ting::Buffer<const char>& str){
+		if(str.Size() == 0){
 			this->value = 0;
 			return;
 		}
 
-		this->value = new char[size + 1];
-		memcpy(this->value, v, size);
-		this->value[size] = 0;//null-terminate
+		this->value = new char[str.Size() + 1];
+		memcpy(this->value, str.Begin(), str.Size());
+		this->value[str.Size()] = 0;//null-terminate
+	}
+	
+	//constructor is private, no inheritance.
+	Node(const ting::Buffer<const char>& str){
+		this->SetValueInternal(str);
 	}
 
 	//no copying
@@ -84,6 +85,9 @@ class Node{
 
 	static void* operator new(size_t size);
 
+	void SetValue(const char* v, size_t size){
+		this->SetValue(ting::Buffer<const char>(v, size));
+	}
 public:
 	~Node()throw(){
 		delete[] this->value;
@@ -93,12 +97,11 @@ public:
 
 	/**
 	 * @brief Create new node object.
-	 * @param value - buffer holding the value to set for the created node, not null-terminated.
-	 * @param size - size of the value buffer in bytes.
+	 * @param str - buffer holding the value to set for the created node.
 	 * @return An auto-pointer to a newly created Node object.
 	 */
-	static ting::Ptr<Node> New(const char* value, size_t size){
-		return ting::Ptr<Node>(new Node(value, size));
+	static ting::Ptr<Node> New(const ting::Buffer<const char>& str){
+		return ting::Ptr<Node>(new Node(str));
 	}
 
 	/**
@@ -110,7 +113,7 @@ public:
 		if(value == 0){
 			return Node::New();
 		}
-		return Node::New(value, strlen(value));
+		return Node::New(ting::Buffer<const char>(value, strlen(value)));
 	}
 
 	/**
@@ -119,7 +122,7 @@ public:
 	 * @return An auto-pointer to a newly created Node object.
 	 */
 	static ting::Ptr<Node> New(){
-		return Node::New(0, 0);
+		return Node::New(ting::Buffer<const char>(0, 0));
 	}
 
 	/**
@@ -237,19 +240,18 @@ public:
 	 * @param v - null-terminated string to set as a node value.
 	 */
 	void SetValue(const char* v = 0)throw(){
-		this->SetValue(v, v == 0 ? 0 : strlen(v));
+		this->SetValue(ting::Buffer<const char>(v, v == 0 ? 0 : strlen(v)));
 	}
 
 	/**
 	 * @brief Set value of the node.
 	 * Set the value of the node. Value is copied from passed buffer.
-	 * @param v - string to set as a node value.
-	 * @param size - size of the buffer holding the string in bytes.
+	 * @param str - string to set as a node value.
 	 */
-	void SetValue(const char* v, size_t size){
+	void SetValue(const ting::Buffer<const char>& str){
 		delete[] this->value;
 
-		this->SetValueInternal(v, size);
+		this->SetValueInternal(str);
 	}
 
 	/**

@@ -4,6 +4,7 @@
 
 #include <ting/debug.hpp>
 #include <ting/Array.hpp>
+#include <ting/util.hpp>
 
 #include "parser.hpp"
 
@@ -350,24 +351,21 @@ ting::Ptr<stob::Node> stob::Load(ting::fs::File& fi){
 		ting::Ptr<Node> chains;
 		Node* lastChain;
 		
-		//override
-		void OnChildrenParseFinished(){
+		void OnChildrenParseFinished() OVERRIDE{
 			this->stack.back().second->SetChildren(this->chains);
 			this->chains = this->stack.back().first;
 			this->lastChain = this->stack.back().second;
 			this->stack.pop_back();
 		}
 
-		//override
-		void OnChildrenParseStarted(){
+		void OnChildrenParseStarted() OVERRIDE{
 			this->stack.push_back(
 					T_Pair(this->chains, this->lastChain)
 				);
 		}
 
-		//override
-		void OnStringParsed(const char* s, ting::u32 size){
-			ting::Ptr<Node> node = Node::New(s, size);
+		void OnStringParsed(const ting::Buffer<const char>& str) OVERRIDE{
+			ting::Ptr<Node> node = Node::New(str);
 
 			if(this->chains.IsNotValid()){
 				this->chains = node;
