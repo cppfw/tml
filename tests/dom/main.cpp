@@ -10,7 +10,8 @@ namespace TestBasicParsing{
 void Run(){
 	ting::fs::FSFile fi("test.stob");
 	
-	ting::Ptr<stob::Node> root = stob::Load(fi);
+	ting::Ptr<stob::Node> root = stob::Node::New();
+	root->SetChildren(stob::Load(fi));
 	ASSERT_ALWAYS(root.IsValid())
 	ASSERT_ALWAYS(root->Next() == 0)
 	
@@ -322,12 +323,14 @@ void Run(){
 	root->Write(fileFormatted, true);
 	root->Write(fileNotFormatted, false);
 	
-	ting::Ptr<stob::Node> readFormatted = stob::Load(fileFormatted);
+	ting::Ptr<stob::Node> readFormatted = stob::Node::New();
+	readFormatted->SetChildren(stob::Load(fileFormatted));
 	ASSERT_ALWAYS(root->operator==(*readFormatted))
 	
 //	TRACE(<< "formatted read" << std::endl)
 	
-	ting::Ptr<stob::Node> readNotFormatted = stob::Load(fileNotFormatted);
+	ting::Ptr<stob::Node> readNotFormatted = stob::Node::New();
+	readNotFormatted->SetChildren(stob::Load(fileNotFormatted));
 	ASSERT_ALWAYS(root->operator==(*readNotFormatted))
 	
 //	TRACE(<< "not formatted read" << std::endl)
