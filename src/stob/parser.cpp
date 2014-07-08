@@ -58,7 +58,7 @@ void Parser::HandleRightCurlyBracket(ParseListener& listener){
 
 void Parser::HandleStringEnd(ParseListener& listener){
 	size_t size = this->p - this->buf->Begin();
-	listener.OnStringParsed(size == 0 ? 0 : reinterpret_cast<char*>(this->buf->Begin()), size);
+	listener.OnStringParsed(ting::Buffer<const char>(size == 0 ? 0 : reinterpret_cast<char*>(this->buf->Begin()), size));
 	this->arrayBuf.Reset();
 	this->buf = &this->staticBuf;
 	this->p = this->buf->Begin();
