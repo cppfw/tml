@@ -376,17 +376,17 @@ ting::Ptr<stob::Node> stob::Load(ting::fs::File& fi){
 			}
 		}
 
-		Listener() :
-				chains(Node::New()),//create root node
-				lastChain(this->chains.operator->())
-		{}
+//		Listener() :
+//				chains(Node::New()),//create root node
+//				lastChain(this->chains.operator->())
+//		{}
 
 		~Listener()throw(){}
 	} listener;
 
-	listener.OnChildrenParseStarted();
+//	listener.OnChildrenParseStarted();
 	stob::Parse(fi, listener);
-	listener.OnChildrenParseFinished();
+//	listener.OnChildrenParseFinished();
 
 	return listener.chains;
 }

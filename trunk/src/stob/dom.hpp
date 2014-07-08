@@ -816,7 +816,7 @@ public:
  * @brief Load document-object model from STOB document.
  * Load document-object model from STOB document provided by given file interface.
  * @param fi - file interface to get the STOB data from.
- * @return auto-pointer to the root node of the document-object model.
+ * @return auto-pointer to the first node in the chain of the document-object model.
  */
 ting::Ptr<Node> Load(ting::fs::File& fi);
 
