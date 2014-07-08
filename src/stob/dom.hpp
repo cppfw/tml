@@ -669,17 +669,63 @@ public:
 	}
 
 	/**
-	 * @brief Get next non-property child.
+	 * @brief Get node with given value in the chain of nodes.
+	 * Get closest node in the single-linked list which holds the given value. This node is included in the search.
+     * @param value - value to look for.
+     * @return instance of NodeAndPrev structure holding information about found Node.
+     */
+	NodeAndPrev ThisOrNext(const char* value)throw(){
+		if(this->operator==(value)){
+			return NodeAndPrev(0, this);
+		}
+
+		return this->Next(value);
+	}
+	
+	/**
+	 * @brief Get constant node with given value in the chain of nodes.
+	 * Get closest constant node in the single-linked list which holds the given value. This node is included in the search.
+     * @param value - value to look for.
+     * @return instance of NodeAndPrev structure holding information about found Node.
+     */
+	const NodeAndPrev ThisOrNext(const char* value)const throw(){
+		return const_cast<Node* const>(this)->ThisOrNext(value);
+	}
+	
+	/**
+	 * @brief Get next non-property node.
      * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
      */
 	NodeAndPrev NextNonProperty()throw();
 	
 	/**
-	 * @brief Get constant next non-property child.
+	 * @brief Get constant next non-property node.
      * @return constant instance of NodeAndPrev class holding information about found node, previous node is always valid.
      */
 	const NodeAndPrev NextNonProperty()const throw(){
 		return const_cast<Node* const>(this)->NextNonProperty();
+	}
+	
+	/**
+	 * @brief Get closest non-property node.
+	 * This node is included in the search.
+     * @return instance of NodeAndPrev class holding information about found node.
+     */
+	NodeAndPrev ThisOrNextNonProperty()throw(){
+		if(!this->IsProperty()){
+			return NodeAndPrev(0, this);
+		}
+		
+		return this->NextNonProperty();
+	}
+	
+	/**
+	 * @brief Get closest constant non-property node.
+	 * This node is included in the search.
+     * @return instance of NodeAndPrev class holding information about found node.
+     */
+	const NodeAndPrev ThisOrNextNonProperty()const throw(){
+		return const_cast<Node* const>(this)->ThisOrNextNonProperty();
 	}
 	
 	/**
@@ -694,6 +740,28 @@ public:
      */
 	const NodeAndPrev NextProperty()const throw(){
 		return const_cast<Node* const>(this)->NextProperty();
+	}
+	
+	/**
+	 * @brief Get closest property node.
+	 * This node is included in the search.
+     * @return instance of NodeAndPrev class holding information about found node.
+     */
+	NodeAndPrev ThisOrNextProperty()throw(){
+		if(this->IsProperty()){
+			return NodeAndPrev(0, this);
+		}
+		
+		return this->NextProperty();
+	}
+	
+	/**
+	 * @brief Get closest constant property node.
+	 * This node is included in the search.
+     * @return instance of NodeAndPrev class holding information about found node.
+     */
+	const NodeAndPrev ThisOrNextProperty()const throw(){
+		return const_cast<Node* const>(this)->ThisOrNextProperty();
 	}
 	
 	/**

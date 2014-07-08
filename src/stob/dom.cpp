@@ -51,11 +51,7 @@ stob::Node::NodeAndPrev Node::Child(const char* value)throw(){
 		return NodeAndPrev(0, 0);
 	}
 
-	if(this->children->operator==(value)){
-		return NodeAndPrev(0, this->children.operator->());
-	}
-
-	return this->children->Next(value);
+	return this->children->ThisOrNext(value);
 }
 
 
