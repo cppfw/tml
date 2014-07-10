@@ -1,3 +1,5 @@
+include ../platform.mk
+
 default: doc
 
 doc:

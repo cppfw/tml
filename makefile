@@ -1,3 +1,5 @@
+include platform.mk
+
 lib_name := stob
 
 subdirs :=
