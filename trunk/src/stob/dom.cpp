@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include <tuple>
+
 #include <ting/debug.hpp>
 #include <ting/Array.hpp>
 #include <ting/util.hpp>
@@ -47,7 +49,7 @@ stob::Node::NodeAndPrev Node::Next(const char* value)throw(){
 
 
 stob::Node::NodeAndPrev Node::Child(const char* value)throw(){
-	if(this->children.IsNotValid()){
+	if(!this->children){
 		return NodeAndPrev(0, 0);
 	}
 
@@ -57,7 +59,7 @@ stob::Node::NodeAndPrev Node::Child(const char* value)throw(){
 
 
 stob::Node::NodeAndPrev Node::ChildNonProperty()throw(){
-	if(this->children.IsNotValid()){
+	if(!this->children){
 		return NodeAndPrev(0, 0);
 	}
 
@@ -71,7 +73,7 @@ stob::Node::NodeAndPrev Node::ChildNonProperty()throw(){
 
 
 stob::Node::NodeAndPrev Node::ChildProperty()throw(){
-	if(this->children.IsNotValid()){
+	if(!this->children){
 		return NodeAndPrev(0, 0);
 	}
 
@@ -109,10 +111,10 @@ stob::Node::NodeAndPrev Node::NextProperty()throw(){
 
 
 Node* Node::AddProperty(const char* propName){
-	ting::Ptr<Node> p = Node::New();
+	std::unique_ptr<Node> p = Node::New();
 	p->SetValue(propName);
 	p->SetNext(this->RemoveChildren());
-	this->SetChildren(p);
+	this->SetChildren(std::move(p));
 
 	this->Child()->SetChildren(Node::New());
 
@@ -338,36 +340,36 @@ void Node::Write(ting::fs::File& fi, bool formatted){
 
 
 
-ting::Ptr<stob::Node> stob::Load(ting::fs::File& fi){
+std::unique_ptr<stob::Node> stob::Load(ting::fs::File& fi){
 	class Listener : public stob::ParseListener{
-		typedef std::pair<ting::Ptr<Node>, Node*> T_Pair;
+		typedef std::tuple<std::unique_ptr<Node>, Node*> T_Pair;
 		std::vector<T_Pair> stack;
 
 	public:
-		ting::Ptr<Node> chains;
+		std::unique_ptr<Node> chains;
 		Node* lastChain;
 		
 		void OnChildrenParseFinished() OVERRIDE{
-			this->stack.back().second->SetChildren(this->chains);
-			this->chains = this->stack.back().first;
-			this->lastChain = this->stack.back().second;
+			std::get<1>(this->stack.back())->SetChildren(std::move(this->chains));
+			this->chains = std::move(std::get<0>(this->stack.back()));
+			this->lastChain = std::get<1>(this->stack.back());
 			this->stack.pop_back();
 		}
 
 		void OnChildrenParseStarted() OVERRIDE{
 			this->stack.push_back(
-					T_Pair(this->chains, this->lastChain)
+					std::make_tuple(std::move(this->chains), this->lastChain)
 				);
 		}
 
 		void OnStringParsed(const ting::Buffer<const char>& str) OVERRIDE{
-			ting::Ptr<Node> node = Node::New(str);
+			std::unique_ptr<Node> node = Node::New(str);
 
-			if(this->chains.IsNotValid()){
-				this->chains = node;
+			if(!this->chains){
+				this->chains = std::move(node);
 				this->lastChain = this->chains.operator->();
 			}else{
-				this->lastChain->InsertNext(node);
+				this->lastChain->InsertNext(std::move(node));
 				this->lastChain = this->lastChain->Next();
 			}
 		}
@@ -384,19 +386,19 @@ ting::Ptr<stob::Node> stob::Load(ting::fs::File& fi){
 	stob::Parse(fi, listener);
 //	listener.OnChildrenParseFinished();
 
-	return listener.chains;
+	return std::move(listener.chains);
 }
 
 
 
-ting::Ptr<stob::Node> Node::Clone()const{
-	ting::Ptr<Node> ret = Node::New(this->Value());
+std::unique_ptr<stob::Node> Node::Clone()const{
+	std::unique_ptr<Node> ret = Node::New(this->Value());
 
 	if(!this->Child()){
 		return ret;
 	}
 
-	ting::Ptr<stob::Node> c = this->Child()->Clone();
+	std::unique_ptr<stob::Node> c = this->Child()->Clone();
 
 	{
 		stob::Node* curChild = c.operator->();
@@ -406,7 +408,7 @@ ting::Ptr<stob::Node> Node::Clone()const{
 		}
 	}
 
-	ret->SetChildren(c);
+	ret->SetChildren(std::move(c));
 	return ret;
 }
 

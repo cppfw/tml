@@ -35,10 +35,11 @@ THE SOFTWARE. */
 
 #include <ting/config.hpp>
 #include <ting/PoolStored.hpp>
-#include <ting/Ptr.hpp>
 #include <ting/fs/File.hpp>
 #include <ting/utf8.hpp>
 #include <ting/Buffer.hpp>
+
+#include <memory>
 
 #include "Exc.hpp"
 
@@ -59,9 +60,9 @@ namespace stob{
 class Node{
 	char* value; //node value
 
-	ting::Ptr<Node> next; //next sibling node
+	std::unique_ptr<Node> next; //next sibling node
 
-	ting::Ptr<Node> children; //pointer to the first child
+	std::unique_ptr<Node> children; //pointer to the first child
 
 	void SetValueInternal(const ting::Buffer<const char>& str){
 		if(str.Size() == 0){
@@ -100,8 +101,8 @@ public:
 	 * @param str - buffer holding the value to set for the created node.
 	 * @return An auto-pointer to a newly created Node object.
 	 */
-	static ting::Ptr<Node> New(const ting::Buffer<const char>& str){
-		return ting::Ptr<Node>(new Node(str));
+	static std::unique_ptr<Node> New(const ting::Buffer<const char>& str){
+		return std::move(std::unique_ptr<Node>(new Node(str)));
 	}
 
 	/**
@@ -109,7 +110,7 @@ public:
 	 * @param value - null-terminated string holding the value to set for the created node.
 	 * @return An auto-pointer to a newly created Node object.
 	 */
-	static ting::Ptr<Node> New(const char* value){
+	static std::unique_ptr<Node> New(const char* value){
 		if(value == 0){
 			return Node::New();
 		}
@@ -121,7 +122,7 @@ public:
 	 * The value is set to empty string.
 	 * @return An auto-pointer to a newly created Node object.
 	 */
-	static ting::Ptr<Node> New(){
+	static std::unique_ptr<Node> New(){
 		return Node::New(ting::Buffer<const char>(0, 0));
 	}
 
@@ -475,8 +476,8 @@ public:
 	 * Sets the children nodes list for this node. Previously set list will be discarded if any.
 	 * @param first - auto-pointer to the first node of the children single.linked list.
 	 */
-	void SetChildren(ting::Ptr<Node> first)throw(){
-		this->children = first;
+	void SetChildren(std::unique_ptr<Node> first)throw(){
+		this->children = std::move(first);
 	}
 
 	/**
@@ -484,23 +485,23 @@ public:
 	 * Removes the list of children from this node.
 	 * @return auto-pointer to the first node in the children list.
 	 */
-	ting::Ptr<Node> RemoveChildren()throw(){
-		return this->children;
+	std::unique_ptr<Node> RemoveChildren()throw(){
+		return std::move(this->children);
 	}
 
 	/**
 	 * @brief Remove first child from the list of children.
 	 * @return auto-pointer to the node which was the first child.
 	 */
-	ting::Ptr<Node> RemoveFirstChild()throw(){
+	std::unique_ptr<Node> RemoveFirstChild()throw(){
 		if(!this->children){
-			return ting::Ptr<Node>();
+			return std::unique_ptr<Node>();
 		}
 
-		ting::Ptr<Node> ret = this->children;
-		this->children = ret->next;
+		std::unique_ptr<Node> ret = std::move(this->children);
+		this->children = std::move(ret->next);
 
-		return ret;
+		return std::move(ret);
 	}
 
 	/**
@@ -510,7 +511,7 @@ public:
 	 * @return auto-pointer to the removed node.
 	 * @return invalid auto-pointer if there was no child with given value found.
 	 */
-	ting::Ptr<Node> RemoveChild(const char* value)throw(){
+	std::unique_ptr<Node> RemoveChild(const char* value)throw(){
 		NodeAndPrev f = this->Child(value);
 
 		if(f.prev()){
@@ -814,21 +815,21 @@ public:
 	 * Insert the node to the single-linked list as a next node after this Node.
 	 * @param node - node to insert.
 	 */
-	void InsertNext(ting::Ptr<Node> node)throw(){
-		if(node.IsValid()){
-			node->next = this->next;
+	void InsertNext(std::unique_ptr<Node> node)throw(){
+		if(node){
+			node->next = std::move(this->next);
 		}
-		this->next = node;
+		this->next = std::move(node);
 	}
 
 	/**
 	 * @brief Remove next node from single-linked list.
 	 * @return auto-pointer to the Node object which has been removed from the single-linked list.
 	 */
-	ting::Ptr<Node> RemoveNext()throw(){
-		ting::Ptr<Node> ret = this->next;
-		if(ret.IsValid()){
-			this->next = ret->next;
+	std::unique_ptr<Node> RemoveNext()throw(){
+		std::unique_ptr<Node> ret = std::move(this->next);
+		if(ret){
+			this->next = std::move(ret->next);
 		}
 		return ret;
 	}
@@ -838,8 +839,8 @@ public:
 	 * After this operation there will be no next node in this single-linked list.
 	 * @return auto-pointer to the first node of the single-linked list tail which has been chopped.
 	 */
-	ting::Ptr<Node> ChopNext()throw(){
-		return this->next;
+	std::unique_ptr<Node> ChopNext()throw(){
+		return std::move(this->next);
 	}
 
 	/**
@@ -847,8 +848,8 @@ public:
 	 * Sets the next node for this node to the specified node.
 	 * @param node - node to set as the next node.
 	 */
-	void SetNext(ting::Ptr<Node> node)throw(){
-		this->next = node;
+	void SetNext(std::unique_ptr<Node> node)throw(){
+		this->next = std::move(node);
 	}
 
 	/**
@@ -856,7 +857,7 @@ public:
 	 * Clones this node and all the underlying nodes hierarchy.
 	 * @return A deep copy of this Node.
 	 */
-	ting::Ptr<Node> Clone()const;
+	std::unique_ptr<Node> Clone()const;
 
 	/**
 	 * @brief Check if the Node is a property.
@@ -886,7 +887,7 @@ public:
  * @param fi - file interface to get the STOB data from.
  * @return auto-pointer to the first node in the chain of the document-object model.
  */
-ting::Ptr<Node> Load(ting::fs::File& fi);
+std::unique_ptr<Node> Load(ting::fs::File& fi);
 
 
 
