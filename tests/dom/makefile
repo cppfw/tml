@@ -34,6 +34,7 @@ cf += -Wall
 cf += -Wno-format #no warnings about format
 cf += -DDEBUG
 cf += -fstrict-aliasing #strict aliasing!!!
+cf += -std=c++11
 
 default: $(binary_name)
 

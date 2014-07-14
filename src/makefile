@@ -62,7 +62,7 @@ compiler_flags += -fstrict-aliasing #strict aliasing (in order to comply with th
 compiler_flags += -g #include debugging symbols
                 #-P -E #-Wreorder
                 #-O3 -funroll-loops -fomit-frame-pointer
-#compiler_flags += -std=c++0x
+compiler_flags += -std=c++11
 
 
 
