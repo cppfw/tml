@@ -1,54 +1,30 @@
-platform := linux
+include prorab.mk
 
-operating_system := $(shell uname -o)
-ifeq ($(operating_system), Msys)
-    platform := win32
-endif
+this_name := tests
 
-binary_name := tests
+this_cflags := $(ecf)
+this_cflags += -Wall
+this_cflags += -Wno-format #no warnings about format
+this_cflags += -DDEBUG
+this_cflags += -fstrict-aliasing #strict aliasing!!!
+this_cflags += -std=c++11
 
-ifeq ($(platform),win32)
-    binary_name := $(binary_name).exe
-endif
+this_srcs := main.cpp
 
+this_ldlibs := -lstob -lting
+this_ldflags := -L$(prorab_this_dir)../../src
 
-ifeq ($(platform),win32)
-    libs := ../../src/libstob.a -lting -L/usr/lib
-    includes := -I"../../../ting/src"
-endif
-ifeq ($(platform),darwin)
-    libs := 
-    includes :=
-endif
-ifeq ($(platform),linux)
-    libs := -lting ../../src/libstob.so
-    includes :=
-endif
-
-#external compiler flags (to be passed to make from command line)
-ecf :=
-
-#compiler flags
-cf := $(ecf)
-cf += -Wall
-cf += -Wno-format #no warnings about format
-cf += -DDEBUG
-cf += -fstrict-aliasing #strict aliasing!!!
-cf += -std=c++11
-
-default: $(binary_name)
-
-test: $(binary_name)
-	@echo running $^...
-	@LD_LIBRARY_PATH=../../src ./$^
-
-$(binary_name): main.cpp
-	@echo Building $@...
-	@g++ -o $@ $(cf) $^ $(includes) $(libs)
+$(eval $(prorab-build-app))
 
 
+define this_rules
+test:: $(prorab_this_name)
+	@echo running $$^...
+	@(cd $(prorab_this_dir); LD_LIBRARY_PATH=../../src $$^)
+endef
+$(eval $(this_rules))
 
-clean:
-	@rm -rf $(binary_name)
+#add dependency on libstob
+$(prorab_this_name): $(abspath $(prorab_this_dir)../../src/libstob$(prorab_lib_extension))
 
-include ../../targets.mk
+$(eval $(call prorab-include,$(prorab_this_dir)../../src/makefile))

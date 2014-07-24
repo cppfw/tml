@@ -1,12 +1,6 @@
-include ../platform.mk
+include prorab.mk
 
-default: doc
 
-doc:
-	@echo Building docs...
-	@doxygen doxygen.cfg
+this_name := stob
 
-clean:
-	@rm -rf doxygen
-
-include ../targets.mk
+$(eval $(prorab-build-doxygen))

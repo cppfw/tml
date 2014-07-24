@@ -1,8 +1,3 @@
-subdirs :=
-subdirs += parser
-subdirs += dom
+include prorab.mk
 
-
-
-include ../targets.mk
-include ../subdirs.mk
+$(eval $(prorab-build-subdirs))
