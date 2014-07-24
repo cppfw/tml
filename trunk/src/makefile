@@ -30,6 +30,7 @@ endif
 
 ifeq ($(prorab_os), windows)
     this_cflags += -Wno-format #due to bugs in some g++ versions it warns about format when not needed, so disable format warnings
+    this_cflags += -I/usr/include
 else
     this_cflags += -fPIC # Since we are building shared library, we need Position-Independend Code
 endif

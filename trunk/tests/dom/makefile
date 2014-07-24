@@ -2,17 +2,21 @@ include prorab.mk
 
 this_name := tests
 
-this_cflags := $(ecf)
 this_cflags += -Wall
 this_cflags += -Wno-format #no warnings about format
 this_cflags += -DDEBUG
 this_cflags += -fstrict-aliasing #strict aliasing!!!
 this_cflags += -std=c++11
 
-this_srcs := main.cpp
+this_srcs += main.cpp
 
-this_ldlibs := -lstob -lting
-this_ldflags := -L$(prorab_this_dir)../../src
+this_ldlibs += -lstob -lting
+this_ldflags += -L$(prorab_this_dir)../../src
+
+ifeq ($(prorab_os),windows)
+    this_cflags += -I/usr/include
+    this_ldflags += -L/usr/lib
+endif
 
 $(eval $(prorab-build-app))
 
