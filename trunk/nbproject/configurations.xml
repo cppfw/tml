@@ -37,6 +37,7 @@
       </toolsSet>
       <flagsDictionary>
         <element flagsID="0" commonFlags="-funsigned-char -std=c++11 -fPIC"/>
+        <element flagsID="1" commonFlags="-std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -61,15 +62,30 @@
           </incDir>
         </ccTool>
       </folder>
+      <folder path="1/dom">
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+      </folder>
       <item path="src/stob/dom.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
         </ccTool>
       </item>
       <item path="src/stob/parser.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
+        <ccTool>
+          <incDir>
+            <pElem>src</pElem>
+          </incDir>
         </ccTool>
       </item>
       <item path="tests/dom/main.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="1">
+        </ccTool>
       </item>
       <item path="tests/parser/main.cpp" ex="false" tool="1" flavor2="8">
       </item>

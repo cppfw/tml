@@ -1,12 +1,14 @@
 #include "dom.hpp"
 
 #include <vector>
-
 #include <tuple>
+#include <cstdint>
 
 #include <ting/debug.hpp>
 #include <ting/Array.hpp>
 #include <ting/util.hpp>
+#include <ting/fs/BufferFile.hpp>
+
 
 #include "parser.hpp"
 
@@ -374,17 +376,10 @@ std::unique_ptr<stob::Node> stob::Load(ting::fs::File& fi){
 			}
 		}
 
-//		Listener() :
-//				chains(Node::New()),//create root node
-//				lastChain(this->chains.operator->())
-//		{}
-
 		~Listener()throw(){}
 	} listener;
 
-//	listener.OnChildrenParseStarted();
 	stob::Parse(fi, listener);
-//	listener.OnChildrenParseFinished();
 
 	return std::move(listener.chains);
 }
@@ -436,3 +431,16 @@ bool Node::operator==(const Node& n)const throw(){
 }
 
 
+
+std::unique_ptr<Node> Parse(const char *str){
+	if(!str){
+		return nullptr;
+	}
+	
+	size_t len = strlen(str);
+	
+	//TODO: make const Buffer file
+	ting::fs::BufferFile fi(ting::Buffer<std::uint8_t>(reinterpret_cast<std::uint8_t*>(const_cast<char*>(str)), len));
+	
+	return Load(fi);
+}
