@@ -432,7 +432,7 @@ bool Node::operator==(const Node& n)const throw(){
 
 
 
-std::unique_ptr<Node> Parse(const char *str){
+std::unique_ptr<Node> stob::Parse(const char *str){
 	if(!str){
 		return nullptr;
 	}
