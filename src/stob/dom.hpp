@@ -891,4 +891,13 @@ std::unique_ptr<Node> Load(ting::fs::File& fi);
 
 
 
+/**
+ * @brief Create STOB document-object model from string.
+ * @param str - null-terminated string describing STOB document.
+ * @return auto-pointer to the first node in the chain of the document-object model.
+ */
+std::unique_ptr<Node> Parse(const char *str);
+
+
+
 }//~namespace
