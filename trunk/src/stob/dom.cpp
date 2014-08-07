@@ -5,7 +5,6 @@
 #include <cstdint>
 
 #include <ting/debug.hpp>
-#include <ting/Array.hpp>
 #include <ting/util.hpp>
 #include <ting/fs/BufferFile.hpp>
 
@@ -160,7 +159,7 @@ bool CanStringBeUnquoted(const char* s, size_t& out_length, unsigned& out_numEsc
 }
 
 
-void MakeEscapedString(const char* str, ting::Buffer<std::uint8_t>& out){
+void MakeEscapedString(const char* str, const ting::Buffer<std::uint8_t>& out){
 	std::uint8_t *p = out.begin();
 	for(const char* c = str; *c != 0; ++c){
 		ASSERT(p != out.end())
@@ -254,7 +253,7 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 						length
 					));
 			}else{
-				ting::Array<std::uint8_t> buf(length + numEscapes);
+				std::vector<std::uint8_t> buf(length + numEscapes);
 
 				MakeEscapedString(n->Value(), buf);
 

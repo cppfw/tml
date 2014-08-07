@@ -30,7 +30,6 @@ THE SOFTWARE. */
 
 
 #include <ting/Buffer.hpp>
-#include <ting/Array.hpp>
 #include <ting/fs/File.hpp>
 
 
@@ -108,7 +107,7 @@ class Parser{
 	unsigned curLine;//current line into the document being parsed, used for pointing place of format error.
 	
 	std::array<std::uint8_t, 256> staticBuf; //string buffer
-	ting::Array<std::uint8_t> arrayBuf;
+	std::vector<std::uint8_t> arrayBuf;
 	ting::Buffer<std::uint8_t> buf;
 	
 	std::uint8_t* p; //current position into the string buffer
@@ -162,7 +161,7 @@ public:
 	void Reset(){
 		this->curLine = 1;
 		this->buf = this->staticBuf;
-		this->arrayBuf.Reset();
+		this->arrayBuf.clear();
 		this->p = this->buf.begin();
 		this->nestingLevel = 0;
 		this->prevChar = 0;
