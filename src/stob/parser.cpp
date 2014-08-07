@@ -15,14 +15,14 @@ using namespace stob;
 void Parser::AppendCharToString(std::uint8_t c){
 	*this->p = c;
 	++this->p;
-	if(this->p == this->buf->end()){
-		ting::Array<std::uint8_t> a(this->buf->size() * 2);
-		memcpy(a.begin(), this->buf->begin(), this->buf->SizeInBytes());
+	if(this->p == this->buf.end()){
+		ting::Array<std::uint8_t> a(this->buf.size() * 2);
+		memcpy(a.begin(), this->buf.begin(), this->buf.SizeInBytes());
 
-		this->p = a.begin() + this->buf->size();
+		this->p = a.begin() + this->buf.size();
 
 		this->arrayBuf = a;
-		this->buf = &this->arrayBuf; //set reference
+		this->buf = ting::Buffer<std::uint8_t>(this->arrayBuf.begin(), this->arrayBuf.size()); //set reference
 	}
 }
 
@@ -57,11 +57,11 @@ void Parser::HandleRightCurlyBracket(ParseListener& listener){
 
 
 void Parser::HandleStringEnd(ParseListener& listener){
-	size_t size = this->p - this->buf->begin();
-	listener.OnStringParsed(ting::Buffer<const char>(size == 0 ? 0 : reinterpret_cast<char*>(this->buf->begin()), size));
+	size_t size = this->p - this->buf.begin();
+	listener.OnStringParsed(ting::Buffer<const char>(size == 0 ? 0 : reinterpret_cast<char*>(this->buf.begin()), size));
 	this->arrayBuf.Reset();
-	this->buf = &this->staticBuf;
-	this->p = this->buf->begin();
+	this->buf = this->staticBuf;
+	this->p = this->buf.begin();
 	this->stringParsed = true;
 	this->state = IDLE;
 }
@@ -78,7 +78,7 @@ void Parser::ParseChar(std::uint8_t c, ParseListener& listener){
 				case '{':
 					if(!this->stringParsed){
 						//empty string with children
-						ASSERT(this->p == this->buf->begin())
+						ASSERT(this->p == this->buf.begin())
 						this->HandleStringEnd(listener);
 					}
 					this->HandleLeftCurlyBracket(listener);
@@ -306,7 +306,7 @@ void stob::Parse(ting::fs::File& fi, ParseListener& listener){
 	
 	stob::Parser parser;
 	
-	ting::StaticBuffer<std::uint8_t, 2048> buf; //2kb read buffer.
+	std::array<std::uint8_t, 2048> buf; //2kb read buffer.
 	
 	size_t bytesRead;
 	

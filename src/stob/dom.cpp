@@ -208,22 +208,22 @@ void MakeEscapedString(const char* str, ting::Buffer<std::uint8_t>& out){
 void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsigned indentation){
 	ASSERT(node)
 
-	ting::StaticBuffer<std::uint8_t, 1> quote;
+	std::array<std::uint8_t, 1> quote;
 	quote[0] = '"';
 
-	ting::StaticBuffer<std::uint8_t, 1> lcurly;
+	std::array<std::uint8_t, 1> lcurly;
 	lcurly[0] = '{';
 
-	ting::StaticBuffer<std::uint8_t, 1> rcurly;
+	std::array<std::uint8_t, 1> rcurly;
 	rcurly[0] = '}';
 
-	ting::StaticBuffer<std::uint8_t, 1> space;
+	std::array<std::uint8_t, 1> space;
 	space[0] = ' ';
 
-	ting::StaticBuffer<std::uint8_t, 1> tab;
+	std::array<std::uint8_t, 1> tab;
 	tab[0] = '\t';
 
-	ting::StaticBuffer<std::uint8_t, 1> newLine;
+	std::array<std::uint8_t, 1> newLine;
 	newLine[0] = '\n';
 
 	//used to detect case of two adjacent unquoted strings without children, need to insert space between them

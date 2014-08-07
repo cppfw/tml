@@ -107,9 +107,9 @@ public:
 class Parser{
 	unsigned curLine;//current line into the document being parsed, used for pointing place of format error.
 	
-	ting::StaticBuffer<std::uint8_t, 256> staticBuf; //string buffer
+	std::array<std::uint8_t, 256> staticBuf; //string buffer
 	ting::Array<std::uint8_t> arrayBuf;
-	ting::Buffer<std::uint8_t>* buf;
+	ting::Buffer<std::uint8_t> buf;
 	
 	std::uint8_t* p; //current position into the string buffer
 	
@@ -161,9 +161,9 @@ public:
      */
 	void Reset(){
 		this->curLine = 1;
-		this->buf = &this->staticBuf;
+		this->buf = this->staticBuf;
 		this->arrayBuf.Reset();
-		this->p = this->buf->begin();
+		this->p = this->buf.begin();
 		this->nestingLevel = 0;
 		this->prevChar = 0;
 		this->commentState = NO_COMMENT;
