@@ -32,13 +32,13 @@ void* Node::operator new(size_t size){
 
 
 
-void Node::operator delete(void* p)throw(){
+void Node::operator delete(void* p)noexcept{
 	memoryPool.Free_ts(p);
 }
 
 
 
-stob::Node::NodeAndPrev Node::Next(const char* value)throw(){
+stob::Node::NodeAndPrev Node::Next(const char* value)noexcept{
 	Node* prev = this;
 	for(Node* n = this->Next(); n; prev = n, n = n->Next()){
 		if(n->operator==(value)){
@@ -50,7 +50,7 @@ stob::Node::NodeAndPrev Node::Next(const char* value)throw(){
 
 
 
-stob::Node::NodeAndPrev Node::Child(const char* value)throw(){
+stob::Node::NodeAndPrev Node::Child(const char* value)noexcept{
 	if(!this->children){
 		return NodeAndPrev(0, 0);
 	}
@@ -60,7 +60,7 @@ stob::Node::NodeAndPrev Node::Child(const char* value)throw(){
 
 
 
-stob::Node::NodeAndPrev Node::ChildNonProperty()throw(){
+stob::Node::NodeAndPrev Node::ChildNonProperty()noexcept{
 	if(!this->children){
 		return NodeAndPrev(0, 0);
 	}
@@ -74,7 +74,7 @@ stob::Node::NodeAndPrev Node::ChildNonProperty()throw(){
 
 
 
-stob::Node::NodeAndPrev Node::ChildProperty()throw(){
+stob::Node::NodeAndPrev Node::ChildProperty()noexcept{
 	if(!this->children){
 		return NodeAndPrev(0, 0);
 	}
@@ -88,7 +88,7 @@ stob::Node::NodeAndPrev Node::ChildProperty()throw(){
 
 
 
-stob::Node::NodeAndPrev Node::NextNonProperty()throw(){
+stob::Node::NodeAndPrev Node::NextNonProperty()noexcept{
 	Node* prev = this;
 	for(Node* n = this->Next(); n; prev = n, n = n->Next()){
 		if(!n->IsProperty()){
@@ -100,7 +100,7 @@ stob::Node::NodeAndPrev Node::NextNonProperty()throw(){
 
 
 
-stob::Node::NodeAndPrev Node::NextProperty()throw(){
+stob::Node::NodeAndPrev Node::NextProperty()noexcept{
 	Node* prev = this;
 	for(Node* n = this->Next(); n; prev = n, n = n->Next()){
 		if(n->IsProperty()){
@@ -351,20 +351,20 @@ std::unique_ptr<stob::Node> stob::Load(ting::fs::File& fi){
 		std::unique_ptr<Node> chains;
 		Node* lastChain;
 		
-		void OnChildrenParseFinished() OVERRIDE{
+		void OnChildrenParseFinished() override{
 			std::get<1>(this->stack.back())->SetChildren(std::move(this->chains));
 			this->chains = std::move(std::get<0>(this->stack.back()));
 			this->lastChain = std::get<1>(this->stack.back());
 			this->stack.pop_back();
 		}
 
-		void OnChildrenParseStarted() OVERRIDE{
+		void OnChildrenParseStarted() override{
 			this->stack.push_back(
 					std::make_tuple(std::move(this->chains), this->lastChain)
 				);
 		}
 
-		void OnStringParsed(const ting::Buffer<const char>& str) OVERRIDE{
+		void OnStringParsed(const ting::Buffer<const char>& str) override{
 			std::unique_ptr<Node> node = Node::New(str);
 
 			if(!this->chains){
@@ -376,7 +376,7 @@ std::unique_ptr<stob::Node> stob::Load(ting::fs::File& fi){
 			}
 		}
 
-		~Listener()throw(){}
+		~Listener()noexcept{}
 	} listener;
 
 	stob::Parse(fi, listener);
@@ -409,7 +409,7 @@ std::unique_ptr<stob::Node> Node::Clone()const{
 
 
 
-bool Node::operator==(const Node& n)const throw(){
+bool Node::operator==(const Node& n)const noexcept{
 	if(!this->operator==(n.Value())){
 		return false;
 	}

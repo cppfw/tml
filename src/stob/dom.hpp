@@ -90,11 +90,11 @@ class Node{
 		this->SetValue(ting::Buffer<const char>(v, size));
 	}
 public:
-	~Node()throw(){
+	~Node()noexcept{
 		delete[] this->value;
 	}
 
-	static void operator delete(void *p)throw();
+	static void operator delete(void *p)noexcept;
 
 	/**
 	 * @brief Create new node object.
@@ -132,7 +132,7 @@ public:
 	 * Return value can be 0;
 	 * @return A string representing this node.
 	 */
-	const char* Value()const throw(){
+	const char* Value()const noexcept{
 		return this->value;
 	}
 
@@ -142,7 +142,7 @@ public:
 	 * Calculates value length in bytes excluding terminating 0 byte.
 	 * @return Value length in bytes.
 	 */
-	size_t ValueLength()const throw(){
+	size_t ValueLength()const noexcept{
 		if(this->Value() == 0){
 			return 0;
 		}
@@ -153,7 +153,7 @@ public:
 	 * @brief Get node value as utf8 string.
 	 * @return UTF-8 iterator to iterate through the string.
 	 */
-	ting::utf8::Iterator AsUTF8()const throw(){
+	ting::utf8::Iterator AsUTF8()const noexcept{
 		return ting::utf8::Iterator(this->Value());
 	}
 
@@ -162,7 +162,7 @@ public:
 	 * Tries to parse the string as signed 32bit integer.
 	 * @return Result of parsing node value as signed 32bit integer.
 	 */
-	ting::s32 AsS32()const throw(){
+	ting::s32 AsS32()const noexcept{
 		return ting::s32(strtol(this->Value(), 0, 0));
 	}
 
@@ -171,7 +171,7 @@ public:
 	 * Tries to parse the string as unsigned 32bit integer.
 	 * @return Result of parsing node value as unsigned 32bit integer.
 	 */
-	ting::u32 AsU32()const throw(){
+	ting::u32 AsU32()const noexcept{
 		return ting::u32(strtoul(this->Value(), 0, 0));
 	}
 
@@ -180,7 +180,7 @@ public:
 	 * Tries to parse the string as signed 64bit integer.
 	 * @return Result of parsing node value as signed 64bit integer.
 	 */
-	ting::s64 AsS64()const throw(){
+	ting::s64 AsS64()const noexcept{
 		return ting::s64(strtoll(this->Value(), 0 , 0));
 	}
 
@@ -189,7 +189,7 @@ public:
 	 * Tries to parse the string as unsigned 64bit integer.
 	 * @return Result of parsing node value as unsigned 64bit integer.
 	 */
-	ting::u64 AsU64()const throw(){
+	ting::u64 AsU64()const noexcept{
 		return ting::u64(strtoull(this->Value(), 0 , 0));
 	}
 
@@ -198,7 +198,7 @@ public:
 	 * Tries to parse the string as float value (32bits).
 	 * @return Result of parsing node value as float value (32bits).
 	 */
-	float AsFloat()const throw(){
+	float AsFloat()const noexcept{
 		return float(this->AsDouble());
 	}
 
@@ -207,7 +207,7 @@ public:
 	 * Tries to parse the string as double precision float value (64bits).
 	 * @return Result of parsing node value as double precision float value (64bits).
 	 */
-	double AsDouble()const throw(){
+	double AsDouble()const noexcept{
 		return strtod(this->Value(), 0);
 	}
 
@@ -216,7 +216,7 @@ public:
 	 * Tries to parse the string as long double precision float value (64bits).
 	 * @return Result of parsing node value as long double precision float value (64bits).
 	 */
-	long double AsLongDouble()const throw(){
+	long double AsLongDouble()const noexcept{
 #if _XOPEN_SOURCE >= 600 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
 		return strtold(this->Value(), 0);
 #else//strtold() not supported
@@ -231,7 +231,7 @@ public:
 	 * @return true if string is "true".
 	 * @return false otherwise.
 	 */
-	bool AsBool()const throw(){
+	bool AsBool()const noexcept{
 		return strcmp(this->Value(), "true") == 0;
 	}
 
@@ -240,7 +240,7 @@ public:
 	 * Set the value of the node. Value is copied from passed buffer.
 	 * @param v - null-terminated string to set as a node value.
 	 */
-	void SetValue(const char* v = 0)throw(){
+	void SetValue(const char* v = 0)noexcept{
 		this->SetValue(ting::Buffer<const char>(v, v == 0 ? 0 : strlen(v)));
 	}
 
@@ -261,7 +261,7 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - signed 32 bit integer to set as a value of the node.
 	 */
-	void SetS32(ting::s32 v)throw(){
+	void SetS32(ting::s32 v)noexcept{
 		char buf[64];
 
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
@@ -286,7 +286,7 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - unsigned 32 bit integer to set as a value of the node.
 	 */
-	void SetU32(ting::u32 v)throw(){
+	void SetU32(ting::u32 v)noexcept{
 		char buf[64];
 
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
@@ -311,7 +311,7 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - signed 64 bit integer to set as a value of the node.
 	 */
-	void SetS64(ting::s64 v)throw(){
+	void SetS64(ting::s64 v)noexcept{
 		char buf[64];
 
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
@@ -336,7 +336,7 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - unsigned 64 bit integer to set as a value of the node.
 	 */
-	void SetU64(ting::u64 v)throw(){
+	void SetU64(ting::u64 v)noexcept{
 		char buf[64];
 
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
@@ -361,7 +361,7 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - 'float' to set as a value of the node.
 	 */
-	void SetFloat(float v)throw(){
+	void SetFloat(float v)noexcept{
 		char buf[64];
 
 		//NOTE: useing capital G in format string as it should be non-locale aware (in contrast with small g).
@@ -387,7 +387,7 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - 'double' to set as a value of the node.
 	 */
-	void SetDouble(double v)throw(){
+	void SetDouble(double v)noexcept{
 		char buf[64];
 
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
@@ -412,7 +412,7 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - 'long double' to set as a value of the node.
 	 */
-	void SetLongDouble(long double v)throw(){
+	void SetLongDouble(long double v)noexcept{
 		char buf[128];
 
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
@@ -437,7 +437,7 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - 'bool' to set as a value of the node.
 	 */
-	void SetBool(bool v)throw(){
+	void SetBool(bool v)noexcept{
 		this->SetValue(v ? "true" : "false");
 	}
 
@@ -448,7 +448,7 @@ public:
 	 *         value is null-pointer and 'str' is an empty string and vice versa.
 	 * @return false otherwise.
      */
-	bool operator==(const char* str)const throw(){
+	bool operator==(const char* str)const noexcept{
 		if(this->Value()){
 			if(str){
 				return strcmp(this->Value(), str) == 0;
@@ -469,14 +469,14 @@ public:
      * @return true if two STOB trees are completely equal.
 	 * @return false otherwise.
      */
-	bool operator==(const Node& n)const throw();
+	bool operator==(const Node& n)const noexcept;
 	
 	/**
 	 * @brief Set children list for this node.
 	 * Sets the children nodes list for this node. Previously set list will be discarded if any.
 	 * @param first - auto-pointer to the first node of the children single.linked list.
 	 */
-	void SetChildren(std::unique_ptr<Node> first)throw(){
+	void SetChildren(std::unique_ptr<Node> first)noexcept{
 		this->children = std::move(first);
 	}
 
@@ -485,7 +485,7 @@ public:
 	 * Removes the list of children from this node.
 	 * @return auto-pointer to the first node in the children list.
 	 */
-	std::unique_ptr<Node> RemoveChildren()throw(){
+	std::unique_ptr<Node> RemoveChildren()noexcept{
 		return std::move(this->children);
 	}
 
@@ -493,7 +493,7 @@ public:
 	 * @brief Remove first child from the list of children.
 	 * @return auto-pointer to the node which was the first child.
 	 */
-	std::unique_ptr<Node> RemoveFirstChild()throw(){
+	std::unique_ptr<Node> RemoveFirstChild()noexcept{
 		if(!this->children){
 			return std::unique_ptr<Node>();
 		}
@@ -511,7 +511,7 @@ public:
 	 * @return auto-pointer to the removed node.
 	 * @return invalid auto-pointer if there was no child with given value found.
 	 */
-	std::unique_ptr<Node> RemoveChild(const char* value)throw(){
+	std::unique_ptr<Node> RemoveChild(const char* value)noexcept{
 		NodeAndPrev f = this->Child(value);
 
 		if(f.prev()){
@@ -525,7 +525,7 @@ public:
 	 * @brief Get list of child nodes.
 	 * @return pointer to the first child node.
 	 */
-	Node* Child()throw(){
+	Node* Child()noexcept{
 		return this->children.operator->();
 	}
 
@@ -533,7 +533,7 @@ public:
 	 * @brief Get constant list of child nodes.
 	 * @return constant pointer to the first child node.
 	 */
-	const Node* Child()const throw(){
+	const Node* Child()const noexcept{
 		return this->children.operator->();
 	}
 
@@ -560,7 +560,7 @@ public:
 		 * @brief Get pointer to Node.
          * @return Pointer to Node.
          */
-		Node* node()throw(){
+		Node* node()noexcept{
 			return this->curNode;
 		}
 		
@@ -568,7 +568,7 @@ public:
 		 * @brief Get constant pointer to Node.
          * @return Constant pointer to Node.
          */
-		const Node* node()const throw(){
+		const Node* node()const noexcept{
 			return this->curNode;
 		}
 		
@@ -576,7 +576,7 @@ public:
 		 * @brief Get pointer to previous Node.
          * @return Pointer to previous Node.
          */
-		Node* prev()throw(){
+		Node* prev()noexcept{
 			return this->prevNode;
 		}
 		
@@ -584,7 +584,7 @@ public:
 		 * @brief Get constant pointer to previous Node.
          * @return Constant pointer to previous Node.
          */
-		const Node* prev()const throw(){
+		const Node* prev()const noexcept{
 			return this->prevNode;
 		}
 	};
@@ -594,14 +594,14 @@ public:
 	 * @param value - value to search for among children.
 	 * @return instance of NodeAndPrev structure holding information about found Node.
 	 */
-	NodeAndPrev Child(const char* value)throw();
+	NodeAndPrev Child(const char* value)noexcept;
 
 	/**
 	 * @brief Get constant child node holding the given value.
 	 * @param value - value to search for among children.
 	 * @return constant instance of NodeAndPrev structure holding information about found Node.
 	 */
-	const NodeAndPrev Child(const char* value)const throw(){
+	const NodeAndPrev Child(const char* value)const noexcept{
 		return const_cast<Node* const>(this)->Child(value);
 	}
 
@@ -609,13 +609,13 @@ public:
 	 * @brief Get first non-property child.
 	 * @return instance of NodeAndPrev structure holding information about found Node.
 	 */
-	NodeAndPrev ChildNonProperty()throw();
+	NodeAndPrev ChildNonProperty()noexcept;
 	
 	/**
 	 * @brief Get constant first non-property child.
 	 * @return constant instance of NodeAndPrev structure holding information about found Node.
 	 */
-	const NodeAndPrev ChildNonProperty()const throw(){
+	const NodeAndPrev ChildNonProperty()const noexcept{
 		return const_cast<Node* const>(this)->ChildNonProperty();
 	}
 	
@@ -623,13 +623,13 @@ public:
 	 * @brief Get first property child.
      * @return instance of NodeAndPrev class holding information about found Node.
      */
-	NodeAndPrev ChildProperty()throw();
+	NodeAndPrev ChildProperty()noexcept;
 	
 	/**
 	 * @brief Get constant first property child.
      * @return constant instance of NodeAndPrev class holding information about found Node.
      */
-	const NodeAndPrev ChildProperty()const throw(){
+	const NodeAndPrev ChildProperty()const noexcept{
 		return const_cast<Node* const>(this)->ChildProperty();
 	}
 	
@@ -638,7 +638,7 @@ public:
 	 * Get next sibling node in the single-linked list of nodes.
 	 * @return pointer to the next node in the single-linked list.
 	 */
-	Node* Next()throw(){
+	Node* Next()noexcept{
 		return this->next.operator->();
 	}
 
@@ -647,7 +647,7 @@ public:
 	 * Get constant next sibling node in the single-linked list of nodes.
 	 * @return constant pointer tot the next node in the single-linked list.
 	 */
-	const Node* Next()const throw(){
+	const Node* Next()const noexcept{
 		return this->next.operator->();
 	}
 
@@ -657,7 +657,7 @@ public:
 	 * @param value - value to look for.
 	 * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
 	 */
-	NodeAndPrev Next(const char* value)throw();
+	NodeAndPrev Next(const char* value)noexcept;
 
 	/**
 	 * @brief Get constant next node holding the given value.
@@ -665,7 +665,7 @@ public:
 	 * @param value - value to look for.
 	 * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
 	 */
-	const NodeAndPrev Next(const char* value)const throw(){
+	const NodeAndPrev Next(const char* value)const noexcept{
 		return const_cast<Node* const>(this)->Next(value);
 	}
 
@@ -675,7 +675,7 @@ public:
      * @param value - value to look for.
      * @return instance of NodeAndPrev structure holding information about found Node.
      */
-	NodeAndPrev ThisOrNext(const char* value)throw(){
+	NodeAndPrev ThisOrNext(const char* value)noexcept{
 		if(this->operator==(value)){
 			return NodeAndPrev(0, this);
 		}
@@ -689,7 +689,7 @@ public:
      * @param value - value to look for.
      * @return instance of NodeAndPrev structure holding information about found Node.
      */
-	const NodeAndPrev ThisOrNext(const char* value)const throw(){
+	const NodeAndPrev ThisOrNext(const char* value)const noexcept{
 		return const_cast<Node* const>(this)->ThisOrNext(value);
 	}
 	
@@ -697,13 +697,13 @@ public:
 	 * @brief Get next non-property node.
      * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
      */
-	NodeAndPrev NextNonProperty()throw();
+	NodeAndPrev NextNonProperty()noexcept;
 	
 	/**
 	 * @brief Get constant next non-property node.
      * @return constant instance of NodeAndPrev class holding information about found node, previous node is always valid.
      */
-	const NodeAndPrev NextNonProperty()const throw(){
+	const NodeAndPrev NextNonProperty()const noexcept{
 		return const_cast<Node* const>(this)->NextNonProperty();
 	}
 	
@@ -712,7 +712,7 @@ public:
 	 * This node is included in the search.
      * @return instance of NodeAndPrev class holding information about found node.
      */
-	NodeAndPrev ThisOrNextNonProperty()throw(){
+	NodeAndPrev ThisOrNextNonProperty()noexcept{
 		if(!this->IsProperty()){
 			return NodeAndPrev(0, this);
 		}
@@ -725,7 +725,7 @@ public:
 	 * This node is included in the search.
      * @return instance of NodeAndPrev class holding information about found node.
      */
-	const NodeAndPrev ThisOrNextNonProperty()const throw(){
+	const NodeAndPrev ThisOrNextNonProperty()const noexcept{
 		return const_cast<Node* const>(this)->ThisOrNextNonProperty();
 	}
 	
@@ -733,13 +733,13 @@ public:
 	 * @brief Get next property child.
      * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
      */
-	NodeAndPrev NextProperty()throw();
+	NodeAndPrev NextProperty()noexcept;
 	
 	/**
 	 * @brief Get constant next property child.
      * @return constant instance of NodeAndPrev class holding information about found node, previous node is always valid.
      */
-	const NodeAndPrev NextProperty()const throw(){
+	const NodeAndPrev NextProperty()const noexcept{
 		return const_cast<Node* const>(this)->NextProperty();
 	}
 	
@@ -748,7 +748,7 @@ public:
 	 * This node is included in the search.
      * @return instance of NodeAndPrev class holding information about found node.
      */
-	NodeAndPrev ThisOrNextProperty()throw(){
+	NodeAndPrev ThisOrNextProperty()noexcept{
 		if(this->IsProperty()){
 			return NodeAndPrev(0, this);
 		}
@@ -761,7 +761,7 @@ public:
 	 * This node is included in the search.
      * @return instance of NodeAndPrev class holding information about found node.
      */
-	const NodeAndPrev ThisOrNextProperty()const throw(){
+	const NodeAndPrev ThisOrNextProperty()const noexcept{
 		return const_cast<Node* const>(this)->ThisOrNextProperty();
 	}
 	
@@ -773,7 +773,7 @@ public:
 	 * @return pointer to a node representing property value.
 	 * @return zero pointer if no property with a given name found or property has no value.
 	 */
-	Node* GetProperty(const char* propName)throw(){
+	Node* GetProperty(const char* propName)noexcept{
 		Node* prop = this->Child(propName).node();
 		if(!prop){
 			return 0;
@@ -790,7 +790,7 @@ public:
 	 * @return constant pointer to a node representing property value.
 	 * @return zero pointer if no property with a given name found or property has no value.
 	 */
-	const Node* GetProperty(const char* propName)const throw(){
+	const Node* GetProperty(const char* propName)const noexcept{
 		return const_cast<Node* const>(this)->GetProperty(propName);
 	}
 
@@ -815,7 +815,7 @@ public:
 	 * Insert the node to the single-linked list as a next node after this Node.
 	 * @param node - node to insert.
 	 */
-	void InsertNext(std::unique_ptr<Node> node)throw(){
+	void InsertNext(std::unique_ptr<Node> node)noexcept{
 		if(node){
 			node->next = std::move(this->next);
 		}
@@ -826,7 +826,7 @@ public:
 	 * @brief Remove next node from single-linked list.
 	 * @return auto-pointer to the Node object which has been removed from the single-linked list.
 	 */
-	std::unique_ptr<Node> RemoveNext()throw(){
+	std::unique_ptr<Node> RemoveNext()noexcept{
 		std::unique_ptr<Node> ret = std::move(this->next);
 		if(ret){
 			this->next = std::move(ret->next);
@@ -839,7 +839,7 @@ public:
 	 * After this operation there will be no next node in this single-linked list.
 	 * @return auto-pointer to the first node of the single-linked list tail which has been chopped.
 	 */
-	std::unique_ptr<Node> ChopNext()throw(){
+	std::unique_ptr<Node> ChopNext()noexcept{
 		return std::move(this->next);
 	}
 
@@ -848,7 +848,7 @@ public:
 	 * Sets the next node for this node to the specified node.
 	 * @param node - node to set as the next node.
 	 */
-	void SetNext(std::unique_ptr<Node> node)throw(){
+	void SetNext(std::unique_ptr<Node> node)noexcept{
 		this->next = std::move(node);
 	}
 
@@ -866,7 +866,7 @@ public:
 	 * @return false if the first character of the node's value is a capital letter of Latin alphabet.
 	 * @return true otherwise.
 	 */
-	bool IsProperty()const throw(){
+	bool IsProperty()const noexcept{
 		return this->Value() == 0 || this->Value()[0] < 'A' || 'Z' < this->Value()[0];
 	}
 

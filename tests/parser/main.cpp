@@ -18,19 +18,19 @@ enum E_Action{
 };
 
 class Listener : public stob::ParseListener{
-	void OnChildrenParseFinished() OVERRIDE{
+	void OnChildrenParseFinished() override{
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == CHILDREN_END, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
 		this->actions.pop_front();
 	}
 	
-	void OnChildrenParseStarted() OVERRIDE{
+	void OnChildrenParseStarted() override{
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == CHILDREN_START, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
 		this->actions.pop_front();
 	}
 	
-	void OnStringParsed(const ting::Buffer<const char>& str) OVERRIDE{
+	void OnStringParsed(const ting::Buffer<const char>& str) override{
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == STRING, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
 		ASSERT_INFO_ALWAYS(this->actions.front().second == std::string(str.Begin(), str.Size()), "first = " << this->actions.front().first << " second = " << this->actions.front().second << " str = " << std::string(str.Begin(), str.Size()))
@@ -38,7 +38,7 @@ class Listener : public stob::ParseListener{
 	}
 	
 public:
-	~Listener()throw(){}
+	~Listener()noexcept{}
 	
 	std::deque<std::pair<E_Action, std::string> > actions;
 };
