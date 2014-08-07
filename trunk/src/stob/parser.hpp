@@ -94,7 +94,7 @@ public:
      */
 	virtual void OnChildrenParseFinished() = 0;
 	
-	virtual ~ParseListener()throw(){}
+	virtual ~ParseListener()noexcept{}
 };
 
 

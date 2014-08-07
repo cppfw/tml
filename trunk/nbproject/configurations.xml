@@ -37,7 +37,6 @@
       </toolsSet>
       <flagsDictionary>
         <element flagsID="0" commonFlags="-funsigned-char -std=c++11 -fPIC"/>
-        <element flagsID="1" commonFlags="-std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -84,8 +83,6 @@
         </ccTool>
       </item>
       <item path="tests/dom/main.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
-        </ccTool>
       </item>
       <item path="tests/parser/main.cpp" ex="false" tool="1" flavor2="8">
       </item>
