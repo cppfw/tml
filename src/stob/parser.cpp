@@ -16,13 +16,13 @@ void Parser::AppendCharToString(std::uint8_t c){
 	*this->p = c;
 	++this->p;
 	if(this->p == this->buf.end()){
-		ting::Array<std::uint8_t> a(this->buf.size() * 2);
-		memcpy(a.begin(), this->buf.begin(), this->buf.SizeInBytes());
+		std::vector<std::uint8_t> a(this->buf.size() * 2);
+		memcpy(&*a.begin(), this->buf.begin(), this->buf.SizeInBytes());
 
-		this->p = a.begin() + this->buf.size();
+		this->p = &*a.begin() + this->buf.size();
 
 		this->arrayBuf = a;
-		this->buf = ting::Buffer<std::uint8_t>(this->arrayBuf.begin(), this->arrayBuf.size()); //set reference
+		this->buf = this->arrayBuf; //set reference
 	}
 }
 
@@ -59,7 +59,7 @@ void Parser::HandleRightCurlyBracket(ParseListener& listener){
 void Parser::HandleStringEnd(ParseListener& listener){
 	size_t size = this->p - this->buf.begin();
 	listener.OnStringParsed(ting::Buffer<const char>(size == 0 ? 0 : reinterpret_cast<char*>(this->buf.begin()), size));
-	this->arrayBuf.Reset();
+	this->arrayBuf.clear();
 	this->buf = this->staticBuf;
 	this->p = this->buf.begin();
 	this->stringParsed = true;
