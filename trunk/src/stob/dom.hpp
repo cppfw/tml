@@ -65,14 +65,14 @@ class Node{
 	std::unique_ptr<Node> children; //pointer to the first child
 
 	void SetValueInternal(const ting::Buffer<const char>& str){
-		if(str.Size() == 0){
+		if(str.size() == 0){
 			this->value = 0;
 			return;
 		}
 
-		this->value = new char[str.Size() + 1];
-		memcpy(this->value, str.Begin(), str.Size());
-		this->value[str.Size()] = 0;//null-terminate
+		this->value = new char[str.size() + 1];
+		memcpy(this->value, str.begin(), str.size());
+		this->value[str.size()] = 0;//null-terminate
 	}
 	
 	//constructor is private, no inheritance.
@@ -162,8 +162,8 @@ public:
 	 * Tries to parse the string as signed 32bit integer.
 	 * @return Result of parsing node value as signed 32bit integer.
 	 */
-	ting::s32 AsS32()const noexcept{
-		return ting::s32(strtol(this->Value(), 0, 0));
+	std::int32_t AsS32()const noexcept{
+		return std::int32_t(strtol(this->Value(), 0, 0));
 	}
 
 	/**
@@ -171,8 +171,8 @@ public:
 	 * Tries to parse the string as unsigned 32bit integer.
 	 * @return Result of parsing node value as unsigned 32bit integer.
 	 */
-	ting::u32 AsU32()const noexcept{
-		return ting::u32(strtoul(this->Value(), 0, 0));
+	std::uint32_t AsU32()const noexcept{
+		return std::uint32_t(strtoul(this->Value(), 0, 0));
 	}
 
 	/**
@@ -180,8 +180,8 @@ public:
 	 * Tries to parse the string as signed 64bit integer.
 	 * @return Result of parsing node value as signed 64bit integer.
 	 */
-	ting::s64 AsS64()const noexcept{
-		return ting::s64(strtoll(this->Value(), 0 , 0));
+	std::int64_t AsS64()const noexcept{
+		return std::int64_t(strtoll(this->Value(), 0 , 0));
 	}
 
 	/**
@@ -189,8 +189,8 @@ public:
 	 * Tries to parse the string as unsigned 64bit integer.
 	 * @return Result of parsing node value as unsigned 64bit integer.
 	 */
-	ting::u64 AsU64()const noexcept{
-		return ting::u64(strtoull(this->Value(), 0 , 0));
+	std::uint64_t AsU64()const noexcept{
+		return std::uint64_t(strtoull(this->Value(), 0 , 0));
 	}
 
 	/**
@@ -261,7 +261,7 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - signed 32 bit integer to set as a value of the node.
 	 */
-	void SetS32(ting::s32 v)noexcept{
+	void SetS32(std::int32_t v)noexcept{
 		char buf[64];
 
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
@@ -286,7 +286,7 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - unsigned 32 bit integer to set as a value of the node.
 	 */
-	void SetU32(ting::u32 v)noexcept{
+	void SetU32(std::uint32_t v)noexcept{
 		char buf[64];
 
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
@@ -311,13 +311,13 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - signed 64 bit integer to set as a value of the node.
 	 */
-	void SetS64(ting::s64 v)noexcept{
+	void SetS64(std::int64_t v)noexcept{
 		char buf[64];
 
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
 		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
 		//snprintf() is available
-		int res = snprintf(buf, sizeof(buf), "%lli", v);
+		int res = snprintf(buf, sizeof(buf), "%li", v);
 #elif M_COMPILER == M_COMPILER_MSVC
 		int res = _snprintf_s(buf, sizeof(buf), sizeof(buf), "%lli", v);
 #else
@@ -336,13 +336,13 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - unsigned 64 bit integer to set as a value of the node.
 	 */
-	void SetU64(ting::u64 v)noexcept{
+	void SetU64(std::uint64_t v)noexcept{
 		char buf[64];
 
 #if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
 		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
 		//snprintf() is available
-		int res = snprintf(buf, sizeof(buf), "%llu", v);
+		int res = snprintf(buf, sizeof(buf), "%lu", v);
 #elif M_COMPILER == M_COMPILER_MSVC
 		int res = _snprintf_s(buf, sizeof(buf), sizeof(buf), "%llu", v);
 #else

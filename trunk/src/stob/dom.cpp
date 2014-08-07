@@ -160,40 +160,40 @@ bool CanStringBeUnquoted(const char* s, size_t& out_length, unsigned& out_numEsc
 }
 
 
-void MakeEscapedString(const char* str, ting::Buffer<ting::u8>& out){
-	ting::u8 *p = out.Begin();
+void MakeEscapedString(const char* str, ting::Buffer<std::uint8_t>& out){
+	std::uint8_t *p = out.begin();
 	for(const char* c = str; *c != 0; ++c){
-		ASSERT(p != out.End())
+		ASSERT(p != out.end())
 
 		switch(*c){
 			case '\t':
 				*p = '\\';
 				++p;
-				ASSERT(p != out.End())
+				ASSERT(p != out.end())
 				*p = 't';
 				break;
 			case '\n':
 				*p = '\\';
 				++p;
-				ASSERT(p != out.End())
+				ASSERT(p != out.end())
 				*p = 'n';
 				break;
 			case '\r':
 				*p = '\\';
 				++p;
-				ASSERT(p != out.End())
+				ASSERT(p != out.end())
 				*p = 'r';
 				break;
 			case '\\':
 				*p = '\\';
 				++p;
-				ASSERT(p != out.End())
+				ASSERT(p != out.end())
 				*p = '\\';
 				break;
 			case '"':
 				*p = '\\';
 				++p;
-				ASSERT(p != out.End())
+				ASSERT(p != out.end())
 				*p = '"';
 				break;
 			default:
@@ -208,22 +208,22 @@ void MakeEscapedString(const char* str, ting::Buffer<ting::u8>& out){
 void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsigned indentation){
 	ASSERT(node)
 
-	ting::StaticBuffer<ting::u8, 1> quote;
+	ting::StaticBuffer<std::uint8_t, 1> quote;
 	quote[0] = '"';
 
-	ting::StaticBuffer<ting::u8, 1> lcurly;
+	ting::StaticBuffer<std::uint8_t, 1> lcurly;
 	lcurly[0] = '{';
 
-	ting::StaticBuffer<ting::u8, 1> rcurly;
+	ting::StaticBuffer<std::uint8_t, 1> rcurly;
 	rcurly[0] = '}';
 
-	ting::StaticBuffer<ting::u8, 1> space;
+	ting::StaticBuffer<std::uint8_t, 1> space;
 	space[0] = ' ';
 
-	ting::StaticBuffer<ting::u8, 1> tab;
+	ting::StaticBuffer<std::uint8_t, 1> tab;
 	tab[0] = '\t';
 
-	ting::StaticBuffer<ting::u8, 1> newLine;
+	ting::StaticBuffer<std::uint8_t, 1> newLine;
 	newLine[0] = '\n';
 
 	//used to detect case of two adjacent unquoted strings without children, need to insert space between them
@@ -249,12 +249,12 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 			fi.Write(quote);
 
 			if(numEscapes == 0){
-				fi.Write(ting::Buffer<ting::u8>(
-						const_cast<ting::u8*>(reinterpret_cast<const ting::u8*>(n->Value())),
+				fi.Write(ting::Buffer<std::uint8_t>(
+						const_cast<std::uint8_t*>(reinterpret_cast<const std::uint8_t*>(n->Value())),
 						length
 					));
 			}else{
-				ting::Array<ting::u8> buf(length + numEscapes);
+				ting::Array<std::uint8_t> buf(length + numEscapes);
 
 				MakeEscapedString(n->Value(), buf);
 
@@ -282,8 +282,8 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 				}
 			}else{
 				ASSERT(numEscapes == 0)
-				fi.Write(ting::Buffer<ting::u8>(
-						const_cast<ting::u8*>(reinterpret_cast<const ting::u8*>(n->Value())),
+				fi.Write(ting::Buffer<std::uint8_t>(
+						const_cast<std::uint8_t*>(reinterpret_cast<const std::uint8_t*>(n->Value())),
 						length
 					));
 			}
