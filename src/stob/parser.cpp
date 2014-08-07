@@ -12,14 +12,14 @@ using namespace stob;
 
 
 
-void Parser::AppendCharToString(ting::u8 c){
+void Parser::AppendCharToString(std::uint8_t c){
 	*this->p = c;
 	++this->p;
-	if(this->p == this->buf->End()){
-		ting::Array<ting::u8> a(this->buf->Size() * 2);
-		memcpy(a.Begin(), this->buf->Begin(), this->buf->SizeInBytes());
+	if(this->p == this->buf->end()){
+		ting::Array<std::uint8_t> a(this->buf->size() * 2);
+		memcpy(a.begin(), this->buf->begin(), this->buf->SizeInBytes());
 
-		this->p = a.Begin() + this->buf->Size();
+		this->p = a.begin() + this->buf->size();
 
 		this->arrayBuf = a;
 		this->buf = &this->arrayBuf; //set reference
@@ -57,18 +57,18 @@ void Parser::HandleRightCurlyBracket(ParseListener& listener){
 
 
 void Parser::HandleStringEnd(ParseListener& listener){
-	size_t size = this->p - this->buf->Begin();
-	listener.OnStringParsed(ting::Buffer<const char>(size == 0 ? 0 : reinterpret_cast<char*>(this->buf->Begin()), size));
+	size_t size = this->p - this->buf->begin();
+	listener.OnStringParsed(ting::Buffer<const char>(size == 0 ? 0 : reinterpret_cast<char*>(this->buf->begin()), size));
 	this->arrayBuf.Reset();
 	this->buf = &this->staticBuf;
-	this->p = this->buf->Begin();
+	this->p = this->buf->begin();
 	this->stringParsed = true;
 	this->state = IDLE;
 }
 
 
 
-void Parser::ParseChar(ting::u8 c, ParseListener& listener){
+void Parser::ParseChar(std::uint8_t c, ParseListener& listener){
 	switch(this->state){
 		case IDLE:
 			switch(c){
@@ -78,7 +78,7 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 				case '{':
 					if(!this->stringParsed){
 						//empty string with children
-						ASSERT(this->p == this->buf->Begin())
+						ASSERT(this->p == this->buf->begin())
 						this->HandleStringEnd(listener);
 					}
 					this->HandleLeftCurlyBracket(listener);
@@ -145,7 +145,7 @@ void Parser::ParseChar(ting::u8 c, ParseListener& listener){
 
 
 
-void Parser::PreParseChar(ting::u8 c, ParseListener& listener){
+void Parser::PreParseChar(std::uint8_t c, ParseListener& listener){
 	if(this->prevChar != 0){
 		switch(this->state){
 			case IDLE:
@@ -239,15 +239,15 @@ void Parser::PreParseChar(ting::u8 c, ParseListener& listener){
 
 
 
-void Parser::ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& listener){
-	for(const ting::u8* s = chunk.Begin(); s != chunk.End(); ++s){
+void Parser::ParseDataChunk(const ting::Buffer<std::uint8_t>& chunk, ParseListener& listener){
+	for(const std::uint8_t* s = chunk.begin(); s != chunk.end(); ++s){
 //		TRACE(<< "Parser::ParseDataChunk(): *s = " << (*s) << std::endl)
 		
 		//skip comments if needed
 		if(this->commentState != NO_COMMENT){
 			switch(this->commentState){
 				case LINE_COMMENT:
-					for(; s != chunk.End(); ++s){
+					for(; s != chunk.end(); ++s){
 						if(*s == '\n'){
 							++this->curLine;
 							this->commentState = NO_COMMENT;
@@ -263,7 +263,7 @@ void Parser::ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& 
 							break;//~switch()
 						}
 					}
-					for(; s != chunk.End(); ++s){
+					for(; s != chunk.end(); ++s){
 						if(*s == '\n'){
 							++this->curLine;
 						}else if(*s == '*'){
@@ -306,16 +306,16 @@ void stob::Parse(ting::fs::File& fi, ParseListener& listener){
 	
 	stob::Parser parser;
 	
-	ting::StaticBuffer<ting::u8, 2048> buf; //2kb read buffer.
+	ting::StaticBuffer<std::uint8_t, 2048> buf; //2kb read buffer.
 	
 	size_t bytesRead;
 	
 	do{
 		bytesRead = fi.Read(buf);
 		
-		ting::Buffer<ting::u8> b(buf.Begin(), bytesRead);
+		ting::Buffer<std::uint8_t> b(buf.begin(), bytesRead);
 		parser.ParseDataChunk(b, listener);
-	}while(bytesRead == buf.Size());
+	}while(bytesRead == buf.size());
 
 	parser.EndOfData(listener);
 }

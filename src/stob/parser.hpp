@@ -107,16 +107,16 @@ public:
 class Parser{
 	unsigned curLine;//current line into the document being parsed, used for pointing place of format error.
 	
-	ting::StaticBuffer<ting::u8, 256> staticBuf; //string buffer
-	ting::Array<ting::u8> arrayBuf;
-	ting::Buffer<ting::u8>* buf;
+	ting::StaticBuffer<std::uint8_t, 256> staticBuf; //string buffer
+	ting::Array<std::uint8_t> arrayBuf;
+	ting::Buffer<std::uint8_t>* buf;
 	
-	ting::u8* p; //current position into the string buffer
+	std::uint8_t* p; //current position into the string buffer
 	
 	unsigned nestingLevel;
 	
 	//Previous character, used to detect two character sequences like //, /*, */, escape sequences.
-	ting::u8 prevChar;
+	std::uint8_t prevChar;
 	
 	enum E_CommentState{
 		NO_COMMENT,
@@ -137,10 +137,10 @@ class Parser{
 	//which is not allowed by the STOB format.
 	bool stringParsed;
 	
-	void ParseChar(ting::u8 c, ParseListener& listener);
-	void PreParseChar(ting::u8 c, ParseListener& listener);
+	void ParseChar(std::uint8_t c, ParseListener& listener);
+	void PreParseChar(std::uint8_t c, ParseListener& listener);
 	
-	void AppendCharToString(ting::u8 c);
+	void AppendCharToString(std::uint8_t c);
 	
 	void HandleLeftCurlyBracket(ParseListener& listener);
 	void HandleRightCurlyBracket(ParseListener& listener);
@@ -163,7 +163,7 @@ public:
 		this->curLine = 1;
 		this->buf = &this->staticBuf;
 		this->arrayBuf.Reset();
-		this->p = this->buf->Begin();
+		this->p = this->buf->begin();
 		this->nestingLevel = 0;
 		this->prevChar = 0;
 		this->commentState = NO_COMMENT;
@@ -178,7 +178,7 @@ public:
      * @param listener - listener object which will receive notifications about parsed tokens.
 	 * @throw stob::Exc - in case of malformed STOB document.
      */
-	void ParseDataChunk(const ting::Buffer<ting::u8>& chunk, ParseListener& listener);
+	void ParseDataChunk(const ting::Buffer<std::uint8_t>& chunk, ParseListener& listener);
 	
 	/**
 	 * @brief Finalize parsing.
