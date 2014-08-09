@@ -22,10 +22,17 @@ endif
 $(eval $(prorab-build-app))
 
 
+ifeq ($(prorab_os),windows)
+    this_test_cmd := $(prorab_echo)(cd $(prorab_this_dir); cp ../../src/libstob.dll .; $$^)
+else
+    this_test_cmd := $(prorab_echo)(cd $(prorab_this_dir); LD_LIBRARY_PATH=../../src $$^)
+endif
+
+
 define this_rules
 test:: $(prorab_this_name)
 	@echo running $$^...
-	@(cd $(prorab_this_dir); LD_LIBRARY_PATH=../../src $$^)
+	$(this_test_cmd)
 endef
 $(eval $(this_rules))
 
