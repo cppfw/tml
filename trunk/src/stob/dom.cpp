@@ -31,13 +31,13 @@ void* Node::operator new(size_t size){
 
 
 
-void Node::operator delete(void* p)noexcept{
+void Node::operator delete(void* p)NOEXCEPT{
 	memoryPool.Free_ts(p);
 }
 
 
 
-stob::Node::NodeAndPrev Node::Next(const char* value)noexcept{
+stob::Node::NodeAndPrev Node::Next(const char* value)NOEXCEPT{
 	Node* prev = this;
 	for(Node* n = this->Next(); n; prev = n, n = n->Next()){
 		if(n->operator==(value)){
@@ -49,7 +49,7 @@ stob::Node::NodeAndPrev Node::Next(const char* value)noexcept{
 
 
 
-stob::Node::NodeAndPrev Node::Child(const char* value)noexcept{
+stob::Node::NodeAndPrev Node::Child(const char* value)NOEXCEPT{
 	if(!this->children){
 		return NodeAndPrev(0, 0);
 	}
@@ -59,7 +59,7 @@ stob::Node::NodeAndPrev Node::Child(const char* value)noexcept{
 
 
 
-stob::Node::NodeAndPrev Node::ChildNonProperty()noexcept{
+stob::Node::NodeAndPrev Node::ChildNonProperty()NOEXCEPT{
 	if(!this->children){
 		return NodeAndPrev(0, 0);
 	}
@@ -73,7 +73,7 @@ stob::Node::NodeAndPrev Node::ChildNonProperty()noexcept{
 
 
 
-stob::Node::NodeAndPrev Node::ChildProperty()noexcept{
+stob::Node::NodeAndPrev Node::ChildProperty()NOEXCEPT{
 	if(!this->children){
 		return NodeAndPrev(0, 0);
 	}
@@ -87,7 +87,7 @@ stob::Node::NodeAndPrev Node::ChildProperty()noexcept{
 
 
 
-stob::Node::NodeAndPrev Node::NextNonProperty()noexcept{
+stob::Node::NodeAndPrev Node::NextNonProperty()NOEXCEPT{
 	Node* prev = this;
 	for(Node* n = this->Next(); n; prev = n, n = n->Next()){
 		if(!n->IsProperty()){
@@ -99,7 +99,7 @@ stob::Node::NodeAndPrev Node::NextNonProperty()noexcept{
 
 
 
-stob::Node::NodeAndPrev Node::NextProperty()noexcept{
+stob::Node::NodeAndPrev Node::NextProperty()NOEXCEPT{
 	Node* prev = this;
 	for(Node* n = this->Next(); n; prev = n, n = n->Next()){
 		if(n->IsProperty()){
@@ -375,7 +375,7 @@ std::unique_ptr<stob::Node> stob::Load(ting::fs::File& fi){
 			}
 		}
 
-		~Listener()noexcept{}
+		~Listener()NOEXCEPT{}
 	} listener;
 
 	stob::Parse(fi, listener);
@@ -408,7 +408,7 @@ std::unique_ptr<stob::Node> Node::Clone()const{
 
 
 
-bool Node::operator==(const Node& n)const noexcept{
+bool Node::operator==(const Node& n)const NOEXCEPT{
 	if(!this->operator==(n.Value())){
 		return false;
 	}
