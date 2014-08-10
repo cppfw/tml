@@ -313,7 +313,7 @@ void stob::Parse(ting::fs::File& fi, ParseListener& listener){
 	do{
 		bytesRead = fi.Read(buf);
 		
-		ting::ArrayAdaptor<std::uint8_t> b(buf.begin(), bytesRead);
+		ting::ArrayAdaptor<std::uint8_t> b(&*buf.begin(), bytesRead);
 		parser.ParseDataChunk(b, listener);
 	}while(bytesRead == buf.size());
 
