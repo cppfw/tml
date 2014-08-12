@@ -8,10 +8,10 @@ this_name := stob
 this_so_name := 0
 
 
-this_srcs := stob/parser.cpp stob/dom.cpp
+this_srcs += stob/parser.cpp stob/dom.cpp
 
 
-this_cflags := -Wall #enable all warnings
+this_cflags += -Wall #enable all warnings
 this_cflags += -Wno-comment #no warnings on nested comments
 this_cflags += -funsigned-char #the 'char' type is unsigned
 this_cflags += -Wnon-virtual-dtor #warn if base class has non-virtual destructor
@@ -28,20 +28,19 @@ ifeq ($(debug), true)
     this_cflags += -DDEBUG
 endif
 
+
 ifeq ($(prorab_os), windows)
     this_cflags += -Wno-format #due to bugs in some g++ versions it warns about format when not needed, so disable format warnings
     this_cflags += -I/usr/include
-else
-    this_cflags += -fPIC # Since we are building shared library, we need Position-Independend Code
-endif
-
-ifeq ($(prorab_os), linux)
-    this_ldlibs := -lting -lpthread
-else ifeq ($(prorab_os), windows)
-    this_ldlibs := -lting
-    this_ldflags := -L/usr/lib
+    this_ldlibs += -lting
+    this_ldflags += -L/usr/lib
 else ifeq ($(prorab_os), macosx)
-    this_ldlibs := -lting
+    this_cflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
+    this_ldlibs += -lc++
+    this_ldlibs += -lting
+else
+    this_ldlibs += -lting -lpthread
+    this_cflags += -fPIC # Since we are building shared library, we need Position-Independend Code
 endif
 
 $(eval $(prorab-build-lib))
