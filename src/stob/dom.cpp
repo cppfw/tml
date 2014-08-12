@@ -343,7 +343,7 @@ void Node::Write(ting::fs::File& fi, bool formatted){
 
 std::unique_ptr<stob::Node> stob::Load(ting::fs::File& fi){
 	class Listener : public stob::ParseListener{
-		typedef std::pair<std::unique_ptr<Node>, Node*> T_Pair;
+		typedef std::pair<std::unique_ptr<Node>, Node*> T_Pair; //NOTE: use pair, because tuple does not work on iOS when adding it to vector, for some reason.
 		std::vector<T_Pair> stack;
 
 	public:
