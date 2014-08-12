@@ -13,7 +13,10 @@ this_srcs += main.cpp
 this_ldlibs += -lstob -lting
 this_ldflags += -L$(prorab_this_dir)../../src
 
-ifeq ($(prorab_os),windows)
+ifeq ($(prorab_os), macosx)
+    this_cflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
+    this_ldlibs += -lc++
+else ifeq ($(prorab_os),windows)
     this_cflags += -I/usr/include
     this_ldflags += -L/usr/lib
 endif
