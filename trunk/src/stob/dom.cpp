@@ -343,7 +343,7 @@ void Node::Write(ting::fs::File& fi, bool formatted){
 
 std::unique_ptr<stob::Node> stob::Load(ting::fs::File& fi){
 	class Listener : public stob::ParseListener{
-		typedef std::tuple<std::unique_ptr<Node>, Node*> T_Pair;
+		typedef std::pair<std::unique_ptr<Node>, Node*> T_Pair;
 		std::vector<T_Pair> stack;
 
 	public:
@@ -358,8 +358,8 @@ std::unique_ptr<stob::Node> stob::Load(ting::fs::File& fi){
 		}
 
 		void OnChildrenParseStarted() override{
-			this->stack.push_back(
-					std::make_tuple(std::move(this->chains), this->lastChain)
+			this->stack.emplace_back(
+					std::make_pair(std::move(this->chains), this->lastChain)
 				);
 		}
 
