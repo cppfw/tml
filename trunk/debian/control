@@ -2,7 +2,8 @@ Source: libstob
 Section: devel
 Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
-Build-Depends: debhelper (>= 9), libc6-dev, doxygen, libting-dev (>= 3.0.0)
+Build-Depends: debhelper (>= 9), libc6-dev, libting-dev (>= 3.0.0)
+Build-Depends-Indep: doxygen
 Standards-Version: 3.9.2
 
 Package: libstob-dev
