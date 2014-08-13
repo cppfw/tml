@@ -40,7 +40,7 @@ THE SOFTWARE. */
 #include <ting/PoolStored.hpp>
 #include <ting/fs/File.hpp>
 #include <ting/utf8.hpp>
-#include <ting/ArrayAdaptor.hpp>
+#include <ting/Buffer.hpp>
 
 #include "Exc.hpp"
 
@@ -65,7 +65,7 @@ class Node{
 
 	std::unique_ptr<Node> children; //pointer to the first child
 
-	void SetValueInternal(const ting::ArrayAdaptor<char> str){
+	void SetValueInternal(const ting::Buffer<char> str){
 		if(str.size() == 0){
 			this->value = 0;
 			return;
@@ -77,7 +77,7 @@ class Node{
 	}
 	
 	//constructor is private, no inheritance.
-	Node(const ting::ArrayAdaptor<char> str){
+	Node(const ting::Buffer<char> str){
 		this->SetValueInternal(str);
 	}
 
@@ -88,7 +88,7 @@ class Node{
 	static void* operator new(size_t size);
 
 	void SetValue(const char* v, size_t size){
-		this->SetValue(ting::ArrayAdaptor<char>(const_cast<char*>(v), size));
+		this->SetValue(ting::Buffer<char>(const_cast<char*>(v), size));
 	}
 public:
 	~Node()NOEXCEPT{
@@ -102,7 +102,7 @@ public:
 	 * @param str - buffer holding the value to set for the created node.
 	 * @return An auto-pointer to a newly created Node object.
 	 */
-	static std::unique_ptr<Node> New(const ting::ArrayAdaptor<char> str){
+	static std::unique_ptr<Node> New(const ting::Buffer<char> str){
 		return std::move(std::unique_ptr<Node>(new Node(str)));
 	}
 
@@ -115,7 +115,7 @@ public:
 		if(value == 0){
 			return Node::New();
 		}
-		return Node::New(ting::ArrayAdaptor<char>(const_cast<char*>(value), strlen(value)));
+		return Node::New(ting::Buffer<char>(const_cast<char*>(value), strlen(value)));
 	}
 
 	/**
@@ -124,7 +124,7 @@ public:
 	 * @return An auto-pointer to a newly created Node object.
 	 */
 	static std::unique_ptr<Node> New(){
-		return Node::New(ting::ArrayAdaptor<char>(0, 0));
+		return Node::New(ting::Buffer<char>(0, 0));
 	}
 
 	/**
@@ -242,7 +242,7 @@ public:
 	 * @param v - null-terminated string to set as a node value.
 	 */
 	void SetValue(const char* v = 0)NOEXCEPT{
-		this->SetValue(ting::ArrayAdaptor<char>(const_cast<char*>(v), v == 0 ? 0 : strlen(v)));
+		this->SetValue(ting::Buffer<char>(const_cast<char*>(v), v == 0 ? 0 : strlen(v)));
 	}
 
 	/**
@@ -250,7 +250,7 @@ public:
 	 * Set the value of the node. Value is copied from passed buffer.
 	 * @param str - string to set as a node value.
 	 */
-	void SetValue(const ting::ArrayAdaptor<char> str){
+	void SetValue(const ting::Buffer<char> str){
 		delete[] this->value;
 
 		this->SetValueInternal(str);

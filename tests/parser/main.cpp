@@ -30,7 +30,7 @@ class Listener : public stob::ParseListener{
 		this->actions.pop_front();
 	}
 	
-	void OnStringParsed(const ting::ArrayAdaptor<char> str)override{
+	void OnStringParsed(const ting::Buffer<char> str)override{
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == STRING, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
 		ASSERT_INFO_ALWAYS(this->actions.front().second == std::string(str.begin(), str.size()), "first = " << this->actions.front().first << " second = " << this->actions.front().second << " str = " << std::string(str.begin(), str.size()))
