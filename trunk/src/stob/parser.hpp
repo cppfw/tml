@@ -29,7 +29,7 @@ THE SOFTWARE. */
 #pragma once
 
 
-#include <ting/ArrayAdaptor.hpp>
+#include <ting/Buffer.hpp>
 #include <ting/fs/File.hpp>
 
 
@@ -79,7 +79,7 @@ public:
 	 * This method is called by Parser when String token has been parsed.
      * @param str - parsed string.
      */
-	virtual void OnStringParsed(const ting::ArrayAdaptor<char> str) = 0;
+	virtual void OnStringParsed(const ting::Buffer<char> str) = 0;
 	
 	/**
 	 * @brief Children list parsing started.
@@ -108,7 +108,7 @@ class Parser{
 	
 	std::array<std::uint8_t, 256> staticBuf; //string buffer
 	std::vector<std::uint8_t> arrayBuf;
-	ting::ArrayAdaptor<std::uint8_t> buf;
+	ting::Buffer<std::uint8_t> buf;
 	
 	std::uint8_t* p; //current position into the string buffer
 	
@@ -177,7 +177,7 @@ public:
      * @param listener - listener object which will receive notifications about parsed tokens.
 	 * @throw stob::Exc - in case of malformed STOB document.
      */
-	void ParseDataChunk(const ting::ArrayAdaptor<std::uint8_t> chunk, ParseListener& listener);
+	void ParseDataChunk(const ting::Buffer<std::uint8_t> chunk, ParseListener& listener);
 	
 	/**
 	 * @brief Finalize parsing.

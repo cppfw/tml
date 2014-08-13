@@ -58,7 +58,7 @@ void Parser::HandleRightCurlyBracket(ParseListener& listener){
 
 void Parser::HandleStringEnd(ParseListener& listener){
 	size_t size = this->p - this->buf.begin();
-	listener.OnStringParsed(ting::ArrayAdaptor<char>(size == 0 ? 0 : reinterpret_cast<char*>(this->buf.begin()), size));
+	listener.OnStringParsed(ting::Buffer<char>(size == 0 ? 0 : reinterpret_cast<char*>(this->buf.begin()), size));
 	this->arrayBuf.clear();
 	this->buf = this->staticBuf;
 	this->p = this->buf.begin();
@@ -239,7 +239,7 @@ void Parser::PreParseChar(std::uint8_t c, ParseListener& listener){
 
 
 
-void Parser::ParseDataChunk(const ting::ArrayAdaptor<std::uint8_t> chunk, ParseListener& listener){
+void Parser::ParseDataChunk(const ting::Buffer<std::uint8_t> chunk, ParseListener& listener){
 	for(const std::uint8_t* s = chunk.begin(); s != chunk.end(); ++s){
 //		TRACE(<< "Parser::ParseDataChunk(): *s = " << (*s) << std::endl)
 		
@@ -302,7 +302,7 @@ void Parser::EndOfData(ParseListener& listener){
 
 
 void stob::Parse(ting::fs::File& fi, ParseListener& listener){
-	ting::fs::File::Guard fileGuard(fi, ting::fs::File::READ);
+	ting::fs::File::Guard fileGuard(fi, ting::fs::File::E_Mode::READ);
 	
 	stob::Parser parser;
 	
@@ -313,7 +313,7 @@ void stob::Parse(ting::fs::File& fi, ParseListener& listener){
 	do{
 		bytesRead = fi.Read(buf);
 		
-		ting::ArrayAdaptor<std::uint8_t> b(&*buf.begin(), bytesRead);
+		ting::Buffer<std::uint8_t> b(&*buf.begin(), bytesRead);
 		parser.ParseDataChunk(b, listener);
 	}while(bytesRead == buf.size());
 

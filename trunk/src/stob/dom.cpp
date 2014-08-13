@@ -159,7 +159,7 @@ bool CanStringBeUnquoted(const char* s, size_t& out_length, unsigned& out_numEsc
 }
 
 
-void MakeEscapedString(const char* str, ting::ArrayAdaptor<std::uint8_t> out){
+void MakeEscapedString(const char* str, ting::Buffer<std::uint8_t> out){
 	std::uint8_t *p = out.begin();
 	for(const char* c = str; *c != 0; ++c){
 		ASSERT(p != out.end())
@@ -248,7 +248,7 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 			fi.Write(quote);
 
 			if(numEscapes == 0){
-				fi.Write(ting::ArrayAdaptor<std::uint8_t>(
+				fi.Write(ting::Buffer<std::uint8_t>(
 						const_cast<std::uint8_t*>(reinterpret_cast<const std::uint8_t*>(n->Value())),
 						length
 					));
@@ -281,7 +281,7 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 				}
 			}else{
 				ASSERT(numEscapes == 0)
-				fi.Write(ting::ArrayAdaptor<std::uint8_t>(
+				fi.Write(ting::Buffer<std::uint8_t>(
 						const_cast<std::uint8_t*>(reinterpret_cast<const std::uint8_t*>(n->Value())),
 						length
 					));
@@ -334,7 +334,7 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 
 
 void Node::Write(ting::fs::File& fi, bool formatted){
-	ting::fs::File::Guard fileGuard(fi, ting::fs::File::CREATE);
+	ting::fs::File::Guard fileGuard(fi, ting::fs::File::E_Mode::CREATE);
 
 	WriteNode(this, fi, formatted, 0);
 }
@@ -363,7 +363,7 @@ std::unique_ptr<stob::Node> stob::Load(ting::fs::File& fi){
 				);
 		}
 
-		void OnStringParsed(const ting::ArrayAdaptor<char> str)override{
+		void OnStringParsed(const ting::Buffer<char> str)override{
 			std::unique_ptr<Node> node = Node::New(str);
 
 			if(!this->chains){
@@ -439,7 +439,7 @@ std::unique_ptr<Node> stob::Parse(const char *str){
 	size_t len = strlen(str);
 	
 	//TODO: make const Buffer file
-	ting::fs::BufferFile fi(ting::ArrayAdaptor<std::uint8_t>(reinterpret_cast<std::uint8_t*>(const_cast<char*>(str)), len));
+	ting::fs::BufferFile fi(ting::Buffer<std::uint8_t>(reinterpret_cast<std::uint8_t*>(const_cast<char*>(str)), len));
 	
 	return Load(fi);
 }
