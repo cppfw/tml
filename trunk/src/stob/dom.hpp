@@ -31,15 +31,16 @@ THE SOFTWARE. */
 
 #include <cstdlib>
 #include <cstdio>
+#include <cstdint>
+#include <cinttypes>
 #include <utility>
+#include <memory>
 
 #include <ting/config.hpp>
 #include <ting/PoolStored.hpp>
 #include <ting/fs/File.hpp>
 #include <ting/utf8.hpp>
 #include <ting/ArrayAdaptor.hpp>
-
-#include <memory>
 
 #include "Exc.hpp"
 
@@ -264,15 +265,8 @@ public:
 	void SetS32(std::int32_t v)NOEXCEPT{
 		char buf[64];
 
-#if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
-		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
-		//snprintf() is available
-		int res = snprintf(buf, sizeof(buf), "%i", v);
-#elif M_COMPILER == M_COMPILER_MSVC
-		int res = _snprintf_s(buf, sizeof(buf), sizeof(buf), "%i", v);
-#else
-		int res = sprintf(buf, "%i", v);
-#endif
+		int res = snprintf(buf, sizeof(buf), "%" PRIi32, v);
+
 		if(res < 0 || res > int(sizeof(buf))){
 			this->SetValue(0, 0);
 		}else{
@@ -289,15 +283,8 @@ public:
 	void SetU32(std::uint32_t v)NOEXCEPT{
 		char buf[64];
 
-#if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
-		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
-		//snprintf() is available
-		int res = snprintf(buf, sizeof(buf), "%u", v);
-#elif M_COMPILER == M_COMPILER_MSVC
-		int res = _snprintf_s(buf, sizeof(buf), sizeof(buf), "%u", v);
-#else
-		int res = sprintf(buf, "%u", v);
-#endif
+		int res = snprintf(buf, sizeof(buf), "%" PRIu32, v);
+
 		if(res < 0 || res > int(sizeof(buf))){
 			this->SetValue(0, 0);
 		}else{
@@ -314,15 +301,8 @@ public:
 	void SetS64(std::int64_t v)NOEXCEPT{
 		char buf[64];
 
-#if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
-		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
-		//snprintf() is available
-		int res = snprintf(buf, sizeof(buf), "%li", v);
-#elif M_COMPILER == M_COMPILER_MSVC
-		int res = _snprintf_s(buf, sizeof(buf), sizeof(buf), "%lli", v);
-#else
-		int res = sprintf(buf, "%lli", v);
-#endif
+		int res = snprintf(buf, sizeof(buf), "%" PRIi64, v);
+
 		if(res < 0 || res > int(sizeof(buf))){
 			this->SetValue(0, 0);
 		}else{
@@ -339,15 +319,8 @@ public:
 	void SetU64(std::uint64_t v)NOEXCEPT{
 		char buf[64];
 
-#if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
-		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
-		//snprintf() is available
-		int res = snprintf(buf, sizeof(buf), "%lu", v);
-#elif M_COMPILER == M_COMPILER_MSVC
-		int res = _snprintf_s(buf, sizeof(buf), sizeof(buf), "%llu", v);
-#else
-		int res = sprintf(buf, "%llu", v);
-#endif
+		int res = snprintf(buf, sizeof(buf), "%" PRIu64, v);
+
 		if(res < 0 || res > int(sizeof(buf))){
 			this->SetValue(0, 0);
 		}else{
@@ -364,16 +337,8 @@ public:
 	void SetFloat(float v)NOEXCEPT{
 		char buf[64];
 
-		//NOTE: useing capital G in format string as it should be non-locale aware (in contrast with small g).
-#if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
-		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
-		//snprintf() is available
 		int res = snprintf(buf, sizeof(buf), "%.8G", double(v));
-#elif M_COMPILER == M_COMPILER_MSVC
-		int res = _snprintf_s(buf, sizeof(buf), sizeof(buf), "%.8G", double(v));
-#else
-		int res = sprintf(buf, "%.8G", double(v));
-#endif
+
 		if(res < 0 || res > int(sizeof(buf))){
 			this->SetValue(0, 0);
 		}else{
@@ -390,15 +355,8 @@ public:
 	void SetDouble(double v)NOEXCEPT{
 		char buf[64];
 
-#if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
-		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
-		//snprintf() is available
 		int res = snprintf(buf, sizeof(buf), "%.17G", v);
-#elif M_COMPILER == M_COMPILER_MSVC
-		int res = _snprintf_s(buf, sizeof(buf), sizeof(buf), "%.17G", v);
-#else
-		int res = sprintf(buf, "%.17G", v);
-#endif
+
 		if(res < 0 || res > int(sizeof(buf))){
 			this->SetValue(0, 0);
 		}else{
@@ -415,15 +373,8 @@ public:
 	void SetLongDouble(long double v)NOEXCEPT{
 		char buf[128];
 
-#if _BSD_SOURCE || _XOPEN_SOURCE >= 500 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
-		//See http://linux.die.net/man/3/snprintf for how to test if snprintf() is available.
-		//snprintf() is available
 		int res = snprintf(buf, sizeof(buf), "%.31LG", v);
-#elif M_COMPILER == M_COMPILER_MSVC
-		int res = _snprintf_s(buf, sizeof(buf), sizeof(buf), "%.31LG", v);
-#else
-		int res = sprintf(buf, "%.31LG", v);
-#endif
+
 		if(res < 0 || res > int(sizeof(buf))){
 			this->SetValue(0, 0);
 		}else{
