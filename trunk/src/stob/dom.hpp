@@ -265,7 +265,11 @@ public:
 	void SetS32(std::int32_t v)NOEXCEPT{
 		char buf[64];
 
+#if M_OS == M_OS_WINDOWS //TODO: remove when MSVC supports C99 fully, perhaps in VS2014
+		int res = _snprintf(buf, sizeof(buf), "%" PRIi32, v);
+#else
 		int res = snprintf(buf, sizeof(buf), "%" PRIi32, v);
+#endif
 
 		if(res < 0 || res > int(sizeof(buf))){
 			this->SetValue(0, 0);
@@ -283,7 +287,11 @@ public:
 	void SetU32(std::uint32_t v)NOEXCEPT{
 		char buf[64];
 
+#if M_OS == M_OS_WINDOWS //TODO: remove when MSVC supports C99 fully, perhaps in VS2014
+		int res = _snprintf(buf, sizeof(buf), "%" PRIu32, v);
+#else
 		int res = snprintf(buf, sizeof(buf), "%" PRIu32, v);
+#endif
 
 		if(res < 0 || res > int(sizeof(buf))){
 			this->SetValue(0, 0);
@@ -301,7 +309,11 @@ public:
 	void SetS64(std::int64_t v)NOEXCEPT{
 		char buf[64];
 
+#if M_OS == M_OS_WINDOWS //TODO: remove when MSVC supports C99 fully, perhaps in VS2014
+		int res = _snprintf(buf, sizeof(buf), "%" PRIi64, v);
+#else
 		int res = snprintf(buf, sizeof(buf), "%" PRIi64, v);
+#endif
 
 		if(res < 0 || res > int(sizeof(buf))){
 			this->SetValue(0, 0);
@@ -319,7 +331,11 @@ public:
 	void SetU64(std::uint64_t v)NOEXCEPT{
 		char buf[64];
 
+#if M_OS == M_OS_WINDOWS //TODO: remove when MSVC supports C99 fully, perhaps in VS2014
+		int res = _snprintf(buf, sizeof(buf), "%" PRIu64, v);
+#else
 		int res = snprintf(buf, sizeof(buf), "%" PRIu64, v);
+#endif
 
 		if(res < 0 || res > int(sizeof(buf))){
 			this->SetValue(0, 0);
@@ -337,7 +353,11 @@ public:
 	void SetFloat(float v)NOEXCEPT{
 		char buf[64];
 
+#if M_OS == M_OS_WINDOWS //TODO: remove when MSVC supports C99 fully, perhaps in VS2014
+		int res = _snprintf(buf, sizeof(buf), "%.8G", double(v));
+#else
 		int res = snprintf(buf, sizeof(buf), "%.8G", double(v));
+#endif
 
 		if(res < 0 || res > int(sizeof(buf))){
 			this->SetValue(0, 0);
@@ -355,7 +375,11 @@ public:
 	void SetDouble(double v)NOEXCEPT{
 		char buf[64];
 
+#if M_OS == M_OS_WINDOWS //TODO: remove when MSVC supports C99 fully, perhaps in VS2014
+		int res = _snprintf(buf, sizeof(buf), "%.17G", v);
+#else
 		int res = snprintf(buf, sizeof(buf), "%.17G", v);
+#endif
 
 		if(res < 0 || res > int(sizeof(buf))){
 			this->SetValue(0, 0);
@@ -373,7 +397,11 @@ public:
 	void SetLongDouble(long double v)NOEXCEPT{
 		char buf[128];
 
+#if M_OS == M_OS_WINDOWS //TODO: remove when MSVC supports C99 fully, perhaps in VS2014
+		int res = _snprintf(buf, sizeof(buf), "%.31LG", v);
+#else
 		int res = snprintf(buf, sizeof(buf), "%.31LG", v);
+#endif
 
 		if(res < 0 || res > int(sizeof(buf))){
 			this->SetValue(0, 0);
