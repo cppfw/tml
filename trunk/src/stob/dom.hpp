@@ -866,7 +866,7 @@ public:
  * @param fi - file interface to get the STOB data from.
  * @return auto-pointer to the first node in the chain of the document-object model.
  */
-std::unique_ptr<Node> Load(ting::fs::File& fi);
+std::unique_ptr<Node> Load(const ting::fs::File& fi);
 
 
 
