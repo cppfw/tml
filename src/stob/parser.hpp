@@ -198,7 +198,7 @@ public:
  * @param listener - listener object which will receive notifications about parsed tokens.
  * @throw stob::Exc - in case of malformed STOB document.
  */
-void Parse(ting::fs::File& fi, ParseListener& listener);
+void Parse(const ting::fs::File& fi, ParseListener& listener);
 
 
 

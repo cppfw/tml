@@ -301,8 +301,8 @@ void Parser::EndOfData(ParseListener& listener){
 
 
 
-void stob::Parse(ting::fs::File& fi, ParseListener& listener){
-	ting::fs::File::Guard fileGuard(fi, ting::fs::File::E_Mode::READ);
+void stob::Parse(const ting::fs::File& fi, ParseListener& listener){
+	ting::fs::File::Guard fileGuard(fi);
 	
 	stob::Parser parser;
 	
