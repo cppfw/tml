@@ -218,11 +218,7 @@ public:
 	 * @return Result of parsing node value as long double precision float value (64bits).
 	 */
 	long double AsLongDouble()const NOEXCEPT{
-#if _XOPEN_SOURCE >= 600 || _ISOC99_SOURCE || _POSIX_C_SOURCE >= 200112L
 		return strtold(this->Value(), 0);
-#else//strtold() not supported
-		return (long double)(this->AsDouble());
-#endif
 	}
 
 	/**
@@ -365,6 +361,27 @@ public:
 			this->SetValue(buf, res);
 		}
 	}
+	
+	/**
+	 * @brief Set value from 'float' as hexadecimal 'float'.
+	 * This should make a lose-less representation of a float number.
+     * @param v - 'float' to set as a value of the node.
+     */
+	void SetHexFloat(float v)NOEXCEPT{
+		char buf[64];
+
+#if M_OS == M_OS_WINDOWS //TODO: remove when MSVC supports C99 fully, perhaps in VS2014
+		int res = _snprintf(buf, sizeof(buf), "%.8a", double(v));
+#else
+		int res = snprintf(buf, sizeof(buf), "%.8a", double(v));
+#endif
+
+		if(res < 0 || res > int(sizeof(buf))){
+			this->SetValue(0, 0);
+		}else{
+			this->SetValue(buf, res);
+		}
+	}
 
 	/**
 	 * @brief Set value from 'double'.
@@ -379,6 +396,27 @@ public:
 		int res = _snprintf(buf, sizeof(buf), "%.17G", v);
 #else
 		int res = snprintf(buf, sizeof(buf), "%.17G", v);
+#endif
+
+		if(res < 0 || res > int(sizeof(buf))){
+			this->SetValue(0, 0);
+		}else{
+			this->SetValue(buf, res);
+		}
+	}
+	
+	/**
+	 * @brief Set value from 'double' as hexadecimal 'double'.
+	 * This should make a lose-less representation of a double number.
+     * @param v - 'double' to set as a value of the node.
+     */
+	void SetHexDouble(double v)NOEXCEPT{
+		char buf[64];
+
+#if M_OS == M_OS_WINDOWS //TODO: remove when MSVC supports C99 fully, perhaps in VS2014
+		int res = _snprintf(buf, sizeof(buf), "%.17a", v);
+#else
+		int res = snprintf(buf, sizeof(buf), "%.17a", v);
 #endif
 
 		if(res < 0 || res > int(sizeof(buf))){
@@ -410,6 +448,27 @@ public:
 		}
 	}
 
+	/**
+	 * @brief Set value from 'long double' as hexadecimal 'long double'.
+	 * This should make a lose-less representation of a long double number.
+     * @param v - 'long double' to set as a value of the node.
+     */
+	void SetHexLongDouble(long double v)NOEXCEPT{
+		char buf[64];
+
+#if M_OS == M_OS_WINDOWS //TODO: remove when MSVC supports C99 fully, perhaps in VS2014
+		int res = _snprintf(buf, sizeof(buf), "%.31La", v);
+#else
+		int res = snprintf(buf, sizeof(buf), "%.31La", v);
+#endif
+
+		if(res < 0 || res > int(sizeof(buf))){
+			this->SetValue(0, 0);
+		}else{
+			this->SetValue(buf, res);
+		}
+	}
+	
 	/**
 	 * @brief Set value from 'bool'.
 	 * Sets value from 'bool'. The value is converted to string
