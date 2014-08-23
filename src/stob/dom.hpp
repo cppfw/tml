@@ -59,7 +59,7 @@ namespace stob{
  * a memory pool to avoid memory fragmentation.
  */
 class Node{
-	char* value; //node value
+	std::unique_ptr<char[]> value; //node value
 
 	std::unique_ptr<Node> next; //next sibling node
 
@@ -67,12 +67,12 @@ class Node{
 
 	void SetValueInternal(const ting::Buffer<char> str){
 		if(str.size() == 0){
-			this->value = 0;
+			this->value = nullptr;
 			return;
 		}
 
-		this->value = new char[str.size() + 1];
-		memcpy(this->value, str.begin(), str.size());
+		this->value = decltype(this->value)(new char[str.size() + 1]);
+		memcpy(this->value.get(), str.begin(), str.size());
 		this->value[str.size()] = 0;//null-terminate
 	}
 	
@@ -91,9 +91,7 @@ class Node{
 		this->SetValue(ting::Buffer<char>(const_cast<char*>(v), size));
 	}
 public:
-	~Node()NOEXCEPT{
-		delete[] this->value;
-	}
+	~Node()NOEXCEPT{}
 
 	static void operator delete(void *p)NOEXCEPT;
 
@@ -134,7 +132,7 @@ public:
 	 * @return A string representing this node.
 	 */
 	const char* Value()const NOEXCEPT{
-		return this->value;
+		return this->value.get();
 	}
 
 	/**
@@ -247,8 +245,6 @@ public:
 	 * @param str - string to set as a node value.
 	 */
 	void SetValue(const ting::Buffer<char> str){
-		delete[] this->value;
-
 		this->SetValueInternal(str);
 	}
 
