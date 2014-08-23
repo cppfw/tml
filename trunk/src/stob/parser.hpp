@@ -110,7 +110,7 @@ class Parser{
 	std::vector<std::uint8_t> arrayBuf;
 	ting::Buffer<std::uint8_t> buf;
 	
-	std::uint8_t* p; //current position into the string buffer
+	decltype(buf)::iterator p; //current position into the string buffer
 	
 	unsigned nestingLevel;
 	
