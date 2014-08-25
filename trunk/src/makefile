@@ -5,7 +5,7 @@ debug := false
 
 this_name := stob
 
-this_so_name := 0
+this_soname := 0
 
 
 this_srcs += stob/parser.cpp stob/dom.cpp
