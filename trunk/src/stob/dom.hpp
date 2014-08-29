@@ -216,7 +216,11 @@ public:
 	 * @return Result of parsing node value as long double precision float value (64bits).
 	 */
 	long double AsLongDouble()const NOEXCEPT{
+#if M_OS_NAME == M_OS_NAME_ANDROID //TODO: use strtold() when it becomes available on Android
+		return this->AsDouble();
+#else
 		return strtold(this->Value(), 0);
+#endif
 	}
 
 	/**
