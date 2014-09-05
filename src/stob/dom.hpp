@@ -161,7 +161,7 @@ public:
 	 * Tries to parse the string as signed 32bit integer.
 	 * @return Result of parsing node value as signed 32bit integer.
 	 */
-	std::int32_t AsS32()const NOEXCEPT{
+	std::int32_t AsInt32()const NOEXCEPT{
 		return std::int32_t(strtol(this->Value(), 0, 0));
 	}
 
@@ -170,7 +170,7 @@ public:
 	 * Tries to parse the string as unsigned 32bit integer.
 	 * @return Result of parsing node value as unsigned 32bit integer.
 	 */
-	std::uint32_t AsU32()const NOEXCEPT{
+	std::uint32_t AsUint32()const NOEXCEPT{
 		return std::uint32_t(strtoul(this->Value(), 0, 0));
 	}
 
@@ -179,7 +179,7 @@ public:
 	 * Tries to parse the string as signed 64bit integer.
 	 * @return Result of parsing node value as signed 64bit integer.
 	 */
-	std::int64_t AsS64()const NOEXCEPT{
+	std::int64_t AsInt64()const NOEXCEPT{
 		return std::int64_t(strtoll(this->Value(), 0 , 0));
 	}
 
@@ -188,7 +188,7 @@ public:
 	 * Tries to parse the string as unsigned 64bit integer.
 	 * @return Result of parsing node value as unsigned 64bit integer.
 	 */
-	std::uint64_t AsU64()const NOEXCEPT{
+	std::uint64_t AsUint64()const NOEXCEPT{
 		return std::uint64_t(strtoull(this->Value(), 0 , 0));
 	}
 
