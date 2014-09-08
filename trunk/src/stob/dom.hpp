@@ -41,6 +41,7 @@ THE SOFTWARE. */
 #include <ting/fs/File.hpp>
 #include <ting/utf8.hpp>
 #include <ting/Buffer.hpp>
+#include <ting/util.hpp>
 
 #include "Exc.hpp"
 
@@ -91,6 +92,13 @@ class Node{
 		this->SetValue(ting::Buffer<char>(const_cast<char*>(v), size));
 	}
 public:
+	class NodeNotFoundExc : stob::Exc{
+	public:
+		NodeNotFoundExc(const std::string& message) :
+				stob::Exc(message)
+		{}
+	};
+	
 	~Node()NOEXCEPT{}
 
 	static void operator delete(void *p)NOEXCEPT;
@@ -640,9 +648,34 @@ public:
 	 * @return constant instance of NodeAndPrev structure holding information about found Node.
 	 */
 	const NodeAndPrev Child(const char* value)const NOEXCEPT{
-		return const_cast<Node* const>(this)->Child(value);
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->Child(value);
 	}
 
+	/**
+	 * @brief Get child node with given value.
+	 * In contrast to Child(value) method this one returns reference and throws exception if note is not found.
+     * @param value - value to looks for amongst children.
+     * @return reference to the found node.
+	 * @throw NodeNotFoundExc - in case node with given value is not found.
+     */
+	Node& get(const char* value){
+		auto r = this->Child(value);
+		if(!r.node()){
+			throw NodeNotFoundExc(value);
+		}
+		return *r.node();
+	}
+	
+	/**
+	 * @brief Const version of get().
+     * @param value - value to looks for amongst children.
+     * @return const reference to the found node.
+	 * @throw NodeNotFoundExc - in case node with given value is not found.
+     */
+	const Node& get(const char* value)const{
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->get(value);
+	}
+	
 	/**
 	 * @brief Get first non-property child.
 	 * @return instance of NodeAndPrev structure holding information about found Node.
@@ -654,7 +687,7 @@ public:
 	 * @return constant instance of NodeAndPrev structure holding information about found Node.
 	 */
 	const NodeAndPrev ChildNonProperty()const NOEXCEPT{
-		return const_cast<Node* const>(this)->ChildNonProperty();
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ChildNonProperty();
 	}
 	
 	/**
@@ -668,7 +701,7 @@ public:
      * @return constant instance of NodeAndPrev class holding information about found Node.
      */
 	const NodeAndPrev ChildProperty()const NOEXCEPT{
-		return const_cast<Node* const>(this)->ChildProperty();
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ChildProperty();
 	}
 	
 	/**
@@ -704,7 +737,7 @@ public:
 	 * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
 	 */
 	const NodeAndPrev Next(const char* value)const NOEXCEPT{
-		return const_cast<Node* const>(this)->Next(value);
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->Next(value);
 	}
 
 	/**
@@ -728,7 +761,7 @@ public:
      * @return instance of NodeAndPrev structure holding information about found Node.
      */
 	const NodeAndPrev ThisOrNext(const char* value)const NOEXCEPT{
-		return const_cast<Node* const>(this)->ThisOrNext(value);
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ThisOrNext(value);
 	}
 	
 	/**
@@ -742,7 +775,7 @@ public:
      * @return constant instance of NodeAndPrev class holding information about found node, previous node is always valid.
      */
 	const NodeAndPrev NextNonProperty()const NOEXCEPT{
-		return const_cast<Node* const>(this)->NextNonProperty();
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->NextNonProperty();
 	}
 	
 	/**
@@ -764,7 +797,7 @@ public:
      * @return instance of NodeAndPrev class holding information about found node.
      */
 	const NodeAndPrev ThisOrNextNonProperty()const NOEXCEPT{
-		return const_cast<Node* const>(this)->ThisOrNextNonProperty();
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ThisOrNextNonProperty();
 	}
 	
 	/**
@@ -778,7 +811,7 @@ public:
      * @return constant instance of NodeAndPrev class holding information about found node, previous node is always valid.
      */
 	const NodeAndPrev NextProperty()const NOEXCEPT{
-		return const_cast<Node* const>(this)->NextProperty();
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->NextProperty();
 	}
 	
 	/**
@@ -800,7 +833,7 @@ public:
      * @return instance of NodeAndPrev class holding information about found node.
      */
 	const NodeAndPrev ThisOrNextProperty()const NOEXCEPT{
-		return const_cast<Node* const>(this)->ThisOrNextProperty();
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ThisOrNextProperty();
 	}
 	
 	/**
@@ -829,7 +862,7 @@ public:
 	 * @return zero pointer if no property with a given name found or property has no value.
 	 */
 	const Node* GetProperty(const char* propName)const NOEXCEPT{
-		return const_cast<Node* const>(this)->GetProperty(propName);
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->GetProperty(propName);
 	}
 
 	/**
