@@ -99,6 +99,13 @@ public:
 		{}
 	};
 	
+	class NodeHasNoChldrenExc : stob::Exc{
+	public:
+		NodeHasNoChldrenExc(const std::string& message) :
+				stob::Exc(message)
+		{}
+	};
+	
 	~Node()NOEXCEPT{}
 
 	static void operator delete(void *p)NOEXCEPT;
@@ -651,6 +658,28 @@ public:
 		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->Child(value);
 	}
 
+	/**
+	 * @brief Get fist child.
+     * @return reference to the first child node.
+	 * @throw NodeHasNoChldrenExc - in case the node has no children at all.
+     */
+	Node& get(){
+		auto r = this->Child();
+		if(r){
+			throw NodeHasNoChldrenExc(this->Value());
+		}
+		return *r;
+	}
+	
+	/**
+	 * @brief Const version of get().
+     * @return Const reference to the first child node.
+	 * @throw NodeHasNoChldrenExc - in case the node has no children at all.
+     */
+	const Node& get()const{
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->get();
+	}
+	
 	/**
 	 * @brief Get child node with given value.
 	 * In contrast to Child(value) method this one returns reference and throws exception if note is not found.
