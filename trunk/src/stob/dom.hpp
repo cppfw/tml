@@ -665,7 +665,7 @@ public:
      */
 	Node& get(){
 		auto r = this->Child();
-		if(r){
+		if(!r){
 			throw NodeHasNoChldrenExc(this->Value());
 		}
 		return *r;
