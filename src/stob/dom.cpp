@@ -386,17 +386,17 @@ std::unique_ptr<stob::Node> stob::Load(const ting::fs::File& fi){
 
 
 std::unique_ptr<stob::Node> Node::Clone()const{
-	std::unique_ptr<Node> ret = Node::New(this->Value());
+	auto ret = Node::New(this->Value());
 
 	if(!this->Child()){
 		return ret;
 	}
 
-	std::unique_ptr<stob::Node> c = this->Child()->Clone();
+	auto c = this->Child()->Clone();
 
 	{
-		stob::Node* curChild = c.operator->();
-		for(const stob::Node *p = this->Child()->Next(); p; p = p->Next(), curChild = curChild->Next()){
+		auto curChild = c.operator->();
+		for(auto p = this->Child()->Next(); p; p = p->Next(), curChild = curChild->Next()){
 			ASSERT(curChild)
 			curChild->InsertNext(p->Clone());
 		}
@@ -406,6 +406,16 @@ std::unique_ptr<stob::Node> Node::Clone()const{
 	return ret;
 }
 
+
+std::unique_ptr<Node> Node::CloneChain() const{
+	auto ret = this->Clone();
+	
+	if(this->Next()){
+		ret->SetNext(this->Next()->CloneChain());
+	}
+	
+	return ret;
+}
 
 
 bool Node::operator==(const Node& n)const NOEXCEPT{

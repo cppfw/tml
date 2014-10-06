@@ -959,6 +959,14 @@ public:
 	 */
 	std::unique_ptr<Node> Clone()const;
 
+	
+	/**
+	 * @brief Create a deep copy of the Node chain.
+	 * Clones this node with all its children hierarchy and chained next Nodes.
+     * @return a deep copy of this Node chain.
+     */
+	std::unique_ptr<Node> CloneChain()const;
+	
 	/**
 	 * @brief Check if the Node is a property.
 	 * This is just a convenience method.
