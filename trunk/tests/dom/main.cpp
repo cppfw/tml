@@ -320,8 +320,8 @@ void Run(){
 	ting::fs::FSFile fileFormatted("out_formatted.stob");
 	ting::fs::FSFile fileNotFormatted("out_not_formatted.stob");
 	
-	root->Write(fileFormatted, true);
-	root->Write(fileNotFormatted, false);
+	root->Child()->WriteChain(fileFormatted, true);
+	root->Child()->WriteChain(fileNotFormatted, false);
 	
 	std::unique_ptr<stob::Node> readFormatted = stob::Node::New();
 	readFormatted->SetChildren(stob::Load(fileFormatted));

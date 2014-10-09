@@ -206,8 +206,8 @@ void MakeEscapedString(const char* str, ting::Buffer<std::uint8_t> out){
 }
 
 
-void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsigned indentation){
-	ASSERT(node)
+void WriteChainInternal(const stob::Node* chain, ting::fs::File& fi, bool formatted, unsigned indentation){
+	ASSERT(chain)
 
 	std::array<std::uint8_t, 1> quote;
 	quote[0] = '"';
@@ -232,7 +232,7 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 	
 	bool prevHadChildren = true;
 
-	for(const Node* n = node->Child(); n; n = n->Next()){
+	for(auto n = chain; n; n = n->Next()){
 		//indent
 		if(formatted){
 			for(unsigned i = 0; i != indentation; ++i){
@@ -305,7 +305,7 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 		if(!formatted){
 			fi.Write(lcurly);
 
-			WriteNode(n, fi, false, 0);
+			WriteChainInternal(n->Child(), fi, false, 0);
 
 			fi.Write(rcurly);
 		}else{
@@ -313,13 +313,13 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 				//if only one child and that child has no children
 
 				fi.Write(lcurly);
-				WriteNode(n, fi, false, 0);
+				WriteChainInternal(n->Child(), fi, false, 0);
 				fi.Write(rcurly);
 				fi.Write(newLine);
 			}else{
 				fi.Write(lcurly);
 				fi.Write(newLine);
-				WriteNode(n, fi, true, indentation + 1);
+				WriteChainInternal(n->Child(), fi, true, indentation + 1);
 
 				//indent
 				for(unsigned i = 0; i != indentation; ++i){
@@ -335,10 +335,10 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 
 
 
-void Node::Write(ting::fs::File& fi, bool formatted)const{
+void Node::WriteChain(ting::fs::File& fi, bool formatted)const{
 	ting::fs::File::Guard fileGuard(fi, ting::fs::File::E_Mode::CREATE);
 
-	WriteNode(this, fi, formatted, 0);
+	WriteChainInternal(this, fi, formatted, 0);
 }
 
 
@@ -461,7 +461,7 @@ std::unique_ptr<Node> stob::Parse(const char *str){
 std::string Node::ChainToString(bool formatted)const{
 	ting::fs::MemoryFile fi;
 	
-	this->Write(fi, formatted);
+	this->WriteChain(fi, formatted);
 	
 	auto data = fi.ResetData();
 	
