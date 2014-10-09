@@ -7,6 +7,8 @@
 #include <ting/debug.hpp>
 #include <ting/util.hpp>
 #include <ting/fs/BufferFile.hpp>
+#include <ting/fs/MemoryFile.hpp>
+#include <iosfwd>
 
 
 #include "parser.hpp"
@@ -333,7 +335,7 @@ void WriteNode(const stob::Node* node, ting::fs::File& fi, bool formatted, unsig
 
 
 
-void Node::Write(ting::fs::File& fi, bool formatted){
+void Node::Write(ting::fs::File& fi, bool formatted)const{
 	ting::fs::File::Guard fileGuard(fi, ting::fs::File::E_Mode::CREATE);
 
 	WriteNode(this, fi, formatted, 0);
@@ -453,3 +455,16 @@ std::unique_ptr<Node> stob::Parse(const char *str){
 	
 	return Load(fi);
 }
+
+
+
+std::string Node::ChainToString(bool formatted)const{
+	ting::fs::MemoryFile fi;
+	
+	this->Write(fi, formatted);
+	
+	auto data = fi.ResetData();
+	
+	return std::string(reinterpret_cast<char*>(&*data.begin()), data.size());
+}
+

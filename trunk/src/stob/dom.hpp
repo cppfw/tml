@@ -984,7 +984,14 @@ public:
 	 * @param formatted - if true then the STOB document will be written with formatting.
 	 *                    if false then no formatting will be applied.
 	 */
-	void Write(ting::fs::File& fi, bool formatted = true);
+	void Write(ting::fs::File& fi, bool formatted = true)const;
+	
+	/**
+	 * @brief Convert Node's chain to string.
+	 * @param formatted - should a formatting be applied for better human readability.
+     * @return STOB as string.
+     */
+	std::string ChainToString(bool formatted = false)const;
 };
 
 
