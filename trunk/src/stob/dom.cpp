@@ -209,23 +209,17 @@ void MakeEscapedString(const char* str, ting::Buffer<std::uint8_t> out){
 void WriteChainInternal(const stob::Node* chain, ting::fs::File& fi, bool formatted, unsigned indentation){
 	ASSERT(chain)
 
-	std::array<std::uint8_t, 1> quote;
-	quote[0] = '"';
+	std::array<std::uint8_t, 1> quote = {{'"'}};
 
-	std::array<std::uint8_t, 1> lcurly;
-	lcurly[0] = '{';
+	std::array<std::uint8_t, 1> lcurly = {{'{'}};
 
-	std::array<std::uint8_t, 1> rcurly;
-	rcurly[0] = '}';
+	std::array<std::uint8_t, 1> rcurly = {{'}'}};
 
-	std::array<std::uint8_t, 1> space;
-	space[0] = ' ';
+	std::array<std::uint8_t, 1> space = {{' '}};
 
-	std::array<std::uint8_t, 1> tab;
-	tab[0] = '\t';
+	std::array<std::uint8_t, 1> tab = {{'\t'}};
 
-	std::array<std::uint8_t, 1> newLine;
-	newLine[0] = '\n';
+	std::array<std::uint8_t, 1> newLine = {{'\n'}};
 
 	//used to detect case of two adjacent unquoted strings without children, need to insert space between them
 	bool prevWasUnquotedWithoutChildren = false;
