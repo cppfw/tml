@@ -461,4 +461,3 @@ std::string Node::ChainToString(bool formatted)const{
 	
 	return std::string(reinterpret_cast<char*>(&*data.begin()), data.size());
 }
-
