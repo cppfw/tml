@@ -793,6 +793,28 @@ public:
 		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ThisOrNext(value);
 	}
 	
+
+	/**
+	 * @brief Get child of given node in the chain of nodes.
+     * @param value - value to look for in the chain of nodes.
+     * @return First child of the node with given value in the chain of nodes.
+     */
+	Node* ChildOfThisOrNext(const char* value)NOEXCEPT{
+		if(auto c = this->ThisOrNext(value).node()){
+			return c->Child();
+		}
+		return nullptr;
+	}
+	
+	/**
+	 * @brief Get constant child of given node in the chain of nodes.
+     * @param value - value to look for in the chain of nodes.
+     * @return Constant first child of the node with given value in the chain of nodes.
+     */
+	const Node* ChildOfThisOrNext(const char* value)const NOEXCEPT{
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ChildOfThisOrNext(value);
+	}
+	
 	/**
 	 * @brief Get next non-property node.
      * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
