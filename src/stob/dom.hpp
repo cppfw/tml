@@ -663,7 +663,7 @@ public:
      * @return reference to the first child node.
 	 * @throw NodeHasNoChldrenExc - in case the node has no children at all.
      */
-	Node& getChild(){
+	Node& up(){
 		auto r = this->Child();
 		if(!r){
 			throw NodeHasNoChldrenExc(this->Value());
@@ -676,8 +676,8 @@ public:
      * @return Const reference to the first child node.
 	 * @throw NodeHasNoChldrenExc - in case the node has no children at all.
      */
-	const Node& getChild()const{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->getChild();
+	const Node& up()const{
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->up();
 	}
 	
 	/**
@@ -687,7 +687,7 @@ public:
      * @return reference to the found node.
 	 * @throw NodeNotFoundExc - in case node with given value is not found.
      */
-	Node& getChild(const char* value){
+	Node& up(const char* value){
 		auto r = this->Child(value).node();
 		if(!r){
 			throw NodeNotFoundExc(value);
@@ -701,12 +701,17 @@ public:
      * @return const reference to the found node.
 	 * @throw NodeNotFoundExc - in case node with given value is not found.
      */
-	const Node& getChild(const char* value)const{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->getChild(value);
+	const Node& up(const char* value)const{
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->up(value);
 	}
 	
-	
-	Node& getThisOrNext(const char* value){
+	/**
+	 * @brief Get node with the given value from the chain.
+     * @param value - value to look for.
+     * @return Reference to the found.
+	 * @throw NodeNotFoundExc - in case node with given value is not found.
+     */
+	Node& side(const char* value){
 		auto r = this->ThisOrNext(value).node();
 		if(!r){
 			throw NodeNotFoundExc(value);
@@ -714,8 +719,14 @@ public:
 		return *r;
 	}
 	
-	const Node& getThisOrNext(const char* value)const{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->getThisOrNext(value);
+	/**
+	 * @brief Const version of side().
+     * @param value - value to look for.
+     * @return Reference to the found.
+	 * @throw NodeNotFoundExc - in case node with given value is not found.
+     */
+	const Node& side(const char* value)const{
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->side(value);
 	}
 	
 	/**
