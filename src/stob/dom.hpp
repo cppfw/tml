@@ -663,7 +663,7 @@ public:
      * @return reference to the first child node.
 	 * @throw NodeHasNoChldrenExc - in case the node has no children at all.
      */
-	Node& get(){
+	Node& getChild(){
 		auto r = this->Child();
 		if(!r){
 			throw NodeHasNoChldrenExc(this->Value());
@@ -676,8 +676,8 @@ public:
      * @return Const reference to the first child node.
 	 * @throw NodeHasNoChldrenExc - in case the node has no children at all.
      */
-	const Node& get()const{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->get();
+	const Node& getChild()const{
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->getChild();
 	}
 	
 	/**
@@ -687,12 +687,12 @@ public:
      * @return reference to the found node.
 	 * @throw NodeNotFoundExc - in case node with given value is not found.
      */
-	Node& get(const char* value){
-		auto r = this->Child(value);
-		if(!r.node()){
+	Node& getChild(const char* value){
+		auto r = this->Child(value).node();
+		if(!r){
 			throw NodeNotFoundExc(value);
 		}
-		return *r.node();
+		return *r;
 	}
 	
 	/**
@@ -701,8 +701,21 @@ public:
      * @return const reference to the found node.
 	 * @throw NodeNotFoundExc - in case node with given value is not found.
      */
-	const Node& get(const char* value)const{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->get(value);
+	const Node& getChild(const char* value)const{
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->getChild(value);
+	}
+	
+	
+	Node& getThisOrNext(const char* value){
+		auto r = this->ThisOrNext(value).node();
+		if(!r){
+			throw NodeNotFoundExc(value);
+		}
+		return *r;
+	}
+	
+	const Node& getThisOrNext(const char* value)const{
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->getThisOrNext(value);
 	}
 	
 	/**
