@@ -22,7 +22,7 @@ void Run(){
 	
 	n = n->Next();
 	ASSERT_ALWAYS(n)
-	ASSERT_ALWAYS(*n == "another string")
+	ASSERT_INFO_ALWAYS(*n == "anot/her string", n->Value())
 	ASSERT_ALWAYS(!n->Child())
 	
 	n = n->Next();
