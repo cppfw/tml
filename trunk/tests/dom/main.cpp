@@ -42,7 +42,7 @@ void Run(){
 	
 	n = n->Next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "string_interrupted", n->Value())
+	ASSERT_INFO_ALWAYS(*n == "string_interrupted_by_comment", n->Value())
 	ASSERT_ALWAYS(!n->Child())
 	
 	n = n->Next();
