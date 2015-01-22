@@ -42,9 +42,19 @@ void Run(){
 	
 	n = n->Next();
 	ASSERT_ALWAYS(n)
+	ASSERT_INFO_ALWAYS(*n == "string_interrupted", n->Value())
+	ASSERT_ALWAYS(!n->Child())
+	
+	n = n->Next();
+	ASSERT_ALWAYS(n)
+	ASSERT_INFO_ALWAYS(*n == "string_broken_by_comment", n->Value())
+	ASSERT_ALWAYS(!n->Child())
+
+	n = n->Next();
+	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "")
 	ASSERT_ALWAYS(n->Value() == 0)
-	ASSERT_ALWAYS(!n->Child())
+	ASSERT_INFO_ALWAYS(!n->Child(), n->Child()->Value())
 	
 	n = n->Next();
 	ASSERT_ALWAYS(n)
