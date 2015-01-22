@@ -7,7 +7,8 @@ multiline comment
 //tralivali
 */
 
-string_interrupted//by_comment
+string_interrupted//tro lo lo
+_by_comment
 
 string_broken/*tro lo lo*/_by_comment{}
 
