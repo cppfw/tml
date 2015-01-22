@@ -27,7 +27,7 @@ void Run(){
 	
 	n = n->Next();
 	ASSERT_ALWAYS(n)
-	ASSERT_ALWAYS(*n == "unquotedString")
+	ASSERT_ALWAYS(*n == "unqu/otedString")
 	ASSERT_ALWAYS(!n->Child())
 	
 	n = n->Next();
@@ -143,9 +143,9 @@ void Run(){
 	}
 	{
 		const stob::Node* constRoot = root.operator->();
-		const stob::Node* ch = constRoot->Child("unquotedString").node();
+		const stob::Node* ch = constRoot->Child("unqu/otedString").node();
 		ASSERT_ALWAYS(ch)
-		ASSERT_ALWAYS(*ch == "unquotedString")
+		ASSERT_ALWAYS(*ch == "unqu/otedString")
 	}
 }
 }//~namespace
