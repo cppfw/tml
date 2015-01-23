@@ -133,8 +133,7 @@ class Parser{
 	
 	//This flag indicates that a string has been parsed before but its children list is not yet parsed.
 	//This is used to detect cases when curly braces go right after another curly braces, thus omitting the string declaration
-	//which is not allowed by the STOB format.
-	//TODO: is it really not allowed???
+	//which is allowed by the STOB format and means that string is empty.
 	bool stringParsed;
 	
 	void ParseChar(std::uint8_t c, ParseListener& listener);
