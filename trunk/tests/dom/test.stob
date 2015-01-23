@@ -1,4 +1,4 @@
-"test string" "anot/her string" unqu/otedString
+ttt"test string" "anot/her string" unqu/otedString
 
 "string with empty children list"{}unquoted_string_with_empty_children_list{}
 

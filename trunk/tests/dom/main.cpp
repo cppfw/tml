@@ -17,7 +17,12 @@ void Run(){
 	
 	stob::Node* n = root->Child();
 	ASSERT_ALWAYS(n)
-	ASSERT_ALWAYS(*n == "test string")
+	ASSERT_ALWAYS(*n == "ttt")
+	ASSERT_ALWAYS(!n->Child())
+	
+	n = n->Next();
+	ASSERT_ALWAYS(n)
+	ASSERT_INFO_ALWAYS(*n == "test string", n->Value())
 	ASSERT_ALWAYS(!n->Child())
 	
 	n = n->Next();
