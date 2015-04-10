@@ -19,18 +19,21 @@ enum E_Action{
 
 class Listener : public stob::ParseListener{
 	void OnChildrenParseFinished() override{
+		TRACE(<< "}" << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == CHILDREN_END, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
 		this->actions.pop_front();
 	}
 	
 	void OnChildrenParseStarted() override{
+		TRACE(<< "{" << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == CHILDREN_START, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
 		this->actions.pop_front();
 	}
 	
 	void OnStringParsed(const ting::Buffer<char> str)override{
+		TRACE(<< "str = " << std::string(&*str.begin(), str.size()) << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == STRING, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
 		ASSERT_INFO_ALWAYS(this->actions.front().second == std::string(str.begin(), str.size()), "first = " << this->actions.front().first << " second = " << this->actions.front().second << " str = " << std::string(str.begin(), str.size()))
@@ -59,6 +62,22 @@ void Run(){
 	l.actions.push_back(T_Pair(CHILDREN_START, ""));
 	l.actions.push_back(T_Pair(CHILDREN_END, ""));
 	
+	l.actions.push_back(T_Pair(STRING, ""));
+	l.actions.push_back(T_Pair(CHILDREN_START, ""));
+	l.actions.push_back(T_Pair(CHILDREN_END, ""));
+	
+	l.actions.push_back(T_Pair(STRING, ""));
+	l.actions.push_back(T_Pair(CHILDREN_START, ""));
+	
+	l.actions.push_back(T_Pair(STRING, ""));
+	l.actions.push_back(T_Pair(CHILDREN_START, ""));
+	l.actions.push_back(T_Pair(CHILDREN_END, ""));
+	
+	l.actions.push_back(T_Pair(STRING, ""));
+	l.actions.push_back(T_Pair(CHILDREN_START, ""));
+	l.actions.push_back(T_Pair(CHILDREN_END, ""));
+	
+	l.actions.push_back(T_Pair(CHILDREN_END, ""));
 	
 	l.actions.push_back(T_Pair(STRING, ""));
 	l.actions.push_back(T_Pair(CHILDREN_START, ""));
