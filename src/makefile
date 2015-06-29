@@ -5,7 +5,7 @@ debug := false
 
 this_name := stob
 
-this_soname := 0
+this_soname := $(shell cat $(prorab_this_dir)soname.txt)
 
 
 this_srcs += stob/parser.cpp stob/dom.cpp
