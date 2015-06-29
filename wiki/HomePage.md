@@ -1,7 +1,7 @@
 ## News ##
 2014-06-24: STOB version 2.0.0 released. Added: Node cloning, deep comparison, memory leaks fixed, bugs fixed.
 
-See [history WiKi page](ProjectHistory.md) for more complete history.
+See [history WiKi page](History.md) for more complete history.
 
 
 ---
