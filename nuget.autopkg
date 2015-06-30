@@ -28,7 +28,7 @@ nuget{
 
 		[x86,debug] { 
 			lib: msvs_solution\Debug\libstob.lib;
-			symbols: msvs_solution\ting\Debug\tstob.pdb;
+			symbols: msvs_solution\stob\Debug\stob.pdb;
 //			bin: ${SDK_2010}bin\x86\Debug\casablanca100.dll;
 		}    
 
