@@ -41,7 +41,7 @@ class Listener : public stob::ParseListener{
 	}
 	
 public:
-	~Listener()NOEXCEPT{}
+	~Listener()noexcept{}
 	
 	std::deque<std::pair<E_Action, std::string> > actions;
 };

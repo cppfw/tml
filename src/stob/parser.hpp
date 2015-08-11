@@ -93,7 +93,7 @@ public:
      */
 	virtual void OnChildrenParseFinished() = 0;
 	
-	virtual ~ParseListener()NOEXCEPT{}
+	virtual ~ParseListener()noexcept{}
 };
 
 

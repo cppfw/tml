@@ -33,13 +33,13 @@ void* Node::operator new(size_t size){
 
 
 
-void Node::operator delete(void* p)NOEXCEPT{
+void Node::operator delete(void* p)noexcept{
 	memoryPool.Free_ts(p);
 }
 
 
 
-stob::Node::NodeAndPrev Node::Next(const char* value)NOEXCEPT{
+stob::Node::NodeAndPrev Node::Next(const char* value)noexcept{
 	Node* prev = this;
 	for(Node* n = this->Next(); n; prev = n, n = n->Next()){
 		if(n->operator==(value)){
@@ -51,7 +51,7 @@ stob::Node::NodeAndPrev Node::Next(const char* value)NOEXCEPT{
 
 
 
-stob::Node::NodeAndPrev Node::Child(const char* value)NOEXCEPT{
+stob::Node::NodeAndPrev Node::Child(const char* value)noexcept{
 	if(!this->children){
 		return NodeAndPrev(0, 0);
 	}
@@ -61,7 +61,7 @@ stob::Node::NodeAndPrev Node::Child(const char* value)NOEXCEPT{
 
 
 
-stob::Node::NodeAndPrev Node::ChildNonProperty()NOEXCEPT{
+stob::Node::NodeAndPrev Node::ChildNonProperty()noexcept{
 	if(!this->children){
 		return NodeAndPrev(0, 0);
 	}
@@ -75,7 +75,7 @@ stob::Node::NodeAndPrev Node::ChildNonProperty()NOEXCEPT{
 
 
 
-stob::Node::NodeAndPrev Node::ChildProperty()NOEXCEPT{
+stob::Node::NodeAndPrev Node::ChildProperty()noexcept{
 	if(!this->children){
 		return NodeAndPrev(0, 0);
 	}
@@ -89,7 +89,7 @@ stob::Node::NodeAndPrev Node::ChildProperty()NOEXCEPT{
 
 
 
-stob::Node::NodeAndPrev Node::NextNonProperty()NOEXCEPT{
+stob::Node::NodeAndPrev Node::NextNonProperty()noexcept{
 	Node* prev = this;
 	for(Node* n = this->Next(); n; prev = n, n = n->Next()){
 		if(!n->IsProperty()){
@@ -101,7 +101,7 @@ stob::Node::NodeAndPrev Node::NextNonProperty()NOEXCEPT{
 
 
 
-stob::Node::NodeAndPrev Node::NextProperty()NOEXCEPT{
+stob::Node::NodeAndPrev Node::NextProperty()noexcept{
 	Node* prev = this;
 	for(Node* n = this->Next(); n; prev = n, n = n->Next()){
 		if(n->IsProperty()){
@@ -371,7 +371,7 @@ std::unique_ptr<stob::Node> stob::Load(const ting::fs::File& fi){
 			}
 		}
 
-		~Listener()NOEXCEPT{}
+		~Listener()noexcept{}
 	} listener;
 
 	stob::Parse(fi, listener);
@@ -414,7 +414,7 @@ std::unique_ptr<Node> Node::CloneChain() const{
 }
 
 
-bool Node::operator==(const Node& n)const NOEXCEPT{
+bool Node::operator==(const Node& n)const noexcept{
 	if(!this->operator==(n.Value())){
 		return false;
 	}
