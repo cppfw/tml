@@ -38,6 +38,7 @@
       <flagsDictionary>
         <element flagsID="0"
                  commonFlags="-mtune=generic -march=x86-64 -std=c++11 -funsigned-char -fPIC -fstack-protector"/>
+        <element flagsID="1" commonFlags="-std=c++11"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -93,8 +94,12 @@
         </ccTool>
       </item>
       <item path="tests/dom/main.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="1">
+        </ccTool>
       </item>
       <item path="tests/parser/main.cpp" ex="false" tool="1" flavor2="8">
+        <ccTool flags="1">
+        </ccTool>
       </item>
     </conf>
     <conf name="Valgrind" type="0">
