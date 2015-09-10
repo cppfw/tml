@@ -76,7 +76,7 @@ class Node{
 		memcpy(this->value.get(), str.begin(), str.size());
 		this->value[str.size()] = 0;//null-terminate
 	}
-	
+
 	//constructor is private, no inheritance.
 	Node(const ting::Buffer<char> str){
 		this->SetValueInternal(str);
@@ -98,14 +98,14 @@ public:
 				stob::Exc(message)
 		{}
 	};
-	
+
 	class NodeHasNoChldrenExc : stob::Exc{
 	public:
 		NodeHasNoChldrenExc(const std::string& message) :
 				stob::Exc(message)
 		{}
 	};
-	
+
 	~Node()noexcept{}
 
 	static void operator delete(void *p)noexcept;
@@ -356,12 +356,12 @@ public:
 			this->SetValue(buf, res);
 		}
 	}
-	
+
 	/**
 	 * @brief Set value from 'float' as hexadecimal 'float'.
 	 * This should make a lose-less representation of a float number.
-     * @param v - 'float' to set as a value of the node.
-     */
+	 * @param v - 'float' to set as a value of the node.
+	 */
 	void SetHexFloat(float v)noexcept{
 		char buf[64];
 
@@ -391,12 +391,12 @@ public:
 			this->SetValue(buf, res);
 		}
 	}
-	
+
 	/**
 	 * @brief Set value from 'double' as hexadecimal 'double'.
 	 * This should make a lose-less representation of a double number.
-     * @param v - 'double' to set as a value of the node.
-     */
+	 * @param v - 'double' to set as a value of the node.
+	 */
 	void SetHexDouble(double v)noexcept{
 		char buf[64];
 
@@ -430,8 +430,8 @@ public:
 	/**
 	 * @brief Set value from 'long double' as hexadecimal 'long double'.
 	 * This should make a lose-less representation of a long double number.
-     * @param v - 'long double' to set as a value of the node.
-     */
+	 * @param v - 'long double' to set as a value of the node.
+	 */
 	void SetHexLongDouble(long double v)noexcept{
 		char buf[64];
 
@@ -443,7 +443,7 @@ public:
 			this->SetValue(buf, res);
 		}
 	}
-	
+
 	/**
 	 * @brief Set value from 'bool'.
 	 * Sets value from 'bool'. The value is converted to string
@@ -456,11 +456,11 @@ public:
 
 	/**
 	 * @brief Compare value of the node to given string.
-     * @param str - string to compare the value to.
-     * @return true if value and given string are equal, including cases when
+	 * @param str - string to compare the value to.
+	 * @return true if value and given string are equal, including cases when
 	 *         value is null-pointer and 'str' is an empty string and vice versa.
 	 * @return false otherwise.
-     */
+	 */
 	bool operator==(const char* str)const noexcept{
 		if(this->Value()){
 			if(str){
@@ -478,12 +478,18 @@ public:
 	 * @brief Deep compare of this node to another node.
 	 * Performs deep comparison of a STOB tree represented by this node to
 	 * another STOB tree represented by given node.
-     * @param n - node to compare this node to.
-     * @return true if two STOB trees are completely equal.
+	 * @param n - node to compare this node to.
+	 * @return true if two STOB trees are completely equal.
 	 * @return false otherwise.
-     */
+	 */
 	bool operator==(const Node& n)const noexcept;
-	
+
+	/**
+	 * @brief Count number of children.
+	 * @return Number of children.
+	 */
+	size_t countChildren()const noexcept;
+
 	/**
 	 * @brief Set children list for this node.
 	 * Sets the children nodes list for this node. Previously set list will be discarded if any.
@@ -560,10 +566,10 @@ public:
 	 */
 	class NodeAndPrev{
 		friend class stob::Node;
-		
+
 		Node* prevNode;
 		Node* curNode;
-		
+
 		NodeAndPrev(Node* prev, Node* node) :
 				prevNode(prev),
 				curNode(node)
@@ -571,37 +577,37 @@ public:
 	public:
 		/**
 		 * @brief Get pointer to Node.
-         * @return Pointer to Node.
-         */
+		 * @return Pointer to Node.
+		 */
 		Node* node()noexcept{
 			return this->curNode;
 		}
-		
+
 		/**
 		 * @brief Get constant pointer to Node.
-         * @return Constant pointer to Node.
-         */
+		 * @return Constant pointer to Node.
+		 */
 		const Node* node()const noexcept{
 			return this->curNode;
 		}
-		
+
 		/**
 		 * @brief Get pointer to previous Node.
-         * @return Pointer to previous Node.
-         */
+		 * @return Pointer to previous Node.
+		 */
 		Node* prev()noexcept{
 			return this->prevNode;
 		}
-		
+
 		/**
 		 * @brief Get constant pointer to previous Node.
-         * @return Constant pointer to previous Node.
-         */
+		 * @return Constant pointer to previous Node.
+		 */
 		const Node* prev()const noexcept{
 			return this->prevNode;
 		}
 	};
-	
+
 	/**
 	 * @brief Get child node holding the given value.
 	 * @param value - value to search for among children.
@@ -620,9 +626,9 @@ public:
 
 	/**
 	 * @brief Get fist child.
-     * @return reference to the first child node.
+	 * @return reference to the first child node.
 	 * @throw NodeHasNoChldrenExc - in case the node has no children at all.
-     */
+	 */
 	Node& up(){
 		auto r = this->Child();
 		if(!r){
@@ -630,23 +636,23 @@ public:
 		}
 		return *r;
 	}
-	
+
 	/**
 	 * @brief Const version of get().
-     * @return Const reference to the first child node.
+	 * @return Const reference to the first child node.
 	 * @throw NodeHasNoChldrenExc - in case the node has no children at all.
-     */
+	 */
 	const Node& up()const{
 		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->up();
 	}
-	
+
 	/**
 	 * @brief Get child node with given value.
 	 * In contrast to Child(value) method this one returns reference and throws exception if note is not found.
-     * @param value - value to looks for amongst children.
-     * @return reference to the found node.
+	 * @param value - value to looks for amongst children.
+	 * @return reference to the found node.
 	 * @throw NodeNotFoundExc - in case node with given value is not found.
-     */
+	 */
 	Node& up(const char* value){
 		auto r = this->Child(value).node();
 		if(!r){
@@ -654,23 +660,23 @@ public:
 		}
 		return *r;
 	}
-	
+
 	/**
 	 * @brief Const version of get().
-     * @param value - value to looks for amongst children.
-     * @return const reference to the found node.
+	 * @param value - value to looks for amongst children.
+	 * @return const reference to the found node.
 	 * @throw NodeNotFoundExc - in case node with given value is not found.
-     */
+	 */
 	const Node& up(const char* value)const{
 		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->up(value);
 	}
-	
+
 	/**
 	 * @brief Get node with the given value from the chain.
-     * @param value - value to look for.
-     * @return Reference to the found.
+	 * @param value - value to look for.
+	 * @return Reference to the found.
 	 * @throw NodeNotFoundExc - in case node with given value is not found.
-     */
+	 */
 	Node& side(const char* value){
 		auto r = this->ThisOrNext(value).node();
 		if(!r){
@@ -678,23 +684,23 @@ public:
 		}
 		return *r;
 	}
-	
+
 	/**
 	 * @brief Const version of side().
-     * @param value - value to look for.
-     * @return Reference to the found.
+	 * @param value - value to look for.
+	 * @return Reference to the found.
 	 * @throw NodeNotFoundExc - in case node with given value is not found.
-     */
+	 */
 	const Node& side(const char* value)const{
 		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->side(value);
 	}
-	
+
 	/**
 	 * @brief Get first non-property child.
 	 * @return instance of NodeAndPrev structure holding information about found Node.
 	 */
 	NodeAndPrev ChildNonProperty()noexcept;
-	
+
 	/**
 	 * @brief Get constant first non-property child.
 	 * @return constant instance of NodeAndPrev structure holding information about found Node.
@@ -702,21 +708,21 @@ public:
 	const NodeAndPrev ChildNonProperty()const noexcept{
 		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ChildNonProperty();
 	}
-	
+
 	/**
 	 * @brief Get first property child.
-     * @return instance of NodeAndPrev class holding information about found Node.
-     */
+	 * @return instance of NodeAndPrev class holding information about found Node.
+	 */
 	NodeAndPrev ChildProperty()noexcept;
-	
+
 	/**
 	 * @brief Get constant first property child.
-     * @return constant instance of NodeAndPrev class holding information about found Node.
-     */
+	 * @return constant instance of NodeAndPrev class holding information about found Node.
+	 */
 	const NodeAndPrev ChildProperty()const noexcept{
 		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ChildProperty();
 	}
-	
+
 	/**
 	 * @brief Get next node in the single-linked list.
 	 * Get next sibling node in the single-linked list of nodes.
@@ -756,9 +762,9 @@ public:
 	/**
 	 * @brief Get node with given value in the chain of nodes.
 	 * Get closest node in the single-linked list which holds the given value. This node is included in the search.
-     * @param value - value to look for.
-     * @return instance of NodeAndPrev structure holding information about found Node.
-     */
+	 * @param value - value to look for.
+	 * @return instance of NodeAndPrev structure holding information about found Node.
+	 */
 	NodeAndPrev ThisOrNext(const char* value)noexcept{
 		if(this->operator==(value)){
 			return NodeAndPrev(0, this);
@@ -766,111 +772,111 @@ public:
 
 		return this->Next(value);
 	}
-	
+
 	/**
 	 * @brief Get constant node with given value in the chain of nodes.
 	 * Get closest constant node in the single-linked list which holds the given value. This node is included in the search.
-     * @param value - value to look for.
-     * @return instance of NodeAndPrev structure holding information about found Node.
-     */
+	 * @param value - value to look for.
+	 * @return instance of NodeAndPrev structure holding information about found Node.
+	 */
 	const NodeAndPrev ThisOrNext(const char* value)const noexcept{
 		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ThisOrNext(value);
 	}
-	
+
 
 	/**
 	 * @brief Get child of given node in the chain of nodes.
-     * @param value - value to look for in the chain of nodes.
-     * @return First child of the node with given value in the chain of nodes.
-     */
+	 * @param value - value to look for in the chain of nodes.
+	 * @return First child of the node with given value in the chain of nodes.
+	 */
 	Node* ChildOfThisOrNext(const char* value)noexcept{
 		if(auto c = this->ThisOrNext(value).node()){
 			return c->Child();
 		}
 		return nullptr;
 	}
-	
+
 	/**
 	 * @brief Get constant child of given node in the chain of nodes.
-     * @param value - value to look for in the chain of nodes.
-     * @return Constant first child of the node with given value in the chain of nodes.
-     */
+	 * @param value - value to look for in the chain of nodes.
+	 * @return Constant first child of the node with given value in the chain of nodes.
+	 */
 	const Node* ChildOfThisOrNext(const char* value)const noexcept{
 		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ChildOfThisOrNext(value);
 	}
-	
+
 	/**
 	 * @brief Get next non-property node.
-     * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
-     */
+	 * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
+	 */
 	NodeAndPrev NextNonProperty()noexcept;
-	
+
 	/**
 	 * @brief Get constant next non-property node.
-     * @return constant instance of NodeAndPrev class holding information about found node, previous node is always valid.
-     */
+	 * @return constant instance of NodeAndPrev class holding information about found node, previous node is always valid.
+	 */
 	const NodeAndPrev NextNonProperty()const noexcept{
 		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->NextNonProperty();
 	}
-	
+
 	/**
 	 * @brief Get closest non-property node.
 	 * This node is included in the search.
-     * @return instance of NodeAndPrev class holding information about found node.
-     */
+	 * @return instance of NodeAndPrev class holding information about found node.
+	 */
 	NodeAndPrev ThisOrNextNonProperty()noexcept{
 		if(!this->IsProperty()){
 			return NodeAndPrev(0, this);
 		}
-		
+
 		return this->NextNonProperty();
 	}
-	
+
 	/**
 	 * @brief Get closest constant non-property node.
 	 * This node is included in the search.
-     * @return instance of NodeAndPrev class holding information about found node.
-     */
+	 * @return instance of NodeAndPrev class holding information about found node.
+	 */
 	const NodeAndPrev ThisOrNextNonProperty()const noexcept{
 		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ThisOrNextNonProperty();
 	}
-	
+
 	/**
 	 * @brief Get next property child.
-     * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
-     */
+	 * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
+	 */
 	NodeAndPrev NextProperty()noexcept;
-	
+
 	/**
 	 * @brief Get constant next property child.
-     * @return constant instance of NodeAndPrev class holding information about found node, previous node is always valid.
-     */
+	 * @return constant instance of NodeAndPrev class holding information about found node, previous node is always valid.
+	 */
 	const NodeAndPrev NextProperty()const noexcept{
 		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->NextProperty();
 	}
-	
+
 	/**
 	 * @brief Get closest property node.
 	 * This node is included in the search.
-     * @return instance of NodeAndPrev class holding information about found node.
-     */
+	 * @return instance of NodeAndPrev class holding information about found node.
+	 */
 	NodeAndPrev ThisOrNextProperty()noexcept{
 		if(this->IsProperty()){
 			return NodeAndPrev(0, this);
 		}
-		
+
 		return this->NextProperty();
 	}
-	
+
 	/**
 	 * @brief Get closest constant property node.
 	 * This node is included in the search.
-     * @return instance of NodeAndPrev class holding information about found node.
-     */
+	 * @return instance of NodeAndPrev class holding information about found node.
+	 */
 	const NodeAndPrev ThisOrNextProperty()const noexcept{
 		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ThisOrNextProperty();
 	}
-	
+
 	/**
 	 * @brief Get property.
 	 * This is a convenience method which searches for the first child node with
@@ -965,14 +971,14 @@ public:
 	 */
 	std::unique_ptr<Node> Clone()const;
 
-	
+
 	/**
 	 * @brief Create a deep copy of the Node chain.
 	 * Clones this node with all its children hierarchy and chained next Nodes.
-     * @return a deep copy of this Node chain.
-     */
+	 * @return a deep copy of this Node chain.
+	 */
 	std::unique_ptr<Node> CloneChain()const;
-	
+
 	/**
 	 * @brief Check if the Node is a property.
 	 * This is just a convenience method.
@@ -991,12 +997,12 @@ public:
 	 *                    if false then no formatting will be applied.
 	 */
 	void WriteChain(ting::fs::File& fi, bool formatted = true)const;
-	
+
 	/**
 	 * @brief Convert Node's chain to string.
 	 * @param formatted - should a formatting be applied for better human readability.
-     * @return STOB as string.
-     */
+	 * @return STOB as string.
+	 */
 	std::string ChainToString(bool formatted = false)const;
 };
 

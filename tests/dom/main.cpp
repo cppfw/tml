@@ -86,6 +86,8 @@ void Run(){
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "")
 	{
+		ASSERT_INFO_ALWAYS(n->countChildren() == 5, n->countChildren())
+		
 		stob::Node * n1 = n->Child();
 		ASSERT_ALWAYS(n1)
 		ASSERT_ALWAYS(*n1 == "child string")
