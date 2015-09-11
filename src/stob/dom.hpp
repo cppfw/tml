@@ -556,6 +556,10 @@ public:
 		return this->children.operator->();
 	}
 
+	Node* child(size_t index)noexcept;
+	
+	const Node* child(size_t index)const noexcept;
+	
 	/**
 	 * @brief Node and its previous node.
 	 * Class holding a pointer to a Node and pointer to its previous Node in

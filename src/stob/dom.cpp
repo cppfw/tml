@@ -472,3 +472,18 @@ size_t Node::countChildren() const noexcept{
 	
 	return ret;
 }
+
+
+Node* Node::child(size_t index)noexcept{
+	Node* ret = nullptr;
+	
+	auto c = this->Child();
+	
+	for(; c && index != 0; c = c->Next(), --index){}
+	
+	if(index == 0){
+		ret = c;
+	}
+	
+	return ret;
+}
