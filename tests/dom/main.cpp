@@ -86,7 +86,7 @@ void Run(){
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "")
 	{
-		ASSERT_INFO_ALWAYS(n->countChildren() == 5, n->countChildren())
+		ASSERT_INFO_ALWAYS(n->count() == 5, n->count())
 		
 		ASSERT_ALWAYS(n->child(3))
 		ASSERT_ALWAYS(n->child(3)->operator==("ccc"))
