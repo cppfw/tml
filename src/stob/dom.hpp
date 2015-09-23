@@ -541,6 +541,14 @@ public:
 	}
 
 	/**
+	 * @brief Remove given child.
+     * @param c - child node to remove.
+     * @return Unique pointer to a removed child.
+	 * @return nullptr if no child found.
+     */
+	std::unique_ptr<Node> removeChild(const stob::Node* c)noexcept;
+	
+	/**
 	 * @brief Get list of child nodes.
 	 * @return pointer to the first child node.
 	 */

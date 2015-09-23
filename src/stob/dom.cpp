@@ -487,3 +487,20 @@ Node* Node::child(size_t index)noexcept{
 	
 	return ret;
 }
+
+std::unique_ptr<Node> Node::removeChild(const stob::Node* c)noexcept{
+	auto ch = this->Child();
+	if(ch == c){
+		return this->RemoveFirstChild();
+	}
+	auto prev = ch;
+	ch = ch->Next();
+	
+	for(; ch; prev = ch, ch = ch->Next()){
+		if(ch == c){
+			return prev->RemoveNext();
+		}
+	}
+	
+	return nullptr;
+}
