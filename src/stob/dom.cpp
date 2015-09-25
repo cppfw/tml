@@ -474,18 +474,17 @@ size_t Node::count() const noexcept{
 }
 
 
-Node* Node::child(size_t index)noexcept{
-	Node* ret = nullptr;
-	
+Node::NodeAndPrev Node::child(size_t index)noexcept{
 	auto c = this->Child();
+	decltype(c) prev = nullptr;
 	
-	for(; c && index != 0; c = c->Next(), --index){}
+	for(; c && index != 0; prev = c, c = c->Next(), --index){}
 	
 	if(index == 0){
-		ret = c;
+		return NodeAndPrev(prev, c);
 	}
 	
-	return ret;
+	return NodeAndPrev(nullptr, nullptr);
 }
 
 std::unique_ptr<Node> Node::removeChild(const stob::Node* c)noexcept{

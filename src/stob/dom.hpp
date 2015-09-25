@@ -563,10 +563,6 @@ public:
 	const Node* Child()const noexcept{
 		return this->children.operator->();
 	}
-
-	Node* child(size_t index)noexcept;
-	
-	const Node* child(size_t index)const noexcept;
 	
 	/**
 	 * @brief Node and its previous node.
@@ -636,6 +632,22 @@ public:
 		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->Child(value);
 	}
 
+	/**
+	 * @brief Get child node by index.
+     * @param index - index of the child node to get.
+     * @return instance of NodeAndPrev structure holding information about found Node.
+     */
+	NodeAndPrev child(size_t index)noexcept;
+	
+	/**
+	 * @brief Get constant child node by index.
+     * @param index - index of the child node to get.
+     * @return constant instance of NodeAndPrev structure holding information about found Node.
+     */
+	const NodeAndPrev child(size_t index)const noexcept{
+		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->child(index);
+	}
+	
 	/**
 	 * @brief Get fist child.
 	 * @return reference to the first child node.

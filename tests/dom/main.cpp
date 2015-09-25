@@ -88,14 +88,16 @@ void Run(){
 	{
 		ASSERT_INFO_ALWAYS(n->count() == 5, n->count())
 		
-		ASSERT_ALWAYS(n->child(3))
-		ASSERT_ALWAYS(n->child(3)->operator==("ccc"))
+		ASSERT_ALWAYS(n->child(3).node())
+		ASSERT_ALWAYS(n->child(3).prev() == n->child(2).node())
+		ASSERT_ALWAYS(n->child(3).node()->operator==("ccc"))
 		
-		ASSERT_ALWAYS(n->child(0))
-		ASSERT_ALWAYS(n->child(0)->operator ==("child string"))
+		ASSERT_ALWAYS(n->child(0).node())
+		ASSERT_ALWAYS(n->child(0).prev() == nullptr)
+		ASSERT_ALWAYS(n->child(0).node()->operator ==("child string"))
 		
-		ASSERT_ALWAYS(!n->child(5))
-		ASSERT_ALWAYS(!n->child(54))
+		ASSERT_ALWAYS(!n->child(5).node())
+		ASSERT_ALWAYS(!n->child(54).node())
 		
 		stob::Node * n1 = n->Child();
 		ASSERT_ALWAYS(n1)
