@@ -947,6 +947,15 @@ public:
 	Node* AddProperty(const char* propName);
 
 	/**
+	 * @brief Insert a node as a first child.
+     * @param node - node to insert.
+     */
+	void addAsFirstChild(std::unique_ptr<Node> node)noexcept{
+		node->SetNext(std::move(this->children));
+		this->children = std::move(node);
+	}
+	
+	/**
 	 * @brief Insert node into the single-linked list.
 	 * Insert the node to the single-linked list as a next node after this Node.
 	 * @param node - node to insert.
