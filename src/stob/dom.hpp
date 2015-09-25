@@ -504,7 +504,7 @@ public:
 	 * Removes the list of children from this node.
 	 * @return auto-pointer to the first node in the children list.
 	 */
-	std::unique_ptr<Node> RemoveChildren()noexcept{
+	std::unique_ptr<Node> removeChildren()noexcept{
 		return std::move(this->children);
 	}
 
@@ -951,8 +951,17 @@ public:
      * @param node - node to insert.
      */
 	void addAsFirstChild(std::unique_ptr<Node> node)noexcept{
-		node->SetNext(std::move(this->children));
+		node->SetNext(this->removeChildren());
 		this->children = std::move(node);
+	}
+	
+	/**
+	 * @brief Insert a new node as a first child.
+	 * Make a new node with given value and insert it as a first child.
+     * @param value - value of the new node.
+     */
+	void addAsFirstChild(const char* value){
+		this->addAsFirstChild(Node::New(value));
 	}
 	
 	/**

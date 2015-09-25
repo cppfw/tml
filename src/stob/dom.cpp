@@ -114,9 +114,9 @@ stob::Node::NodeAndPrev Node::NextProperty()noexcept{
 
 
 Node* Node::AddProperty(const char* propName){
-	std::unique_ptr<Node> p = Node::New();
+	auto p = Node::New();
 	p->SetValue(propName);
-	p->SetNext(this->RemoveChildren());
+	p->SetNext(this->removeChildren());
 	this->SetChildren(std::move(p));
 
 	this->Child()->SetChildren(Node::New());
