@@ -1,14 +1,14 @@
 #include "../../src/stob/dom.hpp"
 
-#include <ting/debug.hpp>
-#include <ting/fs/FSFile.hpp>
+#include <utki/debug.hpp>
+#include <papki/FSFile.hpp>
 
 
 
 namespace TestBasicParsing{
 
 void Run(){
-	ting::fs::FSFile fi("test.stob");
+	papki::FSFile fi("test.stob");
 	
 	std::unique_ptr<stob::Node> root = stob::Node::New();
 	root->SetChildren(stob::Load(fi));
@@ -345,8 +345,8 @@ void Run(){
 		n->SetValue("Last{String}InTheFile");
 	}
 	
-	ting::fs::FSFile fileFormatted("out_formatted.stob");
-	ting::fs::FSFile fileNotFormatted("out_not_formatted.stob");
+	papki::FSFile fileFormatted("out_formatted.stob");
+	papki::FSFile fileNotFormatted("out_not_formatted.stob");
 	
 	root->Child()->WriteChain(fileFormatted, true);
 	root->Child()->WriteChain(fileNotFormatted, false);

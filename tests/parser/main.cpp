@@ -3,9 +3,8 @@
 #include <string>
 #include <deque>
 
-#include <ting/debug.hpp>
-#include <ting/fs/FSFile.hpp>
-#include <ting/util.hpp>
+#include <utki/debug.hpp>
+#include <papki/FSFile.hpp>
 
 
 
@@ -32,7 +31,7 @@ class Listener : public stob::ParseListener{
 		this->actions.pop_front();
 	}
 	
-	void OnStringParsed(const ting::Buffer<char> str)override{
+	void OnStringParsed(const utki::Buf<char> str)override{
 		TRACE(<< "str = " << std::string(&*str.begin(), str.size()) << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == STRING, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
@@ -109,7 +108,7 @@ void Run(){
 	
 	l.actions.push_back(T_Pair(STRING, "UnquotedStringAtTheVeryEndOfTheFile"));
 	
-	ting::fs::FSFile fi("test.stob");
+	papki::FSFile fi("test.stob");
 	
 	stob::Parse(fi, l);
 	

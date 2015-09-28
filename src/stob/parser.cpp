@@ -1,8 +1,9 @@
 #include "parser.hpp"
 
 #include <sstream>
+#include <cstring>
 
-#include <ting/debug.hpp>
+#include <utki/debug.hpp>
 
 #include "Exc.hpp"
 
@@ -17,7 +18,7 @@ void Parser::AppendCharToString(std::uint8_t c){
 	++this->p;
 	if(this->p == &*this->buf.end()){
 		std::vector<std::uint8_t> a(this->buf.size() * 2);
-		memcpy(&*a.begin(), this->buf.begin(), this->buf.SizeInBytes());
+		memcpy(&*a.begin(), this->buf.begin(), this->buf.sizeInBytes());
 
 		this->p = &*a.begin() + this->buf.size();
 
@@ -58,7 +59,7 @@ void Parser::HandleRightCurlyBracket(ParseListener& listener){
 
 void Parser::HandleStringEnd(ParseListener& listener){
 	size_t size = this->p - this->buf.begin();
-	listener.OnStringParsed(ting::Buffer<char>(size == 0 ? 0 : reinterpret_cast<char*>(&*this->buf.begin()), size));
+	listener.OnStringParsed(utki::Buf<char>(size == 0 ? 0 : reinterpret_cast<char*>(&*this->buf.begin()), size));
 	this->arrayBuf.clear();
 	this->buf = this->staticBuf;
 	this->p = this->buf.begin();
@@ -239,7 +240,7 @@ void Parser::PreParseChar(std::uint8_t c, ParseListener& listener){
 
 
 
-void Parser::ParseDataChunk(const ting::Buffer<std::uint8_t> chunk, ParseListener& listener){
+void Parser::ParseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& listener){
 	for(const std::uint8_t* s = chunk.begin(); s != chunk.end(); ++s){
 //		TRACE(<< "Parser::ParseDataChunk(): *s = " << (*s) << std::endl)
 		
@@ -307,8 +308,8 @@ void Parser::EndOfData(ParseListener& listener){
 
 
 
-void stob::Parse(const ting::fs::File& fi, ParseListener& listener){
-	ting::fs::File::Guard fileGuard(fi);
+void stob::Parse(const papki::File& fi, ParseListener& listener){
+	papki::File::Guard fileGuard(fi);
 	
 	stob::Parser parser;
 	
@@ -317,9 +318,9 @@ void stob::Parse(const ting::fs::File& fi, ParseListener& listener){
 	size_t bytesRead;
 	
 	do{
-		bytesRead = fi.Read(buf);
+		bytesRead = fi.read(buf);
 		
-		ting::Buffer<std::uint8_t> b(&*buf.begin(), bytesRead);
+		utki::Buf<std::uint8_t> b(&*buf.begin(), bytesRead);
 		parser.ParseDataChunk(b, listener);
 	}while(bytesRead == buf.size());
 

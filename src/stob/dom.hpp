@@ -1,27 +1,3 @@
-/* The MIT License:
-
-Copyright (c) 2012-2015 Ivan Gagis
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-// Home page: http://stob.googlecode.com
-
 /**
  * @author Ivan Gagis <igagis@gmail.com>
  */
@@ -35,13 +11,16 @@ THE SOFTWARE. */
 #include <cinttypes>
 #include <utility>
 #include <memory>
+#include <cstring>
 
-#include <ting/config.hpp>
-#include <ting/PoolStored.hpp>
-#include <ting/fs/File.hpp>
-#include <ting/utf8.hpp>
-#include <ting/Buffer.hpp>
-#include <ting/util.hpp>
+#include <utki/config.hpp>
+#include <utki/PoolStored.hpp>
+#include <utki/types.hpp>
+#include <utki/Buf.hpp>
+
+#include <papki/File.hpp>
+
+#include <unikod/utf8.hpp>
 
 #include "Exc.hpp"
 
@@ -66,7 +45,7 @@ class Node{
 
 	std::unique_ptr<Node> children; //pointer to the first child
 
-	void SetValueInternal(const ting::Buffer<char> str){
+	void SetValueInternal(const utki::Buf<char> str){
 		if(str.size() == 0){
 			this->value = nullptr;
 			return;
@@ -78,7 +57,7 @@ class Node{
 	}
 
 	//constructor is private, no inheritance.
-	Node(const ting::Buffer<char> str){
+	Node(const utki::Buf<char> str){
 		this->SetValueInternal(str);
 	}
 
@@ -89,7 +68,7 @@ class Node{
 	static void* operator new(size_t size);
 
 	void SetValue(const char* v, size_t size){
-		this->SetValue(ting::Buffer<char>(const_cast<char*>(v), size));
+		this->SetValue(utki::Buf<char>(const_cast<char*>(v), size));
 	}
 public:
 	class NodeNotFoundExc : stob::Exc{
@@ -115,7 +94,7 @@ public:
 	 * @param str - buffer holding the value to set for the created node.
 	 * @return An auto-pointer to a newly created Node object.
 	 */
-	static std::unique_ptr<Node> New(const ting::Buffer<char> str){
+	static std::unique_ptr<Node> New(const utki::Buf<char> str){
 		return std::move(std::unique_ptr<Node>(new Node(str)));
 	}
 
@@ -128,7 +107,7 @@ public:
 		if(value == 0){
 			return Node::New();
 		}
-		return Node::New(ting::Buffer<char>(const_cast<char*>(value), strlen(value)));
+		return Node::New(utki::Buf<char>(const_cast<char*>(value), strlen(value)));
 	}
 
 	/**
@@ -137,7 +116,7 @@ public:
 	 * @return An auto-pointer to a newly created Node object.
 	 */
 	static std::unique_ptr<Node> New(){
-		return Node::New(ting::Buffer<char>(0, 0));
+		return Node::New(utki::Buf<char>(0, 0));
 	}
 
 	/**
@@ -167,8 +146,8 @@ public:
 	 * @brief Get node value as utf8 string.
 	 * @return UTF-8 iterator to iterate through the string.
 	 */
-	ting::utf8::Iterator AsUTF8()const noexcept{
-		return ting::utf8::Iterator(this->Value());
+	unikod::Utf8Iterator AsUTF8()const noexcept{
+		return unikod::Utf8Iterator(this->Value());
 	}
 
 	/**
@@ -255,7 +234,7 @@ public:
 	 * @param v - null-terminated string to set as a node value.
 	 */
 	void SetValue(const char* v = 0)noexcept{
-		this->SetValue(ting::Buffer<char>(const_cast<char*>(v), v == 0 ? 0 : strlen(v)));
+		this->SetValue(utki::Buf<char>(const_cast<char*>(v), v == 0 ? 0 : strlen(v)));
 	}
 
 	/**
@@ -263,7 +242,7 @@ public:
 	 * Set the value of the node. Value is copied from passed buffer.
 	 * @param str - string to set as a node value.
 	 */
-	void SetValue(const ting::Buffer<char> str){
+	void SetValue(const utki::Buf<char> str){
 		this->SetValueInternal(str);
 	}
 
@@ -629,7 +608,7 @@ public:
 	 * @return constant instance of NodeAndPrev structure holding information about found Node.
 	 */
 	const NodeAndPrev Child(const char* value)const noexcept{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->Child(value);
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->Child(value);
 	}
 
 	/**
@@ -645,7 +624,7 @@ public:
      * @return constant instance of NodeAndPrev structure holding information about found Node.
      */
 	const NodeAndPrev child(size_t index)const noexcept{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->child(index);
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->child(index);
 	}
 	
 	/**
@@ -667,7 +646,7 @@ public:
 	 * @throw NodeHasNoChldrenExc - in case the node has no children at all.
 	 */
 	const Node& up()const{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->up();
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->up();
 	}
 
 	/**
@@ -692,7 +671,7 @@ public:
 	 * @throw NodeNotFoundExc - in case node with given value is not found.
 	 */
 	const Node& up(const char* value)const{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->up(value);
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->up(value);
 	}
 
 	/**
@@ -716,7 +695,7 @@ public:
 	 * @throw NodeNotFoundExc - in case node with given value is not found.
 	 */
 	const Node& side(const char* value)const{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->side(value);
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->side(value);
 	}
 
 	/**
@@ -730,7 +709,7 @@ public:
 	 * @return constant instance of NodeAndPrev structure holding information about found Node.
 	 */
 	const NodeAndPrev ChildNonProperty()const noexcept{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ChildNonProperty();
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->ChildNonProperty();
 	}
 
 	/**
@@ -744,7 +723,7 @@ public:
 	 * @return constant instance of NodeAndPrev class holding information about found Node.
 	 */
 	const NodeAndPrev ChildProperty()const noexcept{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ChildProperty();
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->ChildProperty();
 	}
 
 	/**
@@ -780,7 +759,7 @@ public:
 	 * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
 	 */
 	const NodeAndPrev Next(const char* value)const noexcept{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->Next(value);
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->Next(value);
 	}
 
 	/**
@@ -804,7 +783,7 @@ public:
 	 * @return instance of NodeAndPrev structure holding information about found Node.
 	 */
 	const NodeAndPrev ThisOrNext(const char* value)const noexcept{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ThisOrNext(value);
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->ThisOrNext(value);
 	}
 
 
@@ -826,7 +805,7 @@ public:
 	 * @return Constant first child of the node with given value in the chain of nodes.
 	 */
 	const Node* ChildOfThisOrNext(const char* value)const noexcept{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ChildOfThisOrNext(value);
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->ChildOfThisOrNext(value);
 	}
 
 	/**
@@ -840,7 +819,7 @@ public:
 	 * @return constant instance of NodeAndPrev class holding information about found node, previous node is always valid.
 	 */
 	const NodeAndPrev NextNonProperty()const noexcept{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->NextNonProperty();
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->NextNonProperty();
 	}
 
 	/**
@@ -862,7 +841,7 @@ public:
 	 * @return instance of NodeAndPrev class holding information about found node.
 	 */
 	const NodeAndPrev ThisOrNextNonProperty()const noexcept{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ThisOrNextNonProperty();
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->ThisOrNextNonProperty();
 	}
 
 	/**
@@ -876,7 +855,7 @@ public:
 	 * @return constant instance of NodeAndPrev class holding information about found node, previous node is always valid.
 	 */
 	const NodeAndPrev NextProperty()const noexcept{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->NextProperty();
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->NextProperty();
 	}
 
 	/**
@@ -898,7 +877,7 @@ public:
 	 * @return instance of NodeAndPrev class holding information about found node.
 	 */
 	const NodeAndPrev ThisOrNextProperty()const noexcept{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->ThisOrNextProperty();
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->ThisOrNextProperty();
 	}
 
 	/**
@@ -927,7 +906,7 @@ public:
 	 * @return zero pointer if no property with a given name found or property has no value.
 	 */
 	const Node* GetProperty(const char* propName)const noexcept{
-		return const_cast<ting::util::remove_constptr<decltype(this)>::type*>(this)->GetProperty(propName);
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->GetProperty(propName);
 	}
 
 	/**
@@ -1038,7 +1017,7 @@ public:
 	 * @param formatted - if true then the STOB document will be written with formatting.
 	 *                    if false then no formatting will be applied.
 	 */
-	void WriteChain(ting::fs::File& fi, bool formatted = true)const;
+	void WriteChain(papki::File& fi, bool formatted = true)const;
 
 	/**
 	 * @brief Convert Node's chain to string.
@@ -1056,7 +1035,7 @@ public:
  * @param fi - file interface to get the STOB data from.
  * @return auto-pointer to the first node in the chain of the document-object model.
  */
-std::unique_ptr<Node> Load(const ting::fs::File& fi);
+std::unique_ptr<Node> Load(const papki::File& fi);
 
 
 

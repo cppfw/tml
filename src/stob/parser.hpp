@@ -1,27 +1,3 @@
-/* The MIT License:
-
-Copyright (c) 2012-2014 Ivan Gagis <igagis@gmail.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-// Home page: http://stob.googlecode.com
-
 /**
  * @author Ivan Gagis <igagis@gmail.com>
  */
@@ -29,8 +5,8 @@ THE SOFTWARE. */
 #pragma once
 
 
-#include <ting/Buffer.hpp>
-#include <ting/fs/File.hpp>
+#include <utki/Buf.hpp>
+#include <papki/File.hpp>
 
 
 
@@ -79,7 +55,7 @@ public:
 	 * This method is called by Parser when String token has been parsed.
      * @param str - parsed string.
      */
-	virtual void OnStringParsed(const ting::Buffer<char> str) = 0;
+	virtual void OnStringParsed(const utki::Buf<char> str) = 0;
 	
 	/**
 	 * @brief Children list parsing started.
@@ -108,7 +84,7 @@ class Parser{
 	
 	std::array<std::uint8_t, 256> staticBuf; //string buffer
 	std::vector<std::uint8_t> arrayBuf;
-	ting::Buffer<std::uint8_t> buf;
+	utki::Buf<std::uint8_t> buf;
 	
 	decltype(buf)::iterator p; //current position into the string buffer
 	
@@ -177,7 +153,7 @@ public:
      * @param listener - listener object which will receive notifications about parsed tokens.
 	 * @throw stob::Exc - in case of malformed STOB document.
      */
-	void ParseDataChunk(const ting::Buffer<std::uint8_t> chunk, ParseListener& listener);
+	void ParseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& listener);
 	
 	/**
 	 * @brief Finalize parsing.
@@ -198,7 +174,7 @@ public:
  * @param listener - listener object which will receive notifications about parsed tokens.
  * @throw stob::Exc - in case of malformed STOB document.
  */
-void Parse(const ting::fs::File& fi, ParseListener& listener);
+void Parse(const papki::File& fi, ParseListener& listener);
 
 
 

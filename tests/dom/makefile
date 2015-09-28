@@ -10,7 +10,7 @@ this_cflags += -std=c++11
 
 this_srcs += main.cpp
 
-this_ldlibs += -lstob -lting
+this_ldlibs += -lstob -lpapki
 this_ldflags += -L$(prorab_this_dir)../../src
 
 ifeq ($(prorab_os), macosx)

@@ -3,13 +3,12 @@
 #include <vector>
 #include <tuple>
 #include <cstdint>
+//#include <iosfwd>
 
-#include <ting/debug.hpp>
-#include <ting/util.hpp>
-#include <ting/fs/BufferFile.hpp>
-#include <ting/fs/MemoryFile.hpp>
-#include <iosfwd>
 
+#include <utki/debug.hpp>
+#include <papki/BufferFile.hpp>
+#include <papki/MemoryFile.hpp>
 
 #include "parser.hpp"
 
@@ -20,7 +19,7 @@ using namespace stob;
 
 
 namespace{
-ting::MemoryPool<sizeof(Node), 1024> memoryPool;
+utki::MemoryPool<sizeof(Node), 1024> memoryPool;
 }
 
 
@@ -161,7 +160,7 @@ bool CanStringBeUnquoted(const char* s, size_t& out_length, unsigned& out_numEsc
 }
 
 
-void MakeEscapedString(const char* str, ting::Buffer<std::uint8_t> out){
+void MakeEscapedString(const char* str, utki::Buf<std::uint8_t> out){
 	std::uint8_t *p = out.begin();
 	for(const char* c = str; *c != 0; ++c){
 		ASSERT(p != out.end())
@@ -206,7 +205,7 @@ void MakeEscapedString(const char* str, ting::Buffer<std::uint8_t> out){
 }
 
 
-void WriteChainInternal(const stob::Node* chain, ting::fs::File& fi, bool formatted, unsigned indentation){
+void writeChainInternal(const stob::Node* chain, papki::File& fi, bool formatted, unsigned indentation){
 	ASSERT(chain)
 
 	std::array<std::uint8_t, 1> quote = {{'"'}};
@@ -230,7 +229,7 @@ void WriteChainInternal(const stob::Node* chain, ting::fs::File& fi, bool format
 		//indent
 		if(formatted){
 			for(unsigned i = 0; i != indentation; ++i){
-				fi.Write(tab);
+				fi.write(tab);
 			}
 		}
 
@@ -241,10 +240,10 @@ void WriteChainInternal(const stob::Node* chain, ting::fs::File& fi, bool format
 		bool unqouted = CanStringBeUnquoted(n->Value(), length, numEscapes);
 
 		if(!unqouted){
-			fi.Write(quote);
+			fi.write(quote);
 
 			if(numEscapes == 0){
-				fi.Write(ting::Buffer<std::uint8_t>(
+				fi.write(utki::Buf<std::uint8_t>(
 						const_cast<std::uint8_t*>(reinterpret_cast<const std::uint8_t*>(n->Value())),
 						length
 					));
@@ -253,10 +252,10 @@ void WriteChainInternal(const stob::Node* chain, ting::fs::File& fi, bool format
 
 				MakeEscapedString(n->Value(), buf);
 
-				fi.Write(buf);
+				fi.write(buf);
 			}
 
-			fi.Write(quote);
+			fi.write(quote);
 		}else{
 			bool isQuotedEmptyString = false;
 			if(n->ValueLength() == 0){//if empty string
@@ -267,17 +266,17 @@ void WriteChainInternal(const stob::Node* chain, ting::fs::File& fi, bool format
 			
 			//unquoted string
 			if(!formatted && prevWasUnquotedWithoutChildren && !isQuotedEmptyString){
-				fi.Write(space);
+				fi.write(space);
 			}
 
 			if(n->ValueLength() == 0){//if empty string
 				if(isQuotedEmptyString){
-					fi.Write(quote);
-					fi.Write(quote);
+					fi.write(quote);
+					fi.write(quote);
 				}
 			}else{
 				ASSERT(numEscapes == 0)
-				fi.Write(ting::Buffer<std::uint8_t>(
+				fi.write(utki::Buf<std::uint8_t>(
 						const_cast<std::uint8_t*>(reinterpret_cast<const std::uint8_t*>(n->Value())),
 						length
 					));
@@ -288,7 +287,7 @@ void WriteChainInternal(const stob::Node* chain, ting::fs::File& fi, bool format
 		if(n->Child() == 0){
 			
 			if(formatted){
-				fi.Write(newLine);
+				fi.write(newLine);
 			}
 			prevWasUnquotedWithoutChildren = (unqouted && n->ValueLength() != 0);
 			continue;
@@ -297,30 +296,30 @@ void WriteChainInternal(const stob::Node* chain, ting::fs::File& fi, bool format
 		}
 
 		if(!formatted){
-			fi.Write(lcurly);
+			fi.write(lcurly);
 
-			WriteChainInternal(n->Child(), fi, false, 0);
+			writeChainInternal(n->Child(), fi, false, 0);
 
-			fi.Write(rcurly);
+			fi.write(rcurly);
 		}else{
 			if(n->Child()->Next() == 0 && n->Child()->Child() == 0){
 				//if only one child and that child has no children
 
-				fi.Write(lcurly);
-				WriteChainInternal(n->Child(), fi, false, 0);
-				fi.Write(rcurly);
-				fi.Write(newLine);
+				fi.write(lcurly);
+				writeChainInternal(n->Child(), fi, false, 0);
+				fi.write(rcurly);
+				fi.write(newLine);
 			}else{
-				fi.Write(lcurly);
-				fi.Write(newLine);
-				WriteChainInternal(n->Child(), fi, true, indentation + 1);
+				fi.write(lcurly);
+				fi.write(newLine);
+				writeChainInternal(n->Child(), fi, true, indentation + 1);
 
 				//indent
 				for(unsigned i = 0; i != indentation; ++i){
-					fi.Write(tab);
+					fi.write(tab);
 				}
-				fi.Write(rcurly);
-				fi.Write(newLine);
+				fi.write(rcurly);
+				fi.write(newLine);
 			}
 		}
 	}//~for()
@@ -329,15 +328,15 @@ void WriteChainInternal(const stob::Node* chain, ting::fs::File& fi, bool format
 
 
 
-void Node::WriteChain(ting::fs::File& fi, bool formatted)const{
-	ting::fs::File::Guard fileGuard(fi, ting::fs::File::E_Mode::CREATE);
+void Node::WriteChain(papki::File& fi, bool formatted)const{
+	papki::File::Guard fileGuard(fi, papki::File::E_Mode::CREATE);
 
-	WriteChainInternal(this, fi, formatted, 0);
+	writeChainInternal(this, fi, formatted, 0);
 }
 
 
 
-std::unique_ptr<stob::Node> stob::Load(const ting::fs::File& fi){
+std::unique_ptr<stob::Node> stob::Load(const papki::File& fi){
 	class Listener : public stob::ParseListener{
 		typedef std::pair<std::unique_ptr<Node>, Node*> T_Pair; //NOTE: use pair, because tuple does not work on iOS when adding it to vector, for some reason.
 		std::vector<T_Pair> stack;
@@ -359,7 +358,7 @@ std::unique_ptr<stob::Node> stob::Load(const ting::fs::File& fi){
 				);
 		}
 
-		void OnStringParsed(const ting::Buffer<char> str)override{
+		void OnStringParsed(const utki::Buf<char> str)override{
 			std::unique_ptr<Node> node = Node::New(str);
 
 			if(!this->chains){
@@ -445,7 +444,7 @@ std::unique_ptr<Node> stob::Parse(const char *str){
 	size_t len = strlen(str);
 	
 	//TODO: make const Buffer file
-	ting::fs::BufferFile fi(ting::Buffer<std::uint8_t>(reinterpret_cast<std::uint8_t*>(const_cast<char*>(str)), len));
+	papki::BufferFile fi(utki::Buf<std::uint8_t>(reinterpret_cast<std::uint8_t*>(const_cast<char*>(str)), len));
 	
 	return Load(fi);
 }
@@ -453,11 +452,11 @@ std::unique_ptr<Node> stob::Parse(const char *str){
 
 
 std::string Node::ChainToString(bool formatted)const{
-	ting::fs::MemoryFile fi;
+	papki::MemoryFile fi;
 	
 	this->WriteChain(fi, formatted);
 	
-	auto data = fi.ResetData();
+	auto data = fi.resetData();
 	
 	return std::string(reinterpret_cast<char*>(&*data.begin()), data.size());
 }

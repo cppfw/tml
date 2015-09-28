@@ -8,7 +8,8 @@ this_name := stob
 this_soname := $(shell cat $(prorab_this_dir)soname.txt)
 
 
-this_srcs += stob/parser.cpp stob/dom.cpp
+this_srcs += stob/parser.cpp
+this_srcs += stob/dom.cpp
 
 
 this_cflags += -Wall #enable all warnings
@@ -28,18 +29,19 @@ ifeq ($(debug), true)
     this_cflags += -DDEBUG
 endif
 
+this_ldlibs += -lpapki
 
 ifeq ($(prorab_os), windows)
     this_cflags += -Wno-format #due to bugs in some g++ versions it warns about format when not needed, so disable format warnings
     this_cflags += -I/usr/include -I/usr/local/include
-    this_ldlibs += -lting
+    this_ldlibs += 
     this_ldflags += -L/usr/lib -L/usr/local/lib
 else ifeq ($(prorab_os), macosx)
     this_cflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
     this_ldlibs += -lc++
-    this_ldlibs += -lting
+    this_ldlibs += 
 else
-    this_ldlibs += -lting -lpthread
+    this_ldlibs +=  -lpthread
     this_cflags += -fPIC # Since we are building shared library, we need Position-Independend Code
 endif
 
