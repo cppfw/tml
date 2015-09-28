@@ -112,15 +112,15 @@ class Parser{
 	//which is allowed by the STOB format and means that string is empty.
 	bool stringParsed;
 	
-	void ParseChar(std::uint8_t c, ParseListener& listener);
-	void PreParseChar(std::uint8_t c, ParseListener& listener);
+	void parseChar(std::uint8_t c, ParseListener& listener);
+	void preParseChar(std::uint8_t c, ParseListener& listener);
 	
-	void AppendCharToString(std::uint8_t c);
+	void appendCharToString(std::uint8_t c);
 	
-	void HandleLeftCurlyBracket(ParseListener& listener);
-	void HandleRightCurlyBracket(ParseListener& listener);
+	void handleLeftCurlyBracket(ParseListener& listener);
+	void handleRightCurlyBracket(ParseListener& listener);
 	
-	void HandleStringEnd(ParseListener& listener);
+	void handleStringEnd(ParseListener& listener);
 public:
 	/**
 	 * @brief Constructor.

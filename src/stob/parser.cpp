@@ -13,7 +13,7 @@ using namespace stob;
 
 
 
-void Parser::AppendCharToString(std::uint8_t c){
+void Parser::appendCharToString(std::uint8_t c){
 	*this->p = c;
 	++this->p;
 	if(this->p == &*this->buf.end()){
@@ -29,7 +29,7 @@ void Parser::AppendCharToString(std::uint8_t c){
 
 
 
-void Parser::HandleLeftCurlyBracket(ParseListener& listener){
+void Parser::handleLeftCurlyBracket(ParseListener& listener){
 	if(this->nestingLevel == unsigned(-1)){
 		throw stob::Exc("Malformed STOB document. Nesting level is too high.");
 	}
@@ -43,7 +43,7 @@ void Parser::HandleLeftCurlyBracket(ParseListener& listener){
 
 
 
-void Parser::HandleRightCurlyBracket(ParseListener& listener){
+void Parser::handleRightCurlyBracket(ParseListener& listener){
 	if(this->nestingLevel == 0){
 		std::stringstream ss;
 		ss << "Malformed STOB document. Unexpected '}' at line: ";
@@ -57,7 +57,7 @@ void Parser::HandleRightCurlyBracket(ParseListener& listener){
 
 
 
-void Parser::HandleStringEnd(ParseListener& listener){
+void Parser::handleStringEnd(ParseListener& listener){
 	size_t size = this->p - this->buf.begin();
 	listener.onStringParsed(utki::Buf<char>(size == 0 ? 0 : reinterpret_cast<char*>(&*this->buf.begin()), size));
 	this->arrayBuf.clear();
@@ -69,7 +69,7 @@ void Parser::HandleStringEnd(ParseListener& listener){
 
 
 
-void Parser::ParseChar(std::uint8_t c, ParseListener& listener){
+void Parser::parseChar(std::uint8_t c, ParseListener& listener){
 	switch(this->state){
 		case E_State::IDLE:
 			switch(c){
@@ -80,12 +80,12 @@ void Parser::ParseChar(std::uint8_t c, ParseListener& listener){
 					if(!this->stringParsed){
 						//empty string with children
 						ASSERT(this->p == this->buf.begin())
-						this->HandleStringEnd(listener);
+						this->handleStringEnd(listener);
 					}
-					this->HandleLeftCurlyBracket(listener);
+					this->handleLeftCurlyBracket(listener);
 					break;
 				case '}':
-					this->HandleRightCurlyBracket(listener);
+					this->handleRightCurlyBracket(listener);
 					break;
 				case '\n':
 					++this->curLine;
@@ -97,7 +97,7 @@ void Parser::ParseChar(std::uint8_t c, ParseListener& listener){
 					break;
 				default:
 					this->state = E_State::UNQUOTED_STRING;
-					this->AppendCharToString(c);
+					this->appendCharToString(c);
 					break;
 			}
 			break;
@@ -111,14 +111,14 @@ void Parser::ParseChar(std::uint8_t c, ParseListener& listener){
 				case '{':
 				case '}':
 				case '"':
-					this->HandleStringEnd(listener);
+					this->handleStringEnd(listener);
 					
 					switch(c){
 						case '{':
-							this->HandleLeftCurlyBracket(listener);
+							this->handleLeftCurlyBracket(listener);
 							break;
 						case '}':
-							this->HandleRightCurlyBracket(listener);
+							this->handleRightCurlyBracket(listener);
 							break;
 						case '"':
 							//start parsing quoted string right a way
@@ -131,12 +131,12 @@ void Parser::ParseChar(std::uint8_t c, ParseListener& listener){
 					return;
 					
 				default:
-					this->AppendCharToString(c);
+					this->appendCharToString(c);
 					break;
 			}
 			break;
 		case E_State::QUOTED_STRING:
-			this->AppendCharToString(c);
+			this->appendCharToString(c);
 			break;
 		default:
 			ASSERT(false)
@@ -146,7 +146,7 @@ void Parser::ParseChar(std::uint8_t c, ParseListener& listener){
 
 
 
-void Parser::PreParseChar(std::uint8_t c, ParseListener& listener){
+void Parser::preParseChar(std::uint8_t c, ParseListener& listener){
 	if(this->prevChar != 0){
 		switch(this->state){
 			case E_State::IDLE:
@@ -160,8 +160,8 @@ void Parser::PreParseChar(std::uint8_t c, ParseListener& listener){
 						this->commentState = E_CommentState::MULTILINE_COMMENT;
 						break;
 					default:
-						this->ParseChar('/', listener);
-						this->ParseChar(c, listener);
+						this->parseChar('/', listener);
+						this->parseChar(c, listener);
 						break;
 				}
 				break;
@@ -169,22 +169,22 @@ void Parser::PreParseChar(std::uint8_t c, ParseListener& listener){
 				ASSERT(this->prevChar == '\\')//escape sequence
 				switch(c){
 					case '\\'://backslash
-						this->ParseChar('\\', listener);
+						this->parseChar('\\', listener);
 						break;
 					case '/'://slash
-						this->ParseChar('/', listener);
+						this->parseChar('/', listener);
 						break;
 					case '"':
-						this->ParseChar('"', listener);
+						this->parseChar('"', listener);
 						break;
 					case 'n':
-						this->ParseChar('\n', listener);
+						this->parseChar('\n', listener);
 						break;
 					case 'r':
-						this->ParseChar('\r', listener);
+						this->parseChar('\r', listener);
 						break;
 					case 't':
-						this->ParseChar('\t', listener);
+						this->parseChar('\t', listener);
 						break;
 					default:
 						{
@@ -210,7 +210,7 @@ void Parser::PreParseChar(std::uint8_t c, ParseListener& listener){
 						break;
 					case '"':
 //							TRACE(<< "qsp = " << std::string(reinterpret_cast<char*>(this->buf->Begin()), 11) << std::endl)
-						this->HandleStringEnd(listener);
+						this->handleStringEnd(listener);
 						break;
 					case '\n':
 						++this->curLine;
@@ -219,7 +219,7 @@ void Parser::PreParseChar(std::uint8_t c, ParseListener& listener){
 						//ignore
 						break;
 					default:
-						this->ParseChar(c, listener);
+						this->parseChar(c, listener);
 						break;
 				}
 				break;
@@ -228,7 +228,7 @@ void Parser::PreParseChar(std::uint8_t c, ParseListener& listener){
 				if(c == '/'){//possible comment sequence
 					this->prevChar = '/';
 				}else{
-					this->ParseChar(c, listener);
+					this->parseChar(c, listener);
 				}
 				break;
 			default:
@@ -286,7 +286,7 @@ void Parser::parseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& 
 			continue;
 		}
 		
-		this->PreParseChar(*s, listener);
+		this->preParseChar(*s, listener);
 		
 	}//~for(s)
 }
@@ -296,7 +296,7 @@ void Parser::parseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& 
 void Parser::endOfData(ParseListener& listener){
 	if(this->state != E_State::IDLE){
 		//add new line at the end of data
-		this->PreParseChar('\n', listener);
+		this->preParseChar('\n', listener);
 	}
 	
 	if(this->nestingLevel != 0 || this->state != E_State::IDLE){
