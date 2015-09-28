@@ -136,7 +136,7 @@ public:
      */
 	void reset(){
 		this->curLine = 1;
-		this->buf = this->staticBuf;
+		this->buf = utki::wrapBuf(this->staticBuf);
 		this->arrayBuf.clear();
 		this->p = this->buf.begin();
 		this->nestingLevel = 0;

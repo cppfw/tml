@@ -229,7 +229,7 @@ void writeChainInternal(const stob::Node* chain, papki::File& fi, bool formatted
 		//indent
 		if(formatted){
 			for(unsigned i = 0; i != indentation; ++i){
-				fi.write(tab);
+				fi.write(utki::wrapBuf(tab));
 			}
 		}
 
@@ -240,7 +240,7 @@ void writeChainInternal(const stob::Node* chain, papki::File& fi, bool formatted
 		bool unqouted = CanStringBeUnquoted(n->value(), length, numEscapes);
 
 		if(!unqouted){
-			fi.write(quote);
+			fi.write(utki::wrapBuf(quote));
 
 			if(numEscapes == 0){
 				fi.write(utki::Buf<std::uint8_t>(
@@ -250,12 +250,12 @@ void writeChainInternal(const stob::Node* chain, papki::File& fi, bool formatted
 			}else{
 				std::vector<std::uint8_t> buf(length + numEscapes);
 
-				MakeEscapedString(n->value(), buf);
+				MakeEscapedString(n->value(), utki::wrapBuf(buf));
 
-				fi.write(buf);
+				fi.write(utki::wrapBuf(buf));
 			}
 
-			fi.write(quote);
+			fi.write(utki::wrapBuf(quote));
 		}else{
 			bool isQuotedEmptyString = false;
 			if(n->length() == 0){//if empty string
@@ -266,13 +266,13 @@ void writeChainInternal(const stob::Node* chain, papki::File& fi, bool formatted
 			
 			//unquoted string
 			if(!formatted && prevWasUnquotedWithoutChildren && !isQuotedEmptyString){
-				fi.write(space);
+				fi.write(utki::wrapBuf(space));
 			}
 
 			if(n->length() == 0){//if empty string
 				if(isQuotedEmptyString){
-					fi.write(quote);
-					fi.write(quote);
+					fi.write(utki::wrapBuf(quote));
+					fi.write(utki::wrapBuf(quote));
 				}
 			}else{
 				ASSERT(numEscapes == 0)
@@ -287,7 +287,7 @@ void writeChainInternal(const stob::Node* chain, papki::File& fi, bool formatted
 		if(n->child() == 0){
 			
 			if(formatted){
-				fi.write(newLine);
+				fi.write(utki::wrapBuf(newLine));
 			}
 			prevWasUnquotedWithoutChildren = (unqouted && n->length() != 0);
 			continue;
@@ -296,30 +296,30 @@ void writeChainInternal(const stob::Node* chain, papki::File& fi, bool formatted
 		}
 
 		if(!formatted){
-			fi.write(lcurly);
+			fi.write(utki::wrapBuf(lcurly));
 
 			writeChainInternal(n->child(), fi, false, 0);
 
-			fi.write(rcurly);
+			fi.write(utki::wrapBuf(rcurly));
 		}else{
 			if(n->child()->next() == 0 && n->child()->child() == 0){
 				//if only one child and that child has no children
 
-				fi.write(lcurly);
+				fi.write(utki::wrapBuf(lcurly));
 				writeChainInternal(n->child(), fi, false, 0);
-				fi.write(rcurly);
-				fi.write(newLine);
+				fi.write(utki::wrapBuf(rcurly));
+				fi.write(utki::wrapBuf(newLine));
 			}else{
-				fi.write(lcurly);
-				fi.write(newLine);
+				fi.write(utki::wrapBuf(lcurly));
+				fi.write(utki::wrapBuf(newLine));
 				writeChainInternal(n->child(), fi, true, indentation + 1);
 
 				//indent
 				for(unsigned i = 0; i != indentation; ++i){
-					fi.write(tab);
+					fi.write(utki::wrapBuf(tab));
 				}
-				fi.write(rcurly);
-				fi.write(newLine);
+				fi.write(utki::wrapBuf(rcurly));
+				fi.write(utki::wrapBuf(newLine));
 			}
 		}
 	}//~for()

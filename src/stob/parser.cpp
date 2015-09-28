@@ -23,7 +23,7 @@ void Parser::appendCharToString(std::uint8_t c){
 		this->p = &*a.begin() + this->buf.size();
 
 		this->arrayBuf = std::move(a);
-		this->buf = this->arrayBuf; //set reference
+		this->buf = utki::wrapBuf(this->arrayBuf); //set reference
 	}
 }
 
@@ -61,7 +61,7 @@ void Parser::handleStringEnd(ParseListener& listener){
 	size_t size = this->p - this->buf.begin();
 	listener.onStringParsed(utki::Buf<char>(size == 0 ? 0 : reinterpret_cast<char*>(&*this->buf.begin()), size));
 	this->arrayBuf.clear();
-	this->buf = this->staticBuf;
+	this->buf = utki::wrapBuf(this->staticBuf);
 	this->p = this->buf.begin();
 	this->stringParsed = true;
 	this->state = E_State::IDLE;
@@ -318,7 +318,7 @@ void stob::parse(const papki::File& fi, ParseListener& listener){
 	size_t bytesRead;
 	
 	do{
-		bytesRead = fi.read(buf);
+		bytesRead = fi.read(utki::wrapBuf(buf));
 		
 		utki::Buf<std::uint8_t> b(&*buf.begin(), bytesRead);
 		parser.parseDataChunk(b, listener);
