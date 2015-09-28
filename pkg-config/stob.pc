@@ -1,6 +1,6 @@
 Name: stob   # human-readable name
 Description: STOB markup language C++ library
-Version: 2.0.0
+Version: 3.0.0
 URL: http://stob.googlecode.com
 Requires:
 Conflicts:

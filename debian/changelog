@@ -1,3 +1,9 @@
+libstob (3.0.0-1) stable; urgency=medium
+
+  * new method naming style
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 28 Sep 2015 19:02:34 +0300
+
 libstob (2.0.0-2) stable; urgency=low
 
   * re-package with fixed prorab
