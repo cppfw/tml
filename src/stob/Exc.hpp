@@ -23,7 +23,7 @@ public:
 	 * @brief Exception object constructor.
      * @param message - human readable message describing the error.
      */
-	Exc(const std::string& message) :
+	Exc(const std::string& message = std::string()) :
 			utki::Exc(message)
 	{}
 };

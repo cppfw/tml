@@ -17,6 +17,7 @@
 #include <utki/PoolStored.hpp>
 #include <utki/types.hpp>
 #include <utki/Buf.hpp>
+#include <utki/Unique.hpp>
 
 #include <papki/File.hpp>
 
@@ -38,14 +39,16 @@ namespace stob{
  * The Node class has overridden operators new and delete to allocate the memory for the objects from
  * a memory pool to avoid memory fragmentation.
  */
-class Node{
+class Node : public utki::Unique{
+	template< class T, class... Args > friend std::unique_ptr<T> utki::makeUnique(Args&&... args);
+	
 	std::unique_ptr<char[]> value; //node value
 
 	std::unique_ptr<Node> next; //next sibling node
 
 	std::unique_ptr<Node> children; //pointer to the first child
 
-	void SetValueInternal(const utki::Buf<char> str){
+	void setValueInternal(const utki::Buf<char> str){
 		if(str.size() == 0){
 			this->value = nullptr;
 			return;
@@ -56,14 +59,6 @@ class Node{
 		this->value[str.size()] = 0;//null-terminate
 	}
 
-	//constructor is private, no inheritance.
-	Node(const utki::Buf<char> str){
-		this->SetValueInternal(str);
-	}
-
-	//no copying
-	Node(const Node&);
-	Node& operator=(const Node&);
 
 	static void* operator new(size_t size);
 
@@ -71,6 +66,19 @@ class Node{
 		this->SetValue(utki::Buf<char>(const_cast<char*>(v), size));
 	}
 public:
+	Node(const Node&) = delete;
+	Node& operator=(const Node&) = delete;
+	
+	Node(const utki::Buf<char> str){
+		this->setValueInternal(str);
+	}
+	
+	Node(){}
+	
+	Node(const char* value) :
+			Node(utki::Buf<char>(const_cast<char*>(value), strlen(value)))
+	{}
+	
 	class NodeNotFoundExc : stob::Exc{
 	public:
 		NodeNotFoundExc(const std::string& message) :
@@ -89,35 +97,6 @@ public:
 
 	static void operator delete(void *p)noexcept;
 
-	/**
-	 * @brief Create new node object.
-	 * @param str - buffer holding the value to set for the created node.
-	 * @return An auto-pointer to a newly created Node object.
-	 */
-	static std::unique_ptr<Node> New(const utki::Buf<char> str){
-		return std::move(std::unique_ptr<Node>(new Node(str)));
-	}
-
-	/**
-	 * @brief Create new node object.
-	 * @param value - null-terminated string holding the value to set for the created node.
-	 * @return An auto-pointer to a newly created Node object.
-	 */
-	static std::unique_ptr<Node> New(const char* value){
-		if(value == 0){
-			return Node::New();
-		}
-		return Node::New(utki::Buf<char>(const_cast<char*>(value), strlen(value)));
-	}
-
-	/**
-	 * @brief Create new node object.
-	 * The value is set to empty string.
-	 * @return An auto-pointer to a newly created Node object.
-	 */
-	static std::unique_ptr<Node> New(){
-		return Node::New(utki::Buf<char>(0, 0));
-	}
 
 	/**
 	 * @brief Value stored by this node.
@@ -243,7 +222,7 @@ public:
 	 * @param str - string to set as a node value.
 	 */
 	void SetValue(const utki::Buf<char> str){
-		this->SetValueInternal(str);
+		this->setValueInternal(str);
 	}
 
 	/**
@@ -940,7 +919,7 @@ public:
      * @param value - value of the new node.
      */
 	void addAsFirstChild(const char* value){
-		this->addAsFirstChild(Node::New(value));
+		this->addAsFirstChild(utki::makeUnique<Node>(value));
 	}
 	
 	/**

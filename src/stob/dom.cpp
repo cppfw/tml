@@ -113,12 +113,12 @@ stob::Node::NodeAndPrev Node::NextProperty()noexcept{
 
 
 Node* Node::AddProperty(const char* propName){
-	auto p = Node::New();
+	auto p = utki::makeUnique<Node>();
 	p->SetValue(propName);
 	p->SetNext(this->removeChildren());
 	this->SetChildren(std::move(p));
 
-	this->Child()->SetChildren(Node::New());
+	this->Child()->SetChildren(utki::makeUnique<Node>());
 
 	return this->Child()->Child();
 }
@@ -359,7 +359,7 @@ std::unique_ptr<stob::Node> stob::Load(const papki::File& fi){
 		}
 
 		void OnStringParsed(const utki::Buf<char> str)override{
-			std::unique_ptr<Node> node = Node::New(str);
+			auto node = utki::makeUnique<Node>(str);
 
 			if(!this->chains){
 				this->chains = std::move(node);
@@ -381,7 +381,7 @@ std::unique_ptr<stob::Node> stob::Load(const papki::File& fi){
 
 
 std::unique_ptr<stob::Node> Node::Clone()const{
-	auto ret = Node::New(this->Value());
+	auto ret = utki::makeUnique<Node>(this->Value());
 
 	if(!this->Child()){
 		return ret;
