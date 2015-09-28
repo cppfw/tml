@@ -26,8 +26,8 @@
  *		SubChild1
  *		"Subchild two"
  * 
- *		Property1 {Value1}
- *		"Property two" {"Value 2"}
+ *		Property1 {value1}
+ *		"Property two" {"value 2"}
  * 
  *		//comment
  * 

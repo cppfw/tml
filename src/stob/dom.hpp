@@ -39,31 +39,31 @@ namespace stob{
  * The Node class has overridden operators new and delete to allocate the memory for the objects from
  * a memory pool to avoid memory fragmentation.
  */
-class Node : public utki::Unique{
+class Node final : public utki::Unique{
 	template< class T, class... Args > friend std::unique_ptr<T> utki::makeUnique(Args&&... args);
 	
-	std::unique_ptr<char[]> value; //node value
+	std::unique_ptr<char[]> value_var; //node value
 
-	std::unique_ptr<Node> next; //next sibling node
+	std::unique_ptr<Node> next_var; //next sibling node
 
 	std::unique_ptr<Node> children; //pointer to the first child
 
 	void setValueInternal(const utki::Buf<char> str){
 		if(str.size() == 0){
-			this->value = nullptr;
+			this->value_var = nullptr;
 			return;
 		}
 
-		this->value = decltype(this->value)(new char[str.size() + 1]);
-		memcpy(this->value.get(), str.begin(), str.size());
-		this->value[str.size()] = 0;//null-terminate
+		this->value_var = decltype(this->value_var)(new char[str.size() + 1]);
+		memcpy(this->value_var.get(), str.begin(), str.size());
+		this->value_var[str.size()] = 0;//null-terminate
 	}
 
 
 	static void* operator new(size_t size);
 
-	void SetValue(const char* v, size_t size){
-		this->SetValue(utki::Buf<char>(const_cast<char*>(v), size));
+	void setValue(const char* v, size_t size){
+		this->setValue(utki::Buf<char>(const_cast<char*>(v), size));
 	}
 public:
 	Node(const Node&) = delete;
@@ -99,34 +99,34 @@ public:
 
 
 	/**
-	 * @brief Value stored by this node.
+	 * @brief value stored by this node.
 	 * Returns the value stored by this node, i.e. string value.
 	 * Return value can be 0;
 	 * @return A string representing this node.
 	 */
-	const char* Value()const noexcept{
-		return this->value.get();
+	const char* value()const noexcept{
+		return this->value_var.get();
 	}
 
 	/**
 
 	 * @brief Get value length in bytes.
 	 * Calculates value length in bytes excluding terminating 0 byte.
-	 * @return Value length in bytes.
+	 * @return value length in bytes.
 	 */
-	size_t ValueLength()const noexcept{
-		if(this->Value() == 0){
+	size_t length()const noexcept{
+		if(this->value() == 0){
 			return 0;
 		}
-		return strlen(this->Value());
+		return strlen(this->value());
 	}
 
 	/**
 	 * @brief Get node value as utf8 string.
 	 * @return UTF-8 iterator to iterate through the string.
 	 */
-	unikod::Utf8Iterator AsUTF8()const noexcept{
-		return unikod::Utf8Iterator(this->Value());
+	unikod::Utf8Iterator asUTF8()const noexcept{
+		return unikod::Utf8Iterator(this->value());
 	}
 
 	/**
@@ -134,8 +134,8 @@ public:
 	 * Tries to parse the string as signed 32bit integer.
 	 * @return Result of parsing node value as signed 32bit integer.
 	 */
-	std::int32_t AsInt32()const noexcept{
-		return std::int32_t(strtol(this->Value(), 0, 0));
+	std::int32_t asInt32()const noexcept{
+		return std::int32_t(strtol(this->value(), 0, 0));
 	}
 
 	/**
@@ -143,8 +143,8 @@ public:
 	 * Tries to parse the string as unsigned 32bit integer.
 	 * @return Result of parsing node value as unsigned 32bit integer.
 	 */
-	std::uint32_t AsUint32()const noexcept{
-		return std::uint32_t(strtoul(this->Value(), 0, 0));
+	std::uint32_t asUint32()const noexcept{
+		return std::uint32_t(strtoul(this->value(), 0, 0));
 	}
 
 	/**
@@ -152,8 +152,8 @@ public:
 	 * Tries to parse the string as signed 64bit integer.
 	 * @return Result of parsing node value as signed 64bit integer.
 	 */
-	std::int64_t AsInt64()const noexcept{
-		return std::int64_t(strtoll(this->Value(), 0 , 0));
+	std::int64_t asInt64()const noexcept{
+		return std::int64_t(strtoll(this->value(), 0 , 0));
 	}
 
 	/**
@@ -161,8 +161,8 @@ public:
 	 * Tries to parse the string as unsigned 64bit integer.
 	 * @return Result of parsing node value as unsigned 64bit integer.
 	 */
-	std::uint64_t AsUint64()const noexcept{
-		return std::uint64_t(strtoull(this->Value(), 0 , 0));
+	std::uint64_t asUint64()const noexcept{
+		return std::uint64_t(strtoull(this->value(), 0 , 0));
 	}
 
 	/**
@@ -170,8 +170,8 @@ public:
 	 * Tries to parse the string as float value (32bits).
 	 * @return Result of parsing node value as float value (32bits).
 	 */
-	float AsFloat()const noexcept{
-		return float(this->AsDouble());
+	float asFloat()const noexcept{
+		return float(this->asDouble());
 	}
 
 	/**
@@ -179,8 +179,8 @@ public:
 	 * Tries to parse the string as double precision float value (64bits).
 	 * @return Result of parsing node value as double precision float value (64bits).
 	 */
-	double AsDouble()const noexcept{
-		return strtod(this->Value(), 0);
+	double asDouble()const noexcept{
+		return strtod(this->value(), 0);
 	}
 
 	/**
@@ -188,11 +188,11 @@ public:
 	 * Tries to parse the string as long double precision float value (64bits).
 	 * @return Result of parsing node value as long double precision float value (64bits).
 	 */
-	long double AsLongDouble()const noexcept{
+	long double asLongDouble()const noexcept{
 #if M_OS_NAME == M_OS_NAME_ANDROID //TODO: use strtold() when it becomes available on Android
-		return this->AsDouble();
+		return this->asDouble();
 #else
-		return strtold(this->Value(), 0);
+		return strtold(this->value(), 0);
 #endif
 	}
 
@@ -203,25 +203,25 @@ public:
 	 * @return true if string is "true".
 	 * @return false otherwise.
 	 */
-	bool AsBool()const noexcept{
-		return strcmp(this->Value(), "true") == 0;
+	bool asBool()const noexcept{
+		return strcmp(this->value(), "true") == 0;
 	}
 
 	/**
 	 * @brief Set value of the node.
-	 * Set the value of the node. Value is copied from passed buffer.
+	 * Set the value of the node. value is copied from passed buffer.
 	 * @param v - null-terminated string to set as a node value.
 	 */
-	void SetValue(const char* v = 0)noexcept{
-		this->SetValue(utki::Buf<char>(const_cast<char*>(v), v == 0 ? 0 : strlen(v)));
+	void setValue(const char* v = 0)noexcept{
+		this->setValue(utki::Buf<char>(const_cast<char*>(v), v == 0 ? 0 : strlen(v)));
 	}
 
 	/**
 	 * @brief Set value of the node.
-	 * Set the value of the node. Value is copied from passed buffer.
+	 * Set the value of the node. value is copied from passed buffer.
 	 * @param str - string to set as a node value.
 	 */
-	void SetValue(const utki::Buf<char> str){
+	void setValue(const utki::Buf<char> str){
 		this->setValueInternal(str);
 	}
 
@@ -231,15 +231,15 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - signed 32 bit integer to set as a value of the node.
 	 */
-	void SetS32(std::int32_t v)noexcept{
+	void setInt32(std::int32_t v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%" PRIi32, v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->SetValue(0, 0);
+			this->setValue(0, 0);
 		}else{
-			this->SetValue(buf, res);
+			this->setValue(buf, res);
 		}
 	}
 
@@ -249,15 +249,15 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - unsigned 32 bit integer to set as a value of the node.
 	 */
-	void SetU32(std::uint32_t v)noexcept{
+	void setUint32(std::uint32_t v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%" PRIu32, v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->SetValue(0, 0);
+			this->setValue(0, 0);
 		}else{
-			this->SetValue(buf, res);
+			this->setValue(buf, res);
 		}
 	}
 
@@ -267,15 +267,15 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - signed 64 bit integer to set as a value of the node.
 	 */
-	void SetS64(std::int64_t v)noexcept{
+	void setInt64(std::int64_t v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%" PRIi64, v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->SetValue(0, 0);
+			this->setValue(0, 0);
 		}else{
-			this->SetValue(buf, res);
+			this->setValue(buf, res);
 		}
 	}
 
@@ -285,15 +285,15 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - unsigned 64 bit integer to set as a value of the node.
 	 */
-	void SetU64(std::uint64_t v)noexcept{
+	void setUint64(std::uint64_t v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%" PRIu64, v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->SetValue(0, 0);
+			this->setValue(0, 0);
 		}else{
-			this->SetValue(buf, res);
+			this->setValue(buf, res);
 		}
 	}
 
@@ -303,15 +303,15 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - 'float' to set as a value of the node.
 	 */
-	void SetFloat(float v)noexcept{
+	void setFloat(float v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%.8G", double(v));
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->SetValue(0, 0);
+			this->setValue(0, 0);
 		}else{
-			this->SetValue(buf, res);
+			this->setValue(buf, res);
 		}
 	}
 
@@ -320,15 +320,15 @@ public:
 	 * This should make a lose-less representation of a float number.
 	 * @param v - 'float' to set as a value of the node.
 	 */
-	void SetHexFloat(float v)noexcept{
+	void setHexFloat(float v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%.8a", double(v));
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->SetValue(0, 0);
+			this->setValue(0, 0);
 		}else{
-			this->SetValue(buf, res);
+			this->setValue(buf, res);
 		}
 	}
 
@@ -338,15 +338,15 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - 'double' to set as a value of the node.
 	 */
-	void SetDouble(double v)noexcept{
+	void setDouble(double v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%.17G", v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->SetValue(0, 0);
+			this->setValue(0, 0);
 		}else{
-			this->SetValue(buf, res);
+			this->setValue(buf, res);
 		}
 	}
 
@@ -355,15 +355,15 @@ public:
 	 * This should make a lose-less representation of a double number.
 	 * @param v - 'double' to set as a value of the node.
 	 */
-	void SetHexDouble(double v)noexcept{
+	void setHexDouble(double v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%.17a", v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->SetValue(0, 0);
+			this->setValue(0, 0);
 		}else{
-			this->SetValue(buf, res);
+			this->setValue(buf, res);
 		}
 	}
 
@@ -373,15 +373,15 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - 'long double' to set as a value of the node.
 	 */
-	void SetLongDouble(long double v)noexcept{
+	void setLongDouble(long double v)noexcept{
 		char buf[128];
 
 		int res = snprintf(buf, sizeof(buf), "%.31LG", v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->SetValue(0, 0);
+			this->setValue(0, 0);
 		}else{
-			this->SetValue(buf, res);
+			this->setValue(buf, res);
 		}
 	}
 
@@ -390,15 +390,15 @@ public:
 	 * This should make a lose-less representation of a long double number.
 	 * @param v - 'long double' to set as a value of the node.
 	 */
-	void SetHexLongDouble(long double v)noexcept{
+	void setHexLongDouble(long double v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%.31La", v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->SetValue(0, 0);
+			this->setValue(0, 0);
 		}else{
-			this->SetValue(buf, res);
+			this->setValue(buf, res);
 		}
 	}
 
@@ -408,8 +408,8 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - 'bool' to set as a value of the node.
 	 */
-	void SetBool(bool v)noexcept{
-		this->SetValue(v ? "true" : "false");
+	void setBool(bool v)noexcept{
+		this->setValue(v ? "true" : "false");
 	}
 
 	/**
@@ -420,11 +420,11 @@ public:
 	 * @return false otherwise.
 	 */
 	bool operator==(const char* str)const noexcept{
-		if(this->Value()){
+		if(this->value()){
 			if(str){
-				return strcmp(this->Value(), str) == 0;
+				return strcmp(this->value(), str) == 0;
 			}
-			return strlen(this->Value()) == 0;
+			return strlen(this->value()) == 0;
 		}
 		if(str){
 			return strlen(str) == 0;
@@ -453,7 +453,7 @@ public:
 	 * Sets the children nodes list for this node. Previously set list will be discarded if any.
 	 * @param first - auto-pointer to the first node of the children single.linked list.
 	 */
-	void SetChildren(std::unique_ptr<Node> first)noexcept{
+	void setChildren(std::unique_ptr<Node> first)noexcept{
 		this->children = std::move(first);
 	}
 
@@ -470,13 +470,13 @@ public:
 	 * @brief Remove first child from the list of children.
 	 * @return auto-pointer to the node which was the first child.
 	 */
-	std::unique_ptr<Node> RemoveFirstChild()noexcept{
+	std::unique_ptr<Node> removeFirstChild()noexcept{
 		if(!this->children){
 			return std::unique_ptr<Node>();
 		}
 
 		std::unique_ptr<Node> ret = std::move(this->children);
-		this->children = std::move(ret->next);
+		this->children = std::move(ret->next_var);
 
 		return std::move(ret);
 	}
@@ -488,14 +488,14 @@ public:
 	 * @return auto-pointer to the removed node.
 	 * @return invalid auto-pointer if there was no child with given value found.
 	 */
-	std::unique_ptr<Node> RemoveChild(const char* value)noexcept{
-		NodeAndPrev f = this->Child(value);
+	std::unique_ptr<Node> removeChild(const char* value)noexcept{
+		NodeAndPrev f = this->child(value);
 
 		if(f.prev()){
-			return f.prev()->RemoveNext();
+			return f.prev()->removeNext();
 		}
 
-		return this->RemoveFirstChild();
+		return this->removeFirstChild();
 	}
 
 	/**
@@ -510,7 +510,7 @@ public:
 	 * @brief Get list of child nodes.
 	 * @return pointer to the first child node.
 	 */
-	Node* Child()noexcept{
+	Node* child()noexcept{
 		return this->children.operator->();
 	}
 
@@ -518,7 +518,7 @@ public:
 	 * @brief Get constant list of child nodes.
 	 * @return constant pointer to the first child node.
 	 */
-	const Node* Child()const noexcept{
+	const Node* child()const noexcept{
 		return this->children.operator->();
 	}
 	
@@ -579,15 +579,15 @@ public:
 	 * @param value - value to search for among children.
 	 * @return instance of NodeAndPrev structure holding information about found Node.
 	 */
-	NodeAndPrev Child(const char* value)noexcept;
+	NodeAndPrev child(const char* value)noexcept;
 
 	/**
 	 * @brief Get constant child node holding the given value.
 	 * @param value - value to search for among children.
 	 * @return constant instance of NodeAndPrev structure holding information about found Node.
 	 */
-	const NodeAndPrev Child(const char* value)const noexcept{
-		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->Child(value);
+	const NodeAndPrev child(const char* value)const noexcept{
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->child(value);
 	}
 
 	/**
@@ -612,9 +612,9 @@ public:
 	 * @throw NodeHasNoChldrenExc - in case the node has no children at all.
 	 */
 	Node& up(){
-		auto r = this->Child();
+		auto r = this->child();
 		if(!r){
-			throw NodeHasNoChldrenExc(this->Value());
+			throw NodeHasNoChldrenExc(this->value());
 		}
 		return *r;
 	}
@@ -636,7 +636,7 @@ public:
 	 * @throw NodeNotFoundExc - in case node with given value is not found.
 	 */
 	Node& up(const char* value){
-		auto r = this->Child(value).node();
+		auto r = this->child(value).node();
 		if(!r){
 			throw NodeNotFoundExc(value);
 		}
@@ -660,7 +660,7 @@ public:
 	 * @throw NodeNotFoundExc - in case node with given value is not found.
 	 */
 	Node& side(const char* value){
-		auto r = this->ThisOrNext(value).node();
+		auto r = this->thisOrNext(value).node();
 		if(!r){
 			throw NodeNotFoundExc(value);
 		}
@@ -681,28 +681,28 @@ public:
 	 * @brief Get first non-property child.
 	 * @return instance of NodeAndPrev structure holding information about found Node.
 	 */
-	NodeAndPrev ChildNonProperty()noexcept;
+	NodeAndPrev childNonProperty()noexcept;
 
 	/**
 	 * @brief Get constant first non-property child.
 	 * @return constant instance of NodeAndPrev structure holding information about found Node.
 	 */
-	const NodeAndPrev ChildNonProperty()const noexcept{
-		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->ChildNonProperty();
+	const NodeAndPrev childNonProperty()const noexcept{
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->childNonProperty();
 	}
 
 	/**
 	 * @brief Get first property child.
 	 * @return instance of NodeAndPrev class holding information about found Node.
 	 */
-	NodeAndPrev ChildProperty()noexcept;
+	NodeAndPrev childProperty()noexcept;
 
 	/**
 	 * @brief Get constant first property child.
 	 * @return constant instance of NodeAndPrev class holding information about found Node.
 	 */
-	const NodeAndPrev ChildProperty()const noexcept{
-		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->ChildProperty();
+	const NodeAndPrev childProperty()const noexcept{
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->childProperty();
 	}
 
 	/**
@@ -710,8 +710,8 @@ public:
 	 * Get next sibling node in the single-linked list of nodes.
 	 * @return pointer to the next node in the single-linked list.
 	 */
-	Node* Next()noexcept{
-		return this->next.operator->();
+	Node* next()noexcept{
+		return this->next_var.operator->();
 	}
 
 	/**
@@ -719,8 +719,8 @@ public:
 	 * Get constant next sibling node in the single-linked list of nodes.
 	 * @return constant pointer tot the next node in the single-linked list.
 	 */
-	const Node* Next()const noexcept{
-		return this->next.operator->();
+	const Node* next()const noexcept{
+		return this->next_var.operator->();
 	}
 
 	/**
@@ -729,7 +729,7 @@ public:
 	 * @param value - value to look for.
 	 * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
 	 */
-	NodeAndPrev Next(const char* value)noexcept;
+	NodeAndPrev next(const char* value)noexcept;
 
 	/**
 	 * @brief Get constant next node holding the given value.
@@ -737,8 +737,8 @@ public:
 	 * @param value - value to look for.
 	 * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
 	 */
-	const NodeAndPrev Next(const char* value)const noexcept{
-		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->Next(value);
+	const NodeAndPrev next(const char* value)const noexcept{
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->next(value);
 	}
 
 	/**
@@ -747,12 +747,12 @@ public:
 	 * @param value - value to look for.
 	 * @return instance of NodeAndPrev structure holding information about found Node.
 	 */
-	NodeAndPrev ThisOrNext(const char* value)noexcept{
+	NodeAndPrev thisOrNext(const char* value)noexcept{
 		if(this->operator==(value)){
 			return NodeAndPrev(0, this);
 		}
 
-		return this->Next(value);
+		return this->next(value);
 	}
 
 	/**
@@ -761,8 +761,8 @@ public:
 	 * @param value - value to look for.
 	 * @return instance of NodeAndPrev structure holding information about found Node.
 	 */
-	const NodeAndPrev ThisOrNext(const char* value)const noexcept{
-		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->ThisOrNext(value);
+	const NodeAndPrev thisOrNext(const char* value)const noexcept{
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->thisOrNext(value);
 	}
 
 
@@ -771,9 +771,9 @@ public:
 	 * @param value - value to look for in the chain of nodes.
 	 * @return First child of the node with given value in the chain of nodes.
 	 */
-	Node* ChildOfThisOrNext(const char* value)noexcept{
-		if(auto c = this->ThisOrNext(value).node()){
-			return c->Child();
+	Node* childOfThisOrNext(const char* value)noexcept{
+		if(auto c = this->thisOrNext(value).node()){
+			return c->child();
 		}
 		return nullptr;
 	}
@@ -783,22 +783,22 @@ public:
 	 * @param value - value to look for in the chain of nodes.
 	 * @return Constant first child of the node with given value in the chain of nodes.
 	 */
-	const Node* ChildOfThisOrNext(const char* value)const noexcept{
-		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->ChildOfThisOrNext(value);
+	const Node* childOfThisOrNext(const char* value)const noexcept{
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->childOfThisOrNext(value);
 	}
 
 	/**
 	 * @brief Get next non-property node.
 	 * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
 	 */
-	NodeAndPrev NextNonProperty()noexcept;
+	NodeAndPrev nextNonProperty()noexcept;
 
 	/**
 	 * @brief Get constant next non-property node.
 	 * @return constant instance of NodeAndPrev class holding information about found node, previous node is always valid.
 	 */
-	const NodeAndPrev NextNonProperty()const noexcept{
-		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->NextNonProperty();
+	const NodeAndPrev nextNonProperty()const noexcept{
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->nextNonProperty();
 	}
 
 	/**
@@ -806,12 +806,12 @@ public:
 	 * This node is included in the search.
 	 * @return instance of NodeAndPrev class holding information about found node.
 	 */
-	NodeAndPrev ThisOrNextNonProperty()noexcept{
-		if(!this->IsProperty()){
+	NodeAndPrev thisOrNextNonProperty()noexcept{
+		if(!this->isProperty()){
 			return NodeAndPrev(0, this);
 		}
 
-		return this->NextNonProperty();
+		return this->nextNonProperty();
 	}
 
 	/**
@@ -819,22 +819,22 @@ public:
 	 * This node is included in the search.
 	 * @return instance of NodeAndPrev class holding information about found node.
 	 */
-	const NodeAndPrev ThisOrNextNonProperty()const noexcept{
-		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->ThisOrNextNonProperty();
+	const NodeAndPrev thisOrNextNonProperty()const noexcept{
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->thisOrNextNonProperty();
 	}
 
 	/**
 	 * @brief Get next property child.
 	 * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
 	 */
-	NodeAndPrev NextProperty()noexcept;
+	NodeAndPrev nextProperty()noexcept;
 
 	/**
 	 * @brief Get constant next property child.
 	 * @return constant instance of NodeAndPrev class holding information about found node, previous node is always valid.
 	 */
-	const NodeAndPrev NextProperty()const noexcept{
-		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->NextProperty();
+	const NodeAndPrev nextProperty()const noexcept{
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->nextProperty();
 	}
 
 	/**
@@ -842,12 +842,12 @@ public:
 	 * This node is included in the search.
 	 * @return instance of NodeAndPrev class holding information about found node.
 	 */
-	NodeAndPrev ThisOrNextProperty()noexcept{
-		if(this->IsProperty()){
+	NodeAndPrev thisOrNextProperty()noexcept{
+		if(this->isProperty()){
 			return NodeAndPrev(0, this);
 		}
 
-		return this->NextProperty();
+		return this->nextProperty();
 	}
 
 	/**
@@ -855,8 +855,8 @@ public:
 	 * This node is included in the search.
 	 * @return instance of NodeAndPrev class holding information about found node.
 	 */
-	const NodeAndPrev ThisOrNextProperty()const noexcept{
-		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->ThisOrNextProperty();
+	const NodeAndPrev thisOrNextProperty()const noexcept{
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->thisOrNextProperty();
 	}
 
 	/**
@@ -867,13 +867,13 @@ public:
 	 * @return pointer to a node representing property value.
 	 * @return zero pointer if no property with a given name found or property has no value.
 	 */
-	Node* GetProperty(const char* propName)noexcept{
-		Node* prop = this->Child(propName).node();
+	Node* getProperty(const char* propName)noexcept{
+		Node* prop = this->child(propName).node();
 		if(!prop){
 			return 0;
 		}
 
-		return prop->Child();
+		return prop->child();
 	}
 
 	/**
@@ -884,8 +884,8 @@ public:
 	 * @return constant pointer to a node representing property value.
 	 * @return zero pointer if no property with a given name found or property has no value.
 	 */
-	const Node* GetProperty(const char* propName)const noexcept{
-		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->GetProperty(propName);
+	const Node* getProperty(const char* propName)const noexcept{
+		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->getProperty(propName);
 	}
 
 	/**
@@ -902,14 +902,14 @@ public:
 	 * @return pointer to a node representing value of the newly created property.
 	 *         The returned pointer is always valid.
 	 */
-	Node* AddProperty(const char* propName);
+	Node* addProperty(const char* propName);
 
 	/**
 	 * @brief Insert a node as a first child.
      * @param node - node to insert.
      */
 	void addAsFirstChild(std::unique_ptr<Node> node)noexcept{
-		node->SetNext(this->removeChildren());
+		node->setNext(this->removeChildren());
 		this->children = std::move(node);
 	}
 	
@@ -927,21 +927,21 @@ public:
 	 * Insert the node to the single-linked list as a next node after this Node.
 	 * @param node - node to insert.
 	 */
-	void InsertNext(std::unique_ptr<Node> node)noexcept{
+	void insertNext(std::unique_ptr<Node> node)noexcept{
 		if(node){
-			node->next = std::move(this->next);
+			node->next_var = std::move(this->next_var);
 		}
-		this->next = std::move(node);
+		this->next_var = std::move(node);
 	}
 
 	/**
 	 * @brief Remove next node from single-linked list.
 	 * @return auto-pointer to the Node object which has been removed from the single-linked list.
 	 */
-	std::unique_ptr<Node> RemoveNext()noexcept{
-		std::unique_ptr<Node> ret = std::move(this->next);
+	std::unique_ptr<Node> removeNext()noexcept{
+		std::unique_ptr<Node> ret = std::move(this->next_var);
 		if(ret){
-			this->next = std::move(ret->next);
+			this->next_var = std::move(ret->next_var);
 		}
 		return ret;
 	}
@@ -951,8 +951,8 @@ public:
 	 * After this operation there will be no next node in this single-linked list.
 	 * @return auto-pointer to the first node of the single-linked list tail which has been chopped.
 	 */
-	std::unique_ptr<Node> ChopNext()noexcept{
-		return std::move(this->next);
+	std::unique_ptr<Node> chopNext()noexcept{
+		return std::move(this->next_var);
 	}
 
 	/**
@@ -960,8 +960,8 @@ public:
 	 * Sets the next node for this node to the specified node.
 	 * @param node - node to set as the next node.
 	 */
-	void SetNext(std::unique_ptr<Node> node)noexcept{
-		this->next = std::move(node);
+	void setNext(std::unique_ptr<Node> node)noexcept{
+		this->next_var = std::move(node);
 	}
 
 	/**
@@ -969,7 +969,7 @@ public:
 	 * Clones this node and all the underlying nodes hierarchy.
 	 * @return A deep copy of this Node.
 	 */
-	std::unique_ptr<Node> Clone()const;
+	std::unique_ptr<Node> clone()const;
 
 
 	/**
@@ -977,7 +977,7 @@ public:
 	 * Clones this node with all its children hierarchy and chained next Nodes.
 	 * @return a deep copy of this Node chain.
 	 */
-	std::unique_ptr<Node> CloneChain()const;
+	std::unique_ptr<Node> cloneChain()const;
 
 	/**
 	 * @brief Check if the Node is a property.
@@ -986,8 +986,8 @@ public:
 	 * @return false if the first character of the node's value is a capital letter of Latin alphabet.
 	 * @return true otherwise.
 	 */
-	bool IsProperty()const noexcept{
-		return this->Value() == 0 || this->Value()[0] < 'A' || 'Z' < this->Value()[0];
+	bool isProperty()const noexcept{
+		return this->value() == 0 || this->value()[0] < 'A' || 'Z' < this->value()[0];
 	}
 
 	/**
@@ -996,14 +996,14 @@ public:
 	 * @param formatted - if true then the STOB document will be written with formatting.
 	 *                    if false then no formatting will be applied.
 	 */
-	void WriteChain(papki::File& fi, bool formatted = true)const;
+	void writeChain(papki::File& fi, bool formatted = true)const;
 
 	/**
 	 * @brief Convert Node's chain to string.
 	 * @param formatted - should a formatting be applied for better human readability.
 	 * @return STOB as string.
 	 */
-	std::string ChainToString(bool formatted = false)const;
+	std::string chainToString(bool formatted = false)const;
 };
 
 
@@ -1014,7 +1014,7 @@ public:
  * @param fi - file interface to get the STOB data from.
  * @return auto-pointer to the first node in the chain of the document-object model.
  */
-std::unique_ptr<Node> Load(const papki::File& fi);
+std::unique_ptr<Node> load(const papki::File& fi);
 
 
 
@@ -1023,7 +1023,7 @@ std::unique_ptr<Node> Load(const papki::File& fi);
  * @param str - null-terminated string describing STOB document.
  * @return auto-pointer to the first node in the chain of the document-object model.
  */
-std::unique_ptr<Node> Parse(const char *str);
+std::unique_ptr<Node> parse(const char *str);
 
 
 
