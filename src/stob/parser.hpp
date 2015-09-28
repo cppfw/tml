@@ -55,19 +55,19 @@ public:
 	 * This method is called by Parser when String token has been parsed.
      * @param str - parsed string.
      */
-	virtual void OnStringParsed(const utki::Buf<char> str) = 0;
+	virtual void onStringParsed(const utki::Buf<char> str) = 0;
 	
 	/**
 	 * @brief Children list parsing started.
 	 * This method is called by Parser when '{' token has been parsed.
      */
-	virtual void OnChildrenParseStarted() = 0;
+	virtual void onChildrenParseStarted() = 0;
 	
 	/**
 	 * @brief Children list parsing finished.
 	 * This method is called by Parser when '}' token has been parsed.
      */
-	virtual void OnChildrenParseFinished() = 0;
+	virtual void onChildrenParseFinished() = 0;
 	
 	virtual ~ParseListener()noexcept{}
 };

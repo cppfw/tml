@@ -38,7 +38,7 @@ void Parser::HandleLeftCurlyBracket(ParseListener& listener){
 	}
 	++this->nestingLevel;
 	this->stringParsed = false;
-	listener.OnChildrenParseStarted();
+	listener.onChildrenParseStarted();
 }
 
 
@@ -52,14 +52,14 @@ void Parser::HandleRightCurlyBracket(ParseListener& listener){
 	}
 	--this->nestingLevel;
 	this->stringParsed = false;
-	listener.OnChildrenParseFinished();
+	listener.onChildrenParseFinished();
 }
 
 
 
 void Parser::HandleStringEnd(ParseListener& listener){
 	size_t size = this->p - this->buf.begin();
-	listener.OnStringParsed(utki::Buf<char>(size == 0 ? 0 : reinterpret_cast<char*>(&*this->buf.begin()), size));
+	listener.onStringParsed(utki::Buf<char>(size == 0 ? 0 : reinterpret_cast<char*>(&*this->buf.begin()), size));
 	this->arrayBuf.clear();
 	this->buf = this->staticBuf;
 	this->p = this->buf.begin();

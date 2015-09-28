@@ -17,21 +17,21 @@ enum E_Action{
 };
 
 class Listener : public stob::ParseListener{
-	void OnChildrenParseFinished() override{
+	void onChildrenParseFinished() override{
 		TRACE(<< "}" << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == CHILDREN_END, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
 		this->actions.pop_front();
 	}
 	
-	void OnChildrenParseStarted() override{
+	void onChildrenParseStarted() override{
 		TRACE(<< "{" << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == CHILDREN_START, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
 		this->actions.pop_front();
 	}
 	
-	void OnStringParsed(const utki::Buf<char> str)override{
+	void onStringParsed(const utki::Buf<char> str)override{
 		TRACE(<< "str = " << std::string(&*str.begin(), str.size()) << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == STRING, "first = " << this->actions.front().first << " second = " << this->actions.front().second)

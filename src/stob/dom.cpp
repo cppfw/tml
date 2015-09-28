@@ -345,20 +345,20 @@ std::unique_ptr<stob::Node> stob::load(const papki::File& fi){
 		std::unique_ptr<Node> chains;
 		Node* lastChain;
 		
-		void OnChildrenParseFinished() override{
+		void onChildrenParseFinished() override{
 			std::get<1>(this->stack.back())->setChildren(std::move(this->chains));
 			this->chains = std::move(std::get<0>(this->stack.back()));
 			this->lastChain = std::get<1>(this->stack.back());
 			this->stack.pop_back();
 		}
 
-		void OnChildrenParseStarted() override{
+		void onChildrenParseStarted() override{
 			this->stack.emplace_back(
 					std::make_pair(std::move(this->chains), this->lastChain)
 				);
 		}
 
-		void OnStringParsed(const utki::Buf<char> str)override{
+		void onStringParsed(const utki::Buf<char> str)override{
 			auto node = utki::makeUnique<Node>(str);
 
 			if(!this->chains){
