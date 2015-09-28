@@ -110,7 +110,7 @@ void Run(){
 	
 	papki::FSFile fi("test.stob");
 	
-	stob::Parse(fi, l);
+	stob::parse(fi, l);
 	
 	ASSERT_ALWAYS(l.actions.size() == 0)
 }

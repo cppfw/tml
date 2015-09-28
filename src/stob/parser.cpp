@@ -64,17 +64,17 @@ void Parser::HandleStringEnd(ParseListener& listener){
 	this->buf = this->staticBuf;
 	this->p = this->buf.begin();
 	this->stringParsed = true;
-	this->state = IDLE;
+	this->state = E_State::IDLE;
 }
 
 
 
 void Parser::ParseChar(std::uint8_t c, ParseListener& listener){
 	switch(this->state){
-		case IDLE:
+		case E_State::IDLE:
 			switch(c){
 				case '"':
-					this->state = QUOTED_STRING;
+					this->state = E_State::QUOTED_STRING;
 					break;
 				case '{':
 					if(!this->stringParsed){
@@ -96,12 +96,12 @@ void Parser::ParseChar(std::uint8_t c, ParseListener& listener){
 					//ignore
 					break;
 				default:
-					this->state = UNQUOTED_STRING;
+					this->state = E_State::UNQUOTED_STRING;
 					this->AppendCharToString(c);
 					break;
 			}
 			break;
-		case UNQUOTED_STRING:
+		case E_State::UNQUOTED_STRING:
 			switch(c){
 				case '\n':
 					++this->curLine;
@@ -122,7 +122,7 @@ void Parser::ParseChar(std::uint8_t c, ParseListener& listener){
 							break;
 						case '"':
 							//start parsing quoted string right a way
-							this->state = QUOTED_STRING;
+							this->state = E_State::QUOTED_STRING;
 							this->stringParsed = false;
 							break;
 						default:
@@ -135,7 +135,7 @@ void Parser::ParseChar(std::uint8_t c, ParseListener& listener){
 					break;
 			}
 			break;
-		case QUOTED_STRING:
+		case E_State::QUOTED_STRING:
 			this->AppendCharToString(c);
 			break;
 		default:
@@ -149,15 +149,15 @@ void Parser::ParseChar(std::uint8_t c, ParseListener& listener){
 void Parser::PreParseChar(std::uint8_t c, ParseListener& listener){
 	if(this->prevChar != 0){
 		switch(this->state){
-			case IDLE:
-			case UNQUOTED_STRING:
+			case E_State::IDLE:
+			case E_State::UNQUOTED_STRING:
 				ASSERT(this->prevChar == '/')//possible comment sequence
 				switch(c){
 					case '/':
-						this->commentState = LINE_COMMENT;
+						this->commentState = E_CommentState::LINE_COMMENT;
 						break;
 					case '*':
-						this->commentState = MULTILINE_COMMENT;
+						this->commentState = E_CommentState::MULTILINE_COMMENT;
 						break;
 					default:
 						this->ParseChar('/', listener);
@@ -165,7 +165,7 @@ void Parser::PreParseChar(std::uint8_t c, ParseListener& listener){
 						break;
 				}
 				break;
-			case QUOTED_STRING:
+			case E_State::QUOTED_STRING:
 				ASSERT(this->prevChar == '\\')//escape sequence
 				switch(c){
 					case '\\'://backslash
@@ -203,7 +203,7 @@ void Parser::PreParseChar(std::uint8_t c, ParseListener& listener){
 		this->prevChar = 0;
 	}else{//~if(this->prevChar != 0)
 		switch(this->state){
-			case QUOTED_STRING:
+			case E_State::QUOTED_STRING:
 				switch(c){
 					case '\\': //escape sequence
 						this->prevChar = '\\';
@@ -223,8 +223,8 @@ void Parser::PreParseChar(std::uint8_t c, ParseListener& listener){
 						break;
 				}
 				break;
-			case UNQUOTED_STRING:
-			case IDLE:
+			case E_State::UNQUOTED_STRING:
+			case E_State::IDLE:
 				if(c == '/'){//possible comment sequence
 					this->prevChar = '/';
 				}else{
@@ -240,30 +240,30 @@ void Parser::PreParseChar(std::uint8_t c, ParseListener& listener){
 
 
 
-void Parser::ParseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& listener){
+void Parser::parseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& listener){
 	for(const std::uint8_t* s = chunk.begin(); s != chunk.end(); ++s){
 //		TRACE(<< "Parser::ParseDataChunk(): *s = " << (*s) << std::endl)
 		
 		//skip comments if needed
-		if(this->commentState != NO_COMMENT){
+		if(this->commentState != E_CommentState::NO_COMMENT){
 			switch(this->commentState){
-				case LINE_COMMENT:
+				case E_CommentState::LINE_COMMENT:
 					for(;; ++s){
 						if(s == chunk.end()){
 							return;
 						}
 						if(*s == '\n'){
 							++this->curLine;
-							this->commentState = NO_COMMENT;
+							this->commentState = E_CommentState::NO_COMMENT;
 							break;//~for
 						}
 					}
 					break;//~switch
-				case MULTILINE_COMMENT:
+				case E_CommentState::MULTILINE_COMMENT:
 					if(this->prevChar == '*'){
 						this->prevChar = 0;
 						if(*s == '/'){
-							this->commentState = NO_COMMENT;
+							this->commentState = E_CommentState::NO_COMMENT;
 							break;//~switch()
 						}
 					}
@@ -293,22 +293,22 @@ void Parser::ParseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& 
 
 
 
-void Parser::EndOfData(ParseListener& listener){
-	if(this->state != IDLE){
+void Parser::endOfData(ParseListener& listener){
+	if(this->state != E_State::IDLE){
 		//add new line at the end of data
 		this->PreParseChar('\n', listener);
 	}
 	
-	if(this->nestingLevel != 0 || this->state != IDLE){
+	if(this->nestingLevel != 0 || this->state != E_State::IDLE){
 		throw stob::Exc("Malformed stob document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
 	}
 	
-	this->Reset();
+	this->reset();
 }
 
 
 
-void stob::Parse(const papki::File& fi, ParseListener& listener){
+void stob::parse(const papki::File& fi, ParseListener& listener){
 	papki::File::Guard fileGuard(fi);
 	
 	stob::Parser parser;
@@ -321,8 +321,8 @@ void stob::Parse(const papki::File& fi, ParseListener& listener){
 		bytesRead = fi.read(buf);
 		
 		utki::Buf<std::uint8_t> b(&*buf.begin(), bytesRead);
-		parser.ParseDataChunk(b, listener);
+		parser.parseDataChunk(b, listener);
 	}while(bytesRead == buf.size());
 
-	parser.EndOfData(listener);
+	parser.endOfData(listener);
 }

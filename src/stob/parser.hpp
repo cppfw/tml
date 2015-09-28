@@ -93,14 +93,14 @@ class Parser{
 	//Previous character, used to detect two character sequences like //, /*, */, escape sequences.
 	std::uint8_t prevChar;
 	
-	enum E_CommentState{
+	enum class E_CommentState{
 		NO_COMMENT,
 		LINE_COMMENT,
 		MULTILINE_COMMENT
 	};
 	E_CommentState commentState;
 	
-	enum E_State{
+	enum class E_State{
 		IDLE,
 		QUOTED_STRING,
 		UNQUOTED_STRING,
@@ -127,22 +127,22 @@ public:
 	 * Creates an initially reset Parser object.
      */
 	Parser(){
-		this->Reset();
+		this->reset();
 	}
 	
 	/**
 	 * @brief Reset parser.
 	 * Resets the parser to initial state, discarding all the temporary parsed data and state.
      */
-	void Reset(){
+	void reset(){
 		this->curLine = 1;
 		this->buf = this->staticBuf;
 		this->arrayBuf.clear();
 		this->p = this->buf.begin();
 		this->nestingLevel = 0;
 		this->prevChar = 0;
-		this->commentState = NO_COMMENT;
-		this->state = IDLE;
+		this->commentState = E_CommentState::NO_COMMENT;
+		this->state = E_State::IDLE;
 		this->stringParsed = false;
 	}
 	
@@ -153,7 +153,7 @@ public:
      * @param listener - listener object which will receive notifications about parsed tokens.
 	 * @throw stob::Exc - in case of malformed STOB document.
      */
-	void ParseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& listener);
+	void parseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& listener);
 	
 	/**
 	 * @brief Finalize parsing.
@@ -162,7 +162,7 @@ public:
      * @param listener - listener object which will receive notifications about parsed tokens.
 	 * @throw stob::Exc - in case of malformed STOB document.
      */
-	void EndOfData(ParseListener& listener);
+	void endOfData(ParseListener& listener);
 };
 
 
@@ -174,7 +174,7 @@ public:
  * @param listener - listener object which will receive notifications about parsed tokens.
  * @throw stob::Exc - in case of malformed STOB document.
  */
-void Parse(const papki::File& fi, ParseListener& listener);
+void parse(const papki::File& fi, ParseListener& listener);
 
 
 

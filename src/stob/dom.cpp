@@ -373,7 +373,7 @@ std::unique_ptr<stob::Node> stob::load(const papki::File& fi){
 		~Listener()noexcept{}
 	} listener;
 
-	stob::Parse(fi, listener);
+	stob::parse(fi, listener);
 
 	return std::move(listener.chains);
 }
