@@ -1,14 +1,17 @@
-* add new entry to debian/changelog file
+* add new entry to debian/changelog file if it has not beed added yet:
+	$ dch -v"1.0.1-1" "Unique added"
 
-* update the PROJECT_NUMBER variable in the docs/doxygen.cfg file to latest version number
+* mark debian/changelog entry as released:
+	$ dch -r -D stable ""
 
-* update Version in pkg-config/stob.pc file
+* update the PROJECT_NUMBER variable in the doc/doxygen.cfg file to latest version number
 
-* Check if SO-name needs increment and update debian/control file accordingly if needed
-	- src/makefile
-	- debian/control
-	- debian/libstob*.install
+* update Version in pkg-config/*.pc file
 
-* add version tag in version control system
+* Check if SO-name needs increment and update src/soname.txt if needed
 
-* generate debian package using dpkg-buildpackage
+* make version tag in version control system
+
+* generate debian package:
+	$ make deb
+
