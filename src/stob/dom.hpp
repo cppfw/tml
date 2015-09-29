@@ -76,7 +76,7 @@ public:
 	Node(){}
 	
 	Node(const char* value) :
-			Node(utki::Buf<char>(const_cast<char*>(value), strlen(value)))
+			Node(utki::Buf<char>(const_cast<char*>(value), value == nullptr ? 0 : strlen(value)))
 	{}
 	
 	class NodeNotFoundExc : stob::Exc{

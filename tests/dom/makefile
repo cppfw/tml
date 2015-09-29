@@ -7,6 +7,7 @@ this_cflags += -Wno-format #no warnings about format
 this_cflags += -DDEBUG
 this_cflags += -fstrict-aliasing #strict aliasing!!!
 this_cflags += -std=c++11
+this_cflags += -g #debugging symbols
 
 this_srcs += main.cpp
 

@@ -175,6 +175,12 @@ void Run(){
 		ASSERT_ALWAYS(ch)
 		ASSERT_ALWAYS(*ch == "unqu/otedString")
 	}
+	
+	{
+		auto cloned = root->cloneChain();
+		ASSERT_ALWAYS(cloned)
+		ASSERT_ALWAYS(cloned->count() != 0)
+	}
 }
 }//~namespace
 
