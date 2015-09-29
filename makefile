@@ -25,8 +25,6 @@ $(eval $(prorab-build-deb))
 #Update version rule
 $(prorab-clear-this-vars)
 
-this_version := $(firstword $(subst -, ,$(shell dpkg-parsechangelog --show-field Version)))
-
 this_version_files += doc/doxygen.cfg.in
 this_version_files += pkg-config/stob.pc.in
 
