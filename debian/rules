@@ -2,11 +2,15 @@
 %:
 	dh $@
 
-soname := $(shell cat src/soname.txt)
-
 .PHONY: override_dh_strip
 override_dh_strip:
-	dh_strip --dbg-package=libstob$(soname)-dbg
+	dh_strip --dbg-package=$(filter %-dbg, $(shell awk '/^Package: /{print $2}' debian/control))
 
+.PHONY: override_dh_auto_install
 override_dh_auto_install:
 	PREFIX=/usr dh_auto_install
+
+.PHONY: override_dh_auto_build
+override_dh_auto_build:
+	$(MAKE) ver
+	dh_auto_build
