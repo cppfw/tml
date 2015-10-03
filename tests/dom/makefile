@@ -7,10 +7,11 @@ this_cflags += -Wno-format #no warnings about format
 this_cflags += -DDEBUG
 this_cflags += -fstrict-aliasing #strict aliasing!!!
 this_cflags += -std=c++11
+this_cflags += -g #debugging symbols
 
 this_srcs += main.cpp
 
-this_ldlibs += -lstob -lting
+this_ldlibs += -lstob -lpapki
 this_ldflags += -L$(prorab_this_dir)../../src
 
 ifeq ($(prorab_os), macosx)

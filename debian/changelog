@@ -1,3 +1,33 @@
+libstob (3.1.0-1) stable; urgency=medium
+
+  * bug fix
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 29 Sep 2015 17:49:40 +0300
+
+libstob (3.0.2-1) stable; urgency=medium
+
+  * bumping up version
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 29 Sep 2015 17:18:17 +0300
+
+libstob (3.0.1-1) stable; urgency=medium
+
+  * bugfix
+
+ -- Ivan Gagis <ivan@ivan-desktop-pc>  Tue, 29 Sep 2015 00:53:04 +0300
+
+libstob (3.0.0-1) stable; urgency=medium
+
+  * new method naming style
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 28 Sep 2015 19:02:34 +0300
+
+libstob (2.0.0-2) stable; urgency=low
+
+  * re-package with fixed prorab
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 11 Aug 2015 18:13:00 +0200
+ 
 libstob (2.0.0-1) stable; urgency=low
 
   * Node cloning

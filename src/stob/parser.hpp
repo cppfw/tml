@@ -1,27 +1,3 @@
-/* The MIT License:
-
-Copyright (c) 2012-2014 Ivan Gagis <igagis@gmail.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-// Home page: http://stob.googlecode.com
-
 /**
  * @author Ivan Gagis <igagis@gmail.com>
  */
@@ -29,8 +5,8 @@ THE SOFTWARE. */
 #pragma once
 
 
-#include <ting/Buffer.hpp>
-#include <ting/fs/File.hpp>
+#include <utki/Buf.hpp>
+#include <papki/File.hpp>
 
 
 
@@ -50,8 +26,8 @@ THE SOFTWARE. */
  *		SubChild1
  *		"Subchild two"
  * 
- *		Property1 {Value1}
- *		"Property two" {"Value 2"}
+ *		Property1 {value1}
+ *		"Property two" {"value 2"}
  * 
  *		//comment
  * 
@@ -79,21 +55,21 @@ public:
 	 * This method is called by Parser when String token has been parsed.
      * @param str - parsed string.
      */
-	virtual void OnStringParsed(const ting::Buffer<char> str) = 0;
+	virtual void onStringParsed(const utki::Buf<char> str) = 0;
 	
 	/**
 	 * @brief Children list parsing started.
 	 * This method is called by Parser when '{' token has been parsed.
      */
-	virtual void OnChildrenParseStarted() = 0;
+	virtual void onChildrenParseStarted() = 0;
 	
 	/**
 	 * @brief Children list parsing finished.
 	 * This method is called by Parser when '}' token has been parsed.
      */
-	virtual void OnChildrenParseFinished() = 0;
+	virtual void onChildrenParseFinished() = 0;
 	
-	virtual ~ParseListener()NOEXCEPT{}
+	virtual ~ParseListener()noexcept{}
 };
 
 
@@ -108,7 +84,7 @@ class Parser{
 	
 	std::array<std::uint8_t, 256> staticBuf; //string buffer
 	std::vector<std::uint8_t> arrayBuf;
-	ting::Buffer<std::uint8_t> buf;
+	utki::Buf<std::uint8_t> buf;
 	
 	decltype(buf)::iterator p; //current position into the string buffer
 	
@@ -117,14 +93,14 @@ class Parser{
 	//Previous character, used to detect two character sequences like //, /*, */, escape sequences.
 	std::uint8_t prevChar;
 	
-	enum E_CommentState{
+	enum class E_CommentState{
 		NO_COMMENT,
 		LINE_COMMENT,
 		MULTILINE_COMMENT
 	};
 	E_CommentState commentState;
 	
-	enum E_State{
+	enum class E_State{
 		IDLE,
 		QUOTED_STRING,
 		UNQUOTED_STRING,
@@ -136,37 +112,37 @@ class Parser{
 	//which is allowed by the STOB format and means that string is empty.
 	bool stringParsed;
 	
-	void ParseChar(std::uint8_t c, ParseListener& listener);
-	void PreParseChar(std::uint8_t c, ParseListener& listener);
+	void parseChar(std::uint8_t c, ParseListener& listener);
+	void preParseChar(std::uint8_t c, ParseListener& listener);
 	
-	void AppendCharToString(std::uint8_t c);
+	void appendCharToString(std::uint8_t c);
 	
-	void HandleLeftCurlyBracket(ParseListener& listener);
-	void HandleRightCurlyBracket(ParseListener& listener);
+	void handleLeftCurlyBracket(ParseListener& listener);
+	void handleRightCurlyBracket(ParseListener& listener);
 	
-	void HandleStringEnd(ParseListener& listener);
+	void handleStringEnd(ParseListener& listener);
 public:
 	/**
 	 * @brief Constructor.
 	 * Creates an initially reset Parser object.
      */
 	Parser(){
-		this->Reset();
+		this->reset();
 	}
 	
 	/**
 	 * @brief Reset parser.
 	 * Resets the parser to initial state, discarding all the temporary parsed data and state.
      */
-	void Reset(){
+	void reset(){
 		this->curLine = 1;
-		this->buf = this->staticBuf;
+		this->buf = utki::wrapBuf(this->staticBuf);
 		this->arrayBuf.clear();
 		this->p = this->buf.begin();
 		this->nestingLevel = 0;
 		this->prevChar = 0;
-		this->commentState = NO_COMMENT;
-		this->state = IDLE;
+		this->commentState = E_CommentState::NO_COMMENT;
+		this->state = E_State::IDLE;
 		this->stringParsed = false;
 	}
 	
@@ -177,7 +153,7 @@ public:
      * @param listener - listener object which will receive notifications about parsed tokens.
 	 * @throw stob::Exc - in case of malformed STOB document.
      */
-	void ParseDataChunk(const ting::Buffer<std::uint8_t> chunk, ParseListener& listener);
+	void parseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& listener);
 	
 	/**
 	 * @brief Finalize parsing.
@@ -186,7 +162,7 @@ public:
      * @param listener - listener object which will receive notifications about parsed tokens.
 	 * @throw stob::Exc - in case of malformed STOB document.
      */
-	void EndOfData(ParseListener& listener);
+	void endOfData(ParseListener& listener);
 };
 
 
@@ -198,7 +174,7 @@ public:
  * @param listener - listener object which will receive notifications about parsed tokens.
  * @throw stob::Exc - in case of malformed STOB document.
  */
-void Parse(const ting::fs::File& fi, ParseListener& listener);
+void parse(const papki::File& fi, ParseListener& listener);
 
 
 

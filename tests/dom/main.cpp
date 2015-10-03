@@ -1,166 +1,185 @@
 #include "../../src/stob/dom.hpp"
 
-#include <ting/debug.hpp>
-#include <ting/fs/FSFile.hpp>
+#include <utki/debug.hpp>
+#include <papki/FSFile.hpp>
 
 
 
 namespace TestBasicParsing{
 
 void Run(){
-	ting::fs::FSFile fi("test.stob");
+	papki::FSFile fi("test.stob");
 	
-	std::unique_ptr<stob::Node> root = stob::Node::New();
-	root->SetChildren(stob::Load(fi));
+	auto root = utki::makeUnique<stob::Node>();
+	root->setChildren(stob::load(fi));
 	ASSERT_ALWAYS(root)
-	ASSERT_ALWAYS(root->Next() == 0)
+	ASSERT_ALWAYS(root->next() == 0)
 	
-	stob::Node* n = root->Child();
+	auto n = root->child();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "ttt")
-	ASSERT_ALWAYS(!n->Child())
+	ASSERT_ALWAYS(!n->child())
 	
-	n = n->Next();
+	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "test string", n->Value())
-	ASSERT_ALWAYS(!n->Child())
+	ASSERT_INFO_ALWAYS(*n == "test string", n->value())
+	ASSERT_ALWAYS(!n->child())
 	
-	n = n->Next();
+	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "anot/her string", n->Value())
-	ASSERT_ALWAYS(!n->Child())
+	ASSERT_INFO_ALWAYS(*n == "anot/her string", n->value())
+	ASSERT_ALWAYS(!n->child())
 	
-	n = n->Next();
+	n = n->next();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "unqu/otedString")
-	ASSERT_ALWAYS(!n->Child())
+	ASSERT_ALWAYS(!n->child())
 	
-	n = n->Next();
+	n = n->next();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "string with empty children list")
-	ASSERT_ALWAYS(!n->Child())
+	ASSERT_ALWAYS(!n->child())
 	
-	n = n->Next();
+	n = n->next();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "unquoted_string_with_empty_children_list")
-	ASSERT_ALWAYS(!n->Child())
+	ASSERT_ALWAYS(!n->child())
 	
-	n = n->Next();
+	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "string_interrupted_by_comment", n->Value())
-	ASSERT_ALWAYS(!n->Child())
+	ASSERT_INFO_ALWAYS(*n == "string_interrupted_by_comment", n->value())
+	ASSERT_ALWAYS(!n->child())
 	
-	n = n->Next();
+	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "string_broken_by_comment", n->Value())
-	ASSERT_ALWAYS(!n->Child())
+	ASSERT_INFO_ALWAYS(*n == "string_broken_by_comment", n->value())
+	ASSERT_ALWAYS(!n->child())
 
-	n = n->Next();
+	n = n->next();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "")
-	ASSERT_ALWAYS(n->Value() == 0)
-	ASSERT_INFO_ALWAYS(!n->Child(), n->Child()->Value())
+	ASSERT_ALWAYS(n->value() == 0)
+	ASSERT_INFO_ALWAYS(!n->child(), n->child()->value())
 	
-	n = n->Next();
+	n = n->next();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "")
-	ASSERT_ALWAYS(n->Value() == 0)
-	ASSERT_ALWAYS(n->Child())
+	ASSERT_ALWAYS(n->value() == 0)
+	ASSERT_ALWAYS(n->child())
 	{
-		stob::Node * n1 = n->Child();
+		stob::Node * n1 = n->child();
 		ASSERT_ALWAYS(n1)
 		ASSERT_ALWAYS(*n1 == "")
-		ASSERT_ALWAYS(n1->Value() == 0)
-		ASSERT_ALWAYS(!n1->Child())
+		ASSERT_ALWAYS(n1->value() == 0)
+		ASSERT_ALWAYS(!n1->child())
 		
-		n1 = n1->Next();
+		n1 = n1->next();
 		ASSERT_ALWAYS(n1)
 		ASSERT_ALWAYS(*n1 == "")
-		ASSERT_ALWAYS(n1->Value() == 0)
-		ASSERT_ALWAYS(!n1->Child())
+		ASSERT_ALWAYS(n1->value() == 0)
+		ASSERT_ALWAYS(!n1->child())
 		
-		ASSERT_ALWAYS(!n1->Next())
+		ASSERT_ALWAYS(!n1->next())
 	}
 	
-	n = n->Next();
+	n = n->next();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "")
 	{
-		stob::Node * n1 = n->Child();
+		ASSERT_INFO_ALWAYS(n->count() == 5, n->count())
+		
+		ASSERT_ALWAYS(n->child(3).node())
+		ASSERT_ALWAYS(n->child(3).prev() == n->child(2).node())
+		ASSERT_ALWAYS(n->child(3).node()->operator==("ccc"))
+		
+		ASSERT_ALWAYS(n->child(size_t(0)).node())
+		ASSERT_ALWAYS(n->child(size_t(0)).prev() == nullptr)
+		ASSERT_ALWAYS(n->child(size_t(0)).node()->operator ==("child string"))
+		
+		ASSERT_ALWAYS(!n->child(5).node())
+		ASSERT_ALWAYS(!n->child(54).node())
+		
+		stob::Node * n1 = n->child();
 		ASSERT_ALWAYS(n1)
 		ASSERT_ALWAYS(*n1 == "child string")
 		
-		n1 = n1->Next();
+		n1 = n1->next();
 		ASSERT_ALWAYS(n1)
 		ASSERT_ALWAYS(*n1 == "aaa")
-		ASSERT_ALWAYS(!n1->Child())
+		ASSERT_ALWAYS(!n1->child())
 		
-		n1 = n1->Next();
+		n1 = n1->next();
 		ASSERT_ALWAYS(n1)
 		ASSERT_ALWAYS(*n1 == "bbb")
-		ASSERT_ALWAYS(!n1->Child())
+		ASSERT_ALWAYS(!n1->child())
 		
-		n1 = n1->Next();
+		n1 = n1->next();
 		ASSERT_ALWAYS(n1)
 		ASSERT_ALWAYS(*n1 == "ccc")
 		{
-			stob::Node* n2 = n1->Child();
+			stob::Node* n2 = n1->child();
 			ASSERT_ALWAYS(n2)
 			ASSERT_ALWAYS(*n2 == "ddd")
-			ASSERT_ALWAYS(!n2->Next())
+			ASSERT_ALWAYS(!n2->next())
 		}
 		
-		n1 = n1->Next();
+		n1 = n1->next();
 		ASSERT_ALWAYS(n1)
 		ASSERT_ALWAYS(*n1 == "")
-		ASSERT_ALWAYS(!n1->Child())
+		ASSERT_ALWAYS(!n1->child())
 		
-		ASSERT_ALWAYS(!n1->Next())
+		ASSERT_ALWAYS(!n1->next())
 	}
 	
-	n = n->Next();
+	n = n->next();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Carriagereturn\r Doublequotes\" {}{}{}{}")
-	ASSERT_ALWAYS(!n->Child())
+	ASSERT_ALWAYS(!n->child())
 	
-	n = n->Next();
+	n = n->next();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "quoted string with trailing slash /")
-	ASSERT_ALWAYS(!n->Child())
+	ASSERT_ALWAYS(!n->child())
 	
-	n = n->Next();
+	n = n->next();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "fff ggg")
-	ASSERT_ALWAYS(!n->Child())
+	ASSERT_ALWAYS(!n->child())
 	
-	n = n->Next();
+	n = n->next();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "tralala tro lo lo\ntre lele")
-	ASSERT_ALWAYS(!n->Child())
+	ASSERT_ALWAYS(!n->child())
 	
-	n = n->Next();
+	n = n->next();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "-1213.33")
-	ASSERT_ALWAYS(!n->Child())
+	ASSERT_ALWAYS(!n->child())
 	
-	n = n->Next();
+	n = n->next();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "UnquotedStringAtTheVeryEndOfTheFile")
-	ASSERT_ALWAYS(!n->Child())
+	ASSERT_ALWAYS(!n->child())
 	
-	ASSERT_ALWAYS(!n->Next())
+	ASSERT_ALWAYS(!n->next())
 	
 	
 	{
-		stob::Node* ch = root->Child("test string").node();
+		stob::Node* ch = root->child("test string").node();
 		ASSERT_ALWAYS(ch)
 		ASSERT_ALWAYS(*ch == "test string")
 	}
 	{
 		const stob::Node* constRoot = root.operator->();
-		const stob::Node* ch = constRoot->Child("unqu/otedString").node();
+		const stob::Node* ch = constRoot->child("unqu/otedString").node();
 		ASSERT_ALWAYS(ch)
 		ASSERT_ALWAYS(*ch == "unqu/otedString")
+	}
+	
+	{
+		auto cloned = root->cloneChain();
+		ASSERT_ALWAYS(cloned)
+		ASSERT_ALWAYS(cloned->count() != 0)
 	}
 }
 }//~namespace
@@ -169,183 +188,183 @@ void Run(){
 
 namespace TestWriting{
 void Run(){
-	std::unique_ptr<stob::Node> root = stob::Node::New();
+	auto root = utki::makeUnique<stob::Node>();
 	
 	{
-		root->SetChildren(stob::Node::New());
-		stob::Node* n = root->Child();
+		root->setChildren(utki::makeUnique<stob::Node>());
+		stob::Node* n = root->child();
 		ASSERT_ALWAYS(n)
-		n->SetValue("test string");
+		n->setValue("test string");
 		
-		n->InsertNext(stob::Node::New());
-		n = n->Next();
+		n->insertNext(utki::makeUnique<stob::Node>());
+		n = n->next();
 		ASSERT_ALWAYS(n)
-		n->SetValue("Unquoted_String");
+		n->setValue("Unquoted_String");
 		
-		n->InsertNext(stob::Node::New());
-		n = n->Next();
+		n->insertNext(utki::makeUnique<stob::Node>());
+		n = n->next();
 		ASSERT_ALWAYS(n)
-		n->SetValue("Escapes: \n \r \t \\ \" {}");
+		n->setValue("Escapes: \n \r \t \\ \" {}");
 
-		n->InsertNext(stob::Node::New());
-		n = n->Next();
+		n->insertNext(utki::makeUnique<stob::Node>());
+		n = n->next();
 		ASSERT_ALWAYS(n)
-		n->SetValue("Quoted{String");
+		n->setValue("Quoted{String");
 		{
-			n->SetChildren(stob::Node::New());
-			stob::Node* n1 = n->Child();
+			n->setChildren(utki::makeUnique<stob::Node>());
+			stob::Node* n1 = n->child();
 			ASSERT_ALWAYS(n1)
 			//n1 has no value (empty string)
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->SetValue("Child2");
+			n1->setValue("Child2");
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->SetValue("Child_third");
+			n1->setValue("Child_third");
 			{
-				n1->SetChildren(stob::Node::New());
-				stob::Node* n2 = n1->Child();
+				n1->setChildren(utki::makeUnique<stob::Node>());
+				stob::Node* n2 = n1->child();
 				ASSERT_ALWAYS(n2)
-				n2->SetValue("only one child");
+				n2->setValue("only one child");
 			}
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->SetValue("Child fourth");
+			n1->setValue("Child fourth");
 			{
-				n1->AddProperty("Property")->SetValue("value");
+				n1->addProperty("Property")->setValue("value");
 				
-				stob::Node* n2 = n1->Child();
-				n2->InsertNext(stob::Node::New());
-				n2 = n2->Next();
+				stob::Node* n2 = n1->child();
+				n2->insertNext(utki::makeUnique<stob::Node>());
+				n2 = n2->next();
 				ASSERT_ALWAYS(n2)
-				n2->SetValue("subchild1");
-				n2->SetChildren(stob::Node::New());
+				n2->setValue("subchild1");
+				n2->setChildren(utki::makeUnique<stob::Node>());
 				
-				n2->InsertNext(stob::Node::New());
-				n2 = n2->Next();
+				n2->insertNext(utki::makeUnique<stob::Node>());
+				n2 = n2->next();
 				ASSERT_ALWAYS(n2)
-				n2->SetValue("subchild 2");
+				n2->setValue("subchild 2");
 				
-				n1->AddProperty("Prop")->SetBool("true");
+				n1->addProperty("Prop")->setBool("true");
 			}
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			//n1->SetValue("");
+			//n1->setValue("");
 			{
-				n1->SetChildren(stob::Node::New());
-				stob::Node* n2 = n1->Child();
+				n1->setChildren(utki::makeUnique<stob::Node>());
+				stob::Node* n2 = n1->child();
 				ASSERT_ALWAYS(n2)
-				n2->SetValue("-3213.43");
-				n2->InsertNext(stob::Node::New("fsd"));
+				n2->setValue("-3213.43");
+				n2->insertNext(utki::makeUnique<stob::Node>("fsd"));
 			}
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->SetS32(315);
+			n1->setInt32(315);
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->SetS32(-426);
-			n1->SetChildren(stob::Node::New());
-			n1->Child()->SetChildren(stob::Node::New("trololo"));
+			n1->setInt32(-426);
+			n1->setChildren(utki::makeUnique<stob::Node>());
+			n1->child()->setChildren(utki::makeUnique<stob::Node>("trololo"));
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->SetU32(4000100315u);
+			n1->setUint32(4000100315u);
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->SetU32(-426);
+			n1->setUint32(-426);
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->SetU64(1234567890123LL);
+			n1->setUint64(1234567890123LL);
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->SetS64(-1234567890123LL);
+			n1->setInt64(-1234567890123LL);
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->SetChildren(stob::Node::New());
-			n1->Child()->SetChildren(stob::Node::New("trololo"));
+			n1->setChildren(utki::makeUnique<stob::Node>());
+			n1->child()->setChildren(utki::makeUnique<stob::Node>("trololo"));
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->SetFloat(315.34f);
+			n1->setFloat(315.34f);
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->SetFloat(0.00006f);
+			n1->setFloat(0.00006f);
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->SetDouble(-315.3);
+			n1->setDouble(-315.3);
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->SetDouble(-31523355325.3);
+			n1->setDouble(-31523355325.3);
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->SetLongDouble(-315.33L);
+			n1->setLongDouble(-315.33L);
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->SetBool(true);
+			n1->setBool(true);
 			
-			n1->InsertNext(stob::Node::New());
-			n1 = n1->Next();
+			n1->insertNext(utki::makeUnique<stob::Node>());
+			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->SetBool(false);
+			n1->setBool(false);
 		}
 		
-		n->InsertNext(stob::Node::New());
-		n = n->Next();
+		n->insertNext(utki::makeUnique<stob::Node>());
+		n = n->next();
 		ASSERT_ALWAYS(n)
-		n->SetValue("Another}QuotedString");
+		n->setValue("Another}QuotedString");
 
-		n->InsertNext(stob::Node::New());
-		n = n->Next();
+		n->insertNext(utki::makeUnique<stob::Node>());
+		n = n->next();
 		ASSERT_ALWAYS(n)
-		n->SetValue("Last{String}InTheFile");
+		n->setValue("Last{String}InTheFile");
 	}
 	
-	ting::fs::FSFile fileFormatted("out_formatted.stob");
-	ting::fs::FSFile fileNotFormatted("out_not_formatted.stob");
+	papki::FSFile fileFormatted("out_formatted.stob");
+	papki::FSFile fileNotFormatted("out_not_formatted.stob");
 	
-	root->Child()->WriteChain(fileFormatted, true);
-	root->Child()->WriteChain(fileNotFormatted, false);
+	root->child()->writeChain(fileFormatted, true);
+	root->child()->writeChain(fileNotFormatted, false);
 	
-	std::unique_ptr<stob::Node> readFormatted = stob::Node::New();
-	readFormatted->SetChildren(stob::Load(fileFormatted));
+	std::unique_ptr<stob::Node> readFormatted = utki::makeUnique<stob::Node>();
+	readFormatted->setChildren(stob::load(fileFormatted));
 	ASSERT_ALWAYS(root->operator==(*readFormatted))
 	
 //	TRACE(<< "formatted read" << std::endl)
 	
-	std::unique_ptr<stob::Node> readNotFormatted = stob::Node::New();
-	readNotFormatted->SetChildren(stob::Load(fileNotFormatted));
+	std::unique_ptr<stob::Node> readNotFormatted = utki::makeUnique<stob::Node>();
+	readNotFormatted->setChildren(stob::load(fileNotFormatted));
 	ASSERT_ALWAYS(root->operator==(*readNotFormatted))
 	
 //	TRACE(<< "not formatted read" << std::endl)
