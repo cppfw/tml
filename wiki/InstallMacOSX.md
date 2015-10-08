@@ -1,3 +1,21 @@
-2014-06-24: STOB version 2.0.0 released. Added: Node cloning, deep comparison, memory leaks fixed, bugs fixed.
+#Installation in MacOS X
 
-2013-08-07: STOB version 1.0.0 released.
+Installation in MacOS X requires **[homebrew](http://brew.sh/)** package manager. Install it before proceeding.
+
+- Add the homebrew tap (needs to be done once):
+
+  ```
+  sudo brew tap igagis/tap
+  ```
+
+- Update formulaes:
+
+  ```
+  sudo brew update
+  ```
+
+- Install **libstob** keg
+
+  ```
+  sudo brew install libstob
+  ```
