@@ -1,19 +1,28 @@
 # stob
 
-A lightweight markup language C++ library. See more info at http://stobml.org
+A lightweight STOB markup language C++ library. See more info at http://stobml.org
 
+See [WiKi](wiki/HomePage.md) for installation instructions.
 
-[WiKi Home](wiki/HomePage.md)
+STOB document example:
+```
+"String object"
+AnotherStringObject
+"String with children"{
+	"child 1"
+	Child2
+	"child three"{
+		SubChild1
+		"Subchild two"
 
-#installing under linux (Debian/Ubuntu)
-1. Add new source to /etc/apt/sources.list.d directory. Just create a new file **fury.list** there with the following content:
+		Property1 {Value1}
+		"Property two" {"Value 2"}
+		//comment
 
-  deb https://repo.fury.io/igagis/ /
-  
-2. Do APT update:
+		/* multi line
+		   comment */
 
-  $ sudo apt-get update
-  
-3. Install the library
-
-  $ sudo apt-get install libstob-dev
+		"Escape sequences \" \n \r \t \\ \/"
+	}
+}
+```
