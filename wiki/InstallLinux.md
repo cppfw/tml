@@ -1,3 +1,20 @@
-2014-06-24: STOB version 2.0.0 released. Added: Node cloning, deep comparison, memory leaks fixed, bugs fixed.
+#Installation in Linux
 
-2013-08-07: STOB version 1.0.0 released.
+##Using Debian packet manager
+- Add the repo to your sources (needs to be done once):
+
+  ```
+  sudo echo "deb https://repo.fury.io/igagis/ /" > /etc/apt/sources.list.d/igagis.list
+  ```
+
+- Update apt packages
+
+  ```
+  sudo apt-get update
+  ```
+
+- Install **libstob-dev** package
+
+  ```
+  sudo apt-get install libstob-dev
+  ```
