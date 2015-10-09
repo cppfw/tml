@@ -1,3 +1,9 @@
+libstob (3.1.1-1) UNRELEASED; urgency=medium
+
+  * use strtof()
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 09 Oct 2015 14:34:31 +0300
+
 libstob (3.1.0-1) stable; urgency=medium
 
   * bug fix
