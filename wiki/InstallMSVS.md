@@ -1,3 +1,4 @@
-2014-06-24: STOB version 2.0.0 released. Added: Node cloning, deep comparison, memory leaks fixed, bugs fixed.
+#Installation in Windows, Visual Studio
 
-2013-08-07: STOB version 1.0.0 released.
+**stob** is availabale as a NuGet package on nuget.org.
+Package name is **libstob**.
