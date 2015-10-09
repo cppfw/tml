@@ -135,7 +135,7 @@ public:
 	 * @return Result of parsing node value as signed 32bit integer.
 	 */
 	std::int32_t asInt32()const noexcept{
-		return std::int32_t(strtol(this->value(), 0, 0));
+		return std::int32_t(strtol(this->value(), nullptr, 0));
 	}
 
 	/**
@@ -144,7 +144,7 @@ public:
 	 * @return Result of parsing node value as unsigned 32bit integer.
 	 */
 	std::uint32_t asUint32()const noexcept{
-		return std::uint32_t(strtoul(this->value(), 0, 0));
+		return std::uint32_t(strtoul(this->value(), nullptr, 0));
 	}
 
 	/**
@@ -153,7 +153,7 @@ public:
 	 * @return Result of parsing node value as signed 64bit integer.
 	 */
 	std::int64_t asInt64()const noexcept{
-		return std::int64_t(strtoll(this->value(), 0 , 0));
+		return std::int64_t(strtoll(this->value(), nullptr , 0));
 	}
 
 	/**
@@ -162,7 +162,7 @@ public:
 	 * @return Result of parsing node value as unsigned 64bit integer.
 	 */
 	std::uint64_t asUint64()const noexcept{
-		return std::uint64_t(strtoull(this->value(), 0 , 0));
+		return std::uint64_t(strtoull(this->value(), nullptr , 0));
 	}
 
 	/**
@@ -171,7 +171,7 @@ public:
 	 * @return Result of parsing node value as float value (32bits).
 	 */
 	float asFloat()const noexcept{
-		return strtof(this->value(), 0);
+		return strtof(this->value(), nullptr);
 	}
 
 	/**
@@ -180,7 +180,7 @@ public:
 	 * @return Result of parsing node value as double precision float value (64bits).
 	 */
 	double asDouble()const noexcept{
-		return strtod(this->value(), 0);
+		return strtod(this->value(), nullptr);
 	}
 
 	/**
@@ -192,7 +192,7 @@ public:
 #if M_OS_NAME == M_OS_NAME_ANDROID //TODO: use strtold() when it becomes available on Android
 		return this->asDouble();
 #else
-		return strtold(this->value(), 0);
+		return strtold(this->value(), nullptr);
 #endif
 	}
 
