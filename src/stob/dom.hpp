@@ -171,7 +171,7 @@ public:
 	 * @return Result of parsing node value as float value (32bits).
 	 */
 	float asFloat()const noexcept{
-		return float(this->asDouble());
+		return strtof(this->value(), 0);
 	}
 
 	/**
