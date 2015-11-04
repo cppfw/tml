@@ -1,4 +1,6 @@
-# stob
+# stob [![Build status](https://ci.appveyor.com/api/projects/status/owv6srivorp08lxu/branch/master?svg=true)](https://ci.appveyor.com/project/igagis/stob/branch/master)
+
+
 
 A lightweight STOB markup language C++ library. See more info at http://stobml.org
 
