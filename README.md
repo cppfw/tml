@@ -1,4 +1,4 @@
-# stob [![Build status](https://ci.appveyor.com/api/projects/status/owv6srivorp08lxu/branch/master?svg=true)](https://ci.appveyor.com/project/igagis/stob/branch/master)
+# stob [![Build Status](https://travis-ci.org/igagis/stob.svg?branch=master)](https://travis-ci.org/igagis/stob) [![Build status](https://ci.appveyor.com/api/projects/status/owv6srivorp08lxu/branch/master?svg=true)](https://ci.appveyor.com/project/igagis/stob/branch/master)
 
 
 
