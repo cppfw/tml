@@ -20,6 +20,7 @@
                    projectFiles="false"
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>.travis.yml</itemPath>
+      <itemPath>cocoapods/libstob.podspec.in</itemPath>
       <itemPath>makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
