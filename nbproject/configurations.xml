@@ -20,7 +20,9 @@
                    projectFiles="false"
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>.travis.yml</itemPath>
+      <itemPath>debian/changelog</itemPath>
       <itemPath>cocoapods/libstob.podspec.in</itemPath>
+      <itemPath>homebrew/libstob.rb.in</itemPath>
       <itemPath>makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
