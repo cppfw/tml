@@ -478,7 +478,7 @@ public:
 		std::unique_ptr<Node> ret = std::move(this->children);
 		this->children = std::move(ret->next_var);
 
-		return std::move(ret);
+		return ret;
 	}
 
 	/**
