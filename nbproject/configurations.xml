@@ -24,6 +24,7 @@
       <itemPath>cocoapods/libstob.podspec.in</itemPath>
       <itemPath>homebrew/libstob.rb.in</itemPath>
       <itemPath>makefile</itemPath>
+      <itemPath>nuget/nuget.autopkg.in</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
