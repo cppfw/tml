@@ -8,6 +8,7 @@ this_cxxflags += -DDEBUG
 this_cxxflags += -fstrict-aliasing #strict aliasing!!!
 this_cxxflags += -std=c++11
 this_cxxflags += -g #debugging symbols
+this_cxxflags += -O3
 
 this_srcs += main.cpp
 
