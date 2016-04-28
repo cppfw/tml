@@ -9,9 +9,10 @@
 #include <cstdio>
 #include <cstdint>
 #include <cinttypes>
+#include <cstring>
+
 #include <utility>
 #include <memory>
-#include <cstring>
 
 #include <utki/config.hpp>
 #include <utki/PoolStored.hpp>
@@ -49,7 +50,6 @@ class Node final : public utki::Unique{
 	std::unique_ptr<Node> children; //pointer to the first child
 
 	void setValueInternal(const utki::Buf<char> str);
-
 
 	static void* operator new(size_t size);
 

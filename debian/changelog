@@ -1,3 +1,9 @@
+libstob (3.2.1) stable; urgency=medium
+
+  * release again for bintray deployment re-try
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 28 Apr 2016 14:34:07 +0300
+
 libstob (3.2.0) stable; urgency=medium
 
   * std::string and std::u32string getters added
