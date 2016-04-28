@@ -1,3 +1,9 @@
+libstob (3.2.0) stable; urgency=medium
+
+  * std::string and std::u32string getters added
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 28 Apr 2016 14:03:23 +0300
+
 libstob (3.1.4) stable; urgency=medium
 
   * nuget fix
