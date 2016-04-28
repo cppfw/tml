@@ -502,3 +502,24 @@ std::unique_ptr<Node> Node::removeChild(const stob::Node* c)noexcept{
 	
 	return nullptr;
 }
+
+void Node::setValueInternal(const utki::Buf<char> str) {
+	if (str.size() == 0) {
+		this->value_var = nullptr;
+		return;
+	}
+
+	this->value_var = decltype(this->value_var)(new char[str.size() + 1]);
+	memcpy(this->value_var.get(), str.begin(), str.size());
+	this->value_var[str.size()] = 0; //null-terminate
+}
+
+
+std::u32string Node::asU32String() const noexcept{
+	std::vector<char32_t> v;
+	for(auto i = this->asUTF8(); !i.isEnd(); ++i){
+		v.push_back(i.character());
+	}
+	
+	return std::u32string(&*v.begin(), v.size());
+}

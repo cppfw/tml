@@ -48,16 +48,7 @@ class Node final : public utki::Unique{
 
 	std::unique_ptr<Node> children; //pointer to the first child
 
-	void setValueInternal(const utki::Buf<char> str){
-		if(str.size() == 0){
-			this->value_var = nullptr;
-			return;
-		}
-
-		this->value_var = decltype(this->value_var)(new char[str.size() + 1]);
-		memcpy(this->value_var.get(), str.begin(), str.size());
-		this->value_var[str.size()] = 0;//null-terminate
-	}
+	void setValueInternal(const utki::Buf<char> str);
 
 
 	static void* operator new(size_t size);
@@ -129,6 +120,21 @@ public:
 		return unikod::Utf8Iterator(this->value());
 	}
 
+	/**
+	 * @brief Get node value as std::string.
+	 * @return std::string holding the copy of node value.
+	 */
+	std::string asString()const noexcept{
+		return std::string(this->value());
+	}
+	
+	/**
+	 * @brief Get node value as UTF-32 string.
+	 * Converts node value to UTF-32 as if it was in UTF-8.
+	 * @return std::u32string holding the node value.
+	 */
+	std::u32string asU32String()const noexcept;
+	
 	/**
 	 * @brief Get node value as signed 32bit integer.
 	 * Tries to parse the string as signed 32bit integer.
