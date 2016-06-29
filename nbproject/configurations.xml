@@ -25,7 +25,6 @@
       <itemPath>homebrew/libstob.rb.in</itemPath>
       <itemPath>makefile</itemPath>
       <itemPath>nuget/nuget.autopkg.in</itemPath>
-      <itemPath>travis_bintray.json</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>

@@ -28,25 +28,25 @@ nuget{
 		
 		[x86,release] { 
 			lib: ..\msvs_solution\Release\libstob.lib;
-//			symbols: ..\msvs_solution\Release\libstob.pdb;
+			symbols: ..\msvs_solution\libstob\Release\libstob.pdb;
 //			bin: ..\msvs_solution\Release\libstob.dll;
 		}
 
 		[x86,debug] { 
 			lib: ..\msvs_solution\Debug\libstob.lib;
-//			symbols: ..\msvs_solution\Debug\libstob.pdb;
+			symbols: ..\msvs_solution\libstob\Debug\libstob.pdb;
 //			bin: ..\msvs_solution\Debug\libstob.dll;
 		}
 
 		[x64,release] { 
 			lib: ..\msvs_solution\x64\Release\libstob.lib;
-//			symbols: ..\msvs_solution\x64\Release\libstob.pdb;
+			symbols: ..\msvs_solution\libstob\x64\Release\libstob.pdb;
 //			bin: ..\msvs_solution\x64\Release\libstob.dll;
 		}
 
 		[x64,debug] { 
 			lib: ..\msvs_solution\x64\Debug\libstob.lib;
-//			symbols: ..\msvs_solution\x64\Debug\libstob.pdb;
+			symbols: ..\msvs_solution\libstob\x64\Debug\libstob.pdb;
 //			bin: ..\msvs_solution\x64\Debug\libstob.dll;
 		}  
 	}
