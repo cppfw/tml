@@ -1,3 +1,9 @@
+libstob (3.2.2) unstable; urgency=medium
+
+  * bintray version fix
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 29 Jun 2016 18:09:31 +0300
+
 libstob (3.2.1) stable; urgency=medium
 
   * release again for bintray deployment re-try
