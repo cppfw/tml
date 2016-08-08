@@ -9,9 +9,9 @@ b) The items which should be highlighted with their own configurable font style
 
    3. escaped characters inside "": \" \n \r \t \\ \/
 
-   4. Unquoted strings starting with small letter, highlight only if first string on the line and has '{' after it ('{' may be on next line).
+   4. Unquoted strings starting with small letter, highlight only if it has '{' after it ('{' may be on next line).
 
-   5. Unquoted strings starting with capital letter, highlight only if first string on the line and has '{' after it ('{' may be on next line).
+   5. Unquoted strings starting with capital letter.
 
    6. Strings representing a number: decimal and hexadecimal. Examples: 123.3, 32.4e-32, 0xffaa45
 
