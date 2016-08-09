@@ -3,6 +3,7 @@
 <language id="stob" name="STOB" version="2.0" _section="Other">
   <metadata>
     <property name="globs">*.stob</property>
+    <property name="line-comment-start">//</property>
   </metadata>
 
   <definitions>
