@@ -2,6 +2,11 @@
 <!DOCTYPE language SYSTEM "language.dtd">
 
 <language name="STOB" section="Markup" version="1.3" kateversion="2.3" extensions="*.stob" mimetype="application/stob" author="Ivan Gagis (igagis@gmail.com)" license="MIT">
+  <general>
+    <comments>
+      <comment name="singleLine" start="//"/>
+    </comments>
+  </general>
   <highlighting>
     <list name="Keywords">
       <item>true</item>
