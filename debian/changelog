@@ -1,3 +1,9 @@
+libstob (3.2.4) unstable; urgency=medium
+
+  * gedit and kate syntax highlighters added
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 09 Aug 2016 23:16:07 +0300
+
 libstob (3.2.3) unstable; urgency=medium
 
   * nuget: add pdb files to package
