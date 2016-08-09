@@ -32,6 +32,7 @@
   <sourceRootList>
     <Elem>src</Elem>
     <Elem>tests</Elem>
+    <Elem>syntaxHighlight</Elem>
   </sourceRootList>
   <projectmakefile>makefile</projectmakefile>
   <confs>
