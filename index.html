@@ -31,15 +31,60 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h1>
-<a id="stob---" class="anchor" href="#stob---" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>stob <a href="https://github.com/igagis/stob/releases"><img src="https://img.shields.io/github/tag/igagis/stob.svg" alt="releases"></a> <a href="https://travis-ci.org/igagis/stob"><img src="https://travis-ci.org/igagis/stob.svg?branch=master" alt="Build Status"></a> <a href="https://ci.appveyor.com/project/igagis/stob/branch/master"><img src="https://ci.appveyor.com/api/projects/status/owv6srivorp08lxu/branch/master?svg=true" alt="Build status"></a>
-</h1>
+        <p><strong>STOB</strong> is a minimalistic general purpose markup language, proposed by Ivan Gagis in July 2012.
+The name of the language is an abbreviation from "<strong>ST</strong>ring <strong>OB</strong>jects" as the main element of
+the language is a string of text. <strong>STOB</strong> allows describing of string hierarchies.</p>
 
-<p>A lightweight STOB markup language C++ library. See more info at <a href="http://stobml.org">http://stobml.org</a></p>
+<h1>
+<a id="syntax" class="anchor" href="#syntax" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Syntax</h1>
 
-<p>See <a href="wiki/HomePage.md">WiKi</a> for installation instructions.</p>
+<p>STOB syntax is very simple and intentionally kept minimalistic.
+Here are the syntax rules:</p>
 
-<p>STOB document example:</p>
+<ol>
+<li>
+<p>The only type of language element is a string of text.</p>
+
+<ul>
+<li>String is generally enclosed in double quotes. Double quotes can be omitted if string does
+not contain any of the following special characters: space, tabulation, line feed,
+carriage return, left and right curly brackets, double quote.</li>
+<li>If the string is enclosed in double quotes then tabulations, line feeds and carriage returns
+inside of that string should be ignored by the parser.</li>
+<li>If the string is enclosed in double quotes then the following escape sequences inside that
+string should be recognized:
+
+<ul>
+<li>
+<strong>\n</strong> - line feed</li>
+<li>
+<strong>\r</strong> - carriage return</li>
+<li>
+<strong>\"</strong> - double quote</li>
+<li>
+<strong>\\</strong> - back slash</li>
+<li>
+<strong>\t</strong> - tabulation</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>String can have arbitrary number of child strings. Those are optionally listed in the curly
+brackets following the string. If string does not have any children then the curly brackets can be omitted.</p></li>
+<li>Parts of a document can be commented. C++ commenting rules apply.
+
+<ul>
+<li>A line of the document can be commented using double slash <strong>//</strong> sequence. Everything past the double
+slash and till the end of the line will be ignored by the parser.</li>
+<li>A multi-line comment is achieved using C-style commenting, i.e. everything between <strong>/</strong>* and <strong>*/</strong> is ignored
+by the parser. Nested comments are not supported.</li>
+<li>Comments are not allowed inside strings enclosed in double quotes.</li>
+</ul>
+</li>
+</ol>
+
+<h1>
+<a id="example" class="anchor" href="#example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example</h1>
 
 <pre><code>"String object"
 AnotherStringObject
@@ -54,13 +99,30 @@ AnotherStringObject
         "Property two" {"Value 2"}
         //comment
 
-        /* multi line
+        /* multi-line
            comment */
 
-        "Escape sequences \" \n \r \t \\ \/"
+        "multi-line
+         string"
+
+        "Escape sequences \" \n \r \t \\"
     }
 }
 </code></pre>
+
+<h1>
+<a id="libraries" class="anchor" href="#libraries" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Libraries</h1>
+
+<ul>
+<li><a href="https://github.com/igagis/stob">C++</a></li>
+<li><a href="https://github.com/igagis/stob-cs">C#</a></li>
+<li><a href="https://github.com/igagis/stob-java">Java</a></li>
+</ul>
+
+<h1>
+<a id="contact" class="anchor" href="#contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contact</h1>
+
+<p><a href="mailto:igagis@gmail.com">Site admin</a></p>
       </section>
     </div>
 
