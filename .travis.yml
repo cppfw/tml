@@ -43,7 +43,6 @@ before_install:
 script:
 - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     make deb;
-    echo $?;
   fi
 - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     make &&

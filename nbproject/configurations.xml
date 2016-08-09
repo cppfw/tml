@@ -7,6 +7,9 @@
         <in>parser.cpp</in>
       </df>
     </df>
+    <df root="syntaxHighlight" name="2">
+      <in>syntax_highlighting.txt</in>
+    </df>
     <df root="tests" name="1">
       <df name="dom">
         <in>main.cpp</in>
@@ -111,6 +114,11 @@
           </incDir>
         </ccTool>
       </item>
+      <item path="syntaxHighlight/syntax_highlighting.txt"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="tests/dom/main.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="1">
         </ccTool>
@@ -158,6 +166,11 @@
       </item>
       <item path="src/stob/parser.cpp" ex="false" tool="1" flavor2="9">
       </item>
+      <item path="syntaxHighlight/syntax_highlighting.txt"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="tests/dom/main.cpp" ex="false" tool="1" flavor2="9">
       </item>
       <item path="tests/parser/main.cpp" ex="false" tool="1" flavor2="9">
@@ -200,6 +213,11 @@
       <item path="src/stob/dom.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/stob/parser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="syntaxHighlight/syntax_highlighting.txt"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="tests/dom/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
