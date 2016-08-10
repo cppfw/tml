@@ -1,67 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <language id="stob" name="STOB" version="2.0" _section="Other">
-  <metadata>
-    <property name="globs">*.stob</property>
-    <property name="line-comment-start">//</property>
-  </metadata>
+	<metadata>
+		<property name="globs">*.stob</property>
+		<property name="line-comment-start">//</property>
+	</metadata>
 
-  <definitions>
-	<context id="comment" style-ref="def:comment">
-		<start>\/\/</start>
-		<end>$</end>
-	</context>
+	<definitions>
+		<context id="Comment" style-ref="def:comment">
+			<start>\/\/</start>
+			<end>$</end>
+		</context>
 
-	<context id="multilineComment" style-ref="def:comment">
-          <start>\/\*</start>
-          <end>\*\/</end>
-        </context>
-	
-    <context id="quotedString" style-ref="def:string">
-      <start>"</start>
-      <end>"</end>
-      <include>
-	<context id="escapeChar" style-ref="def:special-char">
-	  <match>\\[ntr"\\]</match>
-	</context>
-	<context ref="numbers"/>
-	
-      </include>
-    </context>
+		<context id="MultilineComment" style-ref="def:comment">
+			<start>\/\*</start>
+			<end>\*\/</end>
+		</context>
 
-    <context id="numbers">
-      <include>
-	<context ref="def:decimal"/>
-	<context ref="def:hexadecimal"/>
-	<context ref="def:float"/>
-      </include>
-    </context>
+		<context id="QuotedString" style-ref="def:string">
+			<start>"</start>
+			<end>"</end>
+			<include>
+				<context id="escapeChar" style-ref="def:special-char">
+					<match>\\[ntr"\\]</match>
+				</context>
+				<context ref="Numbers"/>
+			</include>
+		</context>
+
+		<context id="Numbers">
+			<include>
+				<context ref="def:decimal"/>
+				<context ref="def:hexadecimal"/>
+				<context ref="def:float"/>
+			</include>
+		</context>
+
+		<context id="Property">
+			<match>\b([a-z0-9]{1}[^\s\}]*?)\s*\{</match>
+			<include>
+				<context id="Property_highlight" sub-pattern="1" style-ref="def:identifier"/>
+			</include>
+		</context>
     
-    <context id="Property">
-      <match>\b([a-z0-9]{1}[^\s\}]*?)\s*\{</match>
+		<context id="Child">
+			<match>\b([A-Z]{1}[^\s\}]*?)\s*\{</match>
       
-      <include>
-	<context id="Property_highlight" sub-pattern="1" style-ref="def:identifier"/>
-      </include>
-    </context>
-    
-    <context id="Child">
-      <match>\b([A-Z]{1}[^\s\}]*?)\s*\{</match>
-      
-      <include>
-	<context id="Child_highlight" sub-pattern="1" style-ref="def:statement"/>
-      </include>
-    </context>
-    
-    <context id="stob" class="no-spell-check">
-      <include>
-	<context ref="comment"/>
-	<context ref="multilineComment"/>
-	<context ref="quotedString"/>
-	<context ref="numbers"/>
-	<context ref="Property"/>
-	<context ref="Child"/>
-      </include>
-    </context>
-  </definitions>
+			<include>
+				<context id="Child_highlight" sub-pattern="1" style-ref="def:statement"/>
+			</include>
+		</context>
+
+		<context id="Keyword" style-ref="def:keyword">
+			<keyword>true</keyword>
+			<keyword>false</keyword>
+		</context>
+		
+		<context id="stob" class="no-spell-check">
+			<include>
+				<context ref="Comment"/>
+				<context ref="MultilineComment"/>
+				<context ref="QuotedString"/>
+				<context ref="Numbers"/>
+				<context ref="Property"/>
+				<context ref="Child"/>
+				<context ref="Keyword"/>
+			</include>
+		</context>
+	</definitions>
 </language>
