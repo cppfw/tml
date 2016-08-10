@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
 
-<language name="STOB" section="Markup" version="1.3" kateversion="2.3" extensions="*.stob" mimetype="application/stob" author="Ivan Gagis (igagis@gmail.com)" license="MIT">
+<language name="STOB" section="Markup" version="1.0" kateversion="2.4" extensions="*.stob" mimetype="application/stob" author="Ivan Gagis (igagis@gmail.com)" license="MIT">
   <general>
     <comments>
       <comment name="singleLine" start="//"/>
@@ -24,8 +24,8 @@
         <Detect2Chars char="/" char1="/" context="Comment" />
         <Detect2Chars char="/" char1="*" context="MultilineComment" />
         
-        <RegExpr String="\b([a-z0-9]{1}[^\s\}]*?)\s*\{" context="Property" attribute="Style_Property" lookAhead="true"/>
-        <RegExpr String="\b([A-Z]{1}[^\s\}]*?)\s*\{" context="Child" attribute="Style_Child" lookAhead="true"/>
+        <RegExpr String="\b([a-z0-9]{1}[^\s\}]*)\s*\{" context="Property" attribute="Style_Property" lookAhead="true"/>
+        <RegExpr String="\b([A-Z]{1}[^\s\}]*)\s*\{" context="Child" attribute="Style_Child" lookAhead="true"/>
         
         <keyword String="Keywords" context="#stay" attribute="Style_Keyword" />
       </context>
