@@ -18,9 +18,9 @@ nuget{
 	}
 	dependencies {
 		packages : {
-			libutki/1.0.8.4;
-			libunikod/1.0.2.2;
-			libpapki/1.0.2.2;
+			libutki/1.0.22;
+			libunikod/2.0.4;
+			libpapki/1.0.15;
 		};
 	}
 	files {
@@ -29,25 +29,21 @@ nuget{
 			#destination = ${d_include}stob;
 			"..\src\stob\**\*.hpp"
 		};
-		
-		[x86,release] { 
+
+		[x86,release] {
 			lib: ..\msvs_solution\Release\libstob.lib;
-			symbols: ..\msvs_solution\libstob\Release\libstob.pdb;
 		}
 
-		[x86,debug] { 
+		[x86,debug] {
 			lib: ..\msvs_solution\Debug\libstob.lib;
-			symbols: ..\msvs_solution\libstob\Debug\libstob.pdb;
 		}
 
-		[x64,release] { 
+		[x64,release] {
 			lib: ..\msvs_solution\x64\Release\libstob.lib;
-			symbols: ..\msvs_solution\libstob\x64\Release\libstob.pdb;
 		}
 
-		[x64,debug] { 
+		[x64,debug] {
 			lib: ..\msvs_solution\x64\Debug\libstob.lib;
-			symbols: ..\msvs_solution\libstob\x64\Debug\libstob.pdb;
-		}  
+		}
 	}
 }
