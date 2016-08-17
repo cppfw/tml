@@ -76,30 +76,29 @@ public:
  * documents.
  */
 class Parser{
-	unsigned curLine;//current line into the document being parsed, used for pointing place of format error.
-	
 	std::vector<char> buf;//buffer for current string being parsed
 
 	//This variable is used for tracking current nesting level to make checks for detecting malformed STOB document
 	unsigned nestingLevel;
 	
-	//Previous character, used to detect two character sequences like //, /*, */, escape sequences.
-	std::uint8_t prevChar;//TODO: remove
-	
 	enum class State_e{
-		IDLE,//TODO: rename to normal
+		IDLE,
 		QUOTED_STRING,
+		ESCAPE_SEQUENCE,
 		UNQUOTED_STRING,
 		SINGLE_LINE_COMMENT,
 		MULTILINE_COMMENT
 	} state;
-	
-	//This flag indicates that a string has been parsed before but its children list is not yet parsed.
-	//This is used to detect cases when curly braces go right after another curly braces, thus omitting the string declaration
-	//which is allowed by the STOB format and means that string is empty.
-	bool stringParsed;
 
 	void handleStringParsed(ParseListener& listener);
+	
+	void processChar(char c, ParseListener& listener);
+	void processCharInIdle(char c, ParseListener& listener);
+	void processCharInUnquotedString(char c, ParseListener& listener);
+	void processCharInQuotedString(char c, ParseListener& listener);
+	void processCharInEscapeSequence(char c, ParseListener& listener);
+	void processCharInSingleLineComment(char c, ParseListener& listener);
+	void processCharInMultiLineComment(char c, ParseListener& listener);
 	
 public:
 	/**

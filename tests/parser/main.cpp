@@ -31,11 +31,11 @@ class Listener : public stob::ParseListener{
 		this->actions.pop_front();
 	}
 	
-	void onStringParsed(const utki::Buf<char> str)override{
-		TRACE(<< "str = " << std::string(&*str.begin(), str.size()) << std::endl)
+	void onStringParsed(std::string&& str)override{
+		TRACE(<< "str = " << str << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == STRING, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
-		ASSERT_INFO_ALWAYS(this->actions.front().second == std::string(str.begin(), str.size()), "first = " << this->actions.front().first << " second = " << this->actions.front().second << " str = " << std::string(str.begin(), str.size()))
+		ASSERT_INFO_ALWAYS(this->actions.front().second == str, "first = " << this->actions.front().first << " second = " << this->actions.front().second << " str = " << str)
 		this->actions.pop_front();
 	}
 	

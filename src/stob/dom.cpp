@@ -358,8 +358,8 @@ std::unique_ptr<stob::Node> stob::load(const papki::File& fi){
 				);
 		}
 
-		void onStringParsed(const utki::Buf<char> str)override{
-			auto node = utki::makeUnique<Node>(str);
+		void onStringParsed(std::string&& str)override{
+			auto node = utki::makeUnique<Node>(utki::Buf<char>(const_cast<char*>(str.c_str()), str.size()));
 
 			if(!this->chains){
 				this->chains = std::move(node);

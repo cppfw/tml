@@ -23,174 +23,191 @@ void Parser::handleStringParsed(ParseListener& listener){
 	this->buf.reserve(bufReserve_d);
 }
 
+void Parser::processCharInIdle(char c, ParseListener& listener){
+	switch (c) {
+		case ' ':
+		case '\n':
+		case '\r':
+		case '\t':
+			break;
+		case '{':
+			listener.onStringParsed(std::string());
+			listener.onChildrenParseStarted();
+			++this->nestingLevel;
+			break;
+		case '}':
+			listener.onChildrenParseFinished();
+			--this->nestingLevel;
+			break;
+		case '"':
+			this->state = State_e::QUOTED_STRING;
+			break;
+		default:
+			this->buf.push_back(c);
+			this->state = State_e::UNQUOTED_STRING;
+			break;
+	}
+}
+
+void Parser::processCharInUnquotedString(char c, ParseListener& listener){
+	switch (c) {
+		case '/':
+			if(this->buf.size() != 0 && this->buf.back() == '/'){
+				this->buf.pop_back();
+				if(this->buf.size() != 0){
+					this->handleStringParsed(listener);
+				}
+				this->state = State_e::SINGLE_LINE_COMMENT;
+			}else{
+				this->buf.push_back(c);
+			}
+			break;
+		case '*':
+			if(this->buf.size() != 0 && this->buf.back() == '/'){
+				this->buf.pop_back();
+				if(this->buf.size() != 0){
+					this->handleStringParsed(listener);
+				}
+				state = State_e::MULTILINE_COMMENT;
+			} else {
+				this->buf.push_back(c);
+			}
+			break;
+		case '"':
+			ASSERT(this->buf.size() != 0)
+			this->handleStringParsed(listener);
+			this->state = State_e::QUOTED_STRING;
+			break;
+		case ' ':
+		case '\r':
+		case '\n':
+		case '\t':
+			ASSERT(this->buf.size() != 0)
+			this->handleStringParsed(listener);
+			this->state = State_e::IDLE;
+			break;
+		case '{':
+			ASSERT(this->buf.size() != 0)
+			this->handleStringParsed(listener);
+			this->state = State_e::IDLE;
+			listener.onChildrenParseStarted();
+			++this->nestingLevel;
+			break;
+		case '}':
+			ASSERT(this->buf.size() != 0)
+			this->handleStringParsed(listener);
+			this->state = State_e::IDLE;
+			listener.onChildrenParseFinished();
+			--this->nestingLevel;
+			break;
+		default:
+			this->buf.push_back(c);
+			break;
+	}
+}
+
+void Parser::processCharInQuotedString(char c, ParseListener& listener){
+	switch (c) {
+		case '"':
+			this->handleStringParsed(listener);
+			this->state = State_e::IDLE;
+			break;
+		case '\\':
+			this->state = State_e::ESCAPE_SEQUENCE;
+			break;
+		case '\r':
+		case '\n':
+		case '\t':
+			break;
+		default:
+			this->buf.push_back(c);
+			break;
+	}
+}
+
+void Parser::processCharInEscapeSequence(char c, ParseListener& listener){
+	switch (c) {
+		case '"':
+			this->buf.push_back('"');
+			break;
+		case '\\':
+			this->buf.push_back('\\');
+			break;
+		case 'r':
+			this->buf.push_back('\r');
+			break;
+		case 'n':
+			this->buf.push_back('\n');
+			break;
+		case 't':
+			this->buf.push_back('\t');
+			break;
+		default:
+			this->buf.push_back('\\');
+			this->buf.push_back(c);
+			break;
+	}
+	this->state = State_e::QUOTED_STRING;
+}
+
+void Parser::processCharInSingleLineComment(char c, ParseListener& listener){
+	if (c == '\n') {
+		this->state = State_e::IDLE;
+	}
+}
+
+void Parser::processCharInMultiLineComment(char c, ParseListener& listener){
+	switch(c){
+		case '*':
+			ASSERT(this->buf.size() == 0)
+			this->buf.push_back('*');
+			break;
+		case '/':
+			if(this->buf.size() != 0){
+				ASSERT(this->buf.size() == 1)
+				ASSERT(this->buf.back() == '*')
+				this->buf.clear();
+				this->state = State_e::IDLE;
+			}
+			break;
+		default:
+			this->buf.clear();
+			break;
+	}
+}
+
+void Parser::processChar(char c, ParseListener& listener){
+	switch(this->state){
+		case State_e::IDLE:
+			this->processCharInIdle(c, listener);
+			break;
+		case State_e::UNQUOTED_STRING:
+			this->processCharInUnquotedString(c, listener);
+			break;
+		case State_e::QUOTED_STRING:
+			this->processCharInQuotedString(c, listener);
+			break;
+		case State_e::ESCAPE_SEQUENCE:
+			this->processCharInEscapeSequence(c, listener);
+			break;
+		case State_e::SINGLE_LINE_COMMENT:
+			this->processCharInSingleLineComment(c, listener);
+			break;
+		case State_e::MULTILINE_COMMENT:
+			this->processCharInMultiLineComment(c, listener);
+			break;
+		default:
+			ASSERT(false)
+			break;
+	}	
+}
+
 
 
 void Parser::parseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& listener){
-	for(auto s = chunk.cbegin(); s != chunk.cend(); ++s){
-//		TRACE(<< "Parser::parseDataChunk(): *s = " << (*s) << std::endl)
-			auto& c = *s;
-			
-			switch (this->state) {
-				case State_e::IDLE:
-					switch (c) {
-//						case '/':
-//							if(this->buf.size() != 0 && this->buf.back() == '/') {
-//								this->buf.pop_back();
-//								this->handleStringParsed(listener);
-//								this->state = State_e::SINGLE_LINE_COMMENT;
-//							}else{
-//								this->buf.push_back(c);
-//							}
-//							break;
-//						case '*':
-//							if (this->buf.size() != 0 && this->buf.back() == '/') {
-//								this->buf.pop_back();
-//								this->handleStringParsed(listener);
-//								this->state = State_e::MULTILINE_COMMENT;
-//							} else {
-//								this->buf.push_back(c);
-//							}
-//							break;
-						case ' ':
-						case '\n':
-						case '\r':
-						case '\t':
-							break;
-						case '{':
-							this->handleStringParsed(listener);
-							listener.onChildrenParseStarted();
-							break;
-						case '}':
-							this->handleStringParsed(listener);
-							listener.onChildrenParseFinished();
-							break;
-						case '"':
-							this->state = State_e.QUOTED_STRING;
-							break;
-						default:
-							this->handleStringParsed(listener);
-							this->buf.push_back(c);
-							state = State_e::UNQUOTED_STRING;
-							break;
-					}
-				break;
-
-			case UNQUOTED_STRING:
-				switch (c) {
-				case '/':
-					if (prevChar == '/') {
-						state = EState.SINGLE_LINE_COMMENT;
-					}
-					//do not append the character here yet
-					break;
-				case '*':
-					if (prevChar == '/') {
-						state = EState.MULTILINE_COMMENT;
-					} else {
-						curString.append (c);
-					}
-					break;
-                case '"':
-                    listener.onStringParsed(curString.toString());
-                    curString = new StringBuilder();
-                    state = EState.QUOTED_STRING;
-                    stringHasJustBeenParsed = true;
-                    break;
-				case ' ':
-				case '\r':
-				case '\n':
-				case '\t':
-					listener.onStringParsed (curString.toString ());
-					curString = new StringBuilder ();
-					state = EState.IDLE;
-					stringHasJustBeenParsed = true;
-					break;
-				case '{':
-					listener.onStringParsed (curString.toString ());
-					curString = new StringBuilder ();
-					state = EState.IDLE;
-					listener.onChildrenParseStarted ();
-					stringHasJustBeenParsed = false;
-					break;
-				case '}':
-					listener.onStringParsed (curString.toString ());
-					curString = new StringBuilder ();
-					state = EState.IDLE;
-					stringHasJustBeenParsed = false;
-					listener.onChildrenParseFinished ();
-					break;
-				default:
-					if (prevChar == '/') {
-						curString.append ('/');
-					}
-					curString.append (c);
-					break;
-				}
-				break;
-
-			case QUOTED_STRING:
-				switch (c) {
-				case '"':
-					if (prevChar == '\\') {
-						curString.append ('\"');
-					} else {
-						listener.onStringParsed (curString.toString ());
-						curString = new StringBuilder ();
-						state = EState.IDLE;
-						stringHasJustBeenParsed = true;
-					}
-					break;
-				case '\\':
-					if (prevChar == '\\') {
-						curString.append ('\\');
-						c = '\0';//this is to make new prevChar not to be '\' next cycle
-					}
-					break;
-				case '\r':
-				case '\n':
-				case '\t':
-					//ignore
-					break;
-				default:
-					if (prevChar == '\\') {//if escape sequence
-						switch (c) {
-						case 'r':
-							curString.append ('\r');
-							break;
-						case 'n':
-							curString.append ('\n');
-							break;
-						case 't':
-							curString.append ('\t');
-							break;
-						default:
-							//ignore
-							break;
-						}
-					}else{
-						curString.append(c);
-					}
-					break;
-				}
-				break;
-			case SINGLE_LINE_COMMENT:
-				if (c == '\n') {
-					state = EState.IDLE;
-				}
-				break;
-			case MULTILINE_COMMENT:
-				if (c == '/' && prevChar == '*') {
-					state = EState.IDLE;
-					c = '\0';//this is to make new prevChar not to be '/' next cycle
-				}
-				break;
-			default:
-				//Assert(false)
-				break;
-			}
-
-			prevChar = c;		
-	}//~for(s)
+	for(auto c : chunk){
+		this->processChar(c, listener);
+	}
 }
 
 
@@ -198,7 +215,7 @@ void Parser::parseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& 
 void Parser::endOfData(ParseListener& listener){
 	if(this->state != State_e::IDLE){
 		//add new line at the end of data
-		this->preParseChar('\n', listener);
+		this->processChar('\n', listener);
 	}
 	
 	if(this->nestingLevel != 0 || this->state != State_e::IDLE){
@@ -233,9 +250,6 @@ void stob::parse(const papki::File& fi, ParseListener& listener){
 void Parser::reset(){
 	this->buf.clear();
 	this->buf.reserve(bufReserve_d);
-	this->curLine = 1;
 	this->nestingLevel = 0;
-	this->prevChar = 0;
 	this->state = State_e::IDLE;
-	this->stringParsed = false;
 }
