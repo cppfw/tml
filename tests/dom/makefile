@@ -12,7 +12,7 @@ this_cxxflags += -O3
 
 this_srcs += main.cpp
 
-this_ldlibs += -lstob -lpapki
+
 this_ldflags += -L$(prorab_this_dir)../../src
 
 ifeq ($(prorab_os), macosx)
@@ -22,6 +22,8 @@ else ifeq ($(prorab_os),windows)
     this_cxxflags += -I/usr/include -I/usr/local/include
     this_ldflags += -L/usr/lib -L/usr/local/lib
 endif
+
+this_ldlibs += -lstob -lpapki -lstdc++
 
 $(eval $(prorab-build-app))
 
