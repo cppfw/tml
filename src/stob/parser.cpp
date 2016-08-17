@@ -28,9 +28,8 @@ void Parser::handleLeftCurlyBracket(ParseListener& listener){
 	if(this->nestingLevel == unsigned(-1)){
 		throw stob::Exc("Malformed STOB document. Nesting level is too high.");
 	}
-	if(!this->stringParsed){
-		throw stob::Exc("Malformed STOB document. Curly braces without preceding string declaration encountered.");
-	}
+	ASSERT(this->stringParsed)
+	
 	++this->nestingLevel;
 	this->stringParsed = false;
 	listener.onChildrenParseStarted();
@@ -58,17 +57,17 @@ void Parser::handleStringEnd(ParseListener& listener){
 	this->buf.reserve(bufReserve_d);
 	
 	this->stringParsed = true;
-	this->state = E_State::IDLE;
+	this->state = State_e::IDLE;
 }
 
 
 
 void Parser::parseChar(std::uint8_t c, ParseListener& listener){
 	switch(this->state){
-		case E_State::IDLE:
+		case State_e::IDLE:
 			switch(c){
 				case '"':
-					this->state = E_State::QUOTED_STRING;
+					this->state = State_e::QUOTED_STRING;
 					break;
 				case '{':
 					if(!this->stringParsed){
@@ -90,12 +89,12 @@ void Parser::parseChar(std::uint8_t c, ParseListener& listener){
 					//ignore
 					break;
 				default:
-					this->state = E_State::UNQUOTED_STRING;
+					this->state = State_e::UNQUOTED_STRING;
 					this->appendCharToString(c);
 					break;
 			}
 			break;
-		case E_State::UNQUOTED_STRING:
+		case State_e::UNQUOTED_STRING:
 			switch(c){
 				case '\n':
 					++this->curLine;
@@ -116,7 +115,7 @@ void Parser::parseChar(std::uint8_t c, ParseListener& listener){
 							break;
 						case '"':
 							//start parsing quoted string right a way
-							this->state = E_State::QUOTED_STRING;
+							this->state = State_e::QUOTED_STRING;
 							this->stringParsed = false;
 							break;
 						default:
@@ -129,7 +128,7 @@ void Parser::parseChar(std::uint8_t c, ParseListener& listener){
 					break;
 			}
 			break;
-		case E_State::QUOTED_STRING:
+		case State_e::QUOTED_STRING:
 			this->appendCharToString(c);
 			break;
 		default:
@@ -143,15 +142,15 @@ void Parser::parseChar(std::uint8_t c, ParseListener& listener){
 void Parser::preParseChar(std::uint8_t c, ParseListener& listener){
 	if(this->prevChar != 0){
 		switch(this->state){
-			case E_State::IDLE:
-			case E_State::UNQUOTED_STRING:
+			case State_e::IDLE:
+			case State_e::UNQUOTED_STRING:
 				ASSERT(this->prevChar == '/')//possible comment sequence
 				switch(c){
 					case '/':
-						this->commentState = E_CommentState::LINE_COMMENT;
+						this->commentState = CommentState_e::LINE_COMMENT;
 						break;
 					case '*':
-						this->commentState = E_CommentState::MULTILINE_COMMENT;
+						this->commentState = CommentState_e::MULTILINE_COMMENT;
 						break;
 					default:
 						this->parseChar('/', listener);
@@ -159,7 +158,7 @@ void Parser::preParseChar(std::uint8_t c, ParseListener& listener){
 						break;
 				}
 				break;
-			case E_State::QUOTED_STRING:
+			case State_e::QUOTED_STRING:
 				ASSERT(this->prevChar == '\\')//escape sequence
 				switch(c){
 					case '\\'://backslash
@@ -197,7 +196,7 @@ void Parser::preParseChar(std::uint8_t c, ParseListener& listener){
 		this->prevChar = 0;
 	}else{//~if(this->prevChar != 0)
 		switch(this->state){
-			case E_State::QUOTED_STRING:
+			case State_e::QUOTED_STRING:
 				switch(c){
 					case '\\': //escape sequence
 						this->prevChar = '\\';
@@ -217,8 +216,8 @@ void Parser::preParseChar(std::uint8_t c, ParseListener& listener){
 						break;
 				}
 				break;
-			case E_State::UNQUOTED_STRING:
-			case E_State::IDLE:
+			case State_e::UNQUOTED_STRING:
+			case State_e::IDLE:
 				if(c == '/'){//possible comment sequence
 					this->prevChar = '/';
 				}else{
@@ -235,29 +234,29 @@ void Parser::preParseChar(std::uint8_t c, ParseListener& listener){
 
 
 void Parser::parseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& listener){
-	for(const std::uint8_t* s = chunk.begin(); s != chunk.end(); ++s){
+	for(auto s = chunk.cbegin(); s != chunk.cend(); ++s){
 //		TRACE(<< "Parser::ParseDataChunk(): *s = " << (*s) << std::endl)
 		
 		//skip comments if needed
-		if(this->commentState != E_CommentState::NO_COMMENT){
+		if(this->commentState != CommentState_e::NO_COMMENT){
 			switch(this->commentState){
-				case E_CommentState::LINE_COMMENT:
+				case CommentState_e::LINE_COMMENT:
 					for(;; ++s){
 						if(s == chunk.end()){
 							return;
 						}
 						if(*s == '\n'){
 							++this->curLine;
-							this->commentState = E_CommentState::NO_COMMENT;
+							this->commentState = CommentState_e::NO_COMMENT;
 							break;//~for
 						}
 					}
 					break;//~switch
-				case E_CommentState::MULTILINE_COMMENT:
+				case CommentState_e::MULTILINE_COMMENT:
 					if(this->prevChar == '*'){
 						this->prevChar = 0;
 						if(*s == '/'){
-							this->commentState = E_CommentState::NO_COMMENT;
+							this->commentState = CommentState_e::NO_COMMENT;
 							break;//~switch()
 						}
 					}
@@ -288,12 +287,12 @@ void Parser::parseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& 
 
 
 void Parser::endOfData(ParseListener& listener){
-	if(this->state != E_State::IDLE){
+	if(this->state != State_e::IDLE){
 		//add new line at the end of data
 		this->preParseChar('\n', listener);
 	}
 	
-	if(this->nestingLevel != 0 || this->state != E_State::IDLE){
+	if(this->nestingLevel != 0 || this->state != State_e::IDLE){
 		throw stob::Exc("Malformed stob document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
 	}
 	
@@ -329,7 +328,7 @@ void Parser::reset(){
 	this->curLine = 1;
 	this->nestingLevel = 0;
 	this->prevChar = 0;
-	this->commentState = E_CommentState::NO_COMMENT;
-	this->state = E_State::IDLE;
+	this->commentState = CommentState_e::NO_COMMENT;
+	this->state = State_e::IDLE;
 	this->stringParsed = false;
 }

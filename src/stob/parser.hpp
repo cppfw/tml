@@ -82,24 +82,23 @@ class Parser{
 	std::vector<char> buf;//buffer for current string being parsed
 
 	
+	//This variable is used for tracking current nesting level to make checks for detecting malformed STOB document
 	unsigned nestingLevel;
 	
 	//Previous character, used to detect two character sequences like //, /*, */, escape sequences.
 	std::uint8_t prevChar;
 	
-	enum class E_CommentState{
+	enum class CommentState_e{
 		NO_COMMENT,
 		LINE_COMMENT,
 		MULTILINE_COMMENT
-	};
-	E_CommentState commentState;
+	} commentState;
 	
-	enum class E_State{
+	enum class State_e{
 		IDLE,
 		QUOTED_STRING,
 		UNQUOTED_STRING,
-	};
-	E_State state;
+	} state;
 	
 	//This flag indicates that a string has been parsed before but its children list is not yet parsed.
 	//This is used to detect cases when curly braces go right after another curly braces, thus omitting the string declaration
