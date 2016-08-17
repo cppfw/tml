@@ -47,12 +47,22 @@ void Run(){
 	
 	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "string_interrupted_by_comment", n->value())
+	ASSERT_INFO_ALWAYS(*n == "string_interrupted", n->value())
 	ASSERT_ALWAYS(!n->child())
 	
 	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "string_broken_by_comment", n->value())
+	ASSERT_INFO_ALWAYS(*n == "_by_comment", n->value())
+	ASSERT_ALWAYS(!n->child())
+	
+	n = n->next();
+	ASSERT_ALWAYS(n)
+	ASSERT_INFO_ALWAYS(*n == "string_broken", n->value())
+	ASSERT_ALWAYS(!n->child())
+	
+	n = n->next();
+	ASSERT_ALWAYS(n)
+	ASSERT_INFO_ALWAYS(*n == "_by_comment", n->value())
 	ASSERT_ALWAYS(!n->child())
 
 	n = n->next();
@@ -86,7 +96,7 @@ void Run(){
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "")
 	{
-		ASSERT_INFO_ALWAYS(n->count() == 5, n->count())
+//		ASSERT_INFO_ALWAYS(n->count() == 5, n->count())
 		
 		ASSERT_ALWAYS(n->child(3).node())
 		ASSERT_ALWAYS(n->child(3).prev() == n->child(2).node())

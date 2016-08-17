@@ -49,8 +49,27 @@ void Parser::processCharInIdle(char c, ParseListener& listener){
 	}
 }
 
-void Parser::processCharInUnquotedString(char c, ParseListener& listener){
+void Parser::processCharInStringParsed(char c, ParseListener& listener){
 	switch (c) {
+		case ' ':
+		case '\n':
+		case '\r':
+		case '\t':
+			break;
+		case '{':
+			listener.onChildrenParseStarted();
+			this->state = State_e::IDLE;
+			++this->nestingLevel;
+			break;
+		default:
+			this->state = State_e::IDLE;
+			this->processCharInIdle(c, listener);
+			break;
+	}
+}
+
+void Parser::processCharInUnquotedString(char c, ParseListener& listener){
+	switch(c){
 		case '/':
 			if(this->buf.size() != 0 && this->buf.back() == '/'){
 				this->buf.pop_back();
@@ -84,7 +103,7 @@ void Parser::processCharInUnquotedString(char c, ParseListener& listener){
 		case '\t':
 			ASSERT(this->buf.size() != 0)
 			this->handleStringParsed(listener);
-			this->state = State_e::IDLE;
+			this->state = State_e::STRING_PARSED;
 			break;
 		case '{':
 			ASSERT(this->buf.size() != 0)
@@ -110,7 +129,7 @@ void Parser::processCharInQuotedString(char c, ParseListener& listener){
 	switch (c) {
 		case '"':
 			this->handleStringParsed(listener);
-			this->state = State_e::IDLE;
+			this->state = State_e::STRING_PARSED;
 			break;
 		case '\\':
 			this->state = State_e::ESCAPE_SEQUENCE;
@@ -181,6 +200,9 @@ void Parser::processChar(char c, ParseListener& listener){
 		case State_e::IDLE:
 			this->processCharInIdle(c, listener);
 			break;
+		case State_e::STRING_PARSED:
+			this->processCharInStringParsed(c, listener);
+			break;
 		case State_e::UNQUOTED_STRING:
 			this->processCharInUnquotedString(c, listener);
 			break;
@@ -213,9 +235,9 @@ void Parser::parseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& 
 
 
 void Parser::endOfData(ParseListener& listener){
-	if(this->state != State_e::IDLE){
-		//add new line at the end of data
-		this->processChar('\n', listener);
+	this->processChar('\n', listener);
+	if(this->state == State_e::STRING_PARSED){
+		this->state = State_e::IDLE;
 	}
 	
 	if(this->nestingLevel != 0 || this->state != State_e::IDLE){

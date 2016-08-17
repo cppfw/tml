@@ -83,6 +83,7 @@ class Parser{
 	
 	enum class State_e{
 		IDLE,
+		STRING_PARSED,
 		QUOTED_STRING,
 		ESCAPE_SEQUENCE,
 		UNQUOTED_STRING,
@@ -94,6 +95,7 @@ class Parser{
 	
 	void processChar(char c, ParseListener& listener);
 	void processCharInIdle(char c, ParseListener& listener);
+	void processCharInStringParsed(char c, ParseListener& listener);
 	void processCharInUnquotedString(char c, ParseListener& listener);
 	void processCharInQuotedString(char c, ParseListener& listener);
 	void processCharInEscapeSequence(char c, ParseListener& listener);
