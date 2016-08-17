@@ -1,7 +1,3 @@
-/**
- * @author Ivan Gagis <igagis@gmail.com>
- */
-
 #pragma once
 
 
@@ -82,11 +78,9 @@ public:
 class Parser{
 	unsigned curLine;//current line into the document being parsed, used for pointing place of format error.
 	
-	std::array<std::uint8_t, 256> staticBuf; //string buffer
-	std::vector<std::uint8_t> arrayBuf;
-	utki::Buf<std::uint8_t> buf;
 	
-	decltype(buf)::iterator p; //current position into the string buffer
+	std::vector<char> buf;//buffer for current string being parsed
+
 	
 	unsigned nestingLevel;
 	
@@ -134,17 +128,7 @@ public:
 	 * @brief Reset parser.
 	 * Resets the parser to initial state, discarding all the temporary parsed data and state.
      */
-	void reset(){
-		this->curLine = 1;
-		this->buf = utki::wrapBuf(this->staticBuf);
-		this->arrayBuf.clear();
-		this->p = this->buf.begin();
-		this->nestingLevel = 0;
-		this->prevChar = 0;
-		this->commentState = E_CommentState::NO_COMMENT;
-		this->state = E_State::IDLE;
-		this->stringParsed = false;
-	}
+	void reset();
 	
 	/**
 	 * @brief Parse chunk of STOB data.

@@ -12,19 +12,14 @@
 using namespace stob;
 
 
+namespace{
+const size_t bufReserve_d = 0xff;
+}
+
+
 
 void Parser::appendCharToString(std::uint8_t c){
-	*this->p = c;
-	++this->p;
-	if(this->p == &*this->buf.end()){
-		std::vector<std::uint8_t> a(this->buf.size() * 2);
-		memcpy(&*a.begin(), this->buf.begin(), this->buf.sizeInBytes());
-
-		this->p = &*a.begin() + this->buf.size();
-
-		this->arrayBuf = std::move(a);
-		this->buf = utki::wrapBuf(this->arrayBuf); //set reference
-	}
+	this->buf.push_back(c);
 }
 
 
@@ -58,11 +53,10 @@ void Parser::handleRightCurlyBracket(ParseListener& listener){
 
 
 void Parser::handleStringEnd(ParseListener& listener){
-	size_t size = this->p - this->buf.begin();
-	listener.onStringParsed(utki::Buf<char>(size == 0 ? 0 : reinterpret_cast<char*>(&*this->buf.begin()), size));
-	this->arrayBuf.clear();
-	this->buf = utki::wrapBuf(this->staticBuf);
-	this->p = this->buf.begin();
+	listener.onStringParsed(utki::wrapBuf(this->buf));
+	this->buf.clear();
+	this->buf.reserve(bufReserve_d);
+	
 	this->stringParsed = true;
 	this->state = E_State::IDLE;
 }
@@ -79,7 +73,7 @@ void Parser::parseChar(std::uint8_t c, ParseListener& listener){
 				case '{':
 					if(!this->stringParsed){
 						//empty string with children
-						ASSERT(this->p == this->buf.begin())
+						ASSERT(this->buf.size() == 0)
 						this->handleStringEnd(listener);
 					}
 					this->handleLeftCurlyBracket(listener);
@@ -325,4 +319,17 @@ void stob::parse(const papki::File& fi, ParseListener& listener){
 	}while(bytesRead == buf.size());
 
 	parser.endOfData(listener);
+}
+
+
+
+void Parser::reset(){
+	this->buf.clear();
+	this->buf.reserve(bufReserve_d);
+	this->curLine = 1;
+	this->nestingLevel = 0;
+	this->prevChar = 0;
+	this->commentState = E_CommentState::NO_COMMENT;
+	this->state = E_State::IDLE;
+	this->stringParsed = false;
 }
