@@ -51,7 +51,7 @@ public:
 	 * This method is called by Parser when String token has been parsed.
      * @param str - parsed string.
      */
-	virtual void onStringParsed(std::string&& str) = 0;
+	virtual void onStringParsed(const utki::Buf<char> str = utki::Buf<char>()) = 0;
 	
 	/**
 	 * @brief Children list parsing started.

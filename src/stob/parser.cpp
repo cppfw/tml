@@ -18,7 +18,7 @@ const size_t fileReadChinkSize_c = 0x4ff;
 }
 
 void Parser::handleStringParsed(ParseListener& listener){
-	listener.onStringParsed(std::string(&*this->buf.begin(), this->buf.size()));
+	listener.onStringParsed(utki::wrapBuf(this->buf));
 	this->buf.clear();
 	this->buf.reserve(bufReserve_d);
 }
@@ -34,7 +34,7 @@ void Parser::processCharInIdle(char c, ParseListener& listener){
 			this->state = State_e::IDLE;
 			break;
 		case '{':
-			listener.onStringParsed(std::string());
+			listener.onStringParsed();
 			listener.onChildrenParseStarted();
 			++this->nestingLevel;
 			break;

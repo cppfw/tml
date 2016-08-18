@@ -3,8 +3,6 @@
 #include <vector>
 #include <tuple>
 #include <cstdint>
-//#include <iosfwd>
-
 
 #include <utki/debug.hpp>
 #include <papki/BufferFile.hpp>
@@ -358,8 +356,8 @@ std::unique_ptr<stob::Node> stob::load(const papki::File& fi){
 				);
 		}
 
-		void onStringParsed(std::string&& str)override{
-			auto node = utki::makeUnique<Node>(utki::Buf<char>(const_cast<char*>(str.c_str()), str.size()));
+		void onStringParsed(const utki::Buf<char> str)override{
+			auto node = utki::makeUnique<Node>(str);
 
 			if(!this->chains){
 				this->chains = std::move(node);
@@ -505,13 +503,13 @@ std::unique_ptr<Node> Node::removeChild(const stob::Node* c)noexcept{
 
 void Node::setValueInternal(const utki::Buf<char> str) {
 	if (str.size() == 0) {
-		this->value_var = nullptr;
+		this->value_v = nullptr;
 		return;
 	}
 
-	this->value_var = decltype(this->value_var)(new char[str.size() + 1]);
-	memcpy(this->value_var.get(), str.begin(), str.size());
-	this->value_var[str.size()] = 0; //null-terminate
+	this->value_v = decltype(this->value_v)(new char[str.size() + 1]);
+	memcpy(this->value_v.get(), str.begin(), str.size());
+	this->value_v[str.size()] = 0; //null-terminate
 }
 
 

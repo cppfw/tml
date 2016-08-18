@@ -31,7 +31,8 @@ class Listener : public stob::ParseListener{
 		this->actions.pop_front();
 	}
 	
-	void onStringParsed(std::string&& str)override{
+	void onStringParsed(const utki::Buf<char> s)override{
+		std::string str(&*s.begin(), s.size());
 		TRACE(<< "str = " << str << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == STRING, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
