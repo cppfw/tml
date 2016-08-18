@@ -30,6 +30,9 @@ void Parser::processCharInIdle(char c, ParseListener& listener){
 		case '\r':
 		case '\t':
 			break;
+		case '\0':
+			this->state = State_e::IDLE;
+			break;
 		case '{':
 			listener.onStringParsed(std::string());
 			listener.onChildrenParseStarted();
@@ -104,6 +107,11 @@ void Parser::processCharInUnquotedString(char c, ParseListener& listener){
 			ASSERT(this->buf.size() != 0)
 			this->handleStringParsed(listener);
 			this->state = State_e::STRING_PARSED;
+			break;
+		case '\0':
+			ASSERT(this->buf.size() != 0)
+			this->handleStringParsed(listener);
+			this->state = State_e::IDLE;
 			break;
 		case '{':
 			ASSERT(this->buf.size() != 0)
@@ -235,10 +243,7 @@ void Parser::parseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& 
 
 
 void Parser::endOfData(ParseListener& listener){
-	this->processChar('\n', listener);
-	if(this->state == State_e::STRING_PARSED){
-		this->state = State_e::IDLE;
-	}
+	this->processChar('\0', listener);
 	
 	if(this->nestingLevel != 0 || this->state != State_e::IDLE){
 		throw stob::Exc("Malformed stob document fed. After parsing all the data, the parser remained in the middle of some parsing task.");

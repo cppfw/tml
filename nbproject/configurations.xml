@@ -46,9 +46,10 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <flagsDictionary>
-        <element flagsID="0"
+        <element flagsID="0" commonFlags="-funsigned-char -O3 -std=c++11 -fPIC"/>
+        <element flagsID="1"
                  commonFlags="-mtune=generic -march=x86-64 -O3 -std=c++11 -funsigned-char -fPIC -fstack-protector-strong"/>
-        <element flagsID="1" commonFlags="-std=c++11 -O3"/>
+        <element flagsID="2" commonFlags="-std=c++11 -O3"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -71,6 +72,8 @@
         <ccTool>
           <incDir>
             <pElem>/usr/include/utki</pElem>
+            <pElem>src/stob</pElem>
+            <pElem>/usr/include/papki</pElem>
           </incDir>
         </ccTool>
       </folder>
@@ -86,10 +89,11 @@
         </ccTool>
       </folder>
       <item path="src/stob/dom.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="0">
+        <ccTool flags="1">
           <incDir>
-            <pElem>/usr/include/papki</pElem>
+            <pElem>/usr/include/utki</pElem>
             <pElem>src/stob</pElem>
+            <pElem>/usr/include/papki</pElem>
             <pElem>/usr/include/unikod</pElem>
             <pElem>.</pElem>
           </incDir>
@@ -98,18 +102,20 @@
       <item path="src/stob/parser.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
           <incDir>
-            <pElem>src/stob</pElem>
-            <pElem>/usr/include/papki</pElem>
             <pElem>.</pElem>
           </incDir>
+          <preprocessorList>
+            <Elem>DEBUG</Elem>
+            <Elem>_GLIBCXX_USE_CXX11_ABI=0</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="tests/dom/main.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="2">
         </ccTool>
       </item>
       <item path="tests/parser/main.cpp" ex="false" tool="1" flavor2="8">
-        <ccTool flags="1">
+        <ccTool flags="2">
         </ccTool>
       </item>
     </conf>
