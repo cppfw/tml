@@ -178,8 +178,13 @@ void Parser::processCharInEscapeSequence(char c, ParseListener& listener){
 }
 
 void Parser::processCharInSingleLineComment(char c, ParseListener& listener){
-	if (c == '\n') {
-		this->state = State_e::IDLE;
+	switch(c){
+		case '\0':
+		case '\n':
+			this->state = State_e::IDLE;
+			break;
+		default:
+			break;
 	}
 }
 
