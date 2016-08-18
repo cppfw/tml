@@ -1,7 +1,3 @@
-/**
- * @author Ivan Gagis <igagis@gmail.com>
- */
-
 #pragma once
 
 
@@ -43,9 +39,9 @@ namespace stob{
 class Node final : public utki::Unique{
 	template< class T, class... Args > friend std::unique_ptr<T> utki::makeUnique(Args&&... args);
 	
-	std::unique_ptr<char[]> value_var; //node value
+	std::unique_ptr<char[]> value_v; //node value
 
-	std::unique_ptr<Node> next_var; //next sibling node
+	std::unique_ptr<Node> next_v; //next sibling node
 
 	std::unique_ptr<Node> children; //pointer to the first child
 
@@ -63,6 +59,10 @@ public:
 	Node(const utki::Buf<char> str){
 		this->setValueInternal(str);
 	}
+	
+	Node(const std::string& str) :
+			Node(utki::Buf<char>(const_cast<char*>(str.c_str()), str.size()))
+	{}
 	
 	Node(){}
 	
@@ -92,11 +92,12 @@ public:
 	/**
 	 * @brief value stored by this node.
 	 * Returns the value stored by this node, i.e. string value.
-	 * Return value can be 0;
+	 * The string is null-terminated.
+	 * Return value can be nullptr;
 	 * @return A string representing this node.
 	 */
 	const char* value()const noexcept{
-		return this->value_var.get();
+		return this->value_v.get();
 	}
 
 	/**
@@ -482,7 +483,7 @@ public:
 		}
 
 		std::unique_ptr<Node> ret = std::move(this->children);
-		this->children = std::move(ret->next_var);
+		this->children = std::move(ret->next_v);
 
 		return ret;
 	}
@@ -717,7 +718,7 @@ public:
 	 * @return pointer to the next node in the single-linked list.
 	 */
 	Node* next()noexcept{
-		return this->next_var.operator->();
+		return this->next_v.operator->();
 	}
 
 	/**
@@ -726,7 +727,7 @@ public:
 	 * @return constant pointer tot the next node in the single-linked list.
 	 */
 	const Node* next()const noexcept{
-		return this->next_var.operator->();
+		return this->next_v.operator->();
 	}
 
 	/**
@@ -935,9 +936,9 @@ public:
 	 */
 	void insertNext(std::unique_ptr<Node> node)noexcept{
 		if(node){
-			node->next_var = std::move(this->next_var);
+			node->next_v = std::move(this->next_v);
 		}
-		this->next_var = std::move(node);
+		this->next_v = std::move(node);
 	}
 
 	/**
@@ -945,9 +946,9 @@ public:
 	 * @return auto-pointer to the Node object which has been removed from the single-linked list.
 	 */
 	std::unique_ptr<Node> removeNext()noexcept{
-		std::unique_ptr<Node> ret = std::move(this->next_var);
+		std::unique_ptr<Node> ret = std::move(this->next_v);
 		if(ret){
-			this->next_var = std::move(ret->next_var);
+			this->next_v = std::move(ret->next_v);
 		}
 		return ret;
 	}
@@ -958,7 +959,7 @@ public:
 	 * @return auto-pointer to the first node of the single-linked list tail which has been chopped.
 	 */
 	std::unique_ptr<Node> chopNext()noexcept{
-		return std::move(this->next_var);
+		return std::move(this->next_v);
 	}
 
 	/**
@@ -967,7 +968,7 @@ public:
 	 * @param node - node to set as the next node.
 	 */
 	void setNext(std::unique_ptr<Node> node)noexcept{
-		this->next_var = std::move(node);
+		this->next_v = std::move(node);
 	}
 
 	/**

@@ -51,7 +51,7 @@ public:
 	 * This method is called by Parser when String token has been parsed.
      * @param str - parsed string.
      */
-	virtual void onStringParsed(const utki::Buf<char> str) = 0;
+	virtual void onStringParsed(const utki::Buf<char> str = utki::Buf<char>()) = 0;
 	
 	/**
 	 * @brief Children list parsing started.
@@ -76,44 +76,32 @@ public:
  * documents.
  */
 class Parser{
-	unsigned curLine;//current line into the document being parsed, used for pointing place of format error.
-	
-	
 	std::vector<char> buf;//buffer for current string being parsed
 
-	
 	//This variable is used for tracking current nesting level to make checks for detecting malformed STOB document
 	unsigned nestingLevel;
 	
-	//Previous character, used to detect two character sequences like //, /*, */, escape sequences.
-	std::uint8_t prevChar;
-	
-	enum class CommentState_e{
-		NO_COMMENT,
-		LINE_COMMENT,
-		MULTILINE_COMMENT
-	} commentState;
-	
 	enum class State_e{
 		IDLE,
+		STRING_PARSED,
 		QUOTED_STRING,
+		ESCAPE_SEQUENCE,
 		UNQUOTED_STRING,
+		SINGLE_LINE_COMMENT,
+		MULTILINE_COMMENT
 	} state;
+
+	void handleStringParsed(ParseListener& listener);
 	
-	//This flag indicates that a string has been parsed before but its children list is not yet parsed.
-	//This is used to detect cases when curly braces go right after another curly braces, thus omitting the string declaration
-	//which is allowed by the STOB format and means that string is empty.
-	bool stringParsed;
+	void processChar(char c, ParseListener& listener);
+	void processCharInIdle(char c, ParseListener& listener);
+	void processCharInStringParsed(char c, ParseListener& listener);
+	void processCharInUnquotedString(char c, ParseListener& listener);
+	void processCharInQuotedString(char c, ParseListener& listener);
+	void processCharInEscapeSequence(char c, ParseListener& listener);
+	void processCharInSingleLineComment(char c, ParseListener& listener);
+	void processCharInMultiLineComment(char c, ParseListener& listener);
 	
-	void parseChar(std::uint8_t c, ParseListener& listener);
-	void preParseChar(std::uint8_t c, ParseListener& listener);
-	
-	void appendCharToString(std::uint8_t c);
-	
-	void handleLeftCurlyBracket(ParseListener& listener);
-	void handleRightCurlyBracket(ParseListener& listener);
-	
-	void handleStringEnd(ParseListener& listener);
 public:
 	/**
 	 * @brief Constructor.
