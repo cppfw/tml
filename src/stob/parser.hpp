@@ -76,8 +76,11 @@ public:
  * documents.
  */
 class Parser{
-	std::vector<char> buf;//buffer for current string being parsed
+	std::vector<char> stringBuf;//buffer for current string being parsed
 
+	std::string rawStringDelimeter;//delimeter for raw string
+	size_t rawStringDelimeterIndex;//index into the raw string delimeter
+	
 	//This variable is used for tracking current nesting level to make checks for detecting malformed STOB document
 	unsigned nestingLevel;
 	
@@ -88,7 +91,10 @@ class Parser{
 		ESCAPE_SEQUENCE,
 		UNQUOTED_STRING,
 		SINGLE_LINE_COMMENT,
-		MULTILINE_COMMENT
+		MULTILINE_COMMENT,
+		RAW_STRING_OPENING_DELIMETER,
+		RAW_STRING_CLOSING_DELIMETER,
+		RAW_STRING
 	} state;
 
 	void handleStringParsed(ParseListener& listener);
@@ -101,6 +107,9 @@ class Parser{
 	void processCharInEscapeSequence(char c, ParseListener& listener);
 	void processCharInSingleLineComment(char c, ParseListener& listener);
 	void processCharInMultiLineComment(char c, ParseListener& listener);
+	void processCharInRawStringOpeningDelimeter(char c, ParseListener& listener);
+	void processCharInRawString(char c, ParseListener& listener);
+	void processCharInRawStringClosingDelimeter(char c, ParseListener& listener);
 	
 public:
 	/**

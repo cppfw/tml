@@ -125,7 +125,7 @@ Node* Node::addProperty(const char* propName){
 
 namespace{
 
-bool CanStringBeUnquoted(const char* s, size_t& out_length, unsigned& out_numEscapes){
+bool canStringBeUnquoted(const char* s, size_t& out_length, unsigned& out_numEscapes){
 //	TRACE(<< "CanStringBeUnquoted(): enter" << std::endl)
 
 	out_numEscapes = 0;
@@ -235,7 +235,7 @@ void writeChainInternal(const stob::Node* chain, papki::File& fi, bool formatted
 
 		unsigned numEscapes;
 		size_t length;
-		bool unqouted = CanStringBeUnquoted(n->value(), length, numEscapes);
+		bool unqouted = canStringBeUnquoted(n->value(), length, numEscapes);
 
 		if(!unqouted){
 			fi.write(utki::wrapBuf(quote));
@@ -278,12 +278,14 @@ void writeChainInternal(const stob::Node* chain, papki::File& fi, bool formatted
 						const_cast<std::uint8_t*>(reinterpret_cast<const std::uint8_t*>(n->value())),
 						length
 					));
+				if(!n->child() && length == 1 && n->value()[0] == 'R'){
+					fi.write(utki::wrapBuf(space));
+				}
 			}
 		}
 
-		prevHadChildren = (n->child() != 0);
-		if(n->child() == 0){
-			
+		prevHadChildren = (n->child() != nullptr);
+		if(!n->child()){
 			if(formatted){
 				fi.write(utki::wrapBuf(newLine));
 			}

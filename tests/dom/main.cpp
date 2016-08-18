@@ -37,6 +37,11 @@ void Run(){
 	
 	n = n->next();
 	ASSERT_ALWAYS(n)
+	ASSERT_ALWAYS(*n == "one\ntwo three\tfour")
+	ASSERT_ALWAYS(!n->child())
+	
+	n = n->next();
+	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "string with empty children list")
 	ASSERT_ALWAYS(!n->child())
 	

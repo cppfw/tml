@@ -1,6 +1,7 @@
 ttt"test string" "anot/her string" unqu/otedString
 
-//R"qwer( )qwer"
+R"qwer(one
+two three	four)qwer"
 
 "string with empty children list"{}unquoted_string_with_empty_children_list{}
 
