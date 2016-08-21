@@ -56,15 +56,15 @@ string should be recognized:
 
 <ul>
 <li>
-<strong>\n</strong> - line feed</li>
+<code>**\n**</code> - line feed</li>
 <li>
-<strong>\r</strong> - carriage return</li>
+<code>**\r**</code> - carriage return</li>
 <li>
-<strong>\"</strong> - double quote</li>
+<code>**\"**</code> - double quote</li>
 <li>
-<strong>\\</strong> - back slash</li>
+<code>**\\\\**</code> - back slash</li>
 <li>
-<strong>\t</strong> - tabulation</li>
+<code>**\t**</code> - tabulation</li>
 </ul>
 </li>
 <li>Raw strings can be defined with the same syntax as in C++. I.e. <code>R"delimeter(raw string goes here)delimeter"</code>
@@ -76,9 +76,9 @@ brackets following the string. If string does not have any children then the cur
 <li>Parts of a document can be commented. C++ commenting rules apply.
 
 <ul>
-<li>A line of the document can be commented using double slash <strong>//</strong> sequence. Everything past the double
+<li>A line of the document can be commented using double slash <code>**//**</code> sequence. Everything past the double
 slash and till the end of the line will be ignored by the parser.</li>
-<li>A multi-line comment is achieved using C-style commenting, i.e. everything between <strong>/</strong>* and <strong>*/</strong> is ignored
+<li>A multi-line comment is achieved using C-style commenting, i.e. everything between <code>**/***</code> and <code>**\*/**</code> is ignored
 by the parser. Nested comments are not supported.</li>
 <li>Comments are not allowed inside strings enclosed in double quotes.</li>
 </ul>
