@@ -17,17 +17,29 @@
 			<end>\*\/</end>
 		</context>
 
+		<context id="EscapeChar" style-ref="def:special-char">
+			<match>\\[ntr"\\]</match>
+		</context>
+		
 		<context id="QuotedString" style-ref="def:string">
 			<start>"</start>
 			<end>"</end>
 			<include>
-				<context id="escapeChar" style-ref="def:special-char">
-					<match>\\[ntr"\\]</match>
-				</context>
+				<context ref="EscapeChar"/>
 				<context ref="Numbers"/>
 			</include>
 		</context>
-
+		
+		<context id="RawString" style-ref="def:string">
+			<start>R"([^"\(]*)(\()</start>
+			<end>(\)\%{1@start})"</end>
+			<include>
+				<context id="Delimeter_highlight" sub-pattern="1" where="start" style-ref="def:special-char"/>
+				<context id="Delimeter_highlight" sub-pattern="2" where="start" style-ref="def:special-char"/>
+				<context id="Delimeter_highlight" sub-pattern="1" where="end" style-ref="def:special-char"/>
+			</include>
+		</context>
+		
 		<context id="Numbers">
 			<include>
 				<context ref="def:decimal"/>
@@ -37,14 +49,14 @@
 		</context>
 
 		<context id="Property">
-			<match>\b([a-z0-9]{1}[^\s\}]*?)\s*\{</match>
+			<match>([a-z0-9]{1}[^\s\}\{"]*)\s*\{</match>
 			<include>
 				<context id="Property_highlight" sub-pattern="1" style-ref="def:identifier"/>
 			</include>
 		</context>
     
 		<context id="Child">
-			<match>\b([A-Z]{1}[^\s\}]*?)\s*\{</match>
+			<match>([A-Z]{1}[^\s\}\{"]*)\s*\{</match>
       
 			<include>
 				<context id="Child_highlight" sub-pattern="1" style-ref="def:statement"/>
@@ -56,15 +68,35 @@
 			<keyword>false</keyword>
 		</context>
 		
+		<context id="UnqoutedString" end-at-line-end="true">
+			<start>[^ \t\{\}]</start>
+			<end>[ \t\{\}]</end>
+			<include>
+				<context ref="Comment"/>
+				<context ref="MultilineComment"/>
+				<context id="QuotedStringEndUnqouted" end-parent="true" style-ref="def:string">
+					<start>"</start>
+					<end>"</end>
+					<include>
+						<context ref="EscapeChar"/>
+						<context ref="Numbers"/>
+					</include>
+				</context>
+				<context ref="Numbers"/>
+			</include>
+		</context>
+		
 		<context id="stob" class="no-spell-check">
 			<include>
 				<context ref="Comment"/>
 				<context ref="MultilineComment"/>
 				<context ref="QuotedString"/>
-				<context ref="Numbers"/>
+				<context ref="RawString"/>
 				<context ref="Property"/>
 				<context ref="Child"/>
+				<context ref="Numbers"/>
 				<context ref="Keyword"/>
+				<context ref="UnqoutedString"/>
 			</include>
 		</context>
 	</definitions>

@@ -1,0 +1,90 @@
+ttt"test string" "anot/her string" unqu/otedString
+
+R"qwer(qwdqwdwqd wdqw wq dqw d \n \r \" "  
+	\t } { )qwer"
+
+R"werwe"wer(
+
+	R"werwe"wer(
+ =R"qweqw("
+
+ R"qwertc( qdoihowi
+
+ef
+few
+fwe
+ewdwe 
+ew 
+ew 
+fwe 
+ehf)qwertc"
+
+"string with empty children list"{}unquoted_string_with_empt""y_children_list{wewd{true}}afef{}
+
+Chi""Cld {Another{One{} and{false}}} {swd{true}}
+
+3442.244 2.4  234e23 3423e-23 0.43e-2
+-34.2423""de{}
+
+ =wefwf{}
+
+=efwe{}
+
+/*
+multiline comment
+//tralivali
+*/
+
+string_interrupted//tro lo lo
+_by_comment
+
+string_broken/*tro lo lo*/_by_comment{}
+
+{}
+{{}{}}
+
+	// /* 
+
+// /* 
+// 
+// */
+
+/* tgtg
+/* /* 
+/* /* */
+
+	""{
+		"child string"
+
+		"aaa"{}
+
+		bbb
+
+		//comment trololo
+
+		ccc{
+			"ddd"
+		}
+{}
+	}
+
+//comment blah blah
+
+//Escape sequences
+"Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Carriagereturn\r Doublequotes\" {}{}{}{}"
+
+
+"quoted string with trailing slash /"
+
+//multiline string
+"fff 
+ggg"
+
+"tralala 
+tro lo	 lo\n
+	tre lele"
+
+//number
+-1213.33
+
+UnquotedStringAtTheVeryEndOfTheFile
