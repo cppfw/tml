@@ -1,3 +1,9 @@
+libstob (3.3.2) unstable; urgency=medium
+
+  * travis: deploy to cocoapods fix
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 23 Aug 2016 19:48:14 +0300
+
 libstob (3.3.1) unstable; urgency=medium
 
   * gedit highlighter minor fix
