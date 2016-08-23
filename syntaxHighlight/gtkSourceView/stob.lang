@@ -73,7 +73,10 @@
 			<end>[ \t\{\}]</end>
 			<include>
 				<context ref="Comment"/>
-				<context ref="MultilineComment"/>
+				<context style-ref="def:comment" end-parent="true">
+					<start>\/\*</start>
+					<end>\*\/</end>
+				</context>
 				<context id="QuotedStringEndUnqouted" end-parent="true" style-ref="def:string">
 					<start>"</start>
 					<end>"</end>

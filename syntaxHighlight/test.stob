@@ -36,7 +36,7 @@ multiline comment
 */
 
 string_interrupted//tro lo lo
-_by_comment
+by_comment
 
 string_broken/*tro lo lo*/by_comment{}
 
