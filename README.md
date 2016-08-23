@@ -25,6 +25,9 @@ AnotherStringObject
 		   comment */
 
 		"Escape sequences \" \n \r \t \\ \/"
+		
+		//raw string
+		R"qwerty(raw string content " """ { } \ / )qwerty"
 	}
 }
 ```
