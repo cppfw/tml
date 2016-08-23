@@ -15,19 +15,61 @@
 
     <contexts>
       <context name="Normal" lineEndContext="#stay" attribute="Style_Normal">
-        <DetectChar char="&quot;"  context="QuotedString" attribute="Style_QuotedString" />
+        <IncludeRules context="Comments"/>
 
+        <RegExpr String="R&quot;([^&quot;\(]*)\(" context="RawStringOpen" lookAhead="true" dynamic="true"/>
+
+        <DetectChar char="&quot;" context="QuotedString" attribute="Style_QuotedString" />
+
+        <IncludeRules context="PropertiesAndChildren"/>
+
+        <IncludeRules context="Numbers"/>
+        
+        <keyword String="Keywords" context="#stay" attribute="Style_Keyword" />
+        <DetectSpaces/>
+        <RegExpr String="[^ \t\{\}]" context="UnquotedString" lookAhead="true"/>
+      </context>
+
+      <context name="PropertiesAndChildren">
+        <RegExpr String="([a-z0-9]{1}[^\s\}\{&quot;]*)\s*\{" context="Property" attribute="Style_Property" lookAhead="true"/>
+        <RegExpr String="([A-Z]{1}[^\s\}\{&quot;]*)\s*\{" context="Child" attribute="Style_Child" lookAhead="true"/>
+      </context>
+
+      <context name="Comments">
+        <Detect2Chars char="/" char1="/" context="Comment" />
+        <Detect2Chars char="/" char1="*" context="MultilineComment" />
+      </context>
+
+      <context name="Numbers">
         <Float attribute="Style_Float" context="#stay" />
         <HlCHex attribute="Style_Decimal" context="#stay" />
         <Int attribute="Style_Decimal" context="#stay" />
-        
-        <Detect2Chars char="/" char1="/" context="Comment" />
-        <Detect2Chars char="/" char1="*" context="MultilineComment" />
-        
-        <RegExpr String="\b([a-z0-9]{1}[^\s\}]*)\s*\{" context="Property" attribute="Style_Property" lookAhead="true"/>
-        <RegExpr String="\b([A-Z]{1}[^\s\}]*)\s*\{" context="Child" attribute="Style_Child" lookAhead="true"/>
-        
-        <keyword String="Keywords" context="#stay" attribute="Style_Keyword" />
+      </context>
+
+      <context name="UnquotedString" lineEndContext="#pop">
+        <Detect2Chars char="/" char1="*" context="#pop" lookAhead="true"/>
+        <IncludeRules context="Comments"/>
+        <IncludeRules context="Numbers"/>
+        <RegExpr String="[ \t\{\}&quot;]" context="#pop" lookAhead="true"/>
+      </context>
+
+      <context name="RawStringOpen" lineEndContext="#stay" attribute="Style_QuotedString" dynamic="true">
+        <RegExpr String="(%1)\(" lookAhead="true" context="RawString" attribute="Style_QuotedStringEscape" dynamic="true"/>
+      </context>
+
+      <context name="RawString" lineEndContext="#stay" attribute="Style_QuotedString" dynamic="true">
+        <StringDetect
+           String=")%1&quot;"
+           lookAhead="true"
+           context="#pop#pop"
+           attribute="Style_QuotedStringEscape"
+           dynamic="true"
+        /><!--TODO: switch to context RawStringClose instead of #pop#pop
+              when bug https://bugs.kde.org/show_bug.cgi?id=367720 is fixed. -->
+      </context>
+
+      <context name="RawStringClose" lineEndContext="#stay" attribute="Style_QuotedStringEscape" dynamic="true">
+        <DetectChar char="&quot;" context="#pop#pop#pop" attribute="Style_QuotedString"/>
       </context>
 
       <context name="Property" attribute="Style_Property">

@@ -19,7 +19,7 @@ ew
 fwe 
 ehf)qwertc"
 
-"string with empty children list"{}unquoted_string_with_empt""y_children_list{wewd{true}}afef{}
+"string with empty children list"{}unquoted_string_with_empt""y_children_list{qweqw{true}=wewd{true}}afef{}
 
 Chi""Cld {Another{One{} and{false}}} {swd{true}}
 
@@ -38,7 +38,7 @@ multiline comment
 string_interrupted//tro lo lo
 _by_comment
 
-string_broken/*tro lo lo*/_by_comment{}
+string_broken/*tro lo lo*/by_comment{}
 
 {}
 {{}{}}
