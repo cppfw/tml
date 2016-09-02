@@ -22,13 +22,22 @@ env:
   - secure: "qeD6xbuYNkYyAFx7LjVRh9341lKsticKVSbWt6irvhB304u83XkFq0CoA2xPwgTFXpn1ljAmApWbMQHb9SGTixVZ2WPlsMp5cWzSjDEBXPCjVEZ0uGH3p7/vyAzc/PGTg2WlRHzuvGc+8xN1JTZVjxXpUyTIArLodC0LhPkyu3cTAUvnVSa3r539hI3RBb8LSu8+k0NWIEM79QgTeqdX3xdBbOT4gz0BfH061Im/R++bWuIyyqviIXNoh8nRwUQfEG9rdYU5/Sxo4BT+wBe7yo9x7e+MYVFdz6CEJ7x4jLIp9JEHNXAsw4CssgmhXcEYfkY7RE4ZKYfJMqHuPfNFeWCxQ1++DsJplfRFEvqHlFhrqtyrR1Tc8aaMzbniFt3ZCiLgp+vKw2ENssEegiz8HhCxNmI9EdAamFgFRzmUh/BQwGUtqMalGesCIDJyk+qM3SgqQt0oPt5ptmoMfRei7M2jaurqNEP1dpBUUxbCOWrJ8xXVoY/NaPs6vcSEiFpuzdKNMY59gr9I/LhAp8r2J+Vv2lTcFzUrh5W8w3dxXi4P8R0KRkhQZPoGYekhSly6V5p1qAEfwq/qo7mG2P6p4C40VD85o2v/vlSKkH/CmIyU6YVwjaLETum+UNlpswtxz9eHUC2TCkunKCAZigUvzzWNHnadrhX8Q/ugYqM4JmA="
   - PRORAB_GIT_USERNAME=igagis
   - PRORAB_GIT_ACCESS_TOKEN=$HOMEBREW_GITHUB_ACCESS_TOKEN
+  - linuxDependencies="debhelper prorab doxygen libutki-dev libpapki-dev libunikod-dev"
 
 before_install:
 - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     echo "deb https://dl.bintray.com/igagis/deb /" | sudo tee /etc/apt/sources.list.d/igagis.list > /dev/null &&
     sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 &&
     sudo apt-get update -qq &&
-    sudo apt-get install -qq debhelper prorab doxygen libutki-dev libpapki-dev libunikod-dev;
+    sudo apt-get install -qq $linuxDependencies;
+  fi
+- if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CC" == "gcc" ]; then
+    sudo prorab-make-raspberry-chroot.sh /tmp/rasp &&
+    echo "deb http://dl.bintray.com/igagis/rasp /" | sudo tee /tmp/rasp/etc/apt/sources.list.d/igagis.list > /dev/null &&
+    sudo chroot /tmp/rasp apt-get update &&
+    sudo chroot /tmp/rasp apt-get install --allow-unauthenticated -qq -y $linuxDependencies &&
+    sudo mkdir -p /tmp/rasp/build &&
+    sudo rsync -av $TRAVIS_BUILD_DIR/ /tmp/rasp/build/;
   fi
 - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     rvm use ruby-2.2.1 &&
@@ -46,6 +55,10 @@ script:
     prorab-deb-prepare.sh &&
     dpkg-buildpackage -us -uc;
   fi
+- if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CC" == "gcc" ]; then
+    sudo chroot /tmp/rasp bash -c "cd /build && prorab-deb-prepare.sh" &&
+    sudo chroot /tmp/rasp bash -c "cd /build && dpkg-buildpackage -us -uc";
+  fi
 - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     make &&
     make test &&
@@ -54,7 +67,8 @@ script:
   fi
 
 before_deploy:
-  - prorab-apply-version.sh -v `prorab-deb-version.sh debian/changelog` travis_bintray.json.in
+  - prorab-apply-version.sh -v `prorab-deb-version.sh debian/changelog` travis_bintray_deb.json.in
+  - prorab-apply-version.sh -v `prorab-deb-version.sh debian/changelog` travis_bintray_rasp.json.in
 
 deploy:
 - provider: bintray
@@ -62,7 +76,17 @@ deploy:
   on:
     tags: true
     condition: $TRAVIS_OS_NAME = linux && $CC = gcc
-  file: travis_bintray.json
+  file: travis_bintray_deb.json
+  user: igagis
+  key:
+    secure: "pATRl+8N1FyrQ7sIEUNdrvAZJCFim/b4pliEDCXRoa00odb7z35VTmDautJePnM9NceK40c6fpRrgSwCQ8lk7iZrmmnihw+58UV9Fqi1qyZQZ06DcZbljkV50R5ab67KaecscG+N+NqN2CsADd9C0IDdsvR0Qc4ACeD2qS+HOEJ3k85L7i+An0m4CefpZ9sDSDNcaOgLqqDHZBxUNr1OOcvw3NVQxvg/YIB6bIeUWML2RmHx/Qkp5MH7IvYpWy2osy/39x2qntzhNhhFzOGj69xdaTsMUAHLgSOFttVwtaKJTBuFQ5/F/3ZNw3K1pwjDgkSpsGlI/uzjxz3c203BHR5IB6OquO9osQcwWU4Rnvkz/KVZbiQlOJZV/Hq0R5JLRjiGy+qSIaAtmGNGfQNBnatwFUaYrWdEP6b7Pbqc3Fcb6oTLa7B5X+scCZYUyrLy6aWf7B9ukWuQrB97gJR/qol8rNGyYuHJyRRJfFGwxWH7iCxA58jgK7afofGgM+goGTR+OhzLB6E1KHcawQcz+wLidUGK5eMkYQ/Be2JvoZS2SOWDAff+M2tdzfZqqHQOtzkzIKOLKtWpj47rdEvgS9YjJxIChgvn7z0Kr5fgvUsOE9Z7bM6+tak+HwXCfhvPdwGopsRYomi5sQD8r68jVXNCAhYDO4teuPWyJYeZvAE="
+  dry-run: false
+- provider: bintray
+  skip_cleanup: true
+  on:
+    tags: true
+    condition: $TRAVIS_OS_NAME = linux && $CC = gcc
+  file: travis_bintray_rasp.json
   user: igagis
   key:
     secure: "pATRl+8N1FyrQ7sIEUNdrvAZJCFim/b4pliEDCXRoa00odb7z35VTmDautJePnM9NceK40c6fpRrgSwCQ8lk7iZrmmnihw+58UV9Fqi1qyZQZ06DcZbljkV50R5ab67KaecscG+N+NqN2CsADd9C0IDdsvR0Qc4ACeD2qS+HOEJ3k85L7i+An0m4CefpZ9sDSDNcaOgLqqDHZBxUNr1OOcvw3NVQxvg/YIB6bIeUWML2RmHx/Qkp5MH7IvYpWy2osy/39x2qntzhNhhFzOGj69xdaTsMUAHLgSOFttVwtaKJTBuFQ5/F/3ZNw3K1pwjDgkSpsGlI/uzjxz3c203BHR5IB6OquO9osQcwWU4Rnvkz/KVZbiQlOJZV/Hq0R5JLRjiGy+qSIaAtmGNGfQNBnatwFUaYrWdEP6b7Pbqc3Fcb6oTLa7B5X+scCZYUyrLy6aWf7B9ukWuQrB97gJR/qol8rNGyYuHJyRRJfFGwxWH7iCxA58jgK7afofGgM+goGTR+OhzLB6E1KHcawQcz+wLidUGK5eMkYQ/Be2JvoZS2SOWDAff+M2tdzfZqqHQOtzkzIKOLKtWpj47rdEvgS9YjJxIChgvn7z0Kr5fgvUsOE9Z7bM6+tak+HwXCfhvPdwGopsRYomi5sQD8r68jVXNCAhYDO4teuPWyJYeZvAE="
