@@ -1,3 +1,9 @@
+libstob (3.3.4) unstable; urgency=medium
+
+  * deploy to debian, ubuntu, rasp
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 15 Sep 2016 18:16:09 +0300
+
 libstob (3.3.3) unstable; urgency=medium
 
   * rasp deploy
@@ -112,7 +118,7 @@ libstob (3.0.1-1) stable; urgency=medium
 
   * bugfix
 
- -- Ivan Gagis <ivan@ivan-desktop-pc>  Tue, 29 Sep 2015 00:53:04 +0300
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 29 Sep 2015 00:53:04 +0300
 
 libstob (3.0.0-1) stable; urgency=medium
 

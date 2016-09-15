@@ -25,6 +25,7 @@
       <itemPath>.travis.yml</itemPath>
       <itemPath>ios/Podfile</itemPath>
       <itemPath>debian/changelog</itemPath>
+      <itemPath>debian/control.in</itemPath>
       <itemPath>cocoapods/libstob.podspec.in</itemPath>
       <itemPath>homebrew/libstob.rb.in</itemPath>
       <itemPath>makefile</itemPath>

@@ -1,5 +1,5 @@
 Source: libstob
-Section: devel
+Section: libs
 Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
 Build-Depends: debhelper (>= 9), libc6-dev, prorab,
@@ -8,7 +8,7 @@ Build-Depends-Indep: doxygen
 Standards-Version: 3.9.2
 
 Package: libstob-dev
-Section: devel
+Section: libdevel
 Architecture: any
 Depends: libstob$(soname) (= ${binary:Version}), libstob$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
 		libutki-dev, libpapki-dev, libunikod-dev
@@ -24,15 +24,15 @@ Description: STOB markup language C++ library.
  STOB is a simple markup language.
 
 Package: libstob$(soname)-dbg
-Section: libdevel
+Section: debug
 Architecture: any
 Depends: libstob$(soname) (= ${binary:Version}), ${misc:Depends}
 Description: debugging symbols for libstob$(soname) package.
 
 Package: libstob-doc
-Section: devel
+Section: doc
 Architecture: all
 Depends: ${misc:Depends}
-Description: documentation for libstob - STOB markup language C++ library.
+Description: documentation for libstob.
  Documentation for libstob - STOB markup language C++ library.
 
