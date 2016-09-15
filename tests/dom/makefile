@@ -10,7 +10,6 @@ this_cxxflags += -std=c++11
 this_cxxflags += -g #debugging symbols
 this_cxxflags += -O3
 
-this_cxxflags += -D_GLIBCXX_USE_CXX11_ABI=0 #use old ABI
 
 this_srcs += main.cpp
 
