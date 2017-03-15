@@ -3,4 +3,5 @@ usr/lib/pkgconfig
 usr/lib/libstob.so
 usr/lib/libstob.a
 usr/share/kde4
+usr/share/katepart5
 usr/share/gtksourceview-3.0

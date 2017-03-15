@@ -1,3 +1,9 @@
+libstob (3.3.8) unstable; urgency=medium
+
+  * install syntax highlighter to katepart5
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 15 Mar 2017 19:26:20 +0200
+
 libstob (3.3.7) unstable; urgency=medium
 
   * fixing cocoapods deploy
