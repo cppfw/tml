@@ -1,3 +1,9 @@
+libstob (3.3.10) unstable; urgency=medium
+
+  * deploy to android
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 25 Apr 2017 23:08:05 +0300
+
 libstob (3.3.9) unstable; urgency=medium
 
   * install syntax highlighter to katepart5
