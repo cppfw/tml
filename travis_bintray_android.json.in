@@ -1,6 +1,6 @@
 {
 	"package": {
-		"name": "libpapki",
+		"name": "libstob",
 		"repo": "android",
 		"subject": "igagis"
 	},
@@ -12,11 +12,11 @@
 	"files": [
 		{
 			"includePattern": "android/(.[^/]*(\\.aar)$)",
-			"uploadPattern": "io/github/igagis/libpapki/$(version)/$1"
+			"uploadPattern": "io/github/igagis/libstob/$(version)/$1"
 		},
 		{
 			"includePattern": "android/(.[^/]*(\\.pom)$)",
-			"uploadPattern": "io/github/igagis/libpapki/$(version)/$1"
+			"uploadPattern": "io/github/igagis/libstob/$(version)/$1"
 		}
 	],
 	"publish": true,
