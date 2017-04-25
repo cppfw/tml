@@ -1,5 +1,28 @@
 apply plugin: "com.android.model.library"
 
+//String getAbi() {
+//    String taskName = getGradle().startParameter.taskNames[0]
+//    String abi;
+//
+//    println("Gradle: task name = " + taskName)
+//
+//    if (taskName == null) {
+//        return ""
+//    }
+//
+//    println("Gradle: Build = " + taskName)
+//
+//    if (taskName.contains("Arm_64")) {
+//        abi = "arm64-v8a"
+//    } else if (taskName.contains("Arm")) {
+//        abi = "armeabi-v7a"
+//    } else if (taskName.contains("X86_64")) {
+//        abi = "x86_64"
+//    }
+//    println("Gradle: ABI name: " + abi)
+//    return abi;
+//}
+
 model {
 
     android {
@@ -24,7 +47,9 @@ model {
             cppFlags.add("-fexceptions")
             cppFlags.add("-frtti")
             cppFlags.add("-I" + projectDir.getAbsolutePath() + "/build/ndkLibs/include")
+//            ldFlags.add("-L" + projectDir.getAbsolutePath() + "/build/ndkLibs/${getAbi()}")
         }
+
     }
 
     android.lintOptions {
@@ -55,6 +80,7 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'io.github.igagis:libpapki:+'
+    compile 'io.github.igagis:libunikod:+'
 }
 
 
