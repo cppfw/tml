@@ -26,10 +26,12 @@
       <itemPath>ios/Podfile</itemPath>
       <itemPath>debian/changelog</itemPath>
       <itemPath>debian/control.in</itemPath>
+      <itemPath>android/libstob-$(version).pom.in</itemPath>
       <itemPath>cocoapods/libstob.podspec.in</itemPath>
       <itemPath>homebrew/libstob.rb.in</itemPath>
       <itemPath>makefile</itemPath>
       <itemPath>nuget/nuget.autopkg.in</itemPath>
+      <itemPath>travis_bintray_android.json.in</itemPath>
       <itemPath>travis_bintray_deb.json.in</itemPath>
       <itemPath>travis_bintray_rasp.json.in</itemPath>
       <itemPath>travis_bintray_ubu.json.in</itemPath>

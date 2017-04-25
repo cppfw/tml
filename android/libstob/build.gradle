@@ -1,34 +1,11 @@
 apply plugin: "com.android.model.library"
 
-//String getAbi() {
-//    String taskName = getGradle().startParameter.taskNames[0]
-//    String abi;
-//
-//    println("Gradle: task name = " + taskName)
-//
-//    if (taskName == null) {
-//        return ""
-//    }
-//
-//    println("Gradle: Build = " + taskName)
-//
-//    if (taskName.contains("Arm_64")) {
-//        abi = "arm64-v8a"
-//    } else if (taskName.contains("Arm")) {
-//        abi = "armeabi-v7a"
-//    } else if (taskName.contains("X86_64")) {
-//        abi = "x86_64"
-//    }
-//    println("Gradle: ABI name: " + abi)
-//    return abi;
-//}
 
 model {
 
     android {
         compileSdkVersion = 25
         buildToolsVersion = '25.0.2'
-
 
         defaultConfig {
             minSdkVersion.apiLevel = 9
@@ -41,21 +18,41 @@ model {
             moduleName = "stob"
             toolchain = 'clang'
             abiFilters.addAll(['armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64']) //this is default
-            ldLibs.addAll(['android', 'log'])
+            ldLibs.addAll(['android', 'log', 'papki'])
             stl = 'c++_static'
             cppFlags.add("-std=c++11")
             cppFlags.add("-fexceptions")
             cppFlags.add("-frtti")
             cppFlags.add("-I" + projectDir.getAbsolutePath() + "/build/ndkLibs/include")
-//            ldFlags.add("-L" + projectDir.getAbsolutePath() + "/build/ndkLibs/${getAbi()}")
         }
-
+        abis {
+            create("armeabi") {
+                ldFlags.add("-L" + projectDir.getAbsolutePath() + "/build/ndkLibs/armeabi")
+            }
+            create("armeabi-v7a") {
+                ldFlags.add("-L" + projectDir.getAbsolutePath() + "/build/ndkLibs/armeabi-v7a")
+            }
+            create("arm64-v8a") {
+                ldFlags.add("-L" + projectDir.getAbsolutePath() + "/build/ndkLibs/arm64-v8a")
+            }
+            create("x86") {
+                ldFlags.add("-L" + projectDir.getAbsolutePath() + "/build/ndkLibs/x86")
+            }
+            create("x86_64") {
+                ldFlags.add("-L" + projectDir.getAbsolutePath() + "/build/ndkLibs/x86_64")
+            }
+            create("mips") {
+                ldFlags.add("-L" + projectDir.getAbsolutePath() + "/build/ndkLibs/mips")
+            }
+            create("mips64") {
+                ldFlags.add("-L" + projectDir.getAbsolutePath() + "/build/ndkLibs/mips64")
+            }
+        }
     }
 
     android.lintOptions {
         abortOnError false
     }
-
 
     android.sources {
         main {
@@ -70,6 +67,16 @@ model {
         }
     }
 
+    // modify the NDK configuration for each variant.
+//    components.android {
+//        variants.afterEach {variant ->
+//            println("Variant: " + variant)
+//        }
+//        binaries.afterEach { binary ->
+//            println("Binary: " + binary)
+//            //binary.mergedNdkConfig.ldFlags.add("-L" + projectDir.getAbsolutePath() + "/build/ndkLibs/" + binary.getTargetAbi())
+//        }
+//    }
 }
 
 repositories {
@@ -125,6 +132,8 @@ task copyNdkLibsToAAR(type: Zip) {
     from("../../src") {
         exclude('makefile')
         exclude('soname.txt')
+        exclude('**/*.cpp')
+        exclude('**/*.c')
         into('ndkLibs/include')
     }
     from("build/intermediates/binaries/debug/lib"){
