@@ -2,7 +2,6 @@ apply plugin: "com.android.model.library"
 
 
 model {
-
     android {
         compileSdkVersion = 25
         buildToolsVersion = '25.0.2'
@@ -66,17 +65,6 @@ model {
             }
         }
     }
-
-    // modify the NDK configuration for each variant.
-//    components.android {
-//        variants.afterEach {variant ->
-//            println("Variant: " + variant)
-//        }
-//        binaries.afterEach { binary ->
-//            println("Binary: " + binary)
-//            //binary.mergedNdkConfig.ldFlags.add("-L" + projectDir.getAbsolutePath() + "/build/ndkLibs/" + binary.getTargetAbi())
-//        }
-//    }
 }
 
 repositories {
