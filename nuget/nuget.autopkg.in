@@ -1,3 +1,11 @@
+configurations {
+	UserPlatformToolset {
+		// Needed because autopackage lacks VS2015+ support
+		key = "PlatformToolset";
+		choices: "v140,v141";
+	};
+}
+
 nuget{
 	nuspec{
 		id = libstob;
@@ -30,20 +38,36 @@ nuget{
 			"..\src\stob\**\*.hpp"
 		};
 
-		[x86,release] {
-			lib: ..\msvs_solution\Release\libstob.lib;
+		[x86,v140,release] {
+			lib: ..\msvs_solution\v140_Release\libstob.lib;
 		}
 
-		[x86,debug] {
-			lib: ..\msvs_solution\Debug\libstob.lib;
+		[x86,v140,debug] {
+			lib: ..\msvs_solution\v140_Debug\libstob.lib;
 		}
 
-		[x64,release] {
-			lib: ..\msvs_solution\x64\Release\libstob.lib;
+		[x64,v140,release] {
+			lib: ..\msvs_solution\x64\v140_Release\libstob.lib;
 		}
 
-		[x64,debug] {
-			lib: ..\msvs_solution\x64\Debug\libstob.lib;
+		[x64,v140,debug] {
+			lib: ..\msvs_solution\x64\v140_Debug\libstob.lib;
+		}
+		
+		[x86,v141,release] {
+			lib: ..\msvs_solution\v141_Release\libstob.lib;
+		}
+
+		[x86,v141,debug] {
+			lib: ..\msvs_solution\v141_Debug\libstob.lib;
+		}
+
+		[x64,v141,release] {
+			lib: ..\msvs_solution\x64\v141_Release\libstob.lib;
+		}
+
+		[x64,v141,debug] {
+			lib: ..\msvs_solution\x64\v141_Debug\libstob.lib;
 		}
 	}
 }
