@@ -387,11 +387,75 @@ void Run(){
 }//~namespace
 
 
+namespace TestNodeManipulation{
+void run(){
+	//test cloneChildren with no children
+	{
+		auto n = utki::makeUnique<stob::Node>("test");
+		ASSERT_ALWAYS(n)
+		ASSERT_ALWAYS(!n->child())
+		ASSERT_ALWAYS(*n == "test")
+		
+		ASSERT_ALWAYS(!n->cloneChildren())
+	}
+	
+	//test cloneChildren with many children
+	{
+		auto n = stob::parse(R"qwertyuiop(
+				a{
+					b{
+						c
+					}
+					b1{
+						c1{
+							d1
+						}
+					}
+					b2{
+						c2{
+							d2
+						}
+					}
+				}
+			)qwertyuiop");
+		
+		ASSERT_ALWAYS(n)
+		ASSERT_ALWAYS(n->child())
+		ASSERT_ALWAYS(n->count() == 3)
+		
+		auto c = n->cloneChildren();
+		ASSERT_ALWAYS(c)
+		ASSERT_ALWAYS(c->countChain() == 3)
+		
+		ASSERT_ALWAYS(c->count() == 1)
+		ASSERT_ALWAYS(*c == "b")
+		ASSERT_ALWAYS(*c->child() == "c")
+		auto cn = c->next();
+		ASSERT_ALWAYS(cn)
+		ASSERT_ALWAYS(*cn == "b1")
+		ASSERT_ALWAYS(cn->count() == 1)
+		ASSERT_ALWAYS(*cn->child() == "c1")
+		ASSERT_ALWAYS(cn->child()->count() == 1)
+		ASSERT_ALWAYS(*cn->child()->child() == "d1")
+		cn = cn->next();
+		ASSERT_ALWAYS(cn)
+		ASSERT_ALWAYS(*cn == "b2")
+		ASSERT_ALWAYS(cn->count() == 1)
+		ASSERT_ALWAYS(*cn->child() == "c2")
+		ASSERT_ALWAYS(cn->child()->count() == 1)
+		ASSERT_ALWAYS(*cn->child()->child() == "d2")
+		
+		ASSERT_ALWAYS(!cn->next())
+	}
+}
+}
+
 
 int main(int argc, char** argv){
 
 	TestBasicParsing::Run();
 	TestWriting::Run();
+	TestNodeManipulation::run();
 	
 	return 0;
 }

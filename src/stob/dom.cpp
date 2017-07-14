@@ -523,3 +523,22 @@ std::u32string Node::asU32String() const noexcept{
 	
 	return std::u32string(&*v.begin(), v.size());
 }
+
+
+std::unique_ptr<Node> Node::cloneChildren() const {
+	if(!this->child()){
+		return nullptr;
+	}
+	return this->child()->cloneChain();
+}
+
+size_t Node::countChain() const noexcept{
+	size_t ret = 0;
+	
+	auto n = this;
+	for(; n; n = n->next()){
+		++ret;
+	}
+	
+	return ret;
+}

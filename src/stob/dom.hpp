@@ -456,6 +456,12 @@ public:
 	size_t count()const noexcept;
 
 	/**
+	 * @brief Count number of Nodes in chain.
+	 * @return number of Nodes in chain.
+	 */
+	size_t countChain()const noexcept;
+	
+	/**
 	 * @brief Set children list for this node.
 	 * Sets the children nodes list for this node. Previously set list will be discarded if any.
 	 * @param first - auto-pointer to the first node of the children single.linked list.
@@ -986,6 +992,12 @@ public:
 	 */
 	std::unique_ptr<Node> cloneChain()const;
 
+	/**
+	 * @brief Clone children chain.
+	 * @return a deep copy of this Node's children chain.
+	 */
+	std::unique_ptr<Node> cloneChildren()const;
+	
 	/**
 	 * @brief Check if the Node is a property.
 	 * This is just a convenience method.
