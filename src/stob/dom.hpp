@@ -6,7 +6,6 @@
 #include <cstdint>
 #include <cinttypes>
 #include <cstring>
-
 #include <utility>
 #include <memory>
 
@@ -38,7 +37,7 @@ namespace stob{
  */
 class Node final : public utki::Unique{
 	template< class T, class... Args > friend std::unique_ptr<T> utki::makeUnique(Args&&... args);
-	
+
 	std::unique_ptr<char[]> value_v; //node value
 
 	std::unique_ptr<Node> next_v; //next sibling node
@@ -55,21 +54,21 @@ class Node final : public utki::Unique{
 public:
 	Node(const Node&) = delete;
 	Node& operator=(const Node&) = delete;
-	
+
 	Node(const utki::Buf<char> str){
 		this->setValueInternal(str);
 	}
-	
+
 	Node(const std::string& str) :
 			Node(utki::Buf<char>(const_cast<char*>(str.c_str()), str.size()))
 	{}
-	
+
 	Node(){}
-	
+
 	Node(const char* value) :
 			Node(utki::Buf<char>(const_cast<char*>(value), value == nullptr ? 0 : strlen(value)))
 	{}
-	
+
 	class NodeNotFoundExc : stob::Exc{
 	public:
 		NodeNotFoundExc(const std::string& message) :
@@ -128,14 +127,14 @@ public:
 	std::string asString()const noexcept{
 		return std::string(this->value());
 	}
-	
+
 	/**
 	 * @brief Get node value as UTF-32 string.
 	 * Converts node value to UTF-32 as if it was in UTF-8.
 	 * @return std::u32string holding the node value.
 	 */
 	std::u32string asU32String()const noexcept;
-	
+
 	/**
 	 * @brief Get node value as signed 32bit integer.
 	 * Tries to parse the string as signed 32bit integer.
@@ -460,7 +459,7 @@ public:
 	 * @return number of Nodes in chain.
 	 */
 	size_t countChain()const noexcept;
-	
+
 	/**
 	 * @brief Set children list for this node.
 	 * Sets the children nodes list for this node. Previously set list will be discarded if any.
@@ -513,12 +512,12 @@ public:
 
 	/**
 	 * @brief Remove given child.
-     * @param c - child node to remove.
-     * @return Unique pointer to a removed child.
+	 * @param c - child node to remove.
+	 * @return Unique pointer to a removed child.
 	 * @return nullptr if no child found.
-     */
+	 */
 	std::unique_ptr<Node> removeChild(const stob::Node* c)noexcept;
-	
+
 	/**
 	 * @brief Get list of child nodes.
 	 * @return pointer to the first child node.
@@ -534,7 +533,14 @@ public:
 	const Node* child()const noexcept{
 		return this->children.operator->();
 	}
-	
+
+	/**
+	 * @brief Replace this node in the chain by another chain of nodes.
+	 * @param chain - chain of nodes to replace by.
+	 * @return replaced node.
+	 */
+	std::unique_ptr<Node> replace(std::unique_ptr<Node> chain);
+
 	/**
 	 * @brief Node and its previous node.
 	 * Class holding a pointer to a Node and pointer to its previous Node in
@@ -605,20 +611,20 @@ public:
 
 	/**
 	 * @brief Get child node by index.
-     * @param index - index of the child node to get.
-     * @return instance of NodeAndPrev structure holding information about found Node.
-     */
+	 * @param index - index of the child node to get.
+	 * @return instance of NodeAndPrev structure holding information about found Node.
+	 */
 	NodeAndPrev child(size_t index)noexcept;
-	
+
 	/**
 	 * @brief Get constant child node by index.
-     * @param index - index of the child node to get.
-     * @return constant instance of NodeAndPrev structure holding information about found Node.
-     */
+	 * @param index - index of the child node to get.
+	 * @return constant instance of NodeAndPrev structure holding information about found Node.
+	 */
 	const NodeAndPrev child(size_t index)const noexcept{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->child(index);
 	}
-	
+
 	/**
 	 * @brief Get fist child.
 	 * @return reference to the first child node.
@@ -919,22 +925,22 @@ public:
 
 	/**
 	 * @brief Insert a node as a first child.
-     * @param node - node to insert.
-     */
+	 * @param node - node to insert.
+	 */
 	void addAsFirstChild(std::unique_ptr<Node> node)noexcept{
 		node->setNext(this->removeChildren());
 		this->children = std::move(node);
 	}
-	
+
 	/**
 	 * @brief Insert a new node as a first child.
 	 * Make a new node with given value and insert it as a first child.
-     * @param value - value of the new node.
-     */
+	 * @param value - value of the new node.
+	 */
 	void addAsFirstChild(const char* value){
 		this->addAsFirstChild(utki::makeUnique<Node>(value));
 	}
-	
+
 	/**
 	 * @brief Insert node into the single-linked list.
 	 * Insert the node to the single-linked list as a next node after this Node.
@@ -997,7 +1003,7 @@ public:
 	 * @return a deep copy of this Node's children chain.
 	 */
 	std::unique_ptr<Node> cloneChildren()const;
-	
+
 	/**
 	 * @brief Check if the Node is a property.
 	 * This is just a convenience method.
@@ -1023,6 +1029,12 @@ public:
 	 * @return STOB as string.
 	 */
 	std::string chainToString(bool formatted = false)const;
+
+	//Swap node contents
+	friend void swap(Node& a, Node& b){
+		std::swap(a.value_v, b.value_v);
+		std::swap(a.children, b.children);
+	}
 };
 
 

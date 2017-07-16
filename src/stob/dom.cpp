@@ -542,3 +542,27 @@ size_t Node::countChain() const noexcept{
 	
 	return ret;
 }
+
+
+
+std::unique_ptr<Node> Node::replace(std::unique_ptr<Node> chain) {
+	if(!chain){
+		throw stob::Exc("could not replace node by null chain");
+	}
+
+	//find chain's last node
+	Node* last = chain.get();
+	for(; last->next(); ){
+		last = last->next();
+	}
+	
+	if(chain->next()){
+		last->setNext(this->chopNext());
+		this->setNext(chain->chopNext());
+	}
+	
+	swap(*this, *chain);
+	
+	return chain;
+}
+
