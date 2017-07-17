@@ -566,3 +566,25 @@ std::unique_ptr<Node> Node::replace(std::unique_ptr<Node> chain) {
 	return chain;
 }
 
+
+std::unique_ptr<Node> Node::replace(const Node& chain){
+	//clone chain
+	
+	auto head = chain.clone();
+
+	auto last = head.get();
+	
+	for(auto curNode = chain.next(); curNode; curNode = curNode->next()){
+		last->setNext(curNode->clone());
+		last = last->next();
+	}
+	
+	if(head->next()){
+		last->setNext(this->chopNext());
+		this->setNext(head->chopNext());
+	}
+	
+	swap(*this, *head);
+	
+	return head;
+}

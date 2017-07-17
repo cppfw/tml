@@ -540,6 +540,13 @@ public:
 	 * @return replaced node.
 	 */
 	std::unique_ptr<Node> replace(std::unique_ptr<Node> chain);
+	
+	/**
+	 * @brief Replace this node with the clone of the given chain of nodes.
+	 * @param chain - chain of nodes to replace by.
+	 * @return replaced node.
+	 */
+	std::unique_ptr<Node> replace(const Node& chain);
 
 	/**
 	 * @brief Node and its previous node.

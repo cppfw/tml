@@ -524,6 +524,84 @@ void run(){
 		ASSERT_ALWAYS(!n->child()->next())
 		ASSERT_ALWAYS(!n->next())
 	}
+	
+	//test replace(Node&)
+	{
+		auto chain = stob::parse(R"qwertyuiop(
+				b{
+					c
+				}
+				b1{
+					c1{
+						d1
+					}
+				}
+				b2{
+					c2{
+						d2
+					}
+				}
+			)qwertyuiop");
+		
+		auto r = stob::parse(R"qwertyuiop(
+				a{
+					b{
+						c
+					}
+					b1{
+						c1{
+							d1
+						}
+					}
+					b2{
+						c2{
+							d2
+						}
+					}
+				}
+			)qwertyuiop");
+		
+		r->child()->next()->replace(*chain);
+		ASSERT_ALWAYS(chain)
+		
+		auto n = r->child();
+		ASSERT_ALWAYS(n)
+		ASSERT_ALWAYS(*n == "b")
+		ASSERT_ALWAYS(*n->child() == "c")
+		ASSERT_ALWAYS(!n->child()->child())
+		ASSERT_ALWAYS(!n->child()->next())
+		n = n->next();
+		ASSERT_ALWAYS(n)
+		ASSERT_ALWAYS(*n == "b")
+		ASSERT_ALWAYS(*n->child() == "c")
+		ASSERT_ALWAYS(!n->child()->child())
+		ASSERT_ALWAYS(!n->child()->next())
+		n = n->next();
+		ASSERT_ALWAYS(n)
+		ASSERT_ALWAYS(*n == "b1")
+		ASSERT_ALWAYS(*n->child() == "c1")
+		ASSERT_ALWAYS(!n->child()->next())
+		ASSERT_ALWAYS(*n->child()->child() == "d1")
+		ASSERT_ALWAYS(!n->child()->child()->child())
+		ASSERT_ALWAYS(!n->child()->next())
+		n = n->next();
+		ASSERT_ALWAYS(n)
+		ASSERT_ALWAYS(*n == "b2")
+		ASSERT_ALWAYS(*n->child() == "c2")
+		ASSERT_ALWAYS(!n->child()->next())
+		ASSERT_ALWAYS(*n->child()->child() == "d2")
+		ASSERT_ALWAYS(!n->child()->child()->child())
+		ASSERT_ALWAYS(!n->child()->next())
+		n = n->next();
+		ASSERT_ALWAYS(n)
+		ASSERT_ALWAYS(*n == "b2")
+		ASSERT_ALWAYS(*n->child() == "c2")
+		ASSERT_ALWAYS(!n->child()->next())
+		ASSERT_ALWAYS(*n->child()->child() == "d2")
+		ASSERT_ALWAYS(!n->child()->child()->child())
+		ASSERT_ALWAYS(!n->child()->next())
+		ASSERT_ALWAYS(!n->next())
+	}
 }
 }
 
