@@ -1,3 +1,9 @@
+libstob (3.3.14) unstable; urgency=medium
+
+  * Node::replace() methods added
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 17 Jul 2017 15:19:11 +0300
+
 libstob (3.3.13) unstable; urgency=medium
 
   * Node::replace() methods added
