@@ -588,3 +588,60 @@ std::unique_ptr<Node> Node::replace(const Node& chain){
 	
 	return head;
 }
+
+std::uint32_t Node::asUint32() const noexcept{
+	if(!this->value()){
+		return 0;
+	}
+	return std::uint32_t(strtoul(this->value(), nullptr, 0));
+}
+
+bool Node::asBool() const noexcept{
+	return strcmp(this->value(), "true") == 0;
+}
+
+double Node::asDouble() const noexcept{
+	if(!this->value()){
+		return 0;
+	}
+	return strtod(this->value(), nullptr);
+}
+
+float Node::asFloat() const noexcept{
+	if(!this->value()){
+		return 0;
+	}
+	return strtof(this->value(), nullptr);
+}
+
+std::int32_t Node::asInt32() const noexcept{
+	if(!this->value()){
+		return 0;
+	}
+	return std::int32_t(strtol(this->value(), nullptr, 0));
+}
+
+std::int64_t Node::asInt64() const noexcept{
+	if(!this->value()){
+		return 0;
+	}
+	return std::int64_t(strtoll(this->value(), nullptr, 0));
+}
+
+long double Node::asLongDouble() const noexcept{
+#if M_OS_NAME == M_OS_NAME_ANDROID //TODO: use strtold() when it becomes available on Android
+	return this->asDouble();
+#else
+	if(!this->value()){
+		return 0;
+	}
+	return strtold(this->value(), nullptr);
+#endif
+}
+
+std::uint64_t Node::asUint64() const noexcept{
+	if(!this->value()){
+		return 0;
+	}
+	return std::uint64_t(strtoull(this->value(), nullptr, 0));
+}
