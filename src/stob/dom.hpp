@@ -1008,6 +1008,7 @@ public:
 	/**
 	 * @brief Clone children chain.
 	 * @return a deep copy of this Node's children chain.
+	 * @return nullptr if this node has no children.
 	 */
 	std::unique_ptr<Node> cloneChildren()const;
 
