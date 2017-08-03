@@ -218,8 +218,8 @@ public:
 	 * Set the value of the node. value is copied from passed buffer.
 	 * @param v - null-terminated string to set as a node value.
 	 */
-	void setValue(const char* v = 0)noexcept{
-		this->setValue(utki::Buf<char>(const_cast<char*>(v), v == 0 ? 0 : strlen(v)));
+	void setValue(const char* v = nullptr)noexcept{
+		this->setValue(utki::Buf<char>(const_cast<char*>(v), v ? strlen(v) : 0));
 	}
 
 	/**
@@ -243,7 +243,7 @@ public:
 		int res = snprintf(buf, sizeof(buf), "%" PRIi32, v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(0, 0);
+			this->setValue(nullptr, 0);
 		}else{
 			this->setValue(buf, res);
 		}
@@ -261,7 +261,7 @@ public:
 		int res = snprintf(buf, sizeof(buf), "%" PRIu32, v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(0, 0);
+			this->setValue(nullptr, 0);
 		}else{
 			this->setValue(buf, res);
 		}
@@ -279,7 +279,7 @@ public:
 		int res = snprintf(buf, sizeof(buf), "%" PRIi64, v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(0, 0);
+			this->setValue(nullptr, 0);
 		}else{
 			this->setValue(buf, res);
 		}
@@ -297,7 +297,7 @@ public:
 		int res = snprintf(buf, sizeof(buf), "%" PRIu64, v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(0, 0);
+			this->setValue(nullptr, 0);
 		}else{
 			this->setValue(buf, res);
 		}
@@ -315,7 +315,7 @@ public:
 		int res = snprintf(buf, sizeof(buf), "%.8G", double(v));
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(0, 0);
+			this->setValue(nullptr, 0);
 		}else{
 			this->setValue(buf, res);
 		}
@@ -332,7 +332,7 @@ public:
 		int res = snprintf(buf, sizeof(buf), "%.8a", double(v));
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(0, 0);
+			this->setValue(nullptr, 0);
 		}else{
 			this->setValue(buf, res);
 		}
@@ -350,7 +350,7 @@ public:
 		int res = snprintf(buf, sizeof(buf), "%.17G", v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(0, 0);
+			this->setValue(nullptr, 0);
 		}else{
 			this->setValue(buf, res);
 		}
@@ -367,7 +367,7 @@ public:
 		int res = snprintf(buf, sizeof(buf), "%.17a", v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(0, 0);
+			this->setValue(nullptr, 0);
 		}else{
 			this->setValue(buf, res);
 		}
@@ -385,7 +385,7 @@ public:
 		int res = snprintf(buf, sizeof(buf), "%.31LG", v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(0, 0);
+			this->setValue(nullptr, 0);
 		}else{
 			this->setValue(buf, res);
 		}
@@ -402,7 +402,7 @@ public:
 		int res = snprintf(buf, sizeof(buf), "%.31La", v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(0, 0);
+			this->setValue(nullptr, 0);
 		}else{
 			this->setValue(buf, res);
 		}
