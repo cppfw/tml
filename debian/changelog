@@ -1,3 +1,9 @@
+libstob (3.3.15) unstable; urgency=medium
+
+  * update to latest unikod
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 21 Aug 2017 15:03:02 +0300
+
 libstob (3.3.14) unstable; urgency=medium
 
   * Node::replace() methods added
