@@ -50,6 +50,7 @@ env:
   #encrypted PRORAB_GIT_ACCESS_TOKEN for publishing to homebrew-tap
   - secure: "hTb0tpvTrx216BXy9K/4x4rN3LqQXWilDVTFZBwatTWLLscWr/PZSk222niHYYiDDlBV6OaSWDp63QJiY1rtLhof6dSR6Omvdbb35toxm/ZpA4s+wTOAzgXbaYKFamu6Qwt/e+gceDNbXtyexLJb6GBPWA98dN7q/sCp7yT6KtUQdQ9/xu1vOucfQqu81cACWrXwWVPLt6uAOoJXs3MngTQHX08bIOhepfZ/MuwWra9yAAneR8ekt+Gb854x9M5CSq6k90h36kidNoOAyWDOxg7rEGRKKlD5m/TPCowDZafFXzs2KE2DWD4QUDrx+DcV29Ni6UkwBf6fuj+HaGrSuH40SvNvTEXt0sj87zrL0PTKHWLDcY5xZRLp89OrM+ikKUcQlQPn9NLM2C7OqxORo0ucQpLgMNKmCj5pe+nkSLAE1+zo6icwOP3i4nvQDDw1Cl7i9qBXdB+lIthvPBWnjmW4DVielNx9AEriDlKv7dCB+hafpxhLPf04vmtgyo6URbtI2Ov77Emc/cveFOaOpJOFZKsXvqWlWTkTLMlfQ/e6OsAZ7si9QBxLUuxxdbXyL8CczIOys/V7eBnjJolqHCoois2KDqpNp26t1Z5U/YG4TEzQBHAK9hCMVhaiGzMNSiJxen80UT6HQW7BM9ZxAdGQ1F2DaF2/QY4T82qTZ1o="
   - PRORAB_GIT_USERNAME=igagis
+  - USE_ANDROID_NDK_VERSION=15c
   - linuxDependencies="debhelper prorab doxygen libutki-dev libpapki-dev libunikod-dev"
 
 
@@ -119,21 +120,16 @@ before_install:
     sudo mkdir -p /srv/chroot/rasp-armhf/build &&
     sudo rsync -av $TRAVIS_BUILD_DIR/ /srv/chroot/rasp-armhf/build/;
   fi
-- if [ "$BUILD_NAME" == "clang" ]; then
-    echo "deb http://dl.bintray.com/igagis/deb /" | sudo tee /etc/apt/sources.list.d/igagis.list > /dev/null &&
-    sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 &&
-    sudo apt-get update -qq &&
-    sudo apt-get install -qq $linuxDependencies lintian;
-  fi
+
 
 before_script:
   # download and install android NDK
   - if [ "$BUILD_NAME" == "android" ]; then
       export TERM=dumb &&
-      curl -L https://dl.google.com/android/repository/android-ndk-r14b-linux-x86_64.zip -O &&
-      unzip ./android-ndk-r14b-linux-x86_64.zip > /dev/null &&
-      rm android-ndk-r14b-linux-x86_64.zip &&
-      export ANDROID_NDK_HOME=`pwd`/android-ndk-r14b &&
+      curl -L https://dl.google.com/android/repository/android-ndk-r$USE_ANDROID_NDK_VERSION-linux-x86_64.zip -O &&
+      unzip ./android-ndk-r$USE_ANDROID_NDK_VERSION-linux-x86_64.zip > /dev/null &&
+      rm android-ndk-r$USE_ANDROID_NDK_VERSION-linux-x86_64.zip &&
+      export ANDROID_NDK_HOME=`pwd`/android-ndk-r$USE_ANDROID_NDK_VERSION &&
       export LOCAL_ANDROID_NDK_HOME="$ANDROID_NDK_HOME" &&
       export LOCAL_ANDROID_NDK_HOST_PLATFORM="linux-x86_64" &&
       export PATH=$PATH:${ANDROID_NDK_HOME} &&
@@ -143,15 +139,11 @@ before_script:
 script:
 - if [ "$BUILD_NAME" == "debian" ]; then
     prorab-deb-prepare.sh &&
-    sg sbuild -c "sbuild -A -d testing-amd64-sbuild --run-lintian --debbuildopts '-us -uc'";
+    sg sbuild -c "sbuild -n -A -d testing-amd64-sbuild --run-lintian --debbuildopts '-us -uc'";
   fi
 - if [ "$BUILD_NAME" == "ubuntu" ]; then
     prorab-deb-prepare.sh &&
-    sg sbuild -c "sbuild -A -d xenial-amd64-sbuild --debbuildopts '-us -uc'";
-  fi
-- if [ "$BUILD_NAME" == "clang" ]; then
-    prorab-deb-prepare.sh &&
-    dpkg-buildpackage -uc -us;
+    sg sbuild -c "sbuild -n -A -d xenial-amd64-sbuild --debbuildopts '-us -uc'";
   fi
 - if [ "$BUILD_NAME" == "macosx" ]; then
     make &&
