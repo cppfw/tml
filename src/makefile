@@ -32,7 +32,7 @@ ifeq ($(debug), true)
     this_cxxflags += -DDEBUG
 endif
 
-this_ldlibs += -lpapki -lstdc++
+this_ldlibs += -lunikod -lpapki -lstdc++
 
 ifeq ($(prorab_os), windows)
     this_cxxflags += -Wno-format #due to bugs in some g++ versions it warns about format when not needed, so disable format warnings
