@@ -1,3 +1,6 @@
+test //comment
+{eee}
+
 "test string" "another string" unquotedString
 
 "string with empty children list"{}unquoted_string_with_empty_children_list{}
@@ -23,13 +26,14 @@ multiline comment
 	""{
 		"child string"
 
-		"aaa"{}
+		"aaa"/**/{}
 
 		bbb
 
 		//comment trololo
 
-		ccc{
+		ccc //some comment
+		{
 			"ddd"
 		}
 	}

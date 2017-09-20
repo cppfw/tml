@@ -50,6 +50,10 @@ void Run(){
 	Listener l;
 	
 	typedef std::pair<E_Action, std::string> T_Pair;
+	l.actions.push_back(T_Pair(STRING, "test"));
+	l.actions.push_back(T_Pair(CHILDREN_START, ""));
+	l.actions.push_back(T_Pair(STRING, "eee"));
+	l.actions.push_back(T_Pair(CHILDREN_END, ""));
 	l.actions.push_back(T_Pair(STRING, "test string"));
 	l.actions.push_back(T_Pair(STRING, "another string"));
 	l.actions.push_back(T_Pair(STRING, "unquotedString"));
