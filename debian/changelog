@@ -1,3 +1,9 @@
+libstob (3.3.16) unstable; urgency=medium
+
+  * bugfix: allow comments between string and its children declaration
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 21 Sep 2017 15:16:32 +0300
+
 libstob (3.3.15) unstable; urgency=medium
 
   * update to latest unikod
