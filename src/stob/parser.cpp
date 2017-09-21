@@ -57,6 +57,29 @@ void Parser::processCharInStringParsed(char c, ParseListener& listener){
 		case '\r':
 		case '\t':
 			break;
+		case '/':
+			if(this->stringBuf.size() != 0){
+				ASSERT(this->stringBuf.size() == 1)
+				ASSERT(this->stringBuf[0] == '/')
+				this->stringBuf.clear();
+				this->stateAfterComment = State_e::STRING_PARSED;
+				this->state = State_e::SINGLE_LINE_COMMENT;
+			}else{
+				this->stringBuf.push_back(c);
+			}
+			break;
+		case '*':
+			if(this->stringBuf.size() != 0){
+				ASSERT(this->stringBuf.size() == 1)
+				ASSERT(this->stringBuf[0] == '/')
+				this->stringBuf.clear();
+				this->stateAfterComment = State_e::STRING_PARSED;
+				this->state = State_e::MULTILINE_COMMENT;
+			}else{
+				this->state = State_e::IDLE;
+				this->processCharInIdle(c, listener);
+			}
+			break;
 		case '{':
 			listener.onChildrenParseStarted();
 			this->state = State_e::IDLE;
@@ -76,6 +99,9 @@ void Parser::processCharInUnquotedString(char c, ParseListener& listener){
 				this->stringBuf.pop_back();
 				if(this->stringBuf.size() != 0){
 					this->handleStringParsed(listener);
+					this->stateAfterComment = State_e::STRING_PARSED;
+				}else{
+					this->stateAfterComment = State_e::IDLE;
 				}
 				this->state = State_e::SINGLE_LINE_COMMENT;
 			}else{
@@ -87,8 +113,11 @@ void Parser::processCharInUnquotedString(char c, ParseListener& listener){
 				this->stringBuf.pop_back();
 				if(this->stringBuf.size() != 0){
 					this->handleStringParsed(listener);
+					this->stateAfterComment = State_e::STRING_PARSED;
+				}else{
+					this->stateAfterComment = State_e::IDLE;
 				}
-				state = State_e::MULTILINE_COMMENT;
+				this->state = State_e::MULTILINE_COMMENT;
 			} else {
 				this->stringBuf.push_back(c);
 			}
@@ -184,7 +213,7 @@ void Parser::processCharInSingleLineComment(char c, ParseListener& listener){
 	switch(c){
 		case '\0':
 		case '\n':
-			this->state = State_e::IDLE;
+			this->state = this->stateAfterComment;
 			break;
 		default:
 			break;
@@ -202,7 +231,7 @@ void Parser::processCharInMultiLineComment(char c, ParseListener& listener){
 				ASSERT(this->stringBuf.size() == 1)
 				ASSERT(this->stringBuf.back() == '*')
 				this->stringBuf.clear();
-				this->state = State_e::IDLE;
+				this->state = this->stateAfterComment;
 			}
 			break;
 		default:

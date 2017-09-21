@@ -97,6 +97,8 @@ class Parser{
 		RAW_STRING
 	} state;
 
+	State_e stateAfterComment;
+	
 	void handleStringParsed(ParseListener& listener);
 	
 	void processChar(char c, ParseListener& listener);
