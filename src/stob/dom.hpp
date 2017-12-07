@@ -636,7 +636,7 @@ public:
 
 	/**
 	 * @brief Get child node with given value.
-	 * In contrast to Child(value) method this one returns reference and throws exception if node is not found.
+	 * In contrast to child(value) method this one returns reference and throws exception if node is not found.
 	 * @param value - value to looks for amongst children.
 	 * @return reference to the found node.
 	 * @throw NodeNotFoundExc - in case node with given value is not found.
