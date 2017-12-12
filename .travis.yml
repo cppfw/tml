@@ -74,6 +74,7 @@ before_install:
     pod repo add --silent igagis https://$MYCI_GIT_USERNAME:$MYCI_GIT_ACCESS_TOKEN@github.com/igagis/cocoapods-repo.git &&
     pod install --project-directory=ios &&
     
+    brew update > /dev/null &&
     brew tap igagis/tap &&
     brew update > /dev/null &&
     brew install myci;
