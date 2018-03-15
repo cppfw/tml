@@ -10,7 +10,6 @@
 #include <memory>
 
 #include <utki/config.hpp>
-#include <utki/PoolStored.hpp>
 #include <utki/types.hpp>
 #include <utki/Buf.hpp>
 #include <utki/Unique.hpp>
@@ -32,8 +31,6 @@ namespace stob{
  * This class represents a node of the STOB document object model.
  * The Node objects can be organized to a single-linked list. There are methods for managing it.
  * The Node objects can hold a list of child nodes, i.e. a single-linked list of child Node objects.
- * The Node class has overridden operators new and delete to allocate the memory for the objects from
- * a memory pool to avoid memory fragmentation.
  */
 class Node final : public utki::Unique{
 	template< class T, class... Args > friend std::unique_ptr<T> utki::makeUnique(Args&&... args);
@@ -45,8 +42,6 @@ class Node final : public utki::Unique{
 	std::unique_ptr<Node> children; //pointer to the first child
 
 	void setValueInternal(const utki::Buf<char> str);
-
-	static void* operator new(size_t size);
 
 	void setValue(const char* v, size_t size){
 		this->setValue(utki::Buf<char>(const_cast<char*>(v), size));
@@ -84,8 +79,6 @@ public:
 	};
 
 	~Node()noexcept{}
-
-	static void operator delete(void *p)noexcept;
 
 
 	/**

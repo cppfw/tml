@@ -16,26 +16,6 @@ using namespace stob;
 
 
 
-namespace{
-utki::MemoryPool<sizeof(Node), 1024> memoryPool;
-}
-
-
-
-void* Node::operator new(size_t size){
-	ASSERT(size == sizeof(Node))
-
-	return memoryPool.Alloc_ts();
-}
-
-
-
-void Node::operator delete(void* p)noexcept{
-	memoryPool.Free_ts(p);
-}
-
-
-
 stob::Node::NodeAndPrev Node::next(const char* value)noexcept{
 	Node* prev = this;
 	for(Node* n = this->next(); n; prev = n, n = n->next()){
