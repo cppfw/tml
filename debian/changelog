@@ -1,3 +1,9 @@
+libstob (3.3.17) unstable; urgency=medium
+
+  * removing usage of memory pool
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 15 Mar 2018 17:15:36 +0200
+
 libstob (3.3.16) unstable; urgency=medium
 
   * bugfix: allow comments between string and its children declaration
