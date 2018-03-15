@@ -1,3 +1,9 @@
+libstob (3.3.19) unstable; urgency=medium
+
+  * fix ios deployment
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 15 Mar 2018 19:09:27 +0200
+
 libstob (3.3.18) unstable; urgency=medium
 
   * fixing bintray deployment

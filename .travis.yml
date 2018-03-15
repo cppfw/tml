@@ -58,8 +58,8 @@ env:
 
 before_install:
 - if [ "$BUILD_NAME" == "macosx" ]; then
-    rvm install ruby-2.2.3 &&
-    rvm use ruby-2.2.3 &&
+    rvm install ruby-2.3.3 &&
+    rvm use ruby-2.3.3 &&
     
     brew update > /dev/null &&
     brew tap igagis/tap &&
@@ -67,8 +67,8 @@ before_install:
     brew install myci prorab prorab-extra libutki libpapki libunikod;
   fi
 - if [ "$BUILD_NAME" == "ios" ]; then
-    rvm install ruby-2.2.3 &&
-    rvm use ruby-2.2.3 &&
+    rvm install ruby-2.3.3 &&
+    rvm use ruby-2.3.3 &&
     
     sudo gem install cocoapods &&
     pod repo add --silent igagis https://$MYCI_GIT_USERNAME:$MYCI_GIT_ACCESS_TOKEN@github.com/igagis/cocoapods-repo.git &&
@@ -226,7 +226,7 @@ deploy:
     condition: $BUILD_NAME = macosx
 - provider: script
   skip_cleanup: true
-  script: myci-deploy-cocoapods.sh -r igagis
+  script: rvm 2.3.3 do myci-deploy-cocoapods.sh -r igagis
   on:
     tags: true
     condition: $BUILD_NAME = ios
