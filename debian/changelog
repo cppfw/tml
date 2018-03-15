@@ -1,3 +1,9 @@
+libstob (3.3.18) unstable; urgency=medium
+
+  * fixing bintray deployment
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 15 Mar 2018 17:29:31 +0200
+
 libstob (3.3.17) unstable; urgency=medium
 
   * removing usage of memory pool
