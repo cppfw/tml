@@ -37,13 +37,9 @@ this_ldlibs += -lunikod -lpapki -lstdc++
 
 ifeq ($(prorab_os), windows)
     this_cxxflags += -Wno-format #due to bugs in some g++ versions it warns about format when not needed, so disable format warnings
-    this_cxxflags += -I/usr/include -I/usr/local/include
-    this_ldlibs += 
-    this_ldflags += -L/usr/lib -L/usr/local/lib
 else ifeq ($(prorab_os), macosx)
     this_cxxflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
     this_ldlibs += -lc++
-    this_ldlibs += 
 else
     this_ldlibs +=  -lpthread
     this_cxxflags += -fPIC # Since we are building shared library, we need Position-Independend Code
