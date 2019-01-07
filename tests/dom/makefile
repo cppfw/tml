@@ -25,6 +25,8 @@ endif
 
 this_ldlibs += -lstob -lpapki -lstdc++
 
+this_no_install := true
+
 $(eval $(prorab-build-app))
 
 

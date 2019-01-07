@@ -23,6 +23,7 @@ ifeq ($(os), macosx)
 else ifeq ($(os),windows)
 endif
 
+this_no_install := true
 
 $(eval $(prorab-build-app))
 
