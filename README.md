@@ -2,7 +2,7 @@
 
 
 
-A lightweight STOB markup language C++ library. See more info at http://stobml.org
+A lightweight STOB markup language C++ library.
 
 See [WiKi](wiki/HomePage.md) for installation instructions.
 
