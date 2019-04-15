@@ -1,3 +1,9 @@
+libstob (3.3.22) unstable; urgency=medium
+
+  * deploy to bionic
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 16 Apr 2019 01:34:58 +0300
+
 libstob (3.3.21) unstable; urgency=medium
 
   * do not install tests
