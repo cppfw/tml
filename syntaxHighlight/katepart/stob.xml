@@ -61,11 +61,10 @@
         <StringDetect
            String=")%1&quot;"
            lookAhead="true"
-           context="#pop#pop"
+           context="RawStringClose"
            attribute="Style_QuotedStringEscape"
            dynamic="true"
-        /><!--TODO: switch to context RawStringClose instead of #pop#pop
-              when bug https://bugs.kde.org/show_bug.cgi?id=367720 is fixed. -->
+        />
       </context>
 
       <context name="RawStringClose" lineEndContext="#stay" attribute="Style_QuotedStringEscape" dynamic="true">
