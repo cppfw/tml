@@ -45,4 +45,4 @@ $(eval $(this_rules))
 #add dependency on libstob
 $(prorab_this_name): $(abspath $(d)../../src/libstob$(soext))
 
-$(eval $(call prorab-include,$(d)../../src/makefile))
+$(eval $(call prorab-try-include,$(d)../../src/makefile))
