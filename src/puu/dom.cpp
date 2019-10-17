@@ -610,7 +610,7 @@ std::int64_t node::as_int64() const noexcept{
 
 long double node::as_long_double() const noexcept{
 #if M_OS_NAME == M_OS_NAME_ANDROID //TODO: use strtold() when it becomes available on Android
-	return this->asDouble();
+	return this->as_double();
 #else
 	if(!this->get_value()){
 		return 0;
