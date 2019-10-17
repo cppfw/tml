@@ -16,12 +16,12 @@ namespace{
 const size_t fileReadChinkSize_c = 0x4ff;
 }
 
-void Parser::handleStringParsed(ParseListener& listener){
-	listener.onStringParsed(utki::wrapBuf(this->stringBuf));
+void parser::handleStringParsed(listener& listener){
+	listener.on_string_parsed(utki::wrapBuf(this->stringBuf));
 	this->stringBuf.clear();
 }
 
-void Parser::processCharInIdle(char c, ParseListener& listener){
+void parser::processCharInIdle(char c, listener& listener){
 	switch(c){
 		case ' ':
 		case '\n':
@@ -32,12 +32,12 @@ void Parser::processCharInIdle(char c, ParseListener& listener){
 			this->state = State_e::IDLE;
 			break;
 		case '{':
-			listener.onStringParsed();
-			listener.onChildrenParseStarted();
+			listener.on_string_parsed();
+			listener.on_children_parse_started();
 			++this->nestingLevel;
 			break;
 		case '}':
-			listener.onChildrenParseFinished();
+			listener.on_children_parse_finished();
 			--this->nestingLevel;
 			break;
 		case '"':
@@ -50,7 +50,7 @@ void Parser::processCharInIdle(char c, ParseListener& listener){
 	}
 }
 
-void Parser::processCharInStringParsed(char c, ParseListener& listener){
+void parser::processCharInStringParsed(char c, listener& listener){
 	switch (c) {
 		case ' ':
 		case '\n':
@@ -81,7 +81,7 @@ void Parser::processCharInStringParsed(char c, ParseListener& listener){
 			}
 			break;
 		case '{':
-			listener.onChildrenParseStarted();
+			listener.on_children_parse_started();
 			this->state = State_e::IDLE;
 			++this->nestingLevel;
 			break;
@@ -92,7 +92,7 @@ void Parser::processCharInStringParsed(char c, ParseListener& listener){
 	}
 }
 
-void Parser::processCharInUnquotedString(char c, ParseListener& listener){
+void parser::processCharInUnquotedString(char c, listener& listener){
 	switch(c){
 		case '/':
 			if(this->stringBuf.size() != 0 && this->stringBuf.back() == '/'){
@@ -149,14 +149,14 @@ void Parser::processCharInUnquotedString(char c, ParseListener& listener){
 			ASSERT(this->stringBuf.size() != 0)
 			this->handleStringParsed(listener);
 			this->state = State_e::IDLE;
-			listener.onChildrenParseStarted();
+			listener.on_children_parse_started();
 			++this->nestingLevel;
 			break;
 		case '}':
 			ASSERT(this->stringBuf.size() != 0)
 			this->handleStringParsed(listener);
 			this->state = State_e::IDLE;
-			listener.onChildrenParseFinished();
+			listener.on_children_parse_finished();
 			--this->nestingLevel;
 			break;
 		default:
@@ -165,7 +165,7 @@ void Parser::processCharInUnquotedString(char c, ParseListener& listener){
 	}
 }
 
-void Parser::processCharInQuotedString(char c, ParseListener& listener){
+void parser::processCharInQuotedString(char c, listener& listener){
 	switch (c) {
 		case '"':
 			this->handleStringParsed(listener);
@@ -184,7 +184,7 @@ void Parser::processCharInQuotedString(char c, ParseListener& listener){
 	}
 }
 
-void Parser::processCharInEscapeSequence(char c, ParseListener& listener){
+void parser::processCharInEscapeSequence(char c, listener& listener){
 	switch (c) {
 		case '"':
 			this->stringBuf.push_back('"');
@@ -209,7 +209,7 @@ void Parser::processCharInEscapeSequence(char c, ParseListener& listener){
 	this->state = State_e::QUOTED_STRING;
 }
 
-void Parser::processCharInSingleLineComment(char c, ParseListener& listener){
+void parser::processCharInSingleLineComment(char c, listener& listener){
 	switch(c){
 		case '\0':
 		case '\n':
@@ -220,7 +220,7 @@ void Parser::processCharInSingleLineComment(char c, ParseListener& listener){
 	}
 }
 
-void Parser::processCharInMultiLineComment(char c, ParseListener& listener){
+void parser::processCharInMultiLineComment(char c, listener& listener){
 	switch(c){
 		case '*':
 			ASSERT(this->stringBuf.size() == 0)
@@ -240,12 +240,12 @@ void Parser::processCharInMultiLineComment(char c, ParseListener& listener){
 	}
 }
 
-void Parser::processCharInRawStringOpeningDelimeter(char c, ParseListener& listener) {
+void parser::processCharInRawStringOpeningDelimeter(char c, listener& listener) {
 	switch(c){
 		case '"':
 			{
 				char r = 'R';
-				listener.onStringParsed(utki::Buf<char>(&r, 1));
+				listener.on_string_parsed(utki::Buf<char>(&r, 1));
 			}
 			this->handleStringParsed(listener);
 			this->state = State_e::STRING_PARSED;
@@ -261,7 +261,7 @@ void Parser::processCharInRawStringOpeningDelimeter(char c, ParseListener& liste
 	}
 }
 
-void Parser::processCharInRawString(char c, ParseListener& listener) {
+void parser::processCharInRawString(char c, listener& listener) {
 	switch(c){
 		case ')':
 			this->rawStringDelimeterIndex = 0;
@@ -273,7 +273,7 @@ void Parser::processCharInRawString(char c, ParseListener& listener) {
 	}
 }
 
-void Parser::processCharInRawStringClosingDelimeter(char c, ParseListener& listener) {
+void parser::processCharInRawStringClosingDelimeter(char c, listener& listener) {
 	switch(c){
 		case '"':
 			ASSERT(this->rawStringDelimeterIndex <= this->rawStringDelimeter.size())
@@ -307,7 +307,7 @@ void Parser::processCharInRawStringClosingDelimeter(char c, ParseListener& liste
 }
 
 
-void Parser::processChar(char c, ParseListener& listener){
+void parser::processChar(char c, listener& listener){
 	switch(this->state){
 		case State_e::IDLE:
 			this->processCharInIdle(c, listener);
@@ -347,7 +347,7 @@ void Parser::processChar(char c, ParseListener& listener){
 
 
 
-void Parser::parseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& listener){
+void parser::parse_data_chunk(const utki::Buf<std::uint8_t> chunk, listener& listener){
 	for(auto c : chunk){
 		this->processChar(c, listener);
 	}
@@ -355,7 +355,7 @@ void Parser::parseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& 
 
 
 
-void Parser::endOfData(ParseListener& listener){
+void parser::end_of_data(listener& listener){
 	this->processChar('\0', listener);
 
 	if(this->nestingLevel != 0 || this->state != State_e::IDLE){
@@ -367,10 +367,10 @@ void Parser::endOfData(ParseListener& listener){
 
 
 
-void puu::parse(const papki::File& fi, ParseListener& listener){
+void puu::parse(const papki::File& fi, listener& listener){
 	papki::File::Guard fileGuard(fi);
 
-	puu::Parser parser;
+	puu::parser parser;
 
 	std::array<std::uint8_t, fileReadChinkSize_c> buf; //2kb read buffer.
 
@@ -379,15 +379,15 @@ void puu::parse(const papki::File& fi, ParseListener& listener){
 	do{
 		bytesRead = fi.read(utki::wrapBuf(buf));
 
-		parser.parseDataChunk(utki::Buf<std::uint8_t>(&*buf.begin(), bytesRead), listener);
+		parser.parse_data_chunk(utki::Buf<std::uint8_t>(&*buf.begin(), bytesRead), listener);
 	}while(bytesRead == buf.size());
 
-	parser.endOfData(listener);
+	parser.end_of_data(listener);
 }
 
 
 
-void Parser::reset(){
+void parser::reset(){
 	this->stringBuf.clear();
 	this->nestingLevel = 0;
 	this->state = State_e::IDLE;

@@ -16,22 +16,22 @@ enum E_Action{
 	STRING
 };
 
-class Listener : public puu::ParseListener{
-	void onChildrenParseFinished() override{
+class Listener : public puu::listener{
+	void on_children_parse_finished() override{
 		TRACE(<< "}" << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == CHILDREN_END, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
 		this->actions.pop_front();
 	}
 
-	void onChildrenParseStarted() override{
+	void on_children_parse_started() override{
 		TRACE(<< "{" << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == CHILDREN_START, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
 		this->actions.pop_front();
 	}
 
-	void onStringParsed(const utki::Buf<char> s)override{
+	void on_string_parsed(const utki::Buf<char> s)override{
 		std::string str(&*s.begin(), s.size());
 		TRACE(<< "str = " << str << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)

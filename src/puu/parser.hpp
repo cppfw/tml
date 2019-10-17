@@ -44,38 +44,38 @@ namespace puu{
  * During the puu document parsing the Parser notifies this listener object
  * about parsed tokens.
  */
-class ParseListener{
+class listener{
 public:
 	/**
 	 * @brief A string token has been parsed.
 	 * This method is called by Parser when String token has been parsed.
      * @param str - parsed string.
      */
-	virtual void onStringParsed(const utki::Buf<char> str = utki::Buf<char>()) = 0;
+	virtual void on_string_parsed(const utki::Buf<char> str = utki::Buf<char>()) = 0;
 
 	/**
 	 * @brief Children list parsing started.
 	 * This method is called by Parser when '{' token has been parsed.
      */
-	virtual void onChildrenParseStarted() = 0;
+	virtual void on_children_parse_started() = 0;
 
 	/**
 	 * @brief Children list parsing finished.
 	 * This method is called by Parser when '}' token has been parsed.
      */
-	virtual void onChildrenParseFinished() = 0;
+	virtual void on_children_parse_finished() = 0;
 
-	virtual ~ParseListener()noexcept{}
+	virtual ~listener()noexcept{}
 };
 
 
 
 /**
- * @brief puu Parser.
+ * @brief puu parser.
  * This is a class of puu parser. It is used for event-based parsing of puu
  * documents.
  */
-class Parser{
+class parser{
 	std::vector<char> stringBuf;//buffer for current string being parsed
 
 	std::string rawStringDelimeter;//delimeter for raw string
@@ -99,26 +99,26 @@ class Parser{
 
 	State_e stateAfterComment;
 
-	void handleStringParsed(ParseListener& listener);
+	void handleStringParsed(listener& listener);
 
-	void processChar(char c, ParseListener& listener);
-	void processCharInIdle(char c, ParseListener& listener);
-	void processCharInStringParsed(char c, ParseListener& listener);
-	void processCharInUnquotedString(char c, ParseListener& listener);
-	void processCharInQuotedString(char c, ParseListener& listener);
-	void processCharInEscapeSequence(char c, ParseListener& listener);
-	void processCharInSingleLineComment(char c, ParseListener& listener);
-	void processCharInMultiLineComment(char c, ParseListener& listener);
-	void processCharInRawStringOpeningDelimeter(char c, ParseListener& listener);
-	void processCharInRawString(char c, ParseListener& listener);
-	void processCharInRawStringClosingDelimeter(char c, ParseListener& listener);
+	void processChar(char c, listener& listener);
+	void processCharInIdle(char c, listener& listener);
+	void processCharInStringParsed(char c, listener& listener);
+	void processCharInUnquotedString(char c, listener& listener);
+	void processCharInQuotedString(char c, listener& listener);
+	void processCharInEscapeSequence(char c, listener& listener);
+	void processCharInSingleLineComment(char c, listener& listener);
+	void processCharInMultiLineComment(char c, listener& listener);
+	void processCharInRawStringOpeningDelimeter(char c, listener& listener);
+	void processCharInRawString(char c, listener& listener);
+	void processCharInRawStringClosingDelimeter(char c, listener& listener);
 
 public:
 	/**
 	 * @brief Constructor.
 	 * Creates an initially reset Parser object.
      */
-	Parser(){
+	parser(){
 		this->reset();
 	}
 
@@ -135,7 +135,7 @@ public:
      * @param listener - listener object which will receive notifications about parsed tokens.
 	 * @throw puu::Exc - in case of malformed puu document.
      */
-	void parseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& listener);
+	void parse_data_chunk(const utki::Buf<std::uint8_t> chunk, listener& listener);
 
 	/**
 	 * @brief Finalize parsing.
@@ -144,7 +144,7 @@ public:
      * @param listener - listener object which will receive notifications about parsed tokens.
 	 * @throw puu::Exc - in case of malformed puu document.
      */
-	void endOfData(ParseListener& listener);
+	void end_of_data(listener& listener);
 };
 
 
@@ -156,7 +156,7 @@ public:
  * @param listener - listener object which will receive notifications about parsed tokens.
  * @throw puu::Exc - in case of malformed puu document.
  */
-void parse(const papki::File& fi, ParseListener& listener);
+void parse(const papki::File& fi, listener& listener);
 
 
 

@@ -317,7 +317,7 @@ void Node::writeChain(papki::File& fi, bool formatted)const{
 
 
 std::unique_ptr<puu::Node> puu::load(const papki::File& fi){
-	class Listener : public puu::ParseListener{
+	class Listener : public puu::listener{
 		typedef std::pair<std::unique_ptr<Node>, Node*> T_Pair; //NOTE: use pair, because tuple does not work on iOS when adding it to vector, for some reason.
 		std::vector<T_Pair> stack;
 
@@ -325,20 +325,20 @@ std::unique_ptr<puu::Node> puu::load(const papki::File& fi){
 		std::unique_ptr<Node> chains;
 		Node* lastChain;
 
-		void onChildrenParseFinished() override{
+		void on_children_parse_finished() override{
 			std::get<1>(this->stack.back())->setChildren(std::move(this->chains));
 			this->chains = std::move(std::get<0>(this->stack.back()));
 			this->lastChain = std::get<1>(this->stack.back());
 			this->stack.pop_back();
 		}
 
-		void onChildrenParseStarted() override{
+		void on_children_parse_started() override{
 			this->stack.emplace_back(
 					std::make_pair(std::move(this->chains), this->lastChain)
 				);
 		}
 
-		void onStringParsed(const utki::Buf<char> str)override{
+		void on_string_parsed(const utki::Buf<char> str)override{
 			auto node = utki::makeUnique<Node>(str);
 
 			if(!this->chains){
