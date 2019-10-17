@@ -29,17 +29,17 @@ namespace puu{
 /**
  * @brief puu document node.
  * This class represents a node of the puu document object model.
- * The Node objects can be organized to a single-linked list. There are methods for managing it.
- * The Node objects can hold a list of child nodes, i.e. a single-linked list of child Node objects.
+ * The node objects can be organized to a single-linked list.
+ * The node objects can hold a list of child nodes, i.e. a single-linked list of child node objects.
  */
-class Node final : public utki::Unique{
+class node final : public utki::Unique{
 	template< class T, class... Args > friend std::unique_ptr<T> utki::makeUnique(Args&&... args);
 
 	std::unique_ptr<char[]> value_v; //node value
 
-	std::unique_ptr<Node> next_v; //next sibling node
+	std::unique_ptr<node> next_v; //next sibling node
 
-	std::unique_ptr<Node> children; //pointer to the first child
+	std::unique_ptr<node> children; //pointer to the first child
 
 	void setValueInternal(const utki::Buf<char> str);
 
@@ -47,38 +47,38 @@ class Node final : public utki::Unique{
 		this->setValue(utki::Buf<char>(const_cast<char*>(v), size));
 	}
 public:
-	Node(const Node&) = delete;
-	Node& operator=(const Node&) = delete;
+	node(const node&) = delete;
+	node& operator=(const node&) = delete;
 
-	Node(const utki::Buf<char> str){
+	node(const utki::Buf<char> str){
 		this->setValueInternal(str);
 	}
 
-	Node(const std::string& str) :
-			Node(utki::Buf<char>(const_cast<char*>(str.c_str()), str.size()))
+	node(const std::string& str) :
+			node(utki::Buf<char>(const_cast<char*>(str.c_str()), str.size()))
 	{}
 
-	Node(){}
+	node(){}
 
-	Node(const char* value) :
-			Node(utki::Buf<char>(const_cast<char*>(value), value == nullptr ? 0 : strlen(value)))
+	node(const char* value) :
+			node(utki::Buf<char>(const_cast<char*>(value), value == nullptr ? 0 : strlen(value)))
 	{}
 
-	class NodeNotFoundExc : puu::Exc{
+	class nodeNotFoundExc : puu::Exc{
 	public:
-		NodeNotFoundExc(const std::string& message) :
+		nodeNotFoundExc(const std::string& message) :
 				puu::Exc(message)
 		{}
 	};
 
-	class NodeHasNoChldrenExc : puu::Exc{
+	class nodeHasNoChldrenExc : puu::Exc{
 	public:
-		NodeHasNoChldrenExc(const std::string& message) :
+		nodeHasNoChldrenExc(const std::string& message) :
 				puu::Exc(message)
 		{}
 	};
 
-	~Node()noexcept{}
+	~node()noexcept{}
 
 
 	/**
@@ -419,7 +419,7 @@ public:
 	 * @return true if two puu trees are completely equal.
 	 * @return false otherwise.
 	 */
-	bool operator==(const Node& n)const noexcept;
+	bool operator==(const node& n)const noexcept;
 
 	/**
 	 * @brief Count number of children.
@@ -428,8 +428,8 @@ public:
 	size_t count()const noexcept;
 
 	/**
-	 * @brief Count number of Nodes in chain.
-	 * @return number of Nodes in chain.
+	 * @brief Count number of nodes in chain.
+	 * @return number of nodes in chain.
 	 */
 	size_t countChain()const noexcept;
 
@@ -438,7 +438,7 @@ public:
 	 * Sets the children nodes list for this node. Previously set list will be discarded if any.
 	 * @param first - auto-pointer to the first node of the children single.linked list.
 	 */
-	void setChildren(std::unique_ptr<Node> first)noexcept{
+	void setChildren(std::unique_ptr<node> first)noexcept{
 		this->children = std::move(first);
 	}
 
@@ -447,7 +447,7 @@ public:
 	 * Removes the list of children from this node.
 	 * @return auto-pointer to the first node in the children list.
 	 */
-	std::unique_ptr<Node> removeChildren()noexcept{
+	std::unique_ptr<node> removeChildren()noexcept{
 		return std::move(this->children);
 	}
 
@@ -455,12 +455,12 @@ public:
 	 * @brief Remove first child from the list of children.
 	 * @return auto-pointer to the node which was the first child.
 	 */
-	std::unique_ptr<Node> removeFirstChild()noexcept{
+	std::unique_ptr<node> removeFirstChild()noexcept{
 		if(!this->children){
-			return std::unique_ptr<Node>();
+			return std::unique_ptr<node>();
 		}
 
-		std::unique_ptr<Node> ret = std::move(this->children);
+		std::unique_ptr<node> ret = std::move(this->children);
 		this->children = std::move(ret->next_v);
 
 		return ret;
@@ -473,8 +473,8 @@ public:
 	 * @return auto-pointer to the removed node.
 	 * @return invalid auto-pointer if there was no child with given value found.
 	 */
-	std::unique_ptr<Node> removeChild(const char* value)noexcept{
-		NodeAndPrev f = this->child(value);
+	std::unique_ptr<node> removeChild(const char* value)noexcept{
+		nodeAndPrev f = this->child(value);
 
 		if(f.prev()){
 			return f.prev()->removeNext();
@@ -489,13 +489,13 @@ public:
 	 * @return Unique pointer to a removed child.
 	 * @return nullptr if no child found.
 	 */
-	std::unique_ptr<Node> removeChild(const puu::Node* c)noexcept;
+	std::unique_ptr<node> removeChild(const puu::node* c)noexcept;
 
 	/**
 	 * @brief Get list of child nodes.
 	 * @return pointer to the first child node.
 	 */
-	Node* child()noexcept{
+	node* child()noexcept{
 		return this->children.operator->();
 	}
 
@@ -503,7 +503,7 @@ public:
 	 * @brief Get constant list of child nodes.
 	 * @return constant pointer to the first child node.
 	 */
-	const Node* child()const noexcept{
+	const node* child()const noexcept{
 		return this->children.operator->();
 	}
 
@@ -512,108 +512,108 @@ public:
 	 * @param chain - chain of nodes to replace by.
 	 * @return replaced node.
 	 */
-	std::unique_ptr<Node> replace(std::unique_ptr<Node> chain);
+	std::unique_ptr<node> replace(std::unique_ptr<node> chain);
 
 	/**
 	 * @brief Replace this node with the clone of the given chain of nodes.
 	 * @param chain - chain of nodes to replace by.
 	 * @return replaced node.
 	 */
-	std::unique_ptr<Node> replace(const Node& chain);
+	std::unique_ptr<node> replace(const node& chain);
 
 	/**
-	 * @brief Node and its previous node.
-	 * Class holding a pointer to a Node and pointer to its previous Node in
+	 * @brief node and its previous node.
+	 * Class holding a pointer to a node and pointer to its previous node in
 	 * the single linked list.
 	 * If 'node' is not 0 and 'prev' is not 0, then prev()->Next() is same as 'node'.
 	 * If 'prev' is 0 and 'node' is not 0, then 'node' points to the very first node in the single-linked list.
 	 * If 'node' is 0 and 'prev' is not 0, then 'prev' points to the last node in the single-linked list.
 	 */
-	class NodeAndPrev{
-		friend class puu::Node;
+	class nodeAndPrev{
+		friend class puu::node;
 
-		Node* prevNode;
-		Node* curNode;
+		node* prevnode;
+		node* curnode;
 
-		NodeAndPrev(Node* prev, Node* node) :
-				prevNode(prev),
-				curNode(node)
+		nodeAndPrev(node* prev, node* node) :
+				prevnode(prev),
+				curnode(node)
 		{}
 	public:
 		/**
-		 * @brief Get pointer to Node.
-		 * @return Pointer to Node.
+		 * @brief Get pointer to node.
+		 * @return Pointer to node.
 		 */
-		Node* node()noexcept{
-			return this->curNode;
+		node* get_node()noexcept{
+			return this->curnode;
 		}
 
 		/**
-		 * @brief Get constant pointer to Node.
-		 * @return Constant pointer to Node.
+		 * @brief Get constant pointer to node.
+		 * @return Constant pointer to node.
 		 */
-		const Node* node()const noexcept{
-			return this->curNode;
+		const node* get_node()const noexcept{
+			return this->curnode;
 		}
 
 		/**
-		 * @brief Get pointer to previous Node.
-		 * @return Pointer to previous Node.
+		 * @brief Get pointer to previous node.
+		 * @return Pointer to previous node.
 		 */
-		Node* prev()noexcept{
-			return this->prevNode;
+		node* prev()noexcept{
+			return this->prevnode;
 		}
 
 		/**
-		 * @brief Get constant pointer to previous Node.
-		 * @return Constant pointer to previous Node.
+		 * @brief Get constant pointer to previous node.
+		 * @return Constant pointer to previous node.
 		 */
-		const Node* prev()const noexcept{
-			return this->prevNode;
+		const node* prev()const noexcept{
+			return this->prevnode;
 		}
 	};
 
 	/**
 	 * @brief Get child node holding the given value.
 	 * @param value - value to search for among children.
-	 * @return instance of NodeAndPrev structure holding information about found Node.
+	 * @return instance of nodeAndPrev structure holding information about found node.
 	 */
-	NodeAndPrev child(const char* value)noexcept;
+	nodeAndPrev child(const char* value)noexcept;
 
 	/**
 	 * @brief Get constant child node holding the given value.
 	 * @param value - value to search for among children.
-	 * @return constant instance of NodeAndPrev structure holding information about found Node.
+	 * @return constant instance of nodeAndPrev structure holding information about found node.
 	 */
-	const NodeAndPrev child(const char* value)const noexcept{
+	const nodeAndPrev child(const char* value)const noexcept{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->child(value);
 	}
 
 	/**
 	 * @brief Get child node by index.
 	 * @param index - index of the child node to get.
-	 * @return instance of NodeAndPrev structure holding information about found Node.
+	 * @return instance of nodeAndPrev structure holding information about found node.
 	 */
-	NodeAndPrev child(size_t index)noexcept;
+	nodeAndPrev child(size_t index)noexcept;
 
 	/**
 	 * @brief Get constant child node by index.
 	 * @param index - index of the child node to get.
-	 * @return constant instance of NodeAndPrev structure holding information about found Node.
+	 * @return constant instance of nodeAndPrev structure holding information about found node.
 	 */
-	const NodeAndPrev child(size_t index)const noexcept{
+	const nodeAndPrev child(size_t index)const noexcept{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->child(index);
 	}
 
 	/**
 	 * @brief Get fist child.
 	 * @return reference to the first child node.
-	 * @throw NodeHasNoChldrenExc - in case the node has no children at all.
+	 * @throw nodeHasNoChldrenExc - in case the node has no children at all.
 	 */
-	Node& up(){
+	node& up(){
 		auto r = this->child();
 		if(!r){
-			throw NodeHasNoChldrenExc(this->value());
+			throw nodeHasNoChldrenExc(this->value());
 		}
 		return *r;
 	}
@@ -621,9 +621,9 @@ public:
 	/**
 	 * @brief Const version of get().
 	 * @return Const reference to the first child node.
-	 * @throw NodeHasNoChldrenExc - in case the node has no children at all.
+	 * @throw nodeHasNoChldrenExc - in case the node has no children at all.
 	 */
-	const Node& up()const{
+	const node& up()const{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->up();
 	}
 
@@ -632,12 +632,12 @@ public:
 	 * In contrast to child(value) method this one returns reference and throws exception if node is not found.
 	 * @param value - value to looks for amongst children.
 	 * @return reference to the found node.
-	 * @throw NodeNotFoundExc - in case node with given value is not found.
+	 * @throw nodeNotFoundExc - in case node with given value is not found.
 	 */
-	Node& up(const char* value){
-		auto r = this->child(value).node();
+	node& up(const char* value){
+		auto r = this->child(value).get_node();
 		if(!r){
-			throw NodeNotFoundExc(value);
+			throw nodeNotFoundExc(value);
 		}
 		return *r;
 	}
@@ -646,9 +646,9 @@ public:
 	 * @brief Const version of get().
 	 * @param value - value to looks for amongst children.
 	 * @return const reference to the found node.
-	 * @throw NodeNotFoundExc - in case node with given value is not found.
+	 * @throw nodeNotFoundExc - in case node with given value is not found.
 	 */
-	const Node& up(const char* value)const{
+	const node& up(const char* value)const{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->up(value);
 	}
 
@@ -656,12 +656,12 @@ public:
 	 * @brief Get node with the given value from the chain.
 	 * @param value - value to look for.
 	 * @return Reference to the found.
-	 * @throw NodeNotFoundExc - in case node with given value is not found.
+	 * @throw nodeNotFoundExc - in case node with given value is not found.
 	 */
-	Node& side(const char* value){
-		auto r = this->thisOrNext(value).node();
+	node& side(const char* value){
+		auto r = this->thisOrNext(value).get_node();
 		if(!r){
-			throw NodeNotFoundExc(value);
+			throw nodeNotFoundExc(value);
 		}
 		return *r;
 	}
@@ -670,37 +670,37 @@ public:
 	 * @brief Const version of side().
 	 * @param value - value to look for.
 	 * @return Reference to the found.
-	 * @throw NodeNotFoundExc - in case node with given value is not found.
+	 * @throw nodeNotFoundExc - in case node with given value is not found.
 	 */
-	const Node& side(const char* value)const{
+	const node& side(const char* value)const{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->side(value);
 	}
 
 	/**
 	 * @brief Get first non-property child.
-	 * @return instance of NodeAndPrev structure holding information about found Node.
+	 * @return instance of nodeAndPrev structure holding information about found node.
 	 */
-	NodeAndPrev childNonProperty()noexcept;
+	nodeAndPrev childNonProperty()noexcept;
 
 	/**
 	 * @brief Get constant first non-property child.
-	 * @return constant instance of NodeAndPrev structure holding information about found Node.
+	 * @return constant instance of nodeAndPrev structure holding information about found node.
 	 */
-	const NodeAndPrev childNonProperty()const noexcept{
+	const nodeAndPrev childNonProperty()const noexcept{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->childNonProperty();
 	}
 
 	/**
 	 * @brief Get first property child.
-	 * @return instance of NodeAndPrev class holding information about found Node.
+	 * @return instance of nodeAndPrev class holding information about found node.
 	 */
-	NodeAndPrev childProperty()noexcept;
+	nodeAndPrev childProperty()noexcept;
 
 	/**
 	 * @brief Get constant first property child.
-	 * @return constant instance of NodeAndPrev class holding information about found Node.
+	 * @return constant instance of nodeAndPrev class holding information about found node.
 	 */
-	const NodeAndPrev childProperty()const noexcept{
+	const nodeAndPrev childProperty()const noexcept{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->childProperty();
 	}
 
@@ -709,7 +709,7 @@ public:
 	 * Get next sibling node in the single-linked list of nodes.
 	 * @return pointer to the next node in the single-linked list.
 	 */
-	Node* next()noexcept{
+	node* next()noexcept{
 		return this->next_v.operator->();
 	}
 
@@ -718,7 +718,7 @@ public:
 	 * Get constant next sibling node in the single-linked list of nodes.
 	 * @return constant pointer tot the next node in the single-linked list.
 	 */
-	const Node* next()const noexcept{
+	const node* next()const noexcept{
 		return this->next_v.operator->();
 	}
 
@@ -726,17 +726,17 @@ public:
 	 * @brief Get next node holding the given value.
 	 * Get next closest node in the single-linked list which holds the given value.
 	 * @param value - value to look for.
-	 * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
+	 * @return instance of nodeAndPrev class holding information about found node, previous node is always valid.
 	 */
-	NodeAndPrev next(const char* value)noexcept;
+	nodeAndPrev next(const char* value)noexcept;
 
 	/**
 	 * @brief Get constant next node holding the given value.
 	 * Get constant next closest node in the single-linked list which holds the given value.
 	 * @param value - value to look for.
-	 * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
+	 * @return instance of nodeAndPrev class holding information about found node, previous node is always valid.
 	 */
-	const NodeAndPrev next(const char* value)const noexcept{
+	const nodeAndPrev next(const char* value)const noexcept{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->next(value);
 	}
 
@@ -744,11 +744,11 @@ public:
 	 * @brief Get node with given value in the chain of nodes.
 	 * Get closest node in the single-linked list which holds the given value. This node is included in the search.
 	 * @param value - value to look for.
-	 * @return instance of NodeAndPrev structure holding information about found Node.
+	 * @return instance of nodeAndPrev structure holding information about found node.
 	 */
-	NodeAndPrev thisOrNext(const char* value)noexcept{
+	nodeAndPrev thisOrNext(const char* value)noexcept{
 		if(this->operator==(value)){
-			return NodeAndPrev(0, this);
+			return nodeAndPrev(0, this);
 		}
 
 		return this->next(value);
@@ -758,9 +758,9 @@ public:
 	 * @brief Get constant node with given value in the chain of nodes.
 	 * Get closest constant node in the single-linked list which holds the given value. This node is included in the search.
 	 * @param value - value to look for.
-	 * @return instance of NodeAndPrev structure holding information about found Node.
+	 * @return instance of nodeAndPrev structure holding information about found node.
 	 */
-	const NodeAndPrev thisOrNext(const char* value)const noexcept{
+	const nodeAndPrev thisOrNext(const char* value)const noexcept{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->thisOrNext(value);
 	}
 
@@ -770,8 +770,8 @@ public:
 	 * @param value - value to look for in the chain of nodes.
 	 * @return First child of the node with given value in the chain of nodes.
 	 */
-	Node* childOfThisOrNext(const char* value)noexcept{
-		if(auto c = this->thisOrNext(value).node()){
+	node* childOfThisOrNext(const char* value)noexcept{
+		if(auto c = this->thisOrNext(value).get_node()){
 			return c->child();
 		}
 		return nullptr;
@@ -782,32 +782,32 @@ public:
 	 * @param value - value to look for in the chain of nodes.
 	 * @return Constant first child of the node with given value in the chain of nodes.
 	 */
-	const Node* childOfThisOrNext(const char* value)const noexcept{
+	const node* childOfThisOrNext(const char* value)const noexcept{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->childOfThisOrNext(value);
 	}
 
 	/**
 	 * @brief Get next non-property node.
-	 * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
+	 * @return instance of nodeAndPrev class holding information about found node, previous node is always valid.
 	 */
-	NodeAndPrev nextNonProperty()noexcept;
+	nodeAndPrev nextNonProperty()noexcept;
 
 	/**
 	 * @brief Get constant next non-property node.
-	 * @return constant instance of NodeAndPrev class holding information about found node, previous node is always valid.
+	 * @return constant instance of nodeAndPrev class holding information about found node, previous node is always valid.
 	 */
-	const NodeAndPrev nextNonProperty()const noexcept{
+	const nodeAndPrev nextNonProperty()const noexcept{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->nextNonProperty();
 	}
 
 	/**
 	 * @brief Get closest non-property node.
 	 * This node is included in the search.
-	 * @return instance of NodeAndPrev class holding information about found node.
+	 * @return instance of nodeAndPrev class holding information about found node.
 	 */
-	NodeAndPrev thisOrNextNonProperty()noexcept{
+	nodeAndPrev thisOrNextNonProperty()noexcept{
 		if(!this->isProperty()){
-			return NodeAndPrev(0, this);
+			return nodeAndPrev(0, this);
 		}
 
 		return this->nextNonProperty();
@@ -816,34 +816,34 @@ public:
 	/**
 	 * @brief Get closest constant non-property node.
 	 * This node is included in the search.
-	 * @return instance of NodeAndPrev class holding information about found node.
+	 * @return instance of nodeAndPrev class holding information about found node.
 	 */
-	const NodeAndPrev thisOrNextNonProperty()const noexcept{
+	const nodeAndPrev thisOrNextNonProperty()const noexcept{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->thisOrNextNonProperty();
 	}
 
 	/**
 	 * @brief Get next property child.
-	 * @return instance of NodeAndPrev class holding information about found node, previous node is always valid.
+	 * @return instance of nodeAndPrev class holding information about found node, previous node is always valid.
 	 */
-	NodeAndPrev nextProperty()noexcept;
+	nodeAndPrev nextProperty()noexcept;
 
 	/**
 	 * @brief Get constant next property child.
-	 * @return constant instance of NodeAndPrev class holding information about found node, previous node is always valid.
+	 * @return constant instance of nodeAndPrev class holding information about found node, previous node is always valid.
 	 */
-	const NodeAndPrev nextProperty()const noexcept{
+	const nodeAndPrev nextProperty()const noexcept{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->nextProperty();
 	}
 
 	/**
 	 * @brief Get closest property node.
 	 * This node is included in the search.
-	 * @return instance of NodeAndPrev class holding information about found node.
+	 * @return instance of nodeAndPrev class holding information about found node.
 	 */
-	NodeAndPrev thisOrNextProperty()noexcept{
+	nodeAndPrev thisOrNextProperty()noexcept{
 		if(this->isProperty()){
-			return NodeAndPrev(0, this);
+			return nodeAndPrev(0, this);
 		}
 
 		return this->nextProperty();
@@ -852,9 +852,9 @@ public:
 	/**
 	 * @brief Get closest constant property node.
 	 * This node is included in the search.
-	 * @return instance of NodeAndPrev class holding information about found node.
+	 * @return instance of nodeAndPrev class holding information about found node.
 	 */
-	const NodeAndPrev thisOrNextProperty()const noexcept{
+	const nodeAndPrev thisOrNextProperty()const noexcept{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->thisOrNextProperty();
 	}
 
@@ -866,8 +866,8 @@ public:
 	 * @return pointer to a node representing property value.
 	 * @return zero pointer if no property with a given name found or property has no value.
 	 */
-	Node* getProperty(const char* propName)noexcept{
-		Node* prop = this->child(propName).node();
+	node* getProperty(const char* propName)noexcept{
+		node* prop = this->child(propName).get_node();
 		if(!prop){
 			return 0;
 		}
@@ -883,7 +883,7 @@ public:
 	 * @return constant pointer to a node representing property value.
 	 * @return zero pointer if no property with a given name found or property has no value.
 	 */
-	const Node* getProperty(const char* propName)const noexcept{
+	const node* getProperty(const char* propName)const noexcept{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->getProperty(propName);
 	}
 
@@ -901,13 +901,13 @@ public:
 	 * @return pointer to a node representing value of the newly created property.
 	 *         The returned pointer is always valid.
 	 */
-	Node* addProperty(const char* propName);
+	node* addProperty(const char* propName);
 
 	/**
 	 * @brief Insert a node as a first child.
 	 * @param node - node to insert.
 	 */
-	void addAsFirstChild(std::unique_ptr<Node> node)noexcept{
+	void addAsFirstChild(std::unique_ptr<node> node)noexcept{
 		node->setNext(this->removeChildren());
 		this->children = std::move(node);
 	}
@@ -918,15 +918,15 @@ public:
 	 * @param value - value of the new node.
 	 */
 	void addAsFirstChild(const char* value){
-		this->addAsFirstChild(utki::makeUnique<Node>(value));
+		this->addAsFirstChild(utki::makeUnique<node>(value));
 	}
 
 	/**
 	 * @brief Insert node into the single-linked list.
-	 * Insert the node to the single-linked list as a next node after this Node.
+	 * Insert the node to the single-linked list as a next node after this node.
 	 * @param node - node to insert.
 	 */
-	void insertNext(std::unique_ptr<Node> node)noexcept{
+	void insertNext(std::unique_ptr<node> node)noexcept{
 		if(node){
 			node->next_v = std::move(this->next_v);
 		}
@@ -935,10 +935,10 @@ public:
 
 	/**
 	 * @brief Remove next node from single-linked list.
-	 * @return auto-pointer to the Node object which has been removed from the single-linked list.
+	 * @return auto-pointer to the node object which has been removed from the single-linked list.
 	 */
-	std::unique_ptr<Node> removeNext()noexcept{
-		std::unique_ptr<Node> ret = std::move(this->next_v);
+	std::unique_ptr<node> removeNext()noexcept{
+		std::unique_ptr<node> ret = std::move(this->next_v);
 		if(ret){
 			this->next_v = std::move(ret->next_v);
 		}
@@ -950,7 +950,7 @@ public:
 	 * After this operation there will be no next node in this single-linked list.
 	 * @return auto-pointer to the first node of the single-linked list tail which has been chopped.
 	 */
-	std::unique_ptr<Node> chopNext()noexcept{
+	std::unique_ptr<node> chopNext()noexcept{
 		return std::move(this->next_v);
 	}
 
@@ -959,34 +959,34 @@ public:
 	 * Sets the next node for this node to the specified node.
 	 * @param node - node to set as the next node.
 	 */
-	void setNext(std::unique_ptr<Node> node)noexcept{
+	void setNext(std::unique_ptr<node> node)noexcept{
 		this->next_v = std::move(node);
 	}
 
 	/**
-	 * @brief Create a deep copy of the Node.
+	 * @brief Create a deep copy of the node.
 	 * Clones this node and all the underlying nodes hierarchy.
-	 * @return A deep copy of this Node.
+	 * @return A deep copy of this node.
 	 */
-	std::unique_ptr<Node> clone()const;
+	std::unique_ptr<node> clone()const;
 
 
 	/**
-	 * @brief Create a deep copy of the Node chain.
-	 * Clones this node with all its children hierarchy and chained next Nodes.
-	 * @return a deep copy of this Node chain.
+	 * @brief Create a deep copy of the node chain.
+	 * Clones this node with all its children hierarchy and chained next nodes.
+	 * @return a deep copy of this node chain.
 	 */
-	std::unique_ptr<Node> cloneChain()const;
+	std::unique_ptr<node> cloneChain()const;
 
 	/**
 	 * @brief Clone children chain.
-	 * @return a deep copy of this Node's children chain.
+	 * @return a deep copy of this node's children chain.
 	 * @return nullptr if this node has no children.
 	 */
-	std::unique_ptr<Node> cloneChildren()const;
+	std::unique_ptr<node> cloneChildren()const;
 
 	/**
-	 * @brief Check if the Node is a property.
+	 * @brief Check if the node is a property.
 	 * This is just a convenience method.
 	 * Checks if the first character of the value is one of the capital Latin alphabet letters from A to Z.
 	 * @return false if the first character of the node's value is a capital letter of Latin alphabet.
@@ -1005,14 +1005,14 @@ public:
 	void writeChain(papki::File& fi, bool formatted = true)const;
 
 	/**
-	 * @brief Convert Node's chain to string.
+	 * @brief Convert node's chain to string.
 	 * @param formatted - should a formatting be applied for better human readability.
 	 * @return puu as string.
 	 */
 	std::string chainToString(bool formatted = false)const;
 
 	//Swap node contents
-	friend void swap(Node& a, Node& b){
+	friend void swap(node& a, node& b){
 		std::swap(a.value_v, b.value_v);
 		std::swap(a.children, b.children);
 	}
@@ -1026,7 +1026,7 @@ public:
  * @param fi - file interface to get the puu data from.
  * @return auto-pointer to the first node in the chain of the document-object model.
  */
-std::unique_ptr<Node> load(const papki::File& fi);
+std::unique_ptr<node> load(const papki::File& fi);
 
 
 
@@ -1035,7 +1035,7 @@ std::unique_ptr<Node> load(const papki::File& fi);
  * @param str - null-terminated string describing puu document.
  * @return auto-pointer to the first node in the chain of the document-object model.
  */
-std::unique_ptr<Node> parse(const char *str);
+std::unique_ptr<node> parse(const char *str);
 
 
 
