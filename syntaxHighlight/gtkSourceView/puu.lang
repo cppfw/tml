@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language id="stob" name="STOB" version="2.0" _section="Other">
+<language id="puu" name="puu" version="2.0" _section="Other">
 	<metadata>
-		<property name="globs">*.stob</property>
+		<property name="globs">*.puu</property>
 		<property name="line-comment-start">//</property>
 	</metadata>
 
@@ -20,7 +20,7 @@
 		<context id="EscapeChar" style-ref="def:special-char">
 			<match>\\[ntr"\\]</match>
 		</context>
-		
+
 		<context id="QuotedString" style-ref="def:string">
 			<start>"</start>
 			<end>"</end>
@@ -29,7 +29,7 @@
 				<context ref="Numbers"/>
 			</include>
 		</context>
-		
+
 		<context id="RawString" style-ref="def:string">
 			<start>R"([^"\(]*)(\()</start>
 			<end>(\)\%{1@start})"</end>
@@ -39,7 +39,7 @@
 				<context id="Delimeter_highlight" sub-pattern="1" where="end" style-ref="def:special-char"/>
 			</include>
 		</context>
-		
+
 		<context id="Numbers">
 			<include>
 				<context ref="def:decimal"/>
@@ -54,10 +54,10 @@
 				<context id="Property_highlight" sub-pattern="1" style-ref="def:identifier"/>
 			</include>
 		</context>
-    
+
 		<context id="Child">
 			<match>([A-Z]{1}[^\s\}\{"]*)\s*\{</match>
-      
+
 			<include>
 				<context id="Child_highlight" sub-pattern="1" style-ref="def:statement"/>
 			</include>
@@ -67,7 +67,7 @@
 			<keyword>true</keyword>
 			<keyword>false</keyword>
 		</context>
-		
+
 		<context id="UnqoutedString" end-at-line-end="true">
 			<start>[^ \t\{\}]</start>
 			<end>[ \t\{\}]</end>
@@ -88,8 +88,8 @@
 				<context ref="Numbers"/>
 			</include>
 		</context>
-		
-		<context id="stob" class="no-spell-check">
+
+		<context id="puu" class="no-spell-check">
 			<include>
 				<context ref="Comment"/>
 				<context ref="MultilineComment"/>

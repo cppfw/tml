@@ -9,7 +9,7 @@
 
 
 
-using namespace stob;
+using namespace puu;
 
 
 namespace{
@@ -342,7 +342,7 @@ void Parser::processChar(char c, ParseListener& listener){
 		default:
 			ASSERT(false)
 			break;
-	}	
+	}
 }
 
 
@@ -357,28 +357,28 @@ void Parser::parseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& 
 
 void Parser::endOfData(ParseListener& listener){
 	this->processChar('\0', listener);
-	
+
 	if(this->nestingLevel != 0 || this->state != State_e::IDLE){
-		throw stob::Exc("Malformed stob document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
+		throw puu::Exc("Malformed puu document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
 	}
-	
+
 	this->reset();
 }
 
 
 
-void stob::parse(const papki::File& fi, ParseListener& listener){
+void puu::parse(const papki::File& fi, ParseListener& listener){
 	papki::File::Guard fileGuard(fi);
-	
-	stob::Parser parser;
-	
+
+	puu::Parser parser;
+
 	std::array<std::uint8_t, fileReadChinkSize_c> buf; //2kb read buffer.
-	
+
 	size_t bytesRead;
-	
+
 	do{
 		bytesRead = fi.read(utki::wrapBuf(buf));
-		
+
 		parser.parseDataChunk(utki::Buf<std::uint8_t>(&*buf.begin(), bytesRead), listener);
 	}while(bytesRead == buf.size());
 

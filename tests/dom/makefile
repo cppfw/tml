@@ -23,7 +23,7 @@ ifeq ($(os), macosx)
 else ifeq ($(os),windows)
 endif
 
-this_ldlibs += -lstob -lpapki -lstdc++
+this_ldlibs += -lpuu -lpapki -lstdc++
 
 this_no_install := true
 
@@ -31,7 +31,7 @@ $(eval $(prorab-build-app))
 
 
 ifeq ($(prorab_os),windows)
-    this_test_cmd := $(prorab_echo)(cd $(d); cp ../../src/libstob.dll .; $$^)
+    this_test_cmd := $(prorab_echo)(cd $(d); cp ../../src/libpuu.dll .; $$^)
 else
     this_test_cmd := $(prorab_echo)(cd $(d); LD_LIBRARY_PATH=../../src $$^)
 endif
@@ -44,7 +44,7 @@ test:: $(prorab_this_name)
 endef
 $(eval $(this_rules))
 
-#add dependency on libstob
-$(prorab_this_name): $(abspath $(d)../../src/libstob$(soext))
+#add dependency on libpuu
+$(prorab_this_name): $(abspath $(d)../../src/libpuu$(soext))
 
 $(eval $(call prorab-try-include,$(d)../../src/makefile))

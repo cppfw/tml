@@ -1,4 +1,4 @@
-Source: libstob
+Source: libpuu
 Section: libs
 Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
@@ -7,32 +7,32 @@ Build-Depends: debhelper (>= 9), libc6-dev, myci, prorab, prorab-extra,
 Build-Depends-Indep: doxygen
 Standards-Version: 3.9.2
 
-Package: libstob-dev
+Package: libpuu-dev
 Section: libdevel
 Architecture: any
-Depends: libstob$(soname) (= ${binary:Version}), libstob$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
+Depends: libpuu$(soname) (= ${binary:Version}), libpuu$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
 		libutki-dev, libpapki-dev, libunikod-dev
-Suggests: libstob-doc
-Description: STOB markup language C++ library.
- STOB is a simple markup language.
- 
-Package: libstob$(soname)
+Suggests: libpuu-doc
+Description: puu markup language C++ library.
+ puu is a simple markup language.
+
+Package: libpuu$(soname)
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: STOB markup language C++ library.
- STOB is a simple markup language.
+Description: puu markup language C++ library.
+ puu is a simple markup language.
 
-Package: libstob$(soname)-dbg
+Package: libpuu$(soname)-dbg
 Section: debug
 Architecture: any
-Depends: libstob$(soname) (= ${binary:Version}), ${misc:Depends}
-Description: debugging symbols for libstob$(soname) package.
+Depends: libpuu$(soname) (= ${binary:Version}), ${misc:Depends}
+Description: debugging symbols for libpuu$(soname) package.
 
-Package: libstob-doc
+Package: libpuu-doc
 Section: doc
 Architecture: all
 Depends: ${misc:Depends}
-Description: documentation for libstob.
- Documentation for libstob - STOB markup language C++ library.
+Description: documentation for libpuu.
+ Documentation for libpuu - puu markup language C++ library.
 

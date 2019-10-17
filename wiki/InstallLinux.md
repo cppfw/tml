@@ -7,7 +7,7 @@
   ```
   echo "deb https://dl.bintray.com/igagis/deb unstable main" | sudo tee /etc/apt/sources.list.d/igagis.list > /dev/null
   ```
-  
+
   **Ubuntu**
   ```
   echo "deb https://dl.bintray.com/igagis/ubu unstable main" | sudo tee /etc/apt/sources.list.d/igagis.list > /dev/null
@@ -19,8 +19,8 @@
   sudo apt-get update
   ```
 
-- Install **libstob-dev** package
+- Install **libpuu-dev** package
 
   ```
-  sudo apt-get install libstob-dev
+  sudo apt-get install libpuu-dev
   ```

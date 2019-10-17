@@ -1,9 +1,9 @@
-**STOB** is a minimalistic general purpose markup language, proposed by Ivan Gagis in July 2012.
+**puu** is a minimalistic general purpose markup language, proposed by Ivan Gagis in July 2012.
 The name of the language is an abbreviation from "**ST**ring **OB**jects" as the main element of
-the language is a string of text. **STOB** allows describing of string hierarchies.
+the language is a string of text. **puu** allows describing of string hierarchies.
 
 # Syntax
-STOB syntax is very simple and intentionally kept minimalistic.
+puu syntax is very simple and intentionally kept minimalistic.
 Here are the syntax rules:
 
 1. The only type of language element is a string of text.
@@ -56,9 +56,9 @@ AnotherStringObject
 ```
 
 # Libraries
-- [C++](https://github.com/igagis/stob)
-- [C#](https://github.com/igagis/stob-cs)
-- [Java](https://github.com/igagis/stob-java)
+- [C++](https://github.com/igagis/puu)
+- [C#](https://github.com/igagis/puu-cs)
+- [Java](https://github.com/igagis/puu-java)
 
 # Contact
 [Site admin](mailto:igagis@gmail.com)

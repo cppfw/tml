@@ -14,8 +14,8 @@ Installation in MacOS X requires **[homebrew](http://brew.sh/)** package manager
   brew update
   ```
 
-- Install **libstob** keg
+- Install **libpuu** keg
 
   ```
-  brew install libstob
+  brew install libpuu
   ```

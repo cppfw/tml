@@ -53,7 +53,7 @@ env:
   - secure: "hTb0tpvTrx216BXy9K/4x4rN3LqQXWilDVTFZBwatTWLLscWr/PZSk222niHYYiDDlBV6OaSWDp63QJiY1rtLhof6dSR6Omvdbb35toxm/ZpA4s+wTOAzgXbaYKFamu6Qwt/e+gceDNbXtyexLJb6GBPWA98dN7q/sCp7yT6KtUQdQ9/xu1vOucfQqu81cACWrXwWVPLt6uAOoJXs3MngTQHX08bIOhepfZ/MuwWra9yAAneR8ekt+Gb854x9M5CSq6k90h36kidNoOAyWDOxg7rEGRKKlD5m/TPCowDZafFXzs2KE2DWD4QUDrx+DcV29Ni6UkwBf6fuj+HaGrSuH40SvNvTEXt0sj87zrL0PTKHWLDcY5xZRLp89OrM+ikKUcQlQPn9NLM2C7OqxORo0ucQpLgMNKmCj5pe+nkSLAE1+zo6icwOP3i4nvQDDw1Cl7i9qBXdB+lIthvPBWnjmW4DVielNx9AEriDlKv7dCB+hafpxhLPf04vmtgyo6URbtI2Ov77Emc/cveFOaOpJOFZKsXvqWlWTkTLMlfQ/e6OsAZ7si9QBxLUuxxdbXyL8CczIOys/V7eBnjJolqHCoois2KDqpNp26t1Z5U/YG4TEzQBHAK9hCMVhaiGzMNSiJxen80UT6HQW7BM9ZxAdGQ1F2DaF2/QY4T82qTZ1o="
   - MYCI_GIT_USERNAME=igagis
   - MYCI_GIT_ACCESS_TOKEN=$PRORAB_GIT_ACCESS_TOKEN
-  - PACKAGE_NAME=stob
+  - PACKAGE_NAME=puu
   matrix:
   - OS_REL=xenial OS=ubuntu DOCKER_IMAGE=$OS:$OS_REL PACKAGE_TYPE=deb
   - OS_REL=bionic OS=ubuntu DOCKER_IMAGE=$OS:$OS_REL PACKAGE_TYPE=deb
@@ -76,7 +76,7 @@ before_install:
 - if [ "$TRAVIS_JOB_NAME" == "macosx" ]; then
     rvm install ruby-2.3.3 &&
     rvm use ruby-2.3.3 &&
-    
+
     brew update > /dev/null &&
     brew tap igagis/tap &&
     brew update > /dev/null &&
@@ -85,11 +85,11 @@ before_install:
 - if [ "$TRAVIS_JOB_NAME" == "ios" ]; then
     rvm install ruby-2.3.3 &&
     rvm use ruby-2.3.3 &&
-    
+
     sudo gem install cocoapods &&
     pod repo add --silent igagis https://$MYCI_GIT_USERNAME:$MYCI_GIT_ACCESS_TOKEN@github.com/igagis/cocoapods-repo.git &&
     pod install --project-directory=ios &&
-    
+
     brew update > /dev/null &&
     brew tap igagis/tap &&
     brew update > /dev/null &&

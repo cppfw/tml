@@ -18,21 +18,21 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\stob\dom.hpp">
+    <ClInclude Include="..\..\src\puu\dom.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\stob\Exc.hpp">
+    <ClInclude Include="..\..\src\puu\Exc.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\stob\parser.hpp">
+    <ClInclude Include="..\..\src\puu\parser.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\stob\dom.cpp">
+    <ClCompile Include="..\..\src\puu\dom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\stob\parser.cpp">
+    <ClCompile Include="..\..\src\puu\parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

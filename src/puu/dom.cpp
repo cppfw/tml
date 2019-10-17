@@ -12,11 +12,11 @@
 
 
 
-using namespace stob;
+using namespace puu;
 
 
 
-stob::Node::NodeAndPrev Node::next(const char* value)noexcept{
+puu::Node::NodeAndPrev Node::next(const char* value)noexcept{
 	Node* prev = this;
 	for(Node* n = this->next(); n; prev = n, n = n->next()){
 		if(n->operator==(value)){
@@ -28,7 +28,7 @@ stob::Node::NodeAndPrev Node::next(const char* value)noexcept{
 
 
 
-stob::Node::NodeAndPrev Node::child(const char* value)noexcept{
+puu::Node::NodeAndPrev Node::child(const char* value)noexcept{
 	if(!this->children){
 		return NodeAndPrev(0, 0);
 	}
@@ -38,7 +38,7 @@ stob::Node::NodeAndPrev Node::child(const char* value)noexcept{
 
 
 
-stob::Node::NodeAndPrev Node::childNonProperty()noexcept{
+puu::Node::NodeAndPrev Node::childNonProperty()noexcept{
 	if(!this->children){
 		return NodeAndPrev(0, 0);
 	}
@@ -52,7 +52,7 @@ stob::Node::NodeAndPrev Node::childNonProperty()noexcept{
 
 
 
-stob::Node::NodeAndPrev Node::childProperty()noexcept{
+puu::Node::NodeAndPrev Node::childProperty()noexcept{
 	if(!this->children){
 		return NodeAndPrev(0, 0);
 	}
@@ -66,7 +66,7 @@ stob::Node::NodeAndPrev Node::childProperty()noexcept{
 
 
 
-stob::Node::NodeAndPrev Node::nextNonProperty()noexcept{
+puu::Node::NodeAndPrev Node::nextNonProperty()noexcept{
 	Node* prev = this;
 	for(Node* n = this->next(); n; prev = n, n = n->next()){
 		if(!n->isProperty()){
@@ -78,7 +78,7 @@ stob::Node::NodeAndPrev Node::nextNonProperty()noexcept{
 
 
 
-stob::Node::NodeAndPrev Node::nextProperty()noexcept{
+puu::Node::NodeAndPrev Node::nextProperty()noexcept{
 	Node* prev = this;
 	for(Node* n = this->next(); n; prev = n, n = n->next()){
 		if(n->isProperty()){
@@ -183,7 +183,7 @@ void MakeEscapedString(const char* str, utki::Buf<std::uint8_t> out){
 }
 
 
-void writeChainInternal(const stob::Node* chain, papki::File& fi, bool formatted, unsigned indentation){
+void writeChainInternal(const puu::Node* chain, papki::File& fi, bool formatted, unsigned indentation){
 	ASSERT(chain)
 
 	std::array<std::uint8_t, 1> quote = {{'"'}};
@@ -200,7 +200,7 @@ void writeChainInternal(const stob::Node* chain, papki::File& fi, bool formatted
 
 	//used to detect case of two adjacent unquoted strings without children, need to insert space between them
 	bool prevWasUnquotedWithoutChildren = false;
-	
+
 	bool prevHadChildren = true;
 
 	for(auto n = chain; n; n = n->next()){
@@ -241,7 +241,7 @@ void writeChainInternal(const stob::Node* chain, papki::File& fi, bool formatted
 					isQuotedEmptyString = true;
 				}
 			}
-			
+
 			//unquoted string
 			if(!formatted && prevWasUnquotedWithoutChildren && !isQuotedEmptyString){
 				fi.write(utki::wrapBuf(space));
@@ -316,15 +316,15 @@ void Node::writeChain(papki::File& fi, bool formatted)const{
 
 
 
-std::unique_ptr<stob::Node> stob::load(const papki::File& fi){
-	class Listener : public stob::ParseListener{
+std::unique_ptr<puu::Node> puu::load(const papki::File& fi){
+	class Listener : public puu::ParseListener{
 		typedef std::pair<std::unique_ptr<Node>, Node*> T_Pair; //NOTE: use pair, because tuple does not work on iOS when adding it to vector, for some reason.
 		std::vector<T_Pair> stack;
 
 	public:
 		std::unique_ptr<Node> chains;
 		Node* lastChain;
-		
+
 		void onChildrenParseFinished() override{
 			std::get<1>(this->stack.back())->setChildren(std::move(this->chains));
 			this->chains = std::move(std::get<0>(this->stack.back()));
@@ -353,14 +353,14 @@ std::unique_ptr<stob::Node> stob::load(const papki::File& fi){
 		~Listener()noexcept{}
 	} listener;
 
-	stob::parse(fi, listener);
+	puu::parse(fi, listener);
 
 	return std::move(listener.chains);
 }
 
 
 
-std::unique_ptr<stob::Node> Node::clone()const{
+std::unique_ptr<puu::Node> Node::clone()const{
 	auto ret = utki::makeUnique<Node>(this->value());
 
 	if(!this->child()){
@@ -384,11 +384,11 @@ std::unique_ptr<stob::Node> Node::clone()const{
 
 std::unique_ptr<Node> Node::cloneChain() const{
 	auto ret = this->clone();
-	
+
 	if(this->next()){
 		ret->setNext(this->next()->cloneChain());
 	}
-	
+
 	return ret;
 }
 
@@ -397,35 +397,35 @@ bool Node::operator==(const Node& n)const noexcept{
 	if(!this->operator==(n.value())){
 		return false;
 	}
-	
-	const stob::Node* c = this->child();
-	const stob::Node* cn = n.child();
+
+	const puu::Node* c = this->child();
+	const puu::Node* cn = n.child();
 	for(; c && cn; c = c->next(), cn = cn->next()){
 		if(!c->operator==(cn->value())){
 			return false;
 		}
 	}
-	
+
 	//if not equal number of children
 	if((c && !cn) || (!c && cn)){
 		return false;
 	}
-	
+
 	return true;
 }
 
 
 
-std::unique_ptr<Node> stob::parse(const char *str){
+std::unique_ptr<Node> puu::parse(const char *str){
 	if(!str){
 		return nullptr;
 	}
-	
+
 	size_t len = strlen(str);
-	
+
 	//TODO: make const Buffer file
 	papki::BufferFile fi(utki::Buf<std::uint8_t>(reinterpret_cast<std::uint8_t*>(const_cast<char*>(str)), len));
-	
+
 	return load(fi);
 }
 
@@ -433,22 +433,22 @@ std::unique_ptr<Node> stob::parse(const char *str){
 
 std::string Node::chainToString(bool formatted)const{
 	papki::MemoryFile fi;
-	
+
 	this->writeChain(fi, formatted);
-	
+
 	auto data = fi.resetData();
-	
+
 	return std::string(reinterpret_cast<char*>(&*data.begin()), data.size());
 }
 
 
 size_t Node::count() const noexcept{
 	size_t ret = 0;
-	
+
 	for(auto c = this->children.get(); c; c = c->next()){
 		++ret;
 	}
-	
+
 	return ret;
 }
 
@@ -456,30 +456,30 @@ size_t Node::count() const noexcept{
 Node::NodeAndPrev Node::child(size_t index)noexcept{
 	auto c = this->child();
 	decltype(c) prev = nullptr;
-	
+
 	for(; c && index != 0; prev = c, c = c->next(), --index){}
-	
+
 	if(index == 0){
 		return NodeAndPrev(prev, c);
 	}
-	
+
 	return NodeAndPrev(nullptr, nullptr);
 }
 
-std::unique_ptr<Node> Node::removeChild(const stob::Node* c)noexcept{
+std::unique_ptr<Node> Node::removeChild(const puu::Node* c)noexcept{
 	auto ch = this->child();
 	if(ch == c){
 		return this->removeFirstChild();
 	}
 	auto prev = ch;
 	ch = ch->next();
-	
+
 	for(; ch; prev = ch, ch = ch->next()){
 		if(ch == c){
 			return prev->removeNext();
 		}
 	}
-	
+
 	return nullptr;
 }
 
@@ -500,7 +500,7 @@ std::u32string Node::asU32String() const noexcept{
 	for(auto i = this->asUTF8(); !i.isEnd(); ++i){
 		v.push_back(i.character());
 	}
-	
+
 	return std::u32string(&*v.begin(), v.size());
 }
 
@@ -514,12 +514,12 @@ std::unique_ptr<Node> Node::cloneChildren() const {
 
 size_t Node::countChain() const noexcept{
 	size_t ret = 0;
-	
+
 	auto n = this;
 	for(; n; n = n->next()){
 		++ret;
 	}
-	
+
 	return ret;
 }
 
@@ -527,7 +527,7 @@ size_t Node::countChain() const noexcept{
 
 std::unique_ptr<Node> Node::replace(std::unique_ptr<Node> chain) {
 	if(!chain){
-		throw stob::Exc("could not replace node by null chain");
+		throw puu::Exc("could not replace node by null chain");
 	}
 
 	//find chain's last node
@@ -535,37 +535,37 @@ std::unique_ptr<Node> Node::replace(std::unique_ptr<Node> chain) {
 	for(; last->next(); ){
 		last = last->next();
 	}
-	
+
 	if(chain->next()){
 		last->setNext(this->chopNext());
 		this->setNext(chain->chopNext());
 	}
-	
+
 	swap(*this, *chain);
-	
+
 	return chain;
 }
 
 
 std::unique_ptr<Node> Node::replace(const Node& chain){
 	//clone chain
-	
+
 	auto head = chain.clone();
 
 	auto last = head.get();
-	
+
 	for(auto curNode = chain.next(); curNode; curNode = curNode->next()){
 		last->setNext(curNode->clone());
 		last = last->next();
 	}
-	
+
 	if(head->next()){
 		last->setNext(this->chopNext());
 		this->setNext(head->chopNext());
 	}
-	
+
 	swap(*this, *head);
-	
+
 	return head;
 }
 

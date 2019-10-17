@@ -7,8 +7,8 @@
 
 
 /**
- * STOB is a very simple markup language. It is used to describe object
- * hierarchies. The only kind of objects present in STOB are Strings.
+ * puu is a very simple markup language. It is used to describe object
+ * hierarchies. The only kind of objects present in puu are Strings.
  * The name of the language comes from "STring OBjects".
  * Objects (which are strings) can have arbitrary number of child objects.
  * Example:
@@ -21,27 +21,27 @@
  *	"child three"{
  *		SubChild1
  *		"Subchild two"
- * 
+ *
  *		Property1 {value1}
  *		"Property two" {"value 2"}
- * 
+ *
  *		//comment
- * 
+ *
  *		/ * multi line
  *		   comments as in C * /
- * 
+ *
  *		"Escape sequences \" \n \r \t \\ \/"
  *	}
  * }
  * @endcode
  */
-namespace stob{
+namespace puu{
 
 
 
 /**
- * @brief Listener interface for STOB parser.
- * During the STOB document parsing the Parser notifies this listener object
+ * @brief Listener interface for puu parser.
+ * During the puu document parsing the Parser notifies this listener object
  * about parsed tokens.
  */
 class ParseListener{
@@ -52,27 +52,27 @@ public:
      * @param str - parsed string.
      */
 	virtual void onStringParsed(const utki::Buf<char> str = utki::Buf<char>()) = 0;
-	
+
 	/**
 	 * @brief Children list parsing started.
 	 * This method is called by Parser when '{' token has been parsed.
      */
 	virtual void onChildrenParseStarted() = 0;
-	
+
 	/**
 	 * @brief Children list parsing finished.
 	 * This method is called by Parser when '}' token has been parsed.
      */
 	virtual void onChildrenParseFinished() = 0;
-	
+
 	virtual ~ParseListener()noexcept{}
 };
 
 
 
 /**
- * @brief STOB Parser.
- * This is a class of STOB parser. It is used for event-based parsing of STOB
+ * @brief puu Parser.
+ * This is a class of puu parser. It is used for event-based parsing of puu
  * documents.
  */
 class Parser{
@@ -80,10 +80,10 @@ class Parser{
 
 	std::string rawStringDelimeter;//delimeter for raw string
 	size_t rawStringDelimeterIndex;//index into the raw string delimeter
-	
-	//This variable is used for tracking current nesting level to make checks for detecting malformed STOB document
+
+	//This variable is used for tracking current nesting level to make checks for detecting malformed puu document
 	unsigned nestingLevel;
-	
+
 	enum class State_e{
 		IDLE,
 		STRING_PARSED,
@@ -98,9 +98,9 @@ class Parser{
 	} state;
 
 	State_e stateAfterComment;
-	
+
 	void handleStringParsed(ParseListener& listener);
-	
+
 	void processChar(char c, ParseListener& listener);
 	void processCharInIdle(char c, ParseListener& listener);
 	void processCharInStringParsed(char c, ParseListener& listener);
@@ -112,7 +112,7 @@ class Parser{
 	void processCharInRawStringOpeningDelimeter(char c, ParseListener& listener);
 	void processCharInRawString(char c, ParseListener& listener);
 	void processCharInRawStringClosingDelimeter(char c, ParseListener& listener);
-	
+
 public:
 	/**
 	 * @brief Constructor.
@@ -121,28 +121,28 @@ public:
 	Parser(){
 		this->reset();
 	}
-	
+
 	/**
 	 * @brief Reset parser.
 	 * Resets the parser to initial state, discarding all the temporary parsed data and state.
      */
 	void reset();
-	
+
 	/**
-	 * @brief Parse chunk of STOB data.
-	 * Use this method to feed the STOB data to the parser.
+	 * @brief Parse chunk of puu data.
+	 * Use this method to feed the puu data to the parser.
      * @param chunk - data chunk to parse.
      * @param listener - listener object which will receive notifications about parsed tokens.
-	 * @throw stob::Exc - in case of malformed STOB document.
+	 * @throw puu::Exc - in case of malformed puu document.
      */
 	void parseDataChunk(const utki::Buf<std::uint8_t> chunk, ParseListener& listener);
-	
+
 	/**
 	 * @brief Finalize parsing.
-	 * Call this method to finalize parsing after all the available STOB data has been fed to the parser.
+	 * Call this method to finalize parsing after all the available puu data has been fed to the parser.
 	 * This will tell parser that there will be no more data and the temporary stored data should be interpreted as it is.
      * @param listener - listener object which will receive notifications about parsed tokens.
-	 * @throw stob::Exc - in case of malformed STOB document.
+	 * @throw puu::Exc - in case of malformed puu document.
      */
 	void endOfData(ParseListener& listener);
 };
@@ -150,11 +150,11 @@ public:
 
 
 /**
- * @brief Parse STOB document provided by given file interface.
- * Use this function to parse the STOB document from file.
+ * @brief Parse puu document provided by given file interface.
+ * Use this function to parse the puu document from file.
  * @param fi - file interface to use for getting the data to parse.
  * @param listener - listener object which will receive notifications about parsed tokens.
- * @throw stob::Exc - in case of malformed STOB document.
+ * @throw puu::Exc - in case of malformed puu document.
  */
 void parse(const papki::File& fi, ParseListener& listener);
 

@@ -22,13 +22,13 @@
 
 
 
-namespace stob{
+namespace puu{
 
 
 
 /**
- * @brief STOB document node.
- * This class represents a node of the STOB document object model.
+ * @brief puu document node.
+ * This class represents a node of the puu document object model.
  * The Node objects can be organized to a single-linked list. There are methods for managing it.
  * The Node objects can hold a list of child nodes, i.e. a single-linked list of child Node objects.
  */
@@ -64,17 +64,17 @@ public:
 			Node(utki::Buf<char>(const_cast<char*>(value), value == nullptr ? 0 : strlen(value)))
 	{}
 
-	class NodeNotFoundExc : stob::Exc{
+	class NodeNotFoundExc : puu::Exc{
 	public:
 		NodeNotFoundExc(const std::string& message) :
-				stob::Exc(message)
+				puu::Exc(message)
 		{}
 	};
 
-	class NodeHasNoChldrenExc : stob::Exc{
+	class NodeHasNoChldrenExc : puu::Exc{
 	public:
 		NodeHasNoChldrenExc(const std::string& message) :
-				stob::Exc(message)
+				puu::Exc(message)
 		{}
 	};
 
@@ -413,10 +413,10 @@ public:
 
 	/**
 	 * @brief Deep compare of this node to another node.
-	 * Performs deep comparison of a STOB tree represented by this node to
-	 * another STOB tree represented by given node.
+	 * Performs deep comparison of a puu tree represented by this node to
+	 * another puu tree represented by given node.
 	 * @param n - node to compare this node to.
-	 * @return true if two STOB trees are completely equal.
+	 * @return true if two puu trees are completely equal.
 	 * @return false otherwise.
 	 */
 	bool operator==(const Node& n)const noexcept;
@@ -489,7 +489,7 @@ public:
 	 * @return Unique pointer to a removed child.
 	 * @return nullptr if no child found.
 	 */
-	std::unique_ptr<Node> removeChild(const stob::Node* c)noexcept;
+	std::unique_ptr<Node> removeChild(const puu::Node* c)noexcept;
 
 	/**
 	 * @brief Get list of child nodes.
@@ -513,7 +513,7 @@ public:
 	 * @return replaced node.
 	 */
 	std::unique_ptr<Node> replace(std::unique_ptr<Node> chain);
-	
+
 	/**
 	 * @brief Replace this node with the clone of the given chain of nodes.
 	 * @param chain - chain of nodes to replace by.
@@ -530,7 +530,7 @@ public:
 	 * If 'node' is 0 and 'prev' is not 0, then 'prev' points to the last node in the single-linked list.
 	 */
 	class NodeAndPrev{
-		friend class stob::Node;
+		friend class puu::Node;
 
 		Node* prevNode;
 		Node* curNode;
@@ -988,7 +988,7 @@ public:
 	/**
 	 * @brief Check if the Node is a property.
 	 * This is just a convenience method.
-	 * Checks if the first character of the value is one of the capital Latin alphabet letters from A to Z. 
+	 * Checks if the first character of the value is one of the capital Latin alphabet letters from A to Z.
 	 * @return false if the first character of the node's value is a capital letter of Latin alphabet.
 	 * @return true otherwise.
 	 */
@@ -997,9 +997,9 @@ public:
 	}
 
 	/**
-	 * @brief Write this document-object model to the file interface as STOB document.
+	 * @brief Write this document-object model to the file interface as puu document.
 	 * @param fi - file interface to write to.
-	 * @param formatted - if true then the STOB document will be written with formatting.
+	 * @param formatted - if true then the puu document will be written with formatting.
 	 *                    if false then no formatting will be applied.
 	 */
 	void writeChain(papki::File& fi, bool formatted = true)const;
@@ -1007,7 +1007,7 @@ public:
 	/**
 	 * @brief Convert Node's chain to string.
 	 * @param formatted - should a formatting be applied for better human readability.
-	 * @return STOB as string.
+	 * @return puu as string.
 	 */
 	std::string chainToString(bool formatted = false)const;
 
@@ -1021,9 +1021,9 @@ public:
 
 
 /**
- * @brief Load document-object model from STOB document.
- * Load document-object model from STOB document provided by given file interface.
- * @param fi - file interface to get the STOB data from.
+ * @brief Load document-object model from puu document.
+ * Load document-object model from puu document provided by given file interface.
+ * @param fi - file interface to get the puu data from.
  * @return auto-pointer to the first node in the chain of the document-object model.
  */
 std::unique_ptr<Node> load(const papki::File& fi);
@@ -1031,8 +1031,8 @@ std::unique_ptr<Node> load(const papki::File& fi);
 
 
 /**
- * @brief Create STOB document-object model from string.
- * @param str - null-terminated string describing STOB document.
+ * @brief Create puu document-object model from string.
+ * @param str - null-terminated string describing puu document.
  * @return auto-pointer to the first node in the chain of the document-object model.
  */
 std::unique_ptr<Node> parse(const char *str);

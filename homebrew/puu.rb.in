@@ -1,7 +1,7 @@
-class Libstob < Formula
-  desc "C++ cross-platform STOB parser library."
-  homepage "https://github.com/igagis/stob"
-  url "https://github.com/igagis/stob/archive/$(version).tar.gz"
+class Puu < Formula
+  desc "C++ cross-platform puu parser library."
+  homepage "https://github.com/igagis/puu"
+  url "https://github.com/igagis/puu/archive/$(version).tar.gz"
   sha256 "$(sha256)"
 
   depends_on "prorab" => :build

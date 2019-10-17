@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
-    package="igagis.github.io.stob_tests">
+    package="igagis.github.io.puu_tests">
 
     <application
         android:allowBackup="true"

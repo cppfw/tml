@@ -17,13 +17,13 @@ else
 	exit 1
 fi
 
-packageName=stob
+packageName=puu
 
 pkgname="${pkgPrefix}${packageName}"
 pkgver=$(version)
 pkgrel=1
 epoch=
-pkgdesc="STOB markup language library in C++"
+pkgdesc="puu markup language library in C++"
 #arch=('any') #defined above
 url="http://github.com/igagis/${packageName}"
 license=('MIT')

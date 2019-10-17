@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
 
-<language name="STOB" section="Markup" version="1.0" kateversion="2.4" extensions="*.stob" mimetype="application/stob" author="Ivan Gagis (igagis@gmail.com)" license="MIT">
+<language name="puu" section="Markup" version="1.0" kateversion="2.4" extensions="*.puu" mimetype="application/puu" author="Ivan Gagis (igagis@gmail.com)" license="MIT">
   <general>
     <comments>
       <comment name="singleLine" start="//"/>
@@ -24,7 +24,7 @@
         <IncludeRules context="PropertiesAndChildren"/>
 
         <IncludeRules context="Numbers"/>
-        
+
         <keyword String="Keywords" context="#stay" attribute="Style_Keyword" />
         <DetectSpaces/>
         <RegExpr String="[^ \t\{\}]" context="UnquotedString" lookAhead="true"/>
@@ -74,17 +74,17 @@
       <context name="Property" attribute="Style_Property">
         <DetectChar char="{" context="#pop"/>
       </context>
-      
+
       <context name="Child" attribute="Style_Child">
         <DetectChar char="{" context="#pop"/>
       </context>
-      
+
       <context name="Comment" attribute="Style_Comment" lineEndContext="#pop"/>
-      
+
       <context name="MultilineComment" attribute="Style_Comment" lineEndContext="#stay">
         <Detect2Chars char="*" char1="/" context="#pop" attribute="Style_Comment"/>
       </context>
-      
+
       <context name="QuotedString" lineEndContext="#stay" attribute="Style_QuotedString">
         <DetectChar char="&quot;"  context="#pop" attribute="Style_QuotedString" />
         <RegExpr String="\\[ntr&quot;\\]" context="#stay" insensitive="false" minimal="false" attribute="Style_QuotedStringEscape" />

@@ -8,18 +8,18 @@ configurations {
 
 nuget{
 	nuspec{
-		id = libstob;
+		id = libpuu;
 		version : $(version);
-		title: C++ STOB parser library;
+		title: C++ puu parser library;
 		authors: {Ivan Gagis};
 		owners: {Ivan Gagis};
-		licenseUrl: "https://raw.githubusercontent.com/igagis/stob/master/LICENSE";
-		projectUrl: "https://github.com/igagis/stob";
-		iconUrl: "https://github.com/igagis/stob/blob/master/logo.svg";
+		licenseUrl: "https://raw.githubusercontent.com/igagis/puu/master/LICENSE";
+		projectUrl: "https://github.com/igagis/puu";
+		iconUrl: "https://github.com/igagis/puu/blob/master/logo.svg";
 		requireLicenseAcceptance:false;
-		summary: C++ STOB parser library;
+		summary: C++ puu parser library;
 
-		description: @"C++ STOB parser library";
+		description: @"C++ puu parser library";
 		releaseNotes: "Initial release";
 		copyright: Copyright 2015 Ivan Gagis;
 		tags: { native};
@@ -34,40 +34,40 @@ nuget{
 	files {
 		//this is needed to put headers in the base folder
 		nestedInclude: {
-			#destination = ${d_include}stob;
-			"..\src\stob\**\*.hpp"
+			#destination = ${d_include}puu;
+			"..\src\puu\**\*.hpp"
 		};
 
 		[x86,v140,release] {
-			lib: ..\msvs_solution\v140_Release\libstob.lib;
+			lib: ..\msvs_solution\v140_Release\libpuu.lib;
 		}
 
 		[x86,v140,debug] {
-			lib: ..\msvs_solution\v140_Debug\libstob.lib;
+			lib: ..\msvs_solution\v140_Debug\libpuu.lib;
 		}
 
 		[x64,v140,release] {
-			lib: ..\msvs_solution\x64\v140_Release\libstob.lib;
+			lib: ..\msvs_solution\x64\v140_Release\libpuu.lib;
 		}
 
 		[x64,v140,debug] {
-			lib: ..\msvs_solution\x64\v140_Debug\libstob.lib;
+			lib: ..\msvs_solution\x64\v140_Debug\libpuu.lib;
 		}
-		
+
 		[x86,v141,release] {
-			lib: ..\msvs_solution\v141_Release\libstob.lib;
+			lib: ..\msvs_solution\v141_Release\libpuu.lib;
 		}
 
 		[x86,v141,debug] {
-			lib: ..\msvs_solution\v141_Debug\libstob.lib;
+			lib: ..\msvs_solution\v141_Debug\libpuu.lib;
 		}
 
 		[x64,v141,release] {
-			lib: ..\msvs_solution\x64\v141_Release\libstob.lib;
+			lib: ..\msvs_solution\x64\v141_Release\libpuu.lib;
 		}
 
 		[x64,v141,debug] {
-			lib: ..\msvs_solution\x64\v141_Debug\libstob.lib;
+			lib: ..\msvs_solution\x64\v141_Debug\libpuu.lib;
 		}
 	}
 }

@@ -3,13 +3,13 @@ include prorab.mk
 debug := false
 
 
-this_name := stob
+this_name := puu
 
 this_soname := $(shell cat $(prorab_this_dir)soname.txt)
 
 
-this_srcs += stob/parser.cpp
-this_srcs += stob/dom.cpp
+this_srcs += puu/parser.cpp
+this_srcs += puu/dom.cpp
 
 
 this_cxxflags += -Wall #enable all warnings

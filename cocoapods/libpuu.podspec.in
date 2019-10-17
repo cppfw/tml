@@ -1,13 +1,13 @@
 Pod::Spec.new do |s|
-  s.name         = "libstob"
+  s.name         = "libpuu"
   s.version      = "$(version)"
-  s.summary      = "C++ STOB library."
-  s.homepage     = "https://github.com/igagis/stob"
+  s.summary      = "C++ puu library."
+  s.homepage     = "https://github.com/igagis/puu"
   s.license      = 'MIT'
   s.author       = { "Ivan Gagis" => "igagis@gmail.com" }
   s.platform     = :ios, "7.0"
-  
-  s.source = { :git => "https://github.com/igagis/stob.git", :tag => s.version }
+
+  s.source = { :git => "https://github.com/igagis/puu.git", :tag => s.version }
 
   s.source_files  = "src/**/*.{hpp,cpp}"
   s.header_mappings_dir = "src"

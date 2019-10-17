@@ -37,7 +37,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{84761611-0B45-430F-8819-8975B521FE9A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>libstob</RootNamespace>
+    <RootNamespace>libpuu</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -260,13 +260,13 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\stob\dom.hpp" />
-    <ClInclude Include="..\..\src\stob\Exc.hpp" />
-    <ClInclude Include="..\..\src\stob\parser.hpp" />
+    <ClInclude Include="..\..\src\puu\dom.hpp" />
+    <ClInclude Include="..\..\src\puu\Exc.hpp" />
+    <ClInclude Include="..\..\src\puu\parser.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\stob\dom.cpp" />
-    <ClCompile Include="..\..\src\stob\parser.cpp" />
+    <ClCompile Include="..\..\src\puu\dom.cpp" />
+    <ClCompile Include="..\..\src\puu\parser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

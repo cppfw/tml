@@ -1,12 +1,12 @@
-# stob [![releases](https://img.shields.io/github/tag/igagis/stob.svg)](https://github.com/igagis/stob/releases) [![Build Status](https://travis-ci.org/igagis/stob.svg?branch=master)](https://travis-ci.org/igagis/stob) [![Build status](https://ci.appveyor.com/api/projects/status/owv6srivorp08lxu/branch/master?svg=true)](https://ci.appveyor.com/project/igagis/stob/branch/master)
+# puu [![releases](https://img.shields.io/github/tag/igagis/puu.svg)](https://github.com/igagis/puu/releases) [![Build Status](https://travis-ci.org/igagis/puu.svg?branch=master)](https://travis-ci.org/igagis/puu) [![Build status](https://ci.appveyor.com/api/projects/status/owv6srivorp08lxu/branch/master?svg=true)](https://ci.appveyor.com/project/igagis/puu/branch/master)
 
 
 
-A lightweight STOB markup language C++ library.
+A lightweight puu markup language C++ library.
 
 See [WiKi](wiki/HomePage.md) for installation instructions.
 
-STOB document example:
+puu document example:
 ```
 "String object"
 AnotherStringObject
@@ -25,7 +25,7 @@ AnotherStringObject
 		   comment */
 
 		"Escape sequences \" \n \r \t \\ \/"
-		
+
 		//raw string
 		R"qwerty(raw string content " """ { } \ / )qwerty"
 	}

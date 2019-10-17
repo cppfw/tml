@@ -2,7 +2,7 @@
 <configurationDescriptor version="100">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="src" name="0">
-      <df name="stob">
+      <df name="puu">
         <in>dom.cpp</in>
         <in>parser.cpp</in>
       </df>
@@ -27,9 +27,9 @@
       <itemPath>appveyor.yml</itemPath>
       <itemPath>debian/changelog</itemPath>
       <itemPath>debian/control.in</itemPath>
-      <itemPath>android/libstob-$(version).pom.in</itemPath>
-      <itemPath>cocoapods/libstob.podspec.in</itemPath>
-      <itemPath>homebrew/libstob.rb.in</itemPath>
+      <itemPath>android/libpuu-$(version).pom.in</itemPath>
+      <itemPath>cocoapods/libpuu.podspec.in</itemPath>
+      <itemPath>homebrew/libpuu.rb.in</itemPath>
       <itemPath>makefile</itemPath>
       <itemPath>nuget/nuget.autopkg.in</itemPath>
       <itemPath>travis_bintray_android.json.in</itemPath>
@@ -91,20 +91,20 @@
           </preprocessorList>
         </ccTool>
       </folder>
-      <item path="src/stob/dom.cpp" ex="false" tool="1" flavor2="8">
+      <item path="src/puu/dom.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
           <incDir>
             <pElem>/usr/include/papki</pElem>
             <pElem>/usr/include/unikod</pElem>
-            <pElem>src/stob</pElem>
+            <pElem>src/puu</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>
       </item>
-      <item path="src/stob/parser.cpp" ex="false" tool="1" flavor2="8">
+      <item path="src/puu/parser.cpp" ex="false" tool="1" flavor2="8">
         <ccTool flags="0">
           <incDir>
-            <pElem>src/stob</pElem>
+            <pElem>src/puu</pElem>
             <pElem>/usr/include/papki</pElem>
             <pElem>.</pElem>
           </incDir>
@@ -153,9 +153,9 @@
           </preprocessorList>
         </ccTool>
       </folder>
-      <item path="src/stob/dom.cpp" ex="false" tool="1" flavor2="9">
+      <item path="src/puu/dom.cpp" ex="false" tool="1" flavor2="9">
       </item>
-      <item path="src/stob/parser.cpp" ex="false" tool="1" flavor2="9">
+      <item path="src/puu/parser.cpp" ex="false" tool="1" flavor2="9">
       </item>
       <item path="syntaxHighlight/syntax_highlighting.txt"
             ex="false"
@@ -201,9 +201,9 @@
           </preprocessorList>
         </ccTool>
       </folder>
-      <item path="src/stob/dom.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/puu/dom.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/stob/parser.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/puu/parser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="syntaxHighlight/syntax_highlighting.txt"
             ex="false"

@@ -271,7 +271,7 @@
     <ClCompile Include="..\..\tests\parser\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\libstob\libstob.vcxproj">
+    <ProjectReference Include="..\libpuu\libpuu.vcxproj">
       <Project>{84761611-0b45-430f-8819-8975b521fe9a}</Project>
     </ProjectReference>
   </ItemGroup>

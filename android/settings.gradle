@@ -1,1 +1,1 @@
-include ':app', ':libstob'
+include ':app', ':libpuu'

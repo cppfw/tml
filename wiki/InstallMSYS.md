@@ -2,9 +2,9 @@
 
 ##MSYS environment
 
-- Download latest stob version from **[here](https://github.com/igagis/stob/releases)** and unpack it.
+- Download latest puu version from **[here](https://github.com/igagis/puu/releases)** and unpack it.
 
-- Install **stob**
+- Install **puu**
 
   ```
   make install

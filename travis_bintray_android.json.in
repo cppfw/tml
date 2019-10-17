@@ -1,10 +1,10 @@
 {
 	"package": {
-		"name": "libstob",
+		"name": "libpuu",
 		"repo": "android",
 		"subject": "igagis"
 	},
-	
+
 	"version": {
 		"name": "$(version)"
 	},
@@ -12,11 +12,11 @@
 	"files": [
 		{
 			"includePattern": "android/(.[^/]*(\\.aar)$)",
-			"uploadPattern": "io/github/igagis/libstob/$(version)/$1"
+			"uploadPattern": "io/github/igagis/libpuu/$(version)/$1"
 		},
 		{
 			"includePattern": "android/(.[^/]*(\\.pom)$)",
-			"uploadPattern": "io/github/igagis/libstob/$(version)/$1"
+			"uploadPattern": "io/github/igagis/libpuu/$(version)/$1"
 		}
 	],
 	"publish": true,
