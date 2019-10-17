@@ -11,7 +11,7 @@ void Run(){
 	papki::FSFile fi("test.puu");
 
 	auto root = utki::makeUnique<puu::node>();
-	root->setChildren(puu::load(fi));
+	root->set_children(puu::load(fi));
 	ASSERT_ALWAYS(root)
 	ASSERT_ALWAYS(root->next() == 0)
 
@@ -22,12 +22,12 @@ void Run(){
 
 	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "test string", n->value())
+	ASSERT_INFO_ALWAYS(*n == "test string", n->get_value())
 	ASSERT_ALWAYS(!n->child())
 
 	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "anot/her string", n->value())
+	ASSERT_INFO_ALWAYS(*n == "anot/her string", n->get_value())
 	ASSERT_ALWAYS(!n->child())
 
 	n = n->next();
@@ -52,46 +52,46 @@ void Run(){
 
 	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "string_interrupted", n->value())
+	ASSERT_INFO_ALWAYS(*n == "string_interrupted", n->get_value())
 	ASSERT_ALWAYS(!n->child())
 
 	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "_by_comment", n->value())
+	ASSERT_INFO_ALWAYS(*n == "_by_comment", n->get_value())
 	ASSERT_ALWAYS(!n->child())
 
 	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "string_broken", n->value())
+	ASSERT_INFO_ALWAYS(*n == "string_broken", n->get_value())
 	ASSERT_ALWAYS(!n->child())
 
 	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "_by_comment", n->value())
+	ASSERT_INFO_ALWAYS(*n == "_by_comment", n->get_value())
 	ASSERT_ALWAYS(!n->child())
 
 	n = n->next();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "")
-	ASSERT_ALWAYS(n->value() == 0)
-	ASSERT_INFO_ALWAYS(!n->child(), n->child()->value())
+	ASSERT_ALWAYS(n->get_value() == 0)
+	ASSERT_INFO_ALWAYS(!n->child(), n->child()->get_value())
 
 	n = n->next();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "")
-	ASSERT_ALWAYS(n->value() == 0)
+	ASSERT_ALWAYS(n->get_value() == 0)
 	ASSERT_ALWAYS(n->child())
 	{
 		puu::node * n1 = n->child();
 		ASSERT_ALWAYS(n1)
 		ASSERT_ALWAYS(*n1 == "")
-		ASSERT_ALWAYS(n1->value() == 0)
+		ASSERT_ALWAYS(n1->get_value() == 0)
 		ASSERT_ALWAYS(!n1->child())
 
 		n1 = n1->next();
 		ASSERT_ALWAYS(n1)
 		ASSERT_ALWAYS(*n1 == "")
-		ASSERT_ALWAYS(n1->value() == 0)
+		ASSERT_ALWAYS(n1->get_value() == 0)
 		ASSERT_ALWAYS(!n1->child())
 
 		ASSERT_ALWAYS(!n1->next())
@@ -206,27 +206,27 @@ void Run(){
 	auto root = utki::makeUnique<puu::node>();
 
 	{
-		root->setChildren(utki::makeUnique<puu::node>());
+		root->set_children(utki::makeUnique<puu::node>());
 		puu::node* n = root->child();
 		ASSERT_ALWAYS(n)
-		n->setValue("test string");
+		n->set_value("test string");
 
 		n->insertNext(utki::makeUnique<puu::node>());
 		n = n->next();
 		ASSERT_ALWAYS(n)
-		n->setValue("Unquoted_String");
+		n->set_value("Unquoted_String");
 
 		n->insertNext(utki::makeUnique<puu::node>());
 		n = n->next();
 		ASSERT_ALWAYS(n)
-		n->setValue("Escapes: \n \r \t \\ \" {}");
+		n->set_value("Escapes: \n \r \t \\ \" {}");
 
 		n->insertNext(utki::makeUnique<puu::node>());
 		n = n->next();
 		ASSERT_ALWAYS(n)
-		n->setValue("Quoted{String");
+		n->set_value("Quoted{String");
 		{
-			n->setChildren(utki::makeUnique<puu::node>());
+			n->set_children(utki::makeUnique<puu::node>());
 			puu::node* n1 = n->child();
 			ASSERT_ALWAYS(n1)
 			//n1 has no value (empty string)
@@ -234,64 +234,64 @@ void Run(){
 			n1->insertNext(utki::makeUnique<puu::node>());
 			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->setValue("Child2");
+			n1->set_value("Child2");
 
 			n1->insertNext(utki::makeUnique<puu::node>());
 			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->setValue("Child_third");
+			n1->set_value("Child_third");
 			{
-				n1->setChildren(utki::makeUnique<puu::node>());
+				n1->set_children(utki::makeUnique<puu::node>());
 				puu::node* n2 = n1->child();
 				ASSERT_ALWAYS(n2)
-				n2->setValue("only one child");
+				n2->set_value("only one child");
 			}
 
 			n1->insertNext(utki::makeUnique<puu::node>());
 			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->setValue("Child fourth");
+			n1->set_value("Child fourth");
 			{
-				n1->addProperty("Property")->setValue("value");
+				n1->addProperty("Property")->set_value("value");
 
 				puu::node* n2 = n1->child();
 				n2->insertNext(utki::makeUnique<puu::node>());
 				n2 = n2->next();
 				ASSERT_ALWAYS(n2)
-				n2->setValue("subchild1");
-				n2->setChildren(utki::makeUnique<puu::node>());
+				n2->set_value("subchild1");
+				n2->set_children(utki::makeUnique<puu::node>());
 
 				n2->insertNext(utki::makeUnique<puu::node>());
 				n2 = n2->next();
 				ASSERT_ALWAYS(n2)
-				n2->setValue("subchild 2");
+				n2->set_value("subchild 2");
 
-				n1->addProperty("Prop")->setBool("true");
+				n1->addProperty("Prop")->set_bool("true");
 			}
 
 			n1->insertNext(utki::makeUnique<puu::node>());
 			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			//n1->setValue("");
+			//n1->set_value("");
 			{
-				n1->setChildren(utki::makeUnique<puu::node>());
+				n1->set_children(utki::makeUnique<puu::node>());
 				puu::node* n2 = n1->child();
 				ASSERT_ALWAYS(n2)
-				n2->setValue("-3213.43");
+				n2->set_value("-3213.43");
 				n2->insertNext(utki::makeUnique<puu::node>("fsd"));
 			}
 
 			n1->insertNext(utki::makeUnique<puu::node>());
 			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->setInt32(315);
+			n1->set_int32(315);
 
 			n1->insertNext(utki::makeUnique<puu::node>());
 			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->setInt32(-426);
-			n1->setChildren(utki::makeUnique<puu::node>());
-			n1->child()->setChildren(utki::makeUnique<puu::node>("trololo"));
+			n1->set_int32(-426);
+			n1->set_children(utki::makeUnique<puu::node>());
+			n1->child()->set_children(utki::makeUnique<puu::node>("trololo"));
 
 			n1->insertNext(utki::makeUnique<puu::node>());
 			n1 = n1->next();
@@ -306,64 +306,64 @@ void Run(){
 			n1->insertNext(utki::makeUnique<puu::node>());
 			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->setUint64(1234567890123LL);
+			n1->set_uint64(1234567890123LL);
 
 			n1->insertNext(utki::makeUnique<puu::node>());
 			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->setInt64(-1234567890123LL);
+			n1->set_int64(-1234567890123LL);
 
 			n1->insertNext(utki::makeUnique<puu::node>());
 			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->setChildren(utki::makeUnique<puu::node>());
-			n1->child()->setChildren(utki::makeUnique<puu::node>("trololo"));
+			n1->set_children(utki::makeUnique<puu::node>());
+			n1->child()->set_children(utki::makeUnique<puu::node>("trololo"));
 
 			n1->insertNext(utki::makeUnique<puu::node>());
 			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->setFloat(315.34f);
+			n1->set_float(315.34f);
 
 			n1->insertNext(utki::makeUnique<puu::node>());
 			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->setFloat(0.00006f);
+			n1->set_float(0.00006f);
 
 			n1->insertNext(utki::makeUnique<puu::node>());
 			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->setDouble(-315.3);
+			n1->set_double(-315.3);
 
 			n1->insertNext(utki::makeUnique<puu::node>());
 			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->setDouble(-31523355325.3);
+			n1->set_double(-31523355325.3);
 
 			n1->insertNext(utki::makeUnique<puu::node>());
 			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->setLongDouble(-315.33L);
+			n1->set_long_double(-315.33L);
 
 			n1->insertNext(utki::makeUnique<puu::node>());
 			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->setBool(true);
+			n1->set_bool(true);
 
 			n1->insertNext(utki::makeUnique<puu::node>());
 			n1 = n1->next();
 			ASSERT_ALWAYS(n1)
-			n1->setBool(false);
+			n1->set_bool(false);
 		}
 
 		n->insertNext(utki::makeUnique<puu::node>());
 		n = n->next();
 		ASSERT_ALWAYS(n)
-		n->setValue("Another}QuotedString");
+		n->set_value("Another}QuotedString");
 
 		n->insertNext(utki::makeUnique<puu::node>());
 		n = n->next();
 		ASSERT_ALWAYS(n)
-		n->setValue("Last{String}InTheFile");
+		n->set_value("Last{String}InTheFile");
 	}
 
 	papki::FSFile fileFormatted("out_formatted.puu");
@@ -373,13 +373,13 @@ void Run(){
 	root->child()->writeChain(fileNotFormatted, false);
 
 	std::unique_ptr<puu::node> readFormatted = utki::makeUnique<puu::node>();
-	readFormatted->setChildren(puu::load(fileFormatted));
+	readFormatted->set_children(puu::load(fileFormatted));
 	ASSERT_ALWAYS(root->operator==(*readFormatted))
 
 //	TRACE(<< "formatted read" << std::endl)
 
 	std::unique_ptr<puu::node> readNotFormatted = utki::makeUnique<puu::node>();
-	readNotFormatted->setChildren(puu::load(fileNotFormatted));
+	readNotFormatted->set_children(puu::load(fileNotFormatted));
 	ASSERT_ALWAYS(root->operator==(*readNotFormatted))
 
 //	TRACE(<< "not formatted read" << std::endl)
@@ -425,7 +425,7 @@ void run(){
 
 		auto c = n->cloneChildren();
 		ASSERT_ALWAYS(c)
-		ASSERT_ALWAYS(c->countChain() == 3)
+		ASSERT_ALWAYS(c->count_chain() == 3)
 
 		ASSERT_ALWAYS(c->count() == 1)
 		ASSERT_ALWAYS(*c == "b")

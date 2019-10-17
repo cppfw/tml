@@ -41,17 +41,17 @@ class node final : public utki::Unique{
 
 	std::unique_ptr<node> children; //pointer to the first child
 
-	void setValueInternal(const utki::Buf<char> str);
+	void set_value_internal(const utki::Buf<char> str);
 
-	void setValue(const char* v, size_t size){
-		this->setValue(utki::Buf<char>(const_cast<char*>(v), size));
+	void set_value(const char* v, size_t size){
+		this->set_value(utki::Buf<char>(const_cast<char*>(v), size));
 	}
 public:
 	node(const node&) = delete;
 	node& operator=(const node&) = delete;
 
 	node(const utki::Buf<char> str){
-		this->setValueInternal(str);
+		this->set_value_internal(str);
 	}
 
 	node(const std::string& str) :
@@ -64,13 +64,14 @@ public:
 			node(utki::Buf<char>(const_cast<char*>(value), value == nullptr ? 0 : strlen(value)))
 	{}
 
-	class nodeNotFoundExc : puu::Exc{
+	class not_found_exc : puu::Exc{
 	public:
-		nodeNotFoundExc(const std::string& message) :
+		not_found_exc(const std::string& message) :
 				puu::Exc(message)
 		{}
 	};
 
+	//TODO: is needed? can be replaced by not_found_exc?
 	class nodeHasNoChldrenExc : puu::Exc{
 	public:
 		nodeHasNoChldrenExc(const std::string& message) :
@@ -88,7 +89,7 @@ public:
 	 * Return value can be nullptr;
 	 * @return A string representing this node.
 	 */
-	const char* value()const noexcept{
+	const char* get_value()const noexcept{
 		return this->value_v.get();
 	}
 
@@ -98,27 +99,27 @@ public:
 	 * Calculates value length in bytes excluding terminating 0 byte.
 	 * @return value length in bytes.
 	 */
-	size_t length()const noexcept{
-		if(this->value() == 0){
+	size_t get_length()const noexcept{
+		if(this->get_value() == 0){
 			return 0;
 		}
-		return strlen(this->value());
+		return strlen(this->get_value());
 	}
 
 	/**
 	 * @brief Get node value as utf8 string.
 	 * @return UTF-8 iterator to iterate through the string.
 	 */
-	unikod::Utf8Iterator asUTF8()const noexcept{
-		return unikod::Utf8Iterator(this->value());
+	unikod::Utf8Iterator as_utf8()const noexcept{
+		return unikod::Utf8Iterator(this->get_value());
 	}
 
 	/**
 	 * @brief Get node value as std::string.
 	 * @return std::string holding the copy of node value.
 	 */
-	std::string asString()const noexcept{
-		return std::string(this->value());
+	std::string as_string()const noexcept{
+		return std::string(this->get_value());
 	}
 
 	/**
@@ -126,56 +127,56 @@ public:
 	 * Converts node value to UTF-32 as if it was in UTF-8.
 	 * @return std::u32string holding the node value.
 	 */
-	std::u32string asU32String()const noexcept;
+	std::u32string as_u32string()const noexcept;
 
 	/**
 	 * @brief Get node value as signed 32bit integer.
 	 * Tries to parse the string as signed 32bit integer.
 	 * @return Result of parsing node value as signed 32bit integer.
 	 */
-	std::int32_t asInt32()const noexcept;
+	std::int32_t as_int32()const noexcept;
 
 	/**
 	 * @brief Get node value as unsigned 32bit integer.
 	 * Tries to parse the string as unsigned 32bit integer.
 	 * @return Result of parsing node value as unsigned 32bit integer.
 	 */
-	std::uint32_t asUint32()const noexcept;
+	std::uint32_t as_uint32()const noexcept;
 
 	/**
 	 * @brief Get node value as signed 64bit integer.
 	 * Tries to parse the string as signed 64bit integer.
 	 * @return Result of parsing node value as signed 64bit integer.
 	 */
-	std::int64_t asInt64()const noexcept;
+	std::int64_t as_int64()const noexcept;
 
 	/**
 	 * @brief Get node value as unsigned 64bit integer.
 	 * Tries to parse the string as unsigned 64bit integer.
 	 * @return Result of parsing node value as unsigned 64bit integer.
 	 */
-	std::uint64_t asUint64()const noexcept;
+	std::uint64_t as_uint64()const noexcept;
 
 	/**
 	 * @brief Get node value as float value (32bits).
 	 * Tries to parse the string as float value (32bits).
 	 * @return Result of parsing node value as float value (32bits).
 	 */
-	float asFloat()const noexcept;
+	float as_float()const noexcept;
 
 	/**
 	 * @brief Get node value as double precision float value (64bits).
 	 * Tries to parse the string as double precision float value (64bits).
 	 * @return Result of parsing node value as double precision float value (64bits).
 	 */
-	double asDouble()const noexcept;
+	double as_double()const noexcept;
 
 	/**
 	 * @brief Get node value as long double precision float value (64bits).
 	 * Tries to parse the string as long double precision float value (64bits).
 	 * @return Result of parsing node value as long double precision float value (64bits).
 	 */
-	long double asLongDouble()const noexcept;
+	long double as_long_double()const noexcept;
 
 	/**
 	 * @brief Get node value as boolean value.
@@ -184,15 +185,15 @@ public:
 	 * @return true if string is "true".
 	 * @return false otherwise.
 	 */
-	bool asBool()const noexcept;
+	bool as_bool()const noexcept;
 
 	/**
 	 * @brief Set value of the node.
 	 * Set the value of the node. value is copied from passed buffer.
 	 * @param v - null-terminated string to set as a node value.
 	 */
-	void setValue(const char* v = nullptr)noexcept{
-		this->setValue(utki::Buf<char>(const_cast<char*>(v), v ? strlen(v) : 0));
+	void set_value(const char* v)noexcept{
+		this->set_value(utki::Buf<char>(const_cast<char*>(v), v ? strlen(v) : 0));
 	}
 
 	/**
@@ -200,8 +201,8 @@ public:
 	 * Set the value of the node. value is copied from passed buffer.
 	 * @param str - string to set as a node value.
 	 */
-	void setValue(const utki::Buf<char> str){
-		this->setValueInternal(str);
+	void set_value(const utki::Buf<char> str){
+		this->set_value_internal(str);
 	}
 
 	/**
@@ -210,15 +211,15 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - signed 32 bit integer to set as a value of the node.
 	 */
-	void setInt32(std::int32_t v)noexcept{
+	void set_int32(std::int32_t v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%" PRIi32, v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(nullptr, 0);
+			this->set_value(nullptr, 0);
 		}else{
-			this->setValue(buf, res);
+			this->set_value(buf, res);
 		}
 	}
 
@@ -234,9 +235,9 @@ public:
 		int res = snprintf(buf, sizeof(buf), "%" PRIu32, v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(nullptr, 0);
+			this->set_value(nullptr, 0);
 		}else{
-			this->setValue(buf, res);
+			this->set_value(buf, res);
 		}
 	}
 
@@ -246,15 +247,15 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - signed 64 bit integer to set as a value of the node.
 	 */
-	void setInt64(std::int64_t v)noexcept{
+	void set_int64(std::int64_t v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%" PRIi64, v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(nullptr, 0);
+			this->set_value(nullptr, 0);
 		}else{
-			this->setValue(buf, res);
+			this->set_value(buf, res);
 		}
 	}
 
@@ -264,15 +265,15 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - unsigned 64 bit integer to set as a value of the node.
 	 */
-	void setUint64(std::uint64_t v)noexcept{
+	void set_uint64(std::uint64_t v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%" PRIu64, v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(nullptr, 0);
+			this->set_value(nullptr, 0);
 		}else{
-			this->setValue(buf, res);
+			this->set_value(buf, res);
 		}
 	}
 
@@ -282,15 +283,15 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - 'float' to set as a value of the node.
 	 */
-	void setFloat(float v)noexcept{
+	void set_float(float v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%.8G", double(v));
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(nullptr, 0);
+			this->set_value(nullptr, 0);
 		}else{
-			this->setValue(buf, res);
+			this->set_value(buf, res);
 		}
 	}
 
@@ -299,15 +300,15 @@ public:
 	 * This should make a lose-less representation of a float number.
 	 * @param v - 'float' to set as a value of the node.
 	 */
-	void setHexFloat(float v)noexcept{
+	void set_hex_float(float v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%.8a", double(v));
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(nullptr, 0);
+			this->set_value(nullptr, 0);
 		}else{
-			this->setValue(buf, res);
+			this->set_value(buf, res);
 		}
 	}
 
@@ -317,15 +318,15 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - 'double' to set as a value of the node.
 	 */
-	void setDouble(double v)noexcept{
+	void set_double(double v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%.17G", v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(nullptr, 0);
+			this->set_value(nullptr, 0);
 		}else{
-			this->setValue(buf, res);
+			this->set_value(buf, res);
 		}
 	}
 
@@ -334,15 +335,15 @@ public:
 	 * This should make a lose-less representation of a double number.
 	 * @param v - 'double' to set as a value of the node.
 	 */
-	void setHexDouble(double v)noexcept{
+	void set_hex_double(double v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%.17a", v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(nullptr, 0);
+			this->set_value(nullptr, 0);
 		}else{
-			this->setValue(buf, res);
+			this->set_value(buf, res);
 		}
 	}
 
@@ -352,15 +353,15 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - 'long double' to set as a value of the node.
 	 */
-	void setLongDouble(long double v)noexcept{
+	void set_long_double(long double v)noexcept{
 		char buf[128];
 
 		int res = snprintf(buf, sizeof(buf), "%.31LG", v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(nullptr, 0);
+			this->set_value(nullptr, 0);
 		}else{
-			this->setValue(buf, res);
+			this->set_value(buf, res);
 		}
 	}
 
@@ -369,15 +370,15 @@ public:
 	 * This should make a lose-less representation of a long double number.
 	 * @param v - 'long double' to set as a value of the node.
 	 */
-	void setHexLongDouble(long double v)noexcept{
+	void set_hex_long_double(long double v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%.31La", v);
 
 		if(res < 0 || res > int(sizeof(buf))){
-			this->setValue(nullptr, 0);
+			this->set_value(nullptr, 0);
 		}else{
-			this->setValue(buf, res);
+			this->set_value(buf, res);
 		}
 	}
 
@@ -387,8 +388,8 @@ public:
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - 'bool' to set as a value of the node.
 	 */
-	void setBool(bool v)noexcept{
-		this->setValue(v ? "true" : "false");
+	void set_bool(bool v)noexcept{
+		this->set_value(v ? "true" : "false");
 	}
 
 	/**
@@ -399,11 +400,11 @@ public:
 	 * @return false otherwise.
 	 */
 	bool operator==(const char* str)const noexcept{
-		if(this->value()){
+		if(this->get_value()){
 			if(str){
-				return strcmp(this->value(), str) == 0;
+				return strcmp(this->get_value(), str) == 0;
 			}
-			return strlen(this->value()) == 0;
+			return strlen(this->get_value()) == 0;
 		}
 		if(str){
 			return strlen(str) == 0;
@@ -431,14 +432,14 @@ public:
 	 * @brief Count number of nodes in chain.
 	 * @return number of nodes in chain.
 	 */
-	size_t countChain()const noexcept;
+	size_t count_chain()const noexcept;
 
 	/**
 	 * @brief Set children list for this node.
 	 * Sets the children nodes list for this node. Previously set list will be discarded if any.
 	 * @param first - auto-pointer to the first node of the children single.linked list.
 	 */
-	void setChildren(std::unique_ptr<node> first)noexcept{
+	void set_children(std::unique_ptr<node> first)noexcept{
 		this->children = std::move(first);
 	}
 
@@ -447,7 +448,7 @@ public:
 	 * Removes the list of children from this node.
 	 * @return auto-pointer to the first node in the children list.
 	 */
-	std::unique_ptr<node> removeChildren()noexcept{
+	std::unique_ptr<node> remove_children()noexcept{
 		return std::move(this->children);
 	}
 
@@ -455,7 +456,7 @@ public:
 	 * @brief Remove first child from the list of children.
 	 * @return auto-pointer to the node which was the first child.
 	 */
-	std::unique_ptr<node> removeFirstChild()noexcept{
+	std::unique_ptr<node> remove_first_child()noexcept{
 		if(!this->children){
 			return std::unique_ptr<node>();
 		}
@@ -473,14 +474,14 @@ public:
 	 * @return auto-pointer to the removed node.
 	 * @return invalid auto-pointer if there was no child with given value found.
 	 */
-	std::unique_ptr<node> removeChild(const char* value)noexcept{
+	std::unique_ptr<node> remove_child(const char* value)noexcept{
 		nodeAndPrev f = this->child(value);
 
 		if(f.prev()){
 			return f.prev()->removeNext();
 		}
 
-		return this->removeFirstChild();
+		return this->remove_first_child();
 	}
 
 	/**
@@ -489,7 +490,7 @@ public:
 	 * @return Unique pointer to a removed child.
 	 * @return nullptr if no child found.
 	 */
-	std::unique_ptr<node> removeChild(const puu::node* c)noexcept;
+	std::unique_ptr<node> remove_child(const puu::node* c)noexcept;
 
 	/**
 	 * @brief Get list of child nodes.
@@ -613,7 +614,7 @@ public:
 	node& up(){
 		auto r = this->child();
 		if(!r){
-			throw nodeHasNoChldrenExc(this->value());
+			throw nodeHasNoChldrenExc(this->get_value());
 		}
 		return *r;
 	}
@@ -632,12 +633,12 @@ public:
 	 * In contrast to child(value) method this one returns reference and throws exception if node is not found.
 	 * @param value - value to looks for amongst children.
 	 * @return reference to the found node.
-	 * @throw nodeNotFoundExc - in case node with given value is not found.
+	 * @throw not_found_exc - in case node with given value is not found.
 	 */
 	node& up(const char* value){
 		auto r = this->child(value).get_node();
 		if(!r){
-			throw nodeNotFoundExc(value);
+			throw not_found_exc(value);
 		}
 		return *r;
 	}
@@ -646,7 +647,7 @@ public:
 	 * @brief Const version of get().
 	 * @param value - value to looks for amongst children.
 	 * @return const reference to the found node.
-	 * @throw nodeNotFoundExc - in case node with given value is not found.
+	 * @throw not_found_exc - in case node with given value is not found.
 	 */
 	const node& up(const char* value)const{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->up(value);
@@ -656,12 +657,12 @@ public:
 	 * @brief Get node with the given value from the chain.
 	 * @param value - value to look for.
 	 * @return Reference to the found.
-	 * @throw nodeNotFoundExc - in case node with given value is not found.
+	 * @throw not_found_exc - in case node with given value is not found.
 	 */
 	node& side(const char* value){
 		auto r = this->thisOrNext(value).get_node();
 		if(!r){
-			throw nodeNotFoundExc(value);
+			throw not_found_exc(value);
 		}
 		return *r;
 	}
@@ -670,7 +671,7 @@ public:
 	 * @brief Const version of side().
 	 * @param value - value to look for.
 	 * @return Reference to the found.
-	 * @throw nodeNotFoundExc - in case node with given value is not found.
+	 * @throw not_found_exc - in case node with given value is not found.
 	 */
 	const node& side(const char* value)const{
 		return const_cast<utki::remove_constptr<decltype(this)>::type*>(this)->side(value);
@@ -908,7 +909,7 @@ public:
 	 * @param node - node to insert.
 	 */
 	void addAsFirstChild(std::unique_ptr<node> node)noexcept{
-		node->setNext(this->removeChildren());
+		node->setNext(this->remove_children());
 		this->children = std::move(node);
 	}
 
@@ -993,7 +994,7 @@ public:
 	 * @return true otherwise.
 	 */
 	bool isProperty()const noexcept{
-		return this->value() == 0 || this->value()[0] < 'A' || 'Z' < this->value()[0];
+		return this->get_value() == 0 || this->get_value()[0] < 'A' || 'Z' < this->get_value()[0];
 	}
 
 	/**
