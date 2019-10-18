@@ -89,7 +89,7 @@ public:
 	 * Return value can be nullptr;
 	 * @return A string representing this node.
 	 */
-	const char* get_value()const noexcept{
+	const char* value()const noexcept{
 		return this->value_v.get();
 	}
 
@@ -100,10 +100,10 @@ public:
 	 * @return value length in bytes.
 	 */
 	size_t get_length()const noexcept{
-		if(this->get_value() == 0){
+		if(this->value() == 0){
 			return 0;
 		}
-		return strlen(this->get_value());
+		return strlen(this->value());
 	}
 
 	/**
@@ -111,7 +111,7 @@ public:
 	 * @return UTF-8 iterator to iterate through the string.
 	 */
 	unikod::Utf8Iterator as_utf8()const noexcept{
-		return unikod::Utf8Iterator(this->get_value());
+		return unikod::Utf8Iterator(this->value());
 	}
 
 	/**
@@ -119,7 +119,7 @@ public:
 	 * @return std::string holding the copy of node value.
 	 */
 	std::string as_string()const noexcept{
-		return std::string(this->get_value());
+		return std::string(this->value());
 	}
 
 	/**
@@ -400,11 +400,11 @@ public:
 	 * @return false otherwise.
 	 */
 	bool operator==(const char* str)const noexcept{
-		if(this->get_value()){
+		if(this->value()){
 			if(str){
-				return strcmp(this->get_value(), str) == 0;
+				return strcmp(this->value(), str) == 0;
 			}
-			return strlen(this->get_value()) == 0;
+			return strlen(this->value()) == 0;
 		}
 		if(str){
 			return strlen(str) == 0;
@@ -614,7 +614,7 @@ public:
 	node& up(){
 		auto r = this->child();
 		if(!r){
-			throw nodeHasNoChldrenExc(this->get_value());
+			throw nodeHasNoChldrenExc(this->value());
 		}
 		return *r;
 	}
@@ -994,7 +994,7 @@ public:
 	 * @return true otherwise.
 	 */
 	bool isProperty()const noexcept{
-		return this->get_value() == 0 || this->get_value()[0] < 'A' || 'Z' < this->get_value()[0];
+		return this->value() == 0 || this->value()[0] < 'A' || 'Z' < this->value()[0];
 	}
 
 	/**

@@ -22,12 +22,12 @@ void Run(){
 
 	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "test string", n->get_value())
+	ASSERT_INFO_ALWAYS(*n == "test string", n->value())
 	ASSERT_ALWAYS(!n->child())
 
 	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "anot/her string", n->get_value())
+	ASSERT_INFO_ALWAYS(*n == "anot/her string", n->value())
 	ASSERT_ALWAYS(!n->child())
 
 	n = n->next();
@@ -52,46 +52,46 @@ void Run(){
 
 	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "string_interrupted", n->get_value())
+	ASSERT_INFO_ALWAYS(*n == "string_interrupted", n->value())
 	ASSERT_ALWAYS(!n->child())
 
 	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "_by_comment", n->get_value())
+	ASSERT_INFO_ALWAYS(*n == "_by_comment", n->value())
 	ASSERT_ALWAYS(!n->child())
 
 	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "string_broken", n->get_value())
+	ASSERT_INFO_ALWAYS(*n == "string_broken", n->value())
 	ASSERT_ALWAYS(!n->child())
 
 	n = n->next();
 	ASSERT_ALWAYS(n)
-	ASSERT_INFO_ALWAYS(*n == "_by_comment", n->get_value())
+	ASSERT_INFO_ALWAYS(*n == "_by_comment", n->value())
 	ASSERT_ALWAYS(!n->child())
 
 	n = n->next();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "")
-	ASSERT_ALWAYS(n->get_value() == 0)
-	ASSERT_INFO_ALWAYS(!n->child(), n->child()->get_value())
+	ASSERT_ALWAYS(n->value() == 0)
+	ASSERT_INFO_ALWAYS(!n->child(), n->child()->value())
 
 	n = n->next();
 	ASSERT_ALWAYS(n)
 	ASSERT_ALWAYS(*n == "")
-	ASSERT_ALWAYS(n->get_value() == 0)
+	ASSERT_ALWAYS(n->value() == 0)
 	ASSERT_ALWAYS(n->child())
 	{
 		puu::node * n1 = n->child();
 		ASSERT_ALWAYS(n1)
 		ASSERT_ALWAYS(*n1 == "")
-		ASSERT_ALWAYS(n1->get_value() == 0)
+		ASSERT_ALWAYS(n1->value() == 0)
 		ASSERT_ALWAYS(!n1->child())
 
 		n1 = n1->next();
 		ASSERT_ALWAYS(n1)
 		ASSERT_ALWAYS(*n1 == "")
-		ASSERT_ALWAYS(n1->get_value() == 0)
+		ASSERT_ALWAYS(n1->value() == 0)
 		ASSERT_ALWAYS(!n1->child())
 
 		ASSERT_ALWAYS(!n1->next())

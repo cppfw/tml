@@ -215,20 +215,20 @@ void writeChainInternal(const puu::node* chain, papki::File& fi, bool formatted,
 
 		unsigned numEscapes;
 		size_t length;
-		bool unqouted = canStringBeUnquoted(n->get_value(), length, numEscapes);
+		bool unqouted = canStringBeUnquoted(n->value(), length, numEscapes);
 
 		if(!unqouted){
 			fi.write(utki::wrapBuf(quote));
 
 			if(numEscapes == 0){
 				fi.write(utki::Buf<std::uint8_t>(
-						const_cast<std::uint8_t*>(reinterpret_cast<const std::uint8_t*>(n->get_value())),
+						const_cast<std::uint8_t*>(reinterpret_cast<const std::uint8_t*>(n->value())),
 						length
 					));
 			}else{
 				std::vector<std::uint8_t> buf(length + numEscapes);
 
-				MakeEscapedString(n->get_value(), utki::wrapBuf(buf));
+				MakeEscapedString(n->value(), utki::wrapBuf(buf));
 
 				fi.write(utki::wrapBuf(buf));
 			}
@@ -255,10 +255,10 @@ void writeChainInternal(const puu::node* chain, papki::File& fi, bool formatted,
 			}else{
 				ASSERT(numEscapes == 0)
 				fi.write(utki::Buf<std::uint8_t>(
-						const_cast<std::uint8_t*>(reinterpret_cast<const std::uint8_t*>(n->get_value())),
+						const_cast<std::uint8_t*>(reinterpret_cast<const std::uint8_t*>(n->value())),
 						length
 					));
-				if(!n->child() && length == 1 && n->get_value()[0] == 'R'){
+				if(!n->child() && length == 1 && n->value()[0] == 'R'){
 					fi.write(utki::wrapBuf(space));
 				}
 			}
@@ -361,7 +361,7 @@ std::unique_ptr<puu::node> puu::load(const papki::File& fi){
 
 
 std::unique_ptr<puu::node> node::clone()const{
-	auto ret = utki::makeUnique<node>(this->get_value());
+	auto ret = utki::makeUnique<node>(this->value());
 
 	if(!this->child()){
 		return ret;
@@ -394,14 +394,14 @@ std::unique_ptr<node> node::cloneChain() const{
 
 
 bool node::operator==(const node& n)const noexcept{
-	if(!this->operator==(n.get_value())){
+	if(!this->operator==(n.value())){
 		return false;
 	}
 
 	const puu::node* c = this->child();
 	const puu::node* cn = n.child();
 	for(; c && cn; c = c->next(), cn = cn->next()){
-		if(!c->operator==(cn->get_value())){
+		if(!c->operator==(cn->value())){
 			return false;
 		}
 	}
@@ -570,58 +570,58 @@ std::unique_ptr<node> node::replace(const node& chain){
 }
 
 std::uint32_t node::as_uint32() const noexcept{
-	if(!this->get_value()){
+	if(!this->value()){
 		return 0;
 	}
-	return std::uint32_t(strtoul(this->get_value(), nullptr, 0));
+	return std::uint32_t(strtoul(this->value(), nullptr, 0));
 }
 
 bool node::as_bool() const noexcept{
-	return strcmp(this->get_value(), "true") == 0;
+	return strcmp(this->value(), "true") == 0;
 }
 
 double node::as_double() const noexcept{
-	if(!this->get_value()){
+	if(!this->value()){
 		return 0;
 	}
-	return strtod(this->get_value(), nullptr);
+	return strtod(this->value(), nullptr);
 }
 
 float node::as_float() const noexcept{
-	if(!this->get_value()){
+	if(!this->value()){
 		return 0;
 	}
-	return strtof(this->get_value(), nullptr);
+	return strtof(this->value(), nullptr);
 }
 
 std::int32_t node::as_int32() const noexcept{
-	if(!this->get_value()){
+	if(!this->value()){
 		return 0;
 	}
-	return std::int32_t(strtol(this->get_value(), nullptr, 0));
+	return std::int32_t(strtol(this->value(), nullptr, 0));
 }
 
 std::int64_t node::as_int64() const noexcept{
-	if(!this->get_value()){
+	if(!this->value()){
 		return 0;
 	}
-	return std::int64_t(strtoll(this->get_value(), nullptr, 0));
+	return std::int64_t(strtoll(this->value(), nullptr, 0));
 }
 
 long double node::as_long_double() const noexcept{
 #if M_OS_NAME == M_OS_NAME_ANDROID //TODO: use strtold() when it becomes available on Android
 	return this->as_double();
 #else
-	if(!this->get_value()){
+	if(!this->value()){
 		return 0;
 	}
-	return strtold(this->get_value(), nullptr);
+	return strtold(this->value(), nullptr);
 #endif
 }
 
 std::uint64_t node::as_uint64() const noexcept{
-	if(!this->get_value()){
+	if(!this->value()){
 		return 0;
 	}
-	return std::uint64_t(strtoull(this->get_value(), nullptr, 0));
+	return std::uint64_t(strtoull(this->value(), nullptr, 0));
 }
