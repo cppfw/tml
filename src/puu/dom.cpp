@@ -236,7 +236,7 @@ void writeChainInternal(const puu::node* chain, papki::File& fi, bool formatted,
 			fi.write(utki::wrapBuf(quote));
 		}else{
 			bool isQuotedEmptyString = false;
-			if(n->get_length() == 0){//if empty string
+			if(n->length() == 0){//if empty string
 				if(!n->child() || !prevHadChildren){
 					isQuotedEmptyString = true;
 				}
@@ -247,7 +247,7 @@ void writeChainInternal(const puu::node* chain, papki::File& fi, bool formatted,
 				fi.write(utki::wrapBuf(space));
 			}
 
-			if(n->get_length() == 0){//if empty string
+			if(n->length() == 0){//if empty string
 				if(isQuotedEmptyString){
 					fi.write(utki::wrapBuf(quote));
 					fi.write(utki::wrapBuf(quote));
@@ -269,7 +269,7 @@ void writeChainInternal(const puu::node* chain, papki::File& fi, bool formatted,
 			if(formatted){
 				fi.write(utki::wrapBuf(newLine));
 			}
-			prevWasUnquotedWithoutChildren = (unqouted && n->get_length() != 0);
+			prevWasUnquotedWithoutChildren = (unqouted && n->length() != 0);
 			continue;
 		}else{
 			prevWasUnquotedWithoutChildren = false;

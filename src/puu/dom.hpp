@@ -21,7 +21,6 @@
 #include "Exc.hpp"
 
 
-
 namespace puu{
 
 
@@ -71,10 +70,13 @@ public:
 		{}
 	};
 
+	// TODO: deprecated, remove in v1.0.0
+	typedef not_found_exc NodeNotFoundExc;
+
 	//TODO: is needed? can be replaced by not_found_exc?
-	class nodeHasNoChldrenExc : puu::Exc{
+	class NodeHasNoChldrenExc : puu::Exc{
 	public:
-		nodeHasNoChldrenExc(const std::string& message) :
+		NodeHasNoChldrenExc(const std::string& message) :
 				puu::Exc(message)
 		{}
 	};
@@ -99,7 +101,7 @@ public:
 	 * Calculates value length in bytes excluding terminating 0 byte.
 	 * @return value length in bytes.
 	 */
-	size_t get_length()const noexcept{
+	size_t length()const noexcept{
 		if(this->value() == 0){
 			return 0;
 		}
@@ -114,12 +116,22 @@ public:
 		return unikod::Utf8Iterator(this->value());
 	}
 
+	//TODO: deprecated
+	unikod::Utf8Iterator asUTF8()const noexcept{
+		return this->as_utf8();
+	}
+
 	/**
 	 * @brief Get node value as std::string.
 	 * @return std::string holding the copy of node value.
 	 */
 	std::string as_string()const noexcept{
 		return std::string(this->value());
+	}
+
+	//TODO: deprecated
+	std::string asString()const noexcept{
+		return this->as_string();
 	}
 
 	/**
@@ -129,12 +141,22 @@ public:
 	 */
 	std::u32string as_u32string()const noexcept;
 
+	//TODO: deprecated
+	std::u32string asU32String()const noexcept{
+		return this->as_u32string();
+	}
+
 	/**
 	 * @brief Get node value as signed 32bit integer.
 	 * Tries to parse the string as signed 32bit integer.
 	 * @return Result of parsing node value as signed 32bit integer.
 	 */
 	std::int32_t as_int32()const noexcept;
+
+	//TODO:deprecated
+	std::int32_t asInt32()const noexcept{
+		return this->as_int32();
+	}
 
 	/**
 	 * @brief Get node value as unsigned 32bit integer.
@@ -143,12 +165,22 @@ public:
 	 */
 	std::uint32_t as_uint32()const noexcept;
 
+	//TODO: deprecated
+	std::uint32_t asUint32()const noexcept{
+		return this->as_uint32();
+	}
+
 	/**
 	 * @brief Get node value as signed 64bit integer.
 	 * Tries to parse the string as signed 64bit integer.
 	 * @return Result of parsing node value as signed 64bit integer.
 	 */
 	std::int64_t as_int64()const noexcept;
+
+	//TODO:deprecated
+	std::int64_t asInt64()const noexcept{
+		return this->as_int64();
+	}
 
 	/**
 	 * @brief Get node value as unsigned 64bit integer.
@@ -157,12 +189,22 @@ public:
 	 */
 	std::uint64_t as_uint64()const noexcept;
 
+	//TODO:deprecated
+	std::uint64_t asUint64()const noexcept{
+		return this->as_uint64();
+	}
+
 	/**
 	 * @brief Get node value as float value (32bits).
 	 * Tries to parse the string as float value (32bits).
 	 * @return Result of parsing node value as float value (32bits).
 	 */
 	float as_float()const noexcept;
+
+	//TODO:deprecated
+	float asFloat()const noexcept{
+		return this->as_float();
+	}
 
 	/**
 	 * @brief Get node value as double precision float value (64bits).
@@ -171,12 +213,22 @@ public:
 	 */
 	double as_double()const noexcept;
 
+	//TODO:deprecated
+	double asDouble()const noexcept{
+		return this->as_double();
+	}
+
 	/**
 	 * @brief Get node value as long double precision float value (64bits).
 	 * Tries to parse the string as long double precision float value (64bits).
 	 * @return Result of parsing node value as long double precision float value (64bits).
 	 */
 	long double as_long_double()const noexcept;
+
+	//TODO:deprecated
+	long double asLongDouble()const noexcept{
+		return this->as_long_double();
+	}
 
 	/**
 	 * @brief Get node value as boolean value.
@@ -187,6 +239,11 @@ public:
 	 */
 	bool as_bool()const noexcept;
 
+	//TODO: deprecated
+	bool asBool()const noexcept{
+		return this->as_bool();
+	}
+
 	/**
 	 * @brief Set value of the node.
 	 * Set the value of the node. value is copied from passed buffer.
@@ -196,6 +253,11 @@ public:
 		this->set_value(utki::Buf<char>(const_cast<char*>(v), v ? strlen(v) : 0));
 	}
 
+	//TODO: deprecated
+	void setValue(const char* v)noexcept{
+		this->set_value(v);
+	}
+
 	/**
 	 * @brief Set value of the node.
 	 * Set the value of the node. value is copied from passed buffer.
@@ -203,6 +265,11 @@ public:
 	 */
 	void set_value(const utki::Buf<char> str){
 		this->set_value_internal(str);
+	}
+
+	//TODO: deprecated
+	void setValue(const utki::Buf<char> str){
+		this->set_value(str);
 	}
 
 	/**
@@ -223,13 +290,18 @@ public:
 		}
 	}
 
+	//TODO:deprecated
+	void setInt32(std::int32_t v)noexcept{
+		this->set_int32(v);
+	}
+
 	/**
 	 * @brief Set value from unsigned 32 bit integer.
 	 * Sets value from unsigned 32 bit integer. The value is converted to string
 	 * and then the resulting string is set as a value of the node.
 	 * @param v - unsigned 32 bit integer to set as a value of the node.
 	 */
-	void setUint32(std::uint32_t v)noexcept{
+	void set_uint32(std::uint32_t v)noexcept{
 		char buf[64];
 
 		int res = snprintf(buf, sizeof(buf), "%" PRIu32, v);
@@ -239,6 +311,11 @@ public:
 		}else{
 			this->set_value(buf, res);
 		}
+	}
+
+	//TODO:deprecated
+	void setUint32(std::uint32_t v)noexcept{
+		this->set_uint32(v);
 	}
 
 	/**
@@ -259,6 +336,11 @@ public:
 		}
 	}
 
+	//TODO: deprecated
+	void setInt64(std::int64_t v)noexcept{
+		this->set_int64(v);
+	}
+
 	/**
 	 * @brief Set value from unsigned 64 bit integer.
 	 * Sets value from unsigned 64 bit integer. The value is converted to string
@@ -275,6 +357,11 @@ public:
 		}else{
 			this->set_value(buf, res);
 		}
+	}
+
+	//TODO: deprecated
+	void setUint64(std::uint64_t v)noexcept{
+		this->set_uint64(v);
 	}
 
 	/**
@@ -295,6 +382,11 @@ public:
 		}
 	}
 
+	//TODO: deprecated
+	void setFloat(float v)noexcept{
+		this->set_float(v);
+	}
+
 	/**
 	 * @brief Set value from 'float' as hexadecimal 'float'.
 	 * This should make a lose-less representation of a float number.
@@ -310,6 +402,11 @@ public:
 		}else{
 			this->set_value(buf, res);
 		}
+	}
+
+	//TODO:deprecated
+	void setHexFloat(float v)noexcept{
+		this->set_hex_float(v);
 	}
 
 	/**
@@ -330,6 +427,11 @@ public:
 		}
 	}
 
+	//TODO: deprecated
+	void setDouble(double v)noexcept{
+		this->set_double(v);
+	}
+
 	/**
 	 * @brief Set value from 'double' as hexadecimal 'double'.
 	 * This should make a lose-less representation of a double number.
@@ -345,6 +447,11 @@ public:
 		}else{
 			this->set_value(buf, res);
 		}
+	}
+
+	//TODO: deprecated
+	void setHexDouble(double v)noexcept{
+		this->set_hex_double(v);
 	}
 
 	/**
@@ -365,6 +472,11 @@ public:
 		}
 	}
 
+	//TODO: deprecated
+	void setLongDouble(long double v)noexcept{
+		this->set_long_double(v);
+	}
+
 	/**
 	 * @brief Set value from 'long double' as hexadecimal 'long double'.
 	 * This should make a lose-less representation of a long double number.
@@ -382,6 +494,11 @@ public:
 		}
 	}
 
+	//TODO: deprecated
+	void setHexLongDouble(long double v)noexcept{
+		this->set_hex_long_double(v);
+	}
+
 	/**
 	 * @brief Set value from 'bool'.
 	 * Sets value from 'bool'. The value is converted to string
@@ -390,6 +507,11 @@ public:
 	 */
 	void set_bool(bool v)noexcept{
 		this->set_value(v ? "true" : "false");
+	}
+
+	//TODO: deprecated
+	void setBool(bool v)noexcept{
+		this->set_bool(v);
 	}
 
 	/**
@@ -434,6 +556,11 @@ public:
 	 */
 	size_t count_chain()const noexcept;
 
+	//TODO: deprecated
+	size_t countChain()const noexcept{
+		return this->count_chain();
+	}
+
 	/**
 	 * @brief Set children list for this node.
 	 * Sets the children nodes list for this node. Previously set list will be discarded if any.
@@ -443,6 +570,11 @@ public:
 		this->children = std::move(first);
 	}
 
+	//TODO: deprecated
+	void setChildren(std::unique_ptr<node> first)noexcept{
+		this->set_children(std::move(first));
+	}
+
 	/**
 	 * @brief Remove children list from the node.
 	 * Removes the list of children from this node.
@@ -450,6 +582,11 @@ public:
 	 */
 	std::unique_ptr<node> remove_children()noexcept{
 		return std::move(this->children);
+	}
+
+	//TODO: deprecated
+	std::unique_ptr<node> removeChildren()noexcept{
+		return this->remove_children();
 	}
 
 	/**
@@ -465,6 +602,11 @@ public:
 		this->children = std::move(ret->next_v);
 
 		return ret;
+	}
+
+	//TODO: deprecated
+	std::unique_ptr<node> removeFirstChild()noexcept{
+		return this->remove_first_child();
 	}
 
 	/**
@@ -484,6 +626,12 @@ public:
 		return this->remove_first_child();
 	}
 
+
+	//TODO: deprecated
+	std::unique_ptr<node> removeChild(const char* value)noexcept{
+		return this->remove_child(value);
+	}
+
 	/**
 	 * @brief Remove given child.
 	 * @param c - child node to remove.
@@ -491,6 +639,11 @@ public:
 	 * @return nullptr if no child found.
 	 */
 	std::unique_ptr<node> remove_child(const puu::node* c)noexcept;
+
+	//TODO: reprecated
+	std::unique_ptr<node> removeChild(const puu::node* c)noexcept{
+		return this->remove_child(c);
+	}
 
 	/**
 	 * @brief Get list of child nodes.
@@ -614,7 +767,7 @@ public:
 	node& up(){
 		auto r = this->child();
 		if(!r){
-			throw nodeHasNoChldrenExc(this->value());
+			throw NodeHasNoChldrenExc(this->value());
 		}
 		return *r;
 	}
@@ -1039,5 +1192,12 @@ std::unique_ptr<node> load(const papki::File& fi);
 std::unique_ptr<node> parse(const char *str);
 
 
+// TODO: Node is deprecated, remove in version 1.0.0
+typedef node Node;
+
 
 }//~namespace
+
+
+// TODO: stob name is deprecated, remove in version 1.0.0
+namespace stob = puu;
