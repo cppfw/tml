@@ -37,7 +37,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{84761611-0B45-430F-8819-8975B521FE9A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>libpuu</RootNamespace>
+    <RootNamespace>puu</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

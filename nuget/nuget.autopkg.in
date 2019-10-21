@@ -8,7 +8,7 @@ configurations {
 
 nuget{
 	nuspec{
-		id = libpuu;
+		id = puu;
 		version : $(version);
 		title: C++ puu parser library;
 		authors: {Ivan Gagis};
@@ -39,35 +39,35 @@ nuget{
 		};
 
 		[x86,v140,release] {
-			lib: ..\msvs_solution\v140_Release\libpuu.lib;
+			lib: ..\msvs_solution\v140_Release\puu.lib;
 		}
 
 		[x86,v140,debug] {
-			lib: ..\msvs_solution\v140_Debug\libpuu.lib;
+			lib: ..\msvs_solution\v140_Debug\puu.lib;
 		}
 
 		[x64,v140,release] {
-			lib: ..\msvs_solution\x64\v140_Release\libpuu.lib;
+			lib: ..\msvs_solution\x64\v140_Release\puu.lib;
 		}
 
 		[x64,v140,debug] {
-			lib: ..\msvs_solution\x64\v140_Debug\libpuu.lib;
+			lib: ..\msvs_solution\x64\v140_Debug\puu.lib;
 		}
 
 		[x86,v141,release] {
-			lib: ..\msvs_solution\v141_Release\libpuu.lib;
+			lib: ..\msvs_solution\v141_Release\puu.lib;
 		}
 
 		[x86,v141,debug] {
-			lib: ..\msvs_solution\v141_Debug\libpuu.lib;
+			lib: ..\msvs_solution\v141_Debug\puu.lib;
 		}
 
 		[x64,v141,release] {
-			lib: ..\msvs_solution\x64\v141_Release\libpuu.lib;
+			lib: ..\msvs_solution\x64\v141_Release\puu.lib;
 		}
 
 		[x64,v141,debug] {
-			lib: ..\msvs_solution\x64\v141_Debug\libpuu.lib;
+			lib: ..\msvs_solution\x64\v141_Debug\puu.lib;
 		}
 	}
 }

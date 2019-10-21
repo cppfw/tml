@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name         = "libpuu"
+  s.name         = "puu"
   s.version      = "$(version)"
   s.summary      = "C++ puu library."
   s.homepage     = "https://github.com/igagis/puu"

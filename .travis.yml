@@ -129,18 +129,12 @@ deploy:
     tags: true
     condition: $PACKAGE_TYPE = deb && -z "$TRAVIS_JOB_NAME"
   script: myci-deploy-debian-bintray.sh -u igagis -r $OS -p $PACKAGE_NAME -c main -d $OS_REL $TRAVIS_BUILD_DIR/../*.deb
-- provider: bintray
-  edge:
-    branch: v1.8.47
+- provider: script
   skip_cleanup: true
+  script: myci-deploy-maven-bintray.sh -u igagis -r android -p io/github/igagis android/$PACKAGE_NAME-`myci-deb-version.sh debian/changelog`.aar
   on:
     tags: true
     condition: $TRAVIS_JOB_NAME = android
-  file: travis_bintray_android.json
-  user: igagis
-  key:
-    secure: "pATRl+8N1FyrQ7sIEUNdrvAZJCFim/b4pliEDCXRoa00odb7z35VTmDautJePnM9NceK40c6fpRrgSwCQ8lk7iZrmmnihw+58UV9Fqi1qyZQZ06DcZbljkV50R5ab67KaecscG+N+NqN2CsADd9C0IDdsvR0Qc4ACeD2qS+HOEJ3k85L7i+An0m4CefpZ9sDSDNcaOgLqqDHZBxUNr1OOcvw3NVQxvg/YIB6bIeUWML2RmHx/Qkp5MH7IvYpWy2osy/39x2qntzhNhhFzOGj69xdaTsMUAHLgSOFttVwtaKJTBuFQ5/F/3ZNw3K1pwjDgkSpsGlI/uzjxz3c203BHR5IB6OquO9osQcwWU4Rnvkz/KVZbiQlOJZV/Hq0R5JLRjiGy+qSIaAtmGNGfQNBnatwFUaYrWdEP6b7Pbqc3Fcb6oTLa7B5X+scCZYUyrLy6aWf7B9ukWuQrB97gJR/qol8rNGyYuHJyRRJfFGwxWH7iCxA58jgK7afofGgM+goGTR+OhzLB6E1KHcawQcz+wLidUGK5eMkYQ/Be2JvoZS2SOWDAff+M2tdzfZqqHQOtzkzIKOLKtWpj47rdEvgS9YjJxIChgvn7z0Kr5fgvUsOE9Z7bM6+tak+HwXCfhvPdwGopsRYomi5sQD8r68jVXNCAhYDO4teuPWyJYeZvAE="
-  dry-run: false
 - provider: script
   skip_cleanup: true
   script: myci-deploy-homebrew.sh -t igagis/tap
