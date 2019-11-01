@@ -46,9 +46,9 @@ repositories {
     }
 }
 dependencies {
-    implementation 'io.github.igagis:libutki:+'
-    implementation 'io.github.igagis:libunikod:+'
-    implementation 'io.github.igagis:libpapki:+'
+    implementation 'io.github.igagis:utki:+'
+    implementation 'io.github.igagis:unikod:+'
+    implementation 'io.github.igagis:papki:+'
 }
 
 

@@ -9,14 +9,14 @@
   <dependencies>
 	  <dependency>
 		  <groupId>io.github.igagis</groupId>
-		  <artifactId>libpapki</artifactId>
+		  <artifactId>papki</artifactId>
 		  <version>[1.0.34,)</version>
 		  <type>aar</type>
 		  <scope>compile</scope>
 	  </dependency>
 	  <dependency>
 		  <groupId>io.github.igagis</groupId>
-		  <artifactId>libunikod</artifactId>
+		  <artifactId>unikod</artifactId>
 		  <version>[2.0.8,)</version>
 		  <type>aar</type>
 		  <scope>compile</scope>
