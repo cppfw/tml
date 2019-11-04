@@ -1,18 +1,21 @@
 Pod::Spec.new do |s|
   s.name         = "puu"
   s.version      = "$(version)"
-  s.summary      = "C++ puu library."
-  s.homepage     = "https://github.com/igagis/puu"
-  s.license      = 'MIT'
+  s.summary      = "C++ puu markup language library."
+  s.homepage     = "https://github.com/igagis/#{s.name}"
+  s.license      = { :type => 'MIT', :file => 'LICENSE' }
   s.author       = { "Ivan Gagis" => "igagis@gmail.com" }
-  s.platform     = :ios, "7.0"
+  s.platform     = :ios
+  s.ios.deployment_target = '8.0'
 
-  s.source = { :git => "https://github.com/igagis/puu.git", :tag => s.version }
+  s.source = { :http => "https://dl.bintray.com/igagis/cocoapods/#{s.name}/#{s.version}/#{s.name}-#{s.version}.zip" }
 
-  s.source_files  = "src/**/*.{hpp,cpp}"
-  s.header_mappings_dir = "src"
+  s.source_files  = "include/**/*.{hpp,h}"
+  s.header_mappings_dir = "include"
 
-  s.dependency 'libutki', '>= 1.0.8'
-  s.dependency 'libpapki', '>= 1.0.3'
-  s.dependency 'libunikod', '>= 2.0.0'
+  s.ios.vendored_library = "lib/ios/lib#{s.name}.a"
+
+  s.dependency 'utki', '>= 1.1.30'
+  s.dependency 'papki', '>= 1.0.3'
+  s.dependency 'unikod', '>= 2.0.0'
 end

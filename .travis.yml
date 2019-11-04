@@ -23,11 +23,11 @@ matrix:
     - name: macosx
       os: osx
       compiler: clang
-      osx_image: xcode8.3
+      osx_image: xcode11
     - name: ios
       os: osx
       compiler: clang
-      osx_image: xcode8.3
+      osx_image: xcode11
     - name: android
       language: android
       android:
@@ -81,15 +81,17 @@ before_install:
     rvm install ruby-2.3.3 &&
     rvm use ruby-2.3.3 &&
 
-    sudo gem install cocoapods &&
-    pod repo add --silent igagis https://$MYCI_GIT_USERNAME:$MYCI_GIT_ACCESS_TOKEN@github.com/igagis/cocoapods-repo.git &&
-    pod install --project-directory=ios &&
-
     brew update > /dev/null &&
     brew tap igagis/tap &&
     brew update > /dev/null &&
-    brew install myci;
+    brew install myci &&
+
+    sudo gem install cocoapods &&
+    pod repo add --silent igagis https://$MYCI_GIT_USERNAME:$MYCI_GIT_ACCESS_TOKEN@github.com/igagis/cocoapods-repo.git &&
+    pod install --project-directory=xcode;
   fi
+- export PACKAGE_VERSION=$(myci-deb-version.sh debian/changelog)
+
 
 install:
 - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ -z "$TRAVIS_JOB_NAME" ]; then
@@ -101,6 +103,13 @@ install:
     echo y | sdkmanager "cmake;3.6.4111459";
   fi
 
+before_script:
+- if [ "$TRAVIS_JOB_NAME" == "ios" ]; then
+    curl -L https://github.com/zackslash/Xcode-Proj-Adder/raw/master/bin/XcodeProjAdder -O &&
+    chmod +x XcodeProjAdder &&
+    (cd xcode/$PACKAGE_NAME && ../../XcodeProjAdder -XCP $PACKAGE_NAME.xcodeproj -SCSV `echo $(find ../../src -type f -name *.cpp) | sed -E -e 's/ /,/g'`)
+  fi
+
 script:
 - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ -z "$TRAVIS_JOB_NAME" ]; then
     docker exec ccc dpkg-buildpackage -us -uc;
@@ -110,7 +119,8 @@ script:
     make test;
   fi
 - if [ "$TRAVIS_JOB_NAME" == "ios" ]; then
-    xcodebuild -workspace ios/tests.xcworkspace -scheme tests CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO;
+    xcodebuild -workspace xcode/$PACKAGE_NAME.xcworkspace -scheme $PACKAGE_NAME CONFIGURATION_BUILD_DIR=../build -configuration Release &&
+    myci-create-zip-package.sh -h src -f xcode/build/lib$PACKAGE_NAME.a///lib/ios -f LICENSE $PACKAGE_NAME-$PACKAGE_VERSION.zip;
   fi
 - if [ "$TRAVIS_JOB_NAME" == "android" ]; then
     (cd android && ./gradlew build) &&
@@ -144,7 +154,7 @@ deploy:
     condition: $TRAVIS_JOB_NAME = macosx
 - provider: script
   skip_cleanup: true
-  script: rvm 2.3.3 do myci-deploy-cocoapods.sh -r igagis
+  script: rvm 2.3.3 do myci-deploy-cocoapods.sh -r igagis -v $PACKAGE_VERSION -u igagis -b cocoapods -p $PACKAGE_NAME-$PACKAGE_VERSION.zip cocoapods/$PACKAGE_NAME.podspec.in
   on:
     tags: true
     condition: $TRAVIS_JOB_NAME = ios

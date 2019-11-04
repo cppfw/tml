@@ -1,0 +1,11 @@
+source 'https://github.com/igagis/cocoapods-repo.git'
+
+project 'puu/puu.xcodeproj'
+
+platform :ios, '8.0'
+
+target "puu" do
+	pod 'utki', '>= 1.1.30'
+	pod 'papki', '>= 1.0.3'
+	pod 'unikod', '>= 2.0.0'
+end
