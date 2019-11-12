@@ -8,8 +8,7 @@ this_name := puu
 this_soname := $(shell cat $(prorab_this_dir)soname.txt)
 
 
-this_srcs += puu/parser.cpp
-this_srcs += puu/dom.cpp
+this_srcs += $(call prorab-src-dir, .)
 
 
 this_cxxflags += -Wall #enable all warnings
