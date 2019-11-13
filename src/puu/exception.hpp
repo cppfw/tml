@@ -17,13 +17,13 @@ namespace puu{
 /**
  * @brief Basic exception class.
  */
-class Exc : public utki::Exc{
+class exception : public utki::Exc{
 public:
 	/**
 	 * @brief Exception object constructor.
      * @param message - human readable message describing the error.
      */
-	Exc(const std::string& message = std::string()) :
+	exception(const std::string& message = std::string()) :
 			utki::Exc(message)
 	{}
 };

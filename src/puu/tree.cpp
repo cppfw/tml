@@ -43,7 +43,8 @@ bool can_string_be_unquoted(const char* s, size_t& out_length, unsigned& out_num
 	out_num_escapes = 0;
 	out_length = 0;
 
-	if(s == 0){//empty string is can be unquoted when it has children, so return true.
+	if(s == 0){
+		// empty string can be unquoted when it has children, so return true.
 		return true;
 	}
 
@@ -159,20 +160,19 @@ void write_internal(const puu::branches& roots, papki::File& fi, bool formatted,
 			fi.write(utki::wrapBuf(quote));
 		}else{
 			bool is_quoted_empty_string = false;
-            //TODO: use length calculated above?
-			if(n.get().length() == 0){//if empty string
+
+			if(length == 0){
 				if(n.size() == 0 || !prev_had_children){
 					is_quoted_empty_string = true;
 				}
 			}
 
-			//unquoted string
+			// if the string is unquoted then write space in case the output is unformatted
 			if(!formatted && prev_was_unquoted_without_children && !is_quoted_empty_string){
 				fi.write(utki::wrapBuf(space));
 			}
 
-            //TODO: use length calculated above?
-			if(n.get().length() == 0){//if empty string
+			if(length == 0){
 				if(is_quoted_empty_string){
 					fi.write(utki::wrapBuf(quote));
 					fi.write(utki::wrapBuf(quote));
@@ -191,12 +191,12 @@ void write_internal(const puu::branches& roots, papki::File& fi, bool formatted,
 		}
 
 		prev_had_children = (n.size() != 0);
+
 		if(n.size() == 0){
 			if(formatted){
 				fi.write(utki::wrapBuf(newLine));
 			}
-            //TODO: use length calculated above?
-			prev_was_unquoted_without_children = (unqouted && n.get().length() != 0);
+			prev_was_unquoted_without_children = (unqouted && length != 0);
 			continue;
 		}else{
 			prev_was_unquoted_without_children = false;
@@ -209,15 +209,12 @@ void write_internal(const puu::branches& roots, papki::File& fi, bool formatted,
 
 			fi.write(utki::wrapBuf(rcurly));
 		}else{
-			if(n.size() == 1 && n.children()[0].size() == 0){
-				//if only one child and that child has no children
+			fi.write(utki::wrapBuf(lcurly));
 
-				fi.write(utki::wrapBuf(lcurly));
+			if(n.size() == 1 && n.children()[0].size() == 0){
+				// if only one child and that child has no children then write the only child on the same line
 				write_internal(n.children(), fi, false, 0);
-				fi.write(utki::wrapBuf(rcurly));
-				fi.write(utki::wrapBuf(newLine));
 			}else{
-				fi.write(utki::wrapBuf(lcurly));
 				fi.write(utki::wrapBuf(newLine));
 				write_internal(n.children(), fi, true, indentation + 1);
 
@@ -225,11 +222,11 @@ void write_internal(const puu::branches& roots, papki::File& fi, bool formatted,
 				for(unsigned i = 0; i != indentation; ++i){
 					fi.write(utki::wrapBuf(tab));
 				}
-				fi.write(utki::wrapBuf(rcurly));
-				fi.write(utki::wrapBuf(newLine));
 			}
+			fi.write(utki::wrapBuf(rcurly));
+			fi.write(utki::wrapBuf(newLine));
 		}
-	}//~for()
+	}//~for
 }
 }
 

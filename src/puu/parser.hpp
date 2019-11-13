@@ -133,7 +133,7 @@ public:
 	 * Use this method to feed the puu data to the parser.
      * @param chunk - data chunk to parse.
      * @param listener - listener object which will receive notifications about parsed tokens.
-	 * @throw puu::Exc - in case of malformed puu document.
+	 * @throw puu::exception - in case of malformed puu document.
      */
 	void parse_data_chunk(const utki::Buf<std::uint8_t> chunk, listener& listener);
 
@@ -142,7 +142,7 @@ public:
 	 * Call this method to finalize parsing after all the available puu data has been fed to the parser.
 	 * This will tell parser that there will be no more data and the temporary stored data should be interpreted as it is.
      * @param listener - listener object which will receive notifications about parsed tokens.
-	 * @throw puu::Exc - in case of malformed puu document.
+	 * @throw puu::exception - in case of malformed puu document.
      */
 	void end_of_data(listener& listener);
 };
@@ -154,7 +154,7 @@ public:
  * Use this function to parse the puu document from file.
  * @param fi - file interface to use for getting the data to parse.
  * @param listener - listener object which will receive notifications about parsed tokens.
- * @throw puu::Exc - in case of malformed puu document.
+ * @throw puu::exception - in case of malformed puu document.
  */
 void parse(const papki::File& fi, listener& listener);
 

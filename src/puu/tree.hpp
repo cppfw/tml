@@ -6,9 +6,11 @@
 
 #include <string>
 
+//TODO: doxygen
 namespace puu{
 
-typedef utki::tree<std::string>::container_type branches;
+typedef utki::tree<std::string> branch;
+typedef branch::container_type branches;
 
 branches read(const papki::File& fi);
 

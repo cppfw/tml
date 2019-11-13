@@ -18,7 +18,7 @@
 
 #include <unikod/utf8.hpp>
 
-#include "Exc.hpp"
+#include "exception.hpp"
 
 
 namespace puu{
@@ -63,10 +63,10 @@ public:
 			node(utki::Buf<char>(const_cast<char*>(value), value == nullptr ? 0 : strlen(value)))
 	{}
 
-	class not_found_exc : puu::Exc{
+	class not_found_exc : puu::exception{
 	public:
 		not_found_exc(const std::string& message) :
-				puu::Exc(message)
+				puu::exception(message)
 		{}
 	};
 
@@ -74,10 +74,10 @@ public:
 	typedef not_found_exc NodeNotFoundExc;
 
 	//TODO: is needed? can be replaced by not_found_exc?
-	class NodeHasNoChldrenExc : puu::Exc{
+	class NodeHasNoChldrenExc : puu::exception{
 	public:
 		NodeHasNoChldrenExc(const std::string& message) :
-				puu::Exc(message)
+				puu::exception(message)
 		{}
 	};
 
