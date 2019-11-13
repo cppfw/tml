@@ -4,9 +4,32 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "build",
+            "type": "shell",
+            "command": "make aj=t",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
             "label": "test",
             "type": "shell",
-            "command": "make test"
+            "command": "make test",
+            "dependsOn": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "test tree",
+            "type": "shell",
+            "command": "make -C tests/tree test --no-print-directory",
+            "dependsOn": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "make clean",
+            "problemMatcher": []
         }
     ]
 }
