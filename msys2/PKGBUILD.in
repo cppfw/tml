@@ -31,7 +31,7 @@ groups=()
 
 depends=("${pkgPrefix}utki" "${pkgPrefix}papki" "${pkgPrefix}unikod")
 
-makedepends=('myci' 'prorab' 'prorab-extra' 'doxygen')
+makedepends=('myci' 'prorab' 'prorab-extra' 'doxygen' '${pkgPrefix}clargs')
 checkdepends=('myci')
 optdepends=()
 provides=()
