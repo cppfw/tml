@@ -19,9 +19,16 @@
             "problemMatcher": []
         },
         {
-            "label": "test tree",
+            "label": "test tree reading",
             "type": "shell",
-            "command": "make -C tests/tree test --no-print-directory",
+            "command": "make -C tests/tree_reading test --no-print-directory",
+            "dependsOn": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "test tree writing",
+            "type": "shell",
+            "command": "make -C tests/tree_writing test --no-print-directory",
             "dependsOn": "build",
             "problemMatcher": []
         },

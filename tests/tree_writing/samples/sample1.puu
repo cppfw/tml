@@ -1,0 +1,38 @@
+"test string"
+Unquoted_String
+"Escapes: \n \r \t \\ \" {}"
+"Quoted{String"{
+	""
+	Child2
+	Child_third{"only one child"}
+	"Child fourth"{
+		Prop{true}
+		Property{value}
+		subchild1{""}
+		"subchild 2"
+	}
+	{
+		-3213.43
+		fsd
+	}
+	315
+	-426{
+		{trololo}
+	}
+	4000100315
+	4294966870
+	1234567890123
+	-1234567890123
+	""{
+		{trololo}
+	}
+	315.34
+	5.9999998E-05
+	-315.30000000000001
+	-31523355325.299999
+	-315.3299999999999999877875467291
+	true
+	false
+}
+"Another}QuotedString"
+"Last{String}InTheFile"

@@ -18,14 +18,14 @@ enum E_Action{
 
 class Listener : public puu::listener{
 	void on_children_parse_finished() override{
-		TRACE(<< "}" << std::endl)
+		// TRACE(<< "}" << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == CHILDREN_END, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
 		this->actions.pop_front();
 	}
 
 	void on_children_parse_started() override{
-		TRACE(<< "{" << std::endl)
+		// TRACE(<< "{" << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == CHILDREN_START, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
 		this->actions.pop_front();
@@ -33,7 +33,7 @@ class Listener : public puu::listener{
 
 	void on_string_parsed(const utki::Buf<char> s)override{
 		std::string str(&*s.begin(), s.size());
-		TRACE(<< "str = " << str << std::endl)
+		// TRACE(<< "str = " << str << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)
 		ASSERT_INFO_ALWAYS(this->actions.front().first == STRING, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
 		ASSERT_INFO_ALWAYS(this->actions.front().second == str, "first = " << this->actions.front().first << " second = " << this->actions.front().second << " str = " << str)

@@ -29,21 +29,7 @@ this_no_install := true
 
 $(eval $(prorab-build-app))
 
-
-ifeq ($(prorab_os),windows)
-    this_test_cmd := $(prorab_echo)(cd $(d); cp ../../src/libpuu.dll .; $$^)
-else
-    this_test_cmd := $(prorab_echo)(cd $(d); LD_LIBRARY_PATH=../../src $$^)
-endif
-
-
-define this_rules
-test:: $(prorab_this_name)
-$(.RECIPEPREFIX)@echo running $$^...
-$(.RECIPEPREFIX)$(this_test_cmd)
-$(.RECIPEPREFIX)$(Q)myci-passed.sh
-endef
-$(eval $(this_rules))
+include $(d)../test_rule.mk
 
 #add dependency on libpuu
 $(prorab_this_name): $(abspath $(d)../../src/libpuu$(soext))
