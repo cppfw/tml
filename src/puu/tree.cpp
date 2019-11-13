@@ -21,7 +21,7 @@ branches puu::read(const papki::File& fi){
 
         void on_children_parse_finished()override{
             ASSERT(this->stack.size() != 0)
-            this->stack.top().back().branches() = std::move(this->cur_branches);
+            this->stack.top().back().children() = std::move(this->cur_branches);
             this->cur_branches = std::move(this->stack.top());
             this->stack.pop();
 		}
@@ -138,20 +138,20 @@ void write_internal(const puu::branches& roots, papki::File& fi, bool formatted,
 
 		unsigned num_escapes;
 		size_t length;
-		bool unqouted = can_string_be_unquoted(n.leaf().c_str(), length, num_escapes);
+		bool unqouted = can_string_be_unquoted(n.get().c_str(), length, num_escapes);
 
 		if(!unqouted){
 			fi.write(utki::wrapBuf(quote));
 
 			if(num_escapes == 0){
 				fi.write(utki::Buf<uint8_t>(
-						const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(n.leaf().c_str())),
+						const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(n.get().c_str())),
 						length
 					));
 			}else{
 				std::vector<uint8_t> buf(length + num_escapes);
 
-				make_escaped_string(n.leaf().c_str(), utki::wrapBuf(buf));
+				make_escaped_string(n.get().c_str(), utki::wrapBuf(buf));
 
 				fi.write(utki::wrapBuf(buf));
 			}
@@ -160,7 +160,7 @@ void write_internal(const puu::branches& roots, papki::File& fi, bool formatted,
 		}else{
 			bool is_quoted_empty_string = false;
             //TODO: use length calculated above?
-			if(n.leaf().length() == 0){//if empty string
+			if(n.get().length() == 0){//if empty string
 				if(n.size() == 0 || !prev_had_children){
 					is_quoted_empty_string = true;
 				}
@@ -172,7 +172,7 @@ void write_internal(const puu::branches& roots, papki::File& fi, bool formatted,
 			}
 
             //TODO: use length calculated above?
-			if(n.leaf().length() == 0){//if empty string
+			if(n.get().length() == 0){//if empty string
 				if(is_quoted_empty_string){
 					fi.write(utki::wrapBuf(quote));
 					fi.write(utki::wrapBuf(quote));
@@ -180,11 +180,11 @@ void write_internal(const puu::branches& roots, papki::File& fi, bool formatted,
 			}else{
 				ASSERT(num_escapes == 0)
 				fi.write(utki::Buf<std::uint8_t>(
-						const_cast<std::uint8_t*>(reinterpret_cast<const std::uint8_t*>(n.leaf().c_str())),
+						const_cast<std::uint8_t*>(reinterpret_cast<const std::uint8_t*>(n.get().c_str())),
 						length
 					));
-                ASSERT(n.leaf().length() != 0)
-				if(n.size() == 0 && length == 1 && n.leaf()[0] == 'R'){
+                ASSERT(n.get().length() != 0)
+				if(n.size() == 0 && length == 1 && n.get()[0] == 'R'){
 					fi.write(utki::wrapBuf(space));
 				}
 			}
@@ -196,7 +196,7 @@ void write_internal(const puu::branches& roots, papki::File& fi, bool formatted,
 				fi.write(utki::wrapBuf(newLine));
 			}
             //TODO: use length calculated above?
-			prev_was_unquoted_without_children = (unqouted && n.leaf().length() != 0);
+			prev_was_unquoted_without_children = (unqouted && n.get().length() != 0);
 			continue;
 		}else{
 			prev_was_unquoted_without_children = false;
@@ -205,21 +205,21 @@ void write_internal(const puu::branches& roots, papki::File& fi, bool formatted,
 		if(!formatted){
 			fi.write(utki::wrapBuf(lcurly));
 
-			write_internal(n.branches(), fi, false, 0);
+			write_internal(n.children(), fi, false, 0);
 
 			fi.write(utki::wrapBuf(rcurly));
 		}else{
-			if(n.size() == 1 && n.branches()[0].size() == 0){
+			if(n.size() == 1 && n.children()[0].size() == 0){
 				//if only one child and that child has no children
 
 				fi.write(utki::wrapBuf(lcurly));
-				write_internal(n.branches(), fi, false, 0);
+				write_internal(n.children(), fi, false, 0);
 				fi.write(utki::wrapBuf(rcurly));
 				fi.write(utki::wrapBuf(newLine));
 			}else{
 				fi.write(utki::wrapBuf(lcurly));
 				fi.write(utki::wrapBuf(newLine));
-				write_internal(n.branches(), fi, true, indentation + 1);
+				write_internal(n.children(), fi, true, indentation + 1);
 
 				//indent
 				for(unsigned i = 0; i != indentation; ++i){
