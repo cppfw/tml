@@ -20,7 +20,7 @@ int main(int argc, char** argv){
 	for(auto& f : in_files){
 		papki::FSFile fi(f);
 
-		auto roots = puu::grow(fi);
+		auto roots = puu::read(fi);
 
 		papki::MemoryFile outfi;
 

@@ -7,7 +7,7 @@
 using namespace puu;
 
 
-branches puu::grow(const papki::File& fi){
+branches puu::read(const papki::File& fi){
 	class the_listener : public puu::listener{
 		std::stack<branches> stack;
 

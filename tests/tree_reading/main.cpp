@@ -8,7 +8,7 @@
 void test_puu_basic_parsing(){
 	papki::FSFile fi("test.puu");
 
-	auto roots = puu::grow(fi);
+	auto roots = puu::read(fi);
 
 	auto i = roots.begin();
 
