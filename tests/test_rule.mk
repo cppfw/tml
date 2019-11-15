@@ -7,7 +7,7 @@ endif
 
 define this_rules
 test:: $(prorab_this_name)
-$(.RECIPEPREFIX)@myci-running-test.sh $$^...
+$(.RECIPEPREFIX)@myci-running-test.sh $$(notdir $$(abspath $$(dir $$^)))...
 $(.RECIPEPREFIX)$(Q)$(this_test_cmd)
 $(.RECIPEPREFIX)@myci-passed.sh
 endef

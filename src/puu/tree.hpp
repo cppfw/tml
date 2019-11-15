@@ -11,7 +11,22 @@
 //TODO: doxygen
 namespace puu{
 
-typedef utki::tree<std::string> branch;
+class leaf : public std::string{
+public:
+    leaf(const std::string& str) :
+            std::string(str)
+    {}
+
+    leaf(std::string&& str) :
+            std::string(std::move(str))
+    {}
+
+    // TODO: add methods to get as int etc.
+
+    // TODO: add set methods
+};
+
+typedef utki::tree<leaf> branch;
 typedef branch::container_type branches;
 
 branches read(const papki::File& fi);
@@ -32,17 +47,22 @@ public:
     crawler(branches& b) :
             b(b),
             i(b.begin())
-    {}
+    {
+        if(b.size() == 0){
+            throw puu::not_found_exception("crawler::crawler() failed, reached end of node list");
+        }
+    }
 
-    branch& operator*()noexcept{
+    branch& get()noexcept{
+        ASSERT(this->i != this->b.end())
         return *this->i;
     }
 
-    branches::iterator operator->()noexcept{
-        return this->i;
-    }
+    crawler& to(const std::string& str);
 
-    crawler find(const std::string& str);
+    crawler& next();
+
+    crawler up();
 };
 
 }

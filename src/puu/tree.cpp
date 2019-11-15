@@ -27,7 +27,7 @@ branches puu::read(const papki::File& fi){
 		}
 
 		void on_string_parsed(const utki::Buf<char> str)override{
-			this->cur_branches.push_back(std::string(str.begin(), str.size()));
+			this->cur_branches.emplace_back(std::string(str.begin(), str.size()));
 		}
 	} listener;
 
@@ -234,4 +234,29 @@ void puu::write(const puu::branches& roots, papki::File& fi, bool formatted){
     papki::File::Guard fileGuard(fi, papki::File::E_Mode::CREATE);
 
     write_internal(roots, fi, formatted, 0);
+}
+
+crawler crawler::up(){
+	ASSERT(this->i != this->b.end())
+	if(this->get().children.size() == 0){
+		throw puu::not_found_exception("crawler::up() failed, node has no children");
+	}
+	return crawler(this->get().children);
+}
+
+crawler& crawler::next(){
+	ASSERT(this->i != this->b.end())
+	++this->i;
+	if(this->i == this->b.end()){
+		throw puu::not_found_exception("crawler::next() failed, reached end of node list");
+	}
+	return *this;
+}
+
+crawler& crawler::to(const std::string& str){
+	this->i = std::find(this->i, this->b.end(), str);
+	if(this->i != this->b.end()){
+		return *this;
+	}
+	throw puu::not_found_exception("crawler::to() failed, reached end of node list");
 }

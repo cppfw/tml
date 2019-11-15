@@ -33,6 +33,13 @@
             "problemMatcher": []
         },
         {
+            "label": "test crawler",
+            "type": "shell",
+            "command": "make -C tests/crawler test --no-print-directory",
+            "dependsOn": "build",
+            "problemMatcher": []
+        },
+        {
             "label": "clean",
             "type": "shell",
             "command": "make clean",
