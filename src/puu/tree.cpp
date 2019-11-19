@@ -3,6 +3,7 @@
 #include "parser.hpp"
 
 #include <stack>
+#include <cinttypes>
 
 using namespace puu;
 
@@ -259,4 +260,28 @@ crawler& crawler::to(const std::string& str){
 		return *this;
 	}
 	throw puu::not_found_exception("crawler::to() failed, reached end of node list");
+}
+
+namespace{
+std::string make_string_from_int32(int32_t value){
+	char buf[64];
+
+	int res = snprintf(buf, sizeof(buf), "%" PRIi32, value);
+
+	if(0 <= res && res <= int(sizeof(buf))){
+		return std::string(buf, res);
+	}
+	return std::string();
+}
+}
+
+leaf::leaf(int32_t value) :
+		std::string(make_string_from_int32(value))
+{}
+
+int32_t leaf::as_int32()const{
+	if(this->length() == 0){
+		return 0;
+	}
+	return int32_t(strtol(this->c_str(), nullptr, 0));
 }

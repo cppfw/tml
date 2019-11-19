@@ -26,9 +26,27 @@ public:
         return *this;
     }
 
-    // TODO: add methods to get as int etc.
+    leaf(int32_t value);
+    int32_t as_int32()const;
 
-    // TODO: add set methods
+    //TODO: implement
+    leaf(uint32_t value);
+    uint32_t as_uint32()const;
+
+    leaf(int64_t value);
+    int64_t as_int64()const;
+
+    leaf(uint64_t value);
+    uint64_t as_uint64()const;
+
+    leaf(float value);
+    float as_float()const;
+
+    leaf(double value);
+    double as_double()const;
+
+    leaf(bool value);
+    bool as_bool()const;
 };
 
 typedef utki::tree<leaf> branch;
