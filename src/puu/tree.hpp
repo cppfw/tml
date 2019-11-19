@@ -21,6 +21,11 @@ public:
             std::string(std::move(str))
     {}
 
+    leaf& operator=(const std::string& str){
+        this->std::string::operator=(str);
+        return *this;
+    }
+
     // TODO: add methods to get as int etc.
 
     // TODO: add set methods
@@ -53,16 +58,51 @@ public:
         }
     }
 
+    crawler(const branches& b) :
+            crawler(const_cast<branches&>(b))
+    {}
+
     branch& get()noexcept{
+        ASSERT(this->i != this->b.end())
+        return *this->i;
+    }
+
+    const branch& get()const noexcept{
         ASSERT(this->i != this->b.end())
         return *this->i;
     }
 
     crawler& to(const std::string& str);
 
+    const crawler& to(const std::string& str)const{
+        return const_cast<crawler*>(this)->to(str);
+    }
+
+    template <class Predicate> crawler& to_if(Predicate p){
+        this->i = std::find_if(this->i, this->b.end(), p);
+        if(this->i != this->b.end()){
+            return *this;
+        }
+        throw puu::not_found_exception("crawler::to() failed, reached end of node list");
+    }
+
+    template <class Predicate> const crawler& to_if(Predicate p)const{
+        return const_cast<crawler*>(this)->to_if(p);
+    }
+
     crawler& next();
 
+    const crawler& next()const{
+        return const_cast<crawler*>(this)->next();
+    }
+
     crawler up();
+
+    const crawler up()const{
+        return const_cast<crawler*>(this)->up();
+    }
 };
+
+typedef const crawler const_crawler;
 
 }
