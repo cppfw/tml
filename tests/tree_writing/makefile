@@ -42,8 +42,6 @@ define this_rules
 test:: $(prorab_this_name)
 $(.RECIPEPREFIX)@myci-running-test.sh $(notdir $(abspath $(d)))...
 $(.RECIPEPREFIX)$(Q)for f in $(shell ls $(d)samples/*.puu); do \
-                    $(call this_test_cmd, $$$$f -f) > $(d)a.txt; \
-                    echo a.txt = ; cat $(d)a.txt ; xxd $(d)a.txt ; \
                     $(call this_test_cmd, $$$$f -f) | cmp --print-bytes $$$$f.formatted && \
                     $(call this_test_cmd, $$$$f) | cmp --print-bytes $$$$f.unformatted; \
                 done
