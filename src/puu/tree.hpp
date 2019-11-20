@@ -11,42 +11,66 @@
 //TODO: doxygen
 namespace puu{
 
-class leaf : public std::string{
+class leaf{
+    std::string string;
 public:
+    leaf() = default;
+    leaf(const leaf&) = default;
+    leaf(leaf&&) = default;
+    leaf& operator=(const leaf&) = default;
+
     leaf(const std::string& str) :
-            std::string(str)
+            string(str)
     {}
 
     leaf(std::string&& str) :
-            std::string(std::move(str))
+            string(std::move(str))
     {}
 
-    leaf& operator=(const std::string& str){
-        this->std::string::operator=(str);
-        return *this;
+    bool operator==(const char* str)const{
+        return this->string == str;
     }
 
-    leaf(int32_t value);
-    int32_t as_int32()const;
+    bool operator==(const std::string& str)const{
+        return this->string == str;
+    }
+
+    bool operator==(const leaf& l)const{
+        return this->string == l.string;
+    }
+
+    std::string& str()noexcept{
+        return this->string;
+    }
+
+    const std::string& str()const noexcept{
+        return this->string;
+    }
+
+    explicit leaf(int32_t value);
+    int32_t to_int32()const;
 
     //TODO: implement
-    leaf(uint32_t value);
-    uint32_t as_uint32()const;
+    explicit leaf(uint32_t value);
+    uint32_t to_uint32()const;
 
-    leaf(int64_t value);
-    int64_t as_int64()const;
+    explicit leaf(int64_t value);
+    int64_t to_int64()const;
 
-    leaf(uint64_t value);
-    uint64_t as_uint64()const;
+    explicit leaf(uint64_t value);
+    uint64_t to_uint64()const;
 
-    leaf(float value);
-    float as_float()const;
+    explicit leaf(float value);
+    float to_float()const;
 
-    leaf(double value);
-    double as_double()const;
+    explicit leaf(double value);
+    double to_double()const;
 
-    leaf(bool value);
-    bool as_bool()const;
+    explicit leaf(long double value);
+    double to_long_double()const;
+
+    explicit leaf(bool value);
+    bool to_bool()const;
 };
 
 typedef utki::tree<leaf> branch;

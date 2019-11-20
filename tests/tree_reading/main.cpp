@@ -17,12 +17,12 @@ void test_puu_basic_parsing(){
 
 	++i;
 	ASSERT_ALWAYS(i != roots.end())
-	ASSERT_INFO_ALWAYS(i->value == "test string", i->value)
+	ASSERT_INFO_ALWAYS(i->value == "test string", i->value.str())
 	ASSERT_ALWAYS(i->children.size() == 0)
 
 	++i;
 	ASSERT_ALWAYS(i != roots.end())
-	ASSERT_INFO_ALWAYS(i->value == "anot/her string", i->value)
+	ASSERT_INFO_ALWAYS(i->value == "anot/her string", i->value.str())
 	ASSERT_ALWAYS(i->children.size() == 0)
 
 	++i;
@@ -47,47 +47,47 @@ void test_puu_basic_parsing(){
 
 	++i;
 	ASSERT_ALWAYS(i != roots.end())
-	ASSERT_INFO_ALWAYS(i->value == "string_interrupted", i->value)
+	ASSERT_INFO_ALWAYS(i->value == "string_interrupted", i->value.str())
 	ASSERT_ALWAYS(i->children.size() == 0)
 
 	++i;
 	ASSERT_ALWAYS(i != roots.end())
-	ASSERT_INFO_ALWAYS(i->value == "_by_comment", i->value)
+	ASSERT_INFO_ALWAYS(i->value == "_by_comment", i->value.str())
 	ASSERT_ALWAYS(i->children.size() == 0)
 
 	++i;
 	ASSERT_ALWAYS(i != roots.end())
-	ASSERT_INFO_ALWAYS(i->value == "string_broken", i->value)
+	ASSERT_INFO_ALWAYS(i->value == "string_broken", i->value.str())
 	ASSERT_ALWAYS(i->children.size() == 0)
 
 	++i;
 	ASSERT_ALWAYS(i != roots.end())
-	ASSERT_INFO_ALWAYS(i->value == "_by_comment", i->value)
+	ASSERT_INFO_ALWAYS(i->value == "_by_comment", i->value.str())
 	ASSERT_ALWAYS(i->children.size() == 0)
 
 	++i;
 	ASSERT_ALWAYS(i != roots.end())
 	ASSERT_ALWAYS(i->value == "")
-	ASSERT_ALWAYS(i->value.length() == 0)
-	ASSERT_INFO_ALWAYS(i->children.size() == 0, i->children.front().value)
+	ASSERT_ALWAYS(i->value.str().length() == 0)
+	ASSERT_INFO_ALWAYS(i->children.size() == 0, i->children.front().value.str())
 
 	++i;
 	ASSERT_ALWAYS(i != roots.end())
 	ASSERT_ALWAYS(i->value == "")
-	ASSERT_ALWAYS(i->value.length() == 0)
+	ASSERT_ALWAYS(i->value.str().length() == 0)
 	ASSERT_ALWAYS(i->children.size() == 2)
 	{
 		auto& b = i->children;
 		auto ci = b.begin();
 		ASSERT_ALWAYS(ci != b.end())
 		ASSERT_ALWAYS(ci->value == "")
-		ASSERT_ALWAYS(ci->value.length() == 0)
+		ASSERT_ALWAYS(ci->value.str().length() == 0)
 		ASSERT_ALWAYS(ci->children.size() == 0)
 
 		++ci;
 		ASSERT_ALWAYS(ci != b.end())
 		ASSERT_ALWAYS(ci->value == "")
-		ASSERT_ALWAYS(ci->value.length() == 0)
+		ASSERT_ALWAYS(ci->value.str().length() == 0)
 		ASSERT_ALWAYS(ci->children.size() == 0)
 
 		++ci;
