@@ -262,6 +262,14 @@ crawler& crawler::to(const std::string& str){
 	throw puu::not_found_exception("crawler::to() failed, reached end of node list");
 }
 
+leaf::leaf(bool value) :
+		string(value ? "true" : "false")
+{}
+
+bool leaf::to_bool()const{
+	return this->str() == "true";
+}
+
 leaf::leaf(int32_t value) :
 		string([](int32_t value) -> std::string{
 			char buf[64];
@@ -276,17 +284,41 @@ leaf::leaf(int32_t value) :
 {}
 
 int32_t leaf::to_int32()const{
-	if(this->str().length() == 0){
-		return 0;
-	}
 	return int32_t(strtol(this->str().c_str(), nullptr, 0));
 }
 
-leaf::leaf(uint32_t value) :
-		string([](int32_t value) -> std::string{
+leaf::leaf(uint32_t value, std::ios_base&(*base)(std::ios_base&)) :
+		string([](int32_t value, std::ios_base&(*base)(std::ios_base&)) -> std::string{
 			char buf[64];
 
-			int res = snprintf(buf, sizeof(buf), "%" PRIu32, value);
+			const char* format;
+			if(base == std::oct){
+				format = "0%" PRIo32;
+			}else if(base == std::hex){
+				format = "0x%" PRIx32;
+			}else{ // std::dec
+				format = "%" PRIu32;
+			}
+
+			int res = snprintf(buf, sizeof(buf), format, value);
+
+			if(0 <= res && res <= int(sizeof(buf))){
+				return std::string(buf, res);
+			}
+			return std::string();
+		}(value, base))
+{}
+
+uint32_t leaf::to_uint32()const{
+	return uint32_t(strtoul(this->str().c_str(), nullptr, 0));
+}
+
+
+leaf::leaf(int64_t value) :
+		string([](int64_t value) -> std::string{
+			char buf[64];
+
+			int res = snprintf(buf, sizeof(buf), "%" PRIi64, value);
 
 			if(0 <= res && res <= int(sizeof(buf))){
 				return std::string(buf, res);
@@ -295,9 +327,50 @@ leaf::leaf(uint32_t value) :
 		}(value))
 {}
 
-uint32_t leaf::to_uint32()const{
-	if(this->str().length() == 0){
-		return 0;
-	}
-	return std::uint32_t(strtoul(this->str().c_str(), nullptr, 0));
+int64_t leaf::to_int64()const{
+	return int64_t(strtoll(this->str().c_str(), nullptr, 0));
+}
+
+leaf::leaf(uint64_t value, std::ios_base&(*base)(std::ios_base&)) :
+		string([](uint64_t value, std::ios_base&(*base)(std::ios_base&)) -> std::string{
+			char buf[64];
+
+			const char* format;
+			if(base == std::oct){
+				format = "0%" PRIo64;
+			}else if(base == std::hex){
+				format = "0x%" PRIx64;
+			}else{ // std::dec
+				format = "%" PRIu64;
+			}
+
+			int res = snprintf(buf, sizeof(buf), format, value);
+
+			if(0 <= res && res <= int(sizeof(buf))){
+				return std::string(buf, res);
+			}
+			return std::string();
+		}(value, base))
+{}
+
+uint64_t leaf::to_uint64()const{
+	return uint64_t(strtoull(this->str().c_str(), nullptr, 0));
+}
+
+leaf::leaf(float value) :
+		string([](float value) -> std::string{
+			char buf[64];
+
+			int res = snprintf(buf, sizeof(buf), "%.8G", double(value));
+
+			if(res < 0 || res > int(sizeof(buf))){
+				return std::string();
+			}else{
+				return std::string(buf, res);
+			}
+		}(value))
+{}
+
+float leaf::to_float()const{
+	return strtof(this->str().c_str(), nullptr);
 }

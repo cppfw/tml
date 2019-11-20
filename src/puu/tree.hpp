@@ -19,6 +19,10 @@ public:
     leaf(leaf&&) = default;
     leaf& operator=(const leaf&) = default;
 
+    leaf(const char* str) :
+            string(str)
+    {}
+
     leaf(const std::string& str) :
             string(str)
     {}
@@ -47,19 +51,22 @@ public:
         return this->string;
     }
 
+    explicit leaf(bool value);
+    bool to_bool()const;
+
     explicit leaf(int32_t value);
     int32_t to_int32()const;
 
-    //TODO: implement
-    explicit leaf(uint32_t value);
+    explicit leaf(uint32_t value, std::ios_base&(*base)(std::ios_base&) = std::dec);
     uint32_t to_uint32()const;
 
     explicit leaf(int64_t value);
     int64_t to_int64()const;
 
-    explicit leaf(uint64_t value);
+    explicit leaf(uint64_t value, std::ios_base&(*base)(std::ios_base&) = std::dec);
     uint64_t to_uint64()const;
 
+//TODO: implement
     explicit leaf(float value);
     float to_float()const;
 
@@ -68,9 +75,6 @@ public:
 
     explicit leaf(long double value);
     double to_long_double()const;
-
-    explicit leaf(bool value);
-    bool to_bool()const;
 };
 
 typedef utki::tree<leaf> branch;
