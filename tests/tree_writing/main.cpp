@@ -17,10 +17,14 @@ int main(int argc, char** argv){
 
 	auto in_files = args.parse(argc, argv);
 
+//	TRACE(<< "num infiles = " << in_files.size() << std::endl)
+
 	for(auto& f : in_files){
 		papki::FSFile fi(f);
 
 		auto roots = puu::read(fi);
+
+//		TRACE(<< "num roots read = " << roots.size() << std::endl)
 
 		papki::MemoryFile outfi;
 
@@ -28,7 +32,9 @@ int main(int argc, char** argv){
 
 		auto data = outfi.resetData();
 
-		std::cout << reinterpret_cast<char*>(&*data.begin());
+		for(auto b : data){
+			std::cout << char(b);
+		}
 	}
 
 	return 0;

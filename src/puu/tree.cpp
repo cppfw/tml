@@ -138,6 +138,8 @@ void write_internal(const puu::branches& roots, papki::File& fi, bool formatted,
 
 		//write node value
 
+//		TRACE(<< "writing node: " << n.value.str() << std::endl)
+
 		unsigned num_escapes;
 		size_t length;
 		bool unqouted = can_string_be_unquoted(n.value.str().c_str(), length, num_escapes);
@@ -184,7 +186,7 @@ void write_internal(const puu::branches& roots, papki::File& fi, bool formatted,
 						const_cast<std::uint8_t*>(reinterpret_cast<const std::uint8_t*>(n.value.str().c_str())),
 						length
 					));
-                ASSERT(n.value.length() != 0)
+				ASSERT(n.value.str().length() != 0)
 				if(n.children.size() == 0 && length == 1 && n.value.str()[0] == 'R'){
 					fi.write(utki::wrapBuf(space));
 				}
