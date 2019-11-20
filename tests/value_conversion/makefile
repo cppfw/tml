@@ -31,7 +31,7 @@ $(eval $(prorab-build-app))
 
 include $(d)../test_rule.mk
 
-# add dependency on libpuu
+#add dependency on libpuu
 $(prorab_this_name): $(abspath $(d)../../src/libpuu$(soext))
 
 $(eval $(call prorab-try-include,$(d)../../src/makefile))

@@ -262,21 +262,17 @@ crawler& crawler::to(const std::string& str){
 	throw puu::not_found_exception("crawler::to() failed, reached end of node list");
 }
 
-namespace{
-std::string make_string_from_int32(int32_t value){
-	char buf[64];
-
-	int res = snprintf(buf, sizeof(buf), "%" PRIi32, value);
-
-	if(0 <= res && res <= int(sizeof(buf))){
-		return std::string(buf, res);
-	}
-	return std::string();
-}
-}
-
 leaf::leaf(int32_t value) :
-		string(make_string_from_int32(value))
+		string([](int32_t value) -> std::string{
+			char buf[64];
+
+			int res = snprintf(buf, sizeof(buf), "%" PRIi32, value);
+
+			if(0 <= res && res <= int(sizeof(buf))){
+				return std::string(buf, res);
+			}
+			return std::string();
+		}(value))
 {}
 
 int32_t leaf::to_int32()const{
@@ -284,4 +280,24 @@ int32_t leaf::to_int32()const{
 		return 0;
 	}
 	return int32_t(strtol(this->str().c_str(), nullptr, 0));
+}
+
+leaf::leaf(uint32_t value) :
+		string([](int32_t value) -> std::string{
+			char buf[64];
+
+			int res = snprintf(buf, sizeof(buf), "%" PRIu32, value);
+
+			if(0 <= res && res <= int(sizeof(buf))){
+				return std::string(buf, res);
+			}
+			return std::string();
+		}(value))
+{}
+
+uint32_t leaf::to_uint32()const{
+	if(this->str().length() == 0){
+		return 0;
+	}
+	return std::uint32_t(strtoul(this->str().c_str(), nullptr, 0));
 }
