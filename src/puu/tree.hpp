@@ -66,7 +66,6 @@ public:
     explicit leaf(uint64_t value, std::ios_base&(*base)(std::ios_base&) = std::dec);
     uint64_t to_uint64()const;
 
-//TODO: implement
     explicit leaf(float value);
     float to_float()const;
 
@@ -74,7 +73,7 @@ public:
     double to_double()const;
 
     explicit leaf(long double value);
-    double to_long_double()const;
+    long double to_long_double()const;
 };
 
 typedef utki::tree<leaf> branch;

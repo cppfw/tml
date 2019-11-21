@@ -1,5 +1,7 @@
 #include "../../src/puu/tree.hpp"
 
+#include <iomanip>
+
 #include <utki/debug.hpp>
 #include <papki/FSFile.hpp>
 
@@ -140,18 +142,48 @@ void test_puu_value_conversion(){
 
 	// float
 	{
-		puu::branches roots;
+		std::vector<float> samples = {{
+			3.14f,
+			13.0f,
+			-0.0f,
+			0.0f
+		}};
 
-		roots.emplace_back(puu::leaf(0.0f));
-		roots.emplace_back(puu::leaf(3.14f));
+		for(auto n : samples){
+			puu::leaf l(n);
+			ASSERT_ALWAYS(l.to_float() == n)
+		}
+	}
 
-		ASSERT_ALWAYS(roots.size() == 2)
+	// double
+	{
+		std::vector<double> samples = {{
+			3.14,
+			13.0,
+			-0.0,
+			0.0
+		}};
 
-		ASSERT_ALWAYS(roots[0].value.to_float() == 0)
+		for(auto n : samples){
+			puu::leaf l(n);
+			ASSERT_ALWAYS(l.to_double() == n)
+		}
+	}
 
-		ASSERT_ALWAYS(roots[1].value.to_float() == 3.14f)
+	// long double
+	{
+		std::vector<long double> samples = {{
+			3.14l,
+			13.0l,
+			-0.0l,
+			0.0l
+		}};
 
-		//TODO:
+		for(auto n : samples){
+			puu::leaf l(n);
+			// TRACE(<< "l.str() = " << l.str() << ", n = " << std::setprecision(31) << n << ", l.to_long_double() = " << l.to_long_double() << std::endl)
+			ASSERT_INFO_ALWAYS(l.to_long_double() == n, "l.str() = " << l.str() << ", n = " << n << ", l.to_long_double() = " << l.to_long_double())
+		}
 	}
 }
 

@@ -269,7 +269,7 @@ leaf::leaf(bool value) :
 {}
 
 bool leaf::to_bool()const{
-	return this->str() == "true";
+	return this->string == "true";
 }
 
 leaf::leaf(int32_t value) :
@@ -286,7 +286,7 @@ leaf::leaf(int32_t value) :
 {}
 
 int32_t leaf::to_int32()const{
-	return int32_t(strtol(this->str().c_str(), nullptr, 0));
+	return int32_t(strtol(this->string.c_str(), nullptr, 0));
 }
 
 leaf::leaf(uint32_t value, std::ios_base&(*base)(std::ios_base&)) :
@@ -312,7 +312,7 @@ leaf::leaf(uint32_t value, std::ios_base&(*base)(std::ios_base&)) :
 {}
 
 uint32_t leaf::to_uint32()const{
-	return uint32_t(strtoul(this->str().c_str(), nullptr, 0));
+	return uint32_t(strtoul(this->string.c_str(), nullptr, 0));
 }
 
 
@@ -330,7 +330,7 @@ leaf::leaf(int64_t value) :
 {}
 
 int64_t leaf::to_int64()const{
-	return int64_t(strtoll(this->str().c_str(), nullptr, 0));
+	return int64_t(strtoll(this->string.c_str(), nullptr, 0));
 }
 
 leaf::leaf(uint64_t value, std::ios_base&(*base)(std::ios_base&)) :
@@ -356,7 +356,7 @@ leaf::leaf(uint64_t value, std::ios_base&(*base)(std::ios_base&)) :
 {}
 
 uint64_t leaf::to_uint64()const{
-	return uint64_t(strtoull(this->str().c_str(), nullptr, 0));
+	return uint64_t(strtoull(this->string.c_str(), nullptr, 0));
 }
 
 leaf::leaf(float value) :
@@ -374,5 +374,42 @@ leaf::leaf(float value) :
 {}
 
 float leaf::to_float()const{
-	return strtof(this->str().c_str(), nullptr);
+	return strtof(this->string.c_str(), nullptr);
+}
+
+
+leaf::leaf(double value) :
+		string([](double value) -> std::string{
+			char buf[64];
+
+			int res = snprintf(buf, sizeof(buf), "%.17G", value);
+
+			if(res < 0 || res > int(sizeof(buf))){
+				return std::string();
+			}else{
+				return std::string(buf, res);
+			}
+		}(value))
+{}
+
+double leaf::to_double()const{
+	return strtod(this->string.c_str(), nullptr);
+}
+
+leaf::leaf(long double value) :
+		string([](long double value) -> std::string{
+			char buf[128];
+
+			int res = snprintf(buf, sizeof(buf), "%.31LG", value);
+
+			if(res < 0 || res > int(sizeof(buf))){
+				return std::string();
+			}else{
+				return std::string(buf, res);
+			}
+		}(value))
+{}
+
+long double leaf::to_long_double()const{
+	return strtold(this->string.c_str(), nullptr);
 }
