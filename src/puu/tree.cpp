@@ -138,24 +138,24 @@ void write_internal(const puu::branches& roots, papki::File& fi, bool formatted,
 
 		//write node value
 
-//		TRACE(<< "writing node: " << n.value.str() << std::endl)
+//		TRACE(<< "writing node: " << n.value.c_str() << std::endl)
 
 		unsigned num_escapes;
 		size_t length;
-		bool unqouted = can_string_be_unquoted(n.value.str().c_str(), length, num_escapes);
+		bool unqouted = can_string_be_unquoted(n.value.c_str(), length, num_escapes);
 
 		if(!unqouted){
 			fi.write(utki::wrapBuf(quote));
 
 			if(num_escapes == 0){
 				fi.write(utki::Buf<uint8_t>(
-						const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(n.value.str().c_str())),
+						const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(n.value.c_str())),
 						length
 					));
 			}else{
 				std::vector<uint8_t> buf(length + num_escapes);
 
-				make_escaped_string(n.value.str().c_str(), utki::wrapBuf(buf));
+				make_escaped_string(n.value.c_str(), utki::wrapBuf(buf));
 
 				fi.write(utki::wrapBuf(buf));
 			}
@@ -183,11 +183,11 @@ void write_internal(const puu::branches& roots, papki::File& fi, bool formatted,
 			}else{
 				ASSERT(num_escapes == 0)
 				fi.write(utki::Buf<std::uint8_t>(
-						const_cast<std::uint8_t*>(reinterpret_cast<const std::uint8_t*>(n.value.str().c_str())),
+						const_cast<std::uint8_t*>(reinterpret_cast<const std::uint8_t*>(n.value.c_str())),
 						length
 					));
-				ASSERT(n.value.str().length() != 0)
-				if(n.children.size() == 0 && length == 1 && n.value.str()[0] == 'R'){
+				ASSERT(n.value.to_string().length() != 0)
+				if(n.children.size() == 0 && length == 1 && n.value.c_str()[0] == 'R'){
 					fi.write(utki::wrapBuf(space));
 				}
 			}

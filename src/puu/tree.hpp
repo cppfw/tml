@@ -43,36 +43,32 @@ public:
         return this->string == l.string;
     }
 
-    std::string& str()noexcept{
-        return this->string;
+    const char* c_str()const noexcept{
+        return this->string.c_str();
     }
 
-    const std::string& str()const noexcept{
+    const std::string& to_string()const noexcept{
         return this->string;
     }
 
     explicit leaf(bool value);
-    bool to_bool()const;
+    explicit leaf(signed char value);
 
     explicit leaf(int32_t value);
-    int32_t to_int32()const;
-
     explicit leaf(uint32_t value, std::ios_base&(*base)(std::ios_base&) = std::dec);
-    uint32_t to_uint32()const;
-
     explicit leaf(int64_t value);
-    int64_t to_int64()const;
-
     explicit leaf(uint64_t value, std::ios_base&(*base)(std::ios_base&) = std::dec);
-    uint64_t to_uint64()const;
-
     explicit leaf(float value);
-    float to_float()const;
-
     explicit leaf(double value);
-    double to_double()const;
-
     explicit leaf(long double value);
+
+    bool to_bool()const;
+    int32_t to_int32()const;
+    uint32_t to_uint32()const;
+    int64_t to_int64()const;
+    uint64_t to_uint64()const;
+    float to_float()const;
+    double to_double()const;
     long double to_long_double()const;
 };
 

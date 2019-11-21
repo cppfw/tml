@@ -18,11 +18,11 @@ void test_puu_value_conversion(){
 		roots.emplace_back(puu::leaf("qwerfqwef"));
 
 		ASSERT_ALWAYS(roots.size() == 4)
-		ASSERT_ALWAYS(roots[0].value.str() == "true")
+		ASSERT_ALWAYS(roots[0].value.to_string() == "true")
 		ASSERT_ALWAYS(roots[0].value.to_bool() == true)
-		ASSERT_ALWAYS(roots[1].value.str() == "false")
+		ASSERT_ALWAYS(roots[1].value.to_string() == "false")
 		ASSERT_ALWAYS(roots[1].value.to_bool() == false)
-		ASSERT_INFO_ALWAYS(roots[2].value.to_bool() == false, roots[2].value.str())
+		ASSERT_INFO_ALWAYS(roots[2].value.to_bool() == false, roots[2].value.to_string())
 		ASSERT_ALWAYS(roots[3].value.to_bool() == false)
 	}
 
@@ -35,11 +35,11 @@ void test_puu_value_conversion(){
 		roots.emplace_back(puu::leaf());
 
 		ASSERT_ALWAYS(roots.size() == 3)
-		ASSERT_ALWAYS(roots[0].value.str() == "-13")
+		ASSERT_ALWAYS(roots[0].value.to_string() == "-13")
 		ASSERT_ALWAYS(roots[0].value.to_int32() == -13)
-		ASSERT_ALWAYS(roots[1].value.str() == "13")
+		ASSERT_ALWAYS(roots[1].value.to_string() == "13")
 		ASSERT_ALWAYS(roots[1].value.to_int32() == 13)
-		ASSERT_ALWAYS(roots[2].value.str().length() == 0)
+		ASSERT_ALWAYS(roots[2].value.to_string().length() == 0)
 		ASSERT_ALWAYS(roots[2].value.to_int32() == 0)
 	}
 
@@ -58,28 +58,28 @@ void test_puu_value_conversion(){
 
 		ASSERT_ALWAYS(roots.size() == 8)
 
-		ASSERT_INFO_ALWAYS(roots[0].value.str() == "4294967295", roots[0].value.str())
+		ASSERT_INFO_ALWAYS(roots[0].value.to_string() == "4294967295", roots[0].value.to_string())
 		ASSERT_ALWAYS(roots[0].value.to_uint32() == 0xffffffffu)
 
-		ASSERT_ALWAYS(roots[1].value.str().length() == 0)
+		ASSERT_ALWAYS(roots[1].value.to_string().length() == 0)
 		ASSERT_ALWAYS(roots[1].value.to_uint32() == 0)
 
-		ASSERT_INFO_ALWAYS(roots[2].value.str() == "0x8d", roots[2].value.str())
+		ASSERT_INFO_ALWAYS(roots[2].value.to_string() == "0x8d", roots[2].value.to_string())
 		ASSERT_ALWAYS(roots[2].value.to_uint32() == 0x8d)
 
-		ASSERT_ALWAYS(roots[3].value.str() == "0xffffffff")
+		ASSERT_ALWAYS(roots[3].value.to_string() == "0xffffffff")
 		ASSERT_ALWAYS(roots[3].value.to_uint32() == 0xffffffff)
 
-		ASSERT_INFO_ALWAYS(roots[4].value.str() == "0x0", roots[4].value.str())
+		ASSERT_INFO_ALWAYS(roots[4].value.to_string() == "0x0", roots[4].value.to_string())
 		ASSERT_ALWAYS(roots[4].value.to_uint32() == 0)
 
-		ASSERT_INFO_ALWAYS(roots[5].value.str() == "074", roots[5].value.str())
+		ASSERT_INFO_ALWAYS(roots[5].value.to_string() == "074", roots[5].value.to_string())
 		ASSERT_ALWAYS(roots[5].value.to_uint32() == 074)
 
-		ASSERT_INFO_ALWAYS(roots[6].value.str() == "037777777777", roots[6].value.str())
+		ASSERT_INFO_ALWAYS(roots[6].value.to_string() == "037777777777", roots[6].value.to_string())
 		ASSERT_ALWAYS(roots[6].value.to_uint32() == 037777777777)
 
-		ASSERT_INFO_ALWAYS(roots[7].value.str() == "00", roots[7].value.str())
+		ASSERT_INFO_ALWAYS(roots[7].value.to_string() == "00", roots[7].value.to_string())
 		ASSERT_ALWAYS(roots[7].value.to_uint32() == 0)
 	}
 
@@ -92,11 +92,11 @@ void test_puu_value_conversion(){
 		roots.emplace_back(puu::leaf());
 
 		ASSERT_ALWAYS(roots.size() == 3)
-		ASSERT_ALWAYS(roots[0].value.str() == "-13")
+		ASSERT_ALWAYS(roots[0].value.to_string() == "-13")
 		ASSERT_ALWAYS(roots[0].value.to_int64() == -13)
-		ASSERT_ALWAYS(roots[1].value.str() == "13")
+		ASSERT_ALWAYS(roots[1].value.to_string() == "13")
 		ASSERT_ALWAYS(roots[1].value.to_int64() == 13)
-		ASSERT_ALWAYS(roots[2].value.str().length() == 0)
+		ASSERT_ALWAYS(roots[2].value.to_string().length() == 0)
 		ASSERT_ALWAYS(roots[2].value.to_int64() == 0)
 	}
 
@@ -115,28 +115,28 @@ void test_puu_value_conversion(){
 
 		ASSERT_ALWAYS(roots.size() == 8)
 
-		ASSERT_INFO_ALWAYS(roots[0].value.str() == "18446744073709551615", roots[0].value.str())
+		ASSERT_INFO_ALWAYS(roots[0].value.to_string() == "18446744073709551615", roots[0].value.to_string())
 		ASSERT_ALWAYS(roots[0].value.to_uint64() == 0xfffffffffffffffful)
 
-		ASSERT_ALWAYS(roots[1].value.str().length() == 0)
+		ASSERT_ALWAYS(roots[1].value.to_string().length() == 0)
 		ASSERT_ALWAYS(roots[1].value.to_uint64() == 0)
 
-		ASSERT_INFO_ALWAYS(roots[2].value.str() == "0x8d", roots[2].value.str())
+		ASSERT_INFO_ALWAYS(roots[2].value.to_string() == "0x8d", roots[2].value.to_string())
 		ASSERT_ALWAYS(roots[2].value.to_uint64() == 0x8d)
 
-		ASSERT_ALWAYS(roots[3].value.str() == "0xffffffffffffffff")
+		ASSERT_ALWAYS(roots[3].value.to_string() == "0xffffffffffffffff")
 		ASSERT_ALWAYS(roots[3].value.to_uint64() == 0xffffffffffffffff)
 
-		ASSERT_INFO_ALWAYS(roots[4].value.str() == "0x0", roots[4].value.str())
+		ASSERT_INFO_ALWAYS(roots[4].value.to_string() == "0x0", roots[4].value.to_string())
 		ASSERT_ALWAYS(roots[4].value.to_uint64() == 0)
 
-		ASSERT_INFO_ALWAYS(roots[5].value.str() == "074", roots[5].value.str())
+		ASSERT_INFO_ALWAYS(roots[5].value.to_string() == "074", roots[5].value.to_string())
 		ASSERT_ALWAYS(roots[5].value.to_uint64() == 074)
 
-		ASSERT_INFO_ALWAYS(roots[6].value.str() == "01777777777777777777777", roots[6].value.str())
+		ASSERT_INFO_ALWAYS(roots[6].value.to_string() == "01777777777777777777777", roots[6].value.to_string())
 		ASSERT_ALWAYS(roots[6].value.to_uint64() == ~0ul)
 
-		ASSERT_INFO_ALWAYS(roots[7].value.str() == "00", roots[7].value.str())
+		ASSERT_INFO_ALWAYS(roots[7].value.to_string() == "00", roots[7].value.to_string())
 		ASSERT_ALWAYS(roots[7].value.to_uint64() == 0)
 	}
 
@@ -181,8 +181,8 @@ void test_puu_value_conversion(){
 
 		for(auto n : samples){
 			puu::leaf l(n);
-			// TRACE(<< "l.str() = " << l.str() << ", n = " << std::setprecision(31) << n << ", l.to_long_double() = " << l.to_long_double() << std::endl)
-			ASSERT_INFO_ALWAYS(l.to_long_double() == n, "l.str() = " << l.str() << ", n = " << n << ", l.to_long_double() = " << l.to_long_double())
+			// TRACE(<< "l.to_string() = " << l.to_string() << ", n = " << std::setprecision(31) << n << ", l.to_long_double() = " << l.to_long_double() << std::endl)
+			ASSERT_INFO_ALWAYS(l.to_long_double() == n, "l.to_string() = " << l.to_string() << ", n = " << n << ", l.to_long_double() = " << l.to_long_double())
 		}
 	}
 }
