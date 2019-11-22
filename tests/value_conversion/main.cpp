@@ -48,13 +48,13 @@ template <class test_type> void test_uint(){
 	typedef sample_template<test_type> sample;
 
 	std::vector<sample> samples = {{
-		sample{puu::leaf(), "", 0},
+		sample{puu::leaf(), "", 0}, // 0
 
 		sample{puu::leaf(uint8_t(0x8d)), "141", test_type(0x8d)},
 		sample{puu::leaf(uint16_t(0x8d)), "141", test_type(0x8d)},
 		sample{puu::leaf(uint32_t(0x8d)), "141", test_type(0x8d)},
 		sample{puu::leaf(uint64_t(0x8d)), "141", test_type(0x8d)},
-		sample{puu::leaf(0x8d), "141", test_type(0x8d)},
+		sample{puu::leaf(0x8d), "141", test_type(0x8d)}, // 5
 		sample{puu::leaf(0x8du), "141", test_type(0x8d)},
 		sample{puu::leaf(0x8dul), "141", test_type(0x8d)},
 		sample{puu::leaf(0x8dull), "141", test_type(0x8d)},
@@ -64,12 +64,12 @@ template <class test_type> void test_uint(){
 		// sample{puu::leaf(~0ull), "", test_type(~0)},
 		sample{puu::leaf(13.34f), "13.34", 13},
 
-		sample{puu::leaf(uint8_t(074), std::oct), "074", test_type(074)},
+		sample{puu::leaf(uint8_t(074), std::oct), "074", test_type(074)}, // 10
 		sample{puu::leaf(uint16_t(074), std::oct), "074", test_type(074)},
 		sample{puu::leaf(uint32_t(074), std::oct), "074", test_type(074)},
 		sample{puu::leaf(uint64_t(074), std::oct), "074", test_type(074)},
 		sample{puu::leaf(074u, std::oct), "074", test_type(074)},
-		sample{puu::leaf(074ul, std::oct), "074", test_type(074)},
+		sample{puu::leaf(074ul, std::oct), "074", test_type(074)}, // 15
 		sample{puu::leaf(074ull, std::oct), "074", test_type(074)},
 
 		// sample{puu::leaf(~0u, std::oct), "", test_type(~0)},
@@ -92,7 +92,21 @@ template <class test_type> void test_uint(){
 	for(auto& s: samples){
 		auto value = s.leaf.to_uint32();
 		if(s.expected_string.length() != 0){
-			ASSERT_INFO_ALWAYS(s.leaf.to_string() == s.expected_string, "to_string() = " << s.leaf.to_string() << ", expected = " << s.expected_string)
+			ASSERT_INFO_ALWAYS(
+					s.leaf.to_string() == s.expected_string,
+					"to_string() = " << s.leaf.to_string() <<
+					", expected = " << s.expected_string <<
+					", index = " << std::distance(
+							samples.begin(),
+							std::find_if(
+									samples.begin(),
+									samples.end(),
+									[&s](const sample& smp) -> bool {
+										return &s == &smp;
+									}
+								)
+						)
+				)
 		}
 		ASSERT_INFO_ALWAYS(value == s.expected_value, "to_string() = " << s.leaf.to_string() << ", value = " << value << ", expected_value = " << s.expected_value)
 	}
