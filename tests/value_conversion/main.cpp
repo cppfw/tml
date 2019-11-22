@@ -48,13 +48,13 @@ template <class test_type> void test_uint(){
 	typedef sample_template<test_type> sample;
 
 	std::vector<sample> samples = {{
-		sample{puu::leaf(), "", 0}, // 0
+		// sample{puu::leaf(), "", 0},
 
 		sample{puu::leaf(uint8_t(0x8d)), "141", test_type(0x8d)},
 		sample{puu::leaf(uint16_t(0x8d)), "141", test_type(0x8d)},
 		sample{puu::leaf(uint32_t(0x8d)), "141", test_type(0x8d)},
 		sample{puu::leaf(uint64_t(0x8d)), "141", test_type(0x8d)},
-		sample{puu::leaf(0x8d), "141", test_type(0x8d)}, // 5
+		sample{puu::leaf(0x8d), "141", test_type(0x8d)},
 		sample{puu::leaf(0x8du), "141", test_type(0x8d)},
 		sample{puu::leaf(0x8dul), "141", test_type(0x8d)},
 		sample{puu::leaf(0x8dull), "141", test_type(0x8d)},
@@ -64,12 +64,12 @@ template <class test_type> void test_uint(){
 		// sample{puu::leaf(~0ull), "", test_type(~0)},
 		sample{puu::leaf(13.34f), "13.34", 13},
 
-		sample{puu::leaf(uint8_t(074), std::oct), "074", test_type(074)}, // 10
+		sample{puu::leaf(uint8_t(074), std::oct), "074", test_type(074)},
 		sample{puu::leaf(uint16_t(074), std::oct), "074", test_type(074)},
 		sample{puu::leaf(uint32_t(074), std::oct), "074", test_type(074)},
 		sample{puu::leaf(uint64_t(074), std::oct), "074", test_type(074)},
 		sample{puu::leaf(074u, std::oct), "074", test_type(074)},
-		sample{puu::leaf(074ul, std::oct), "074", test_type(074)}, // 15
+		sample{puu::leaf(074ul, std::oct), "074", test_type(074)},
 		sample{puu::leaf(074ull, std::oct), "074", test_type(074)},
 
 		// sample{puu::leaf(~0u, std::oct), "", test_type(~0)},
