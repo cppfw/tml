@@ -281,6 +281,14 @@ leaf::leaf(int value) :
 		}(value))
 {}
 
+leaf::leaf(unsigned char value, std::ios_base&(*base)(std::ios_base&)) :
+		leaf((unsigned short int)value, base)
+{}
+
+leaf::leaf(unsigned short int value, std::ios_base&(*base)(std::ios_base&)) :
+		leaf((unsigned int)value, base)
+{}
+
 leaf::leaf(unsigned int value, std::ios_base&(*base)(std::ios_base&)) :
 		string([](unsigned int value, std::ios_base&(*base)(std::ios_base&)) -> std::string{
 			char buf[64];
