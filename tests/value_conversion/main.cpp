@@ -12,6 +12,24 @@ template <class T> struct sample_template{
 	T expected_value;
 };
 
+template <class test_type> test_type to_test_type(const puu::leaf& l);
+
+template <> int32_t to_test_type<int32_t>(const puu::leaf& l){
+	return l.to_int32();
+}
+
+template <> int64_t to_test_type<int64_t>(const puu::leaf& l){
+	return l.to_int64();
+}
+
+template <> uint32_t to_test_type<uint32_t>(const puu::leaf& l){
+	return l.to_uint32();
+}
+
+template <> uint64_t to_test_type<uint64_t>(const puu::leaf& l){
+	return l.to_uint64();
+}
+
 template <class test_type> void test_int(){
 	typedef sample_template<test_type> sample;
 
@@ -36,7 +54,7 @@ template <class test_type> void test_int(){
 	}};
 
 	for(auto& s: samples){
-		auto value = s.leaf.to_int32();
+		auto value = to_test_type<test_type>(s.leaf);
 		ASSERT_INFO_ALWAYS(s.leaf.to_string() == s.expected_string, "to_string() = " << s.leaf.to_string() << ", expected = " << s.expected_string)
 		ASSERT_INFO_ALWAYS(value == s.expected_value, "to_string() = " << s.leaf.to_string() << ", value = " << value)
 	}
@@ -86,7 +104,7 @@ template <class test_type> void test_uint(){
 	}};
 
 	for(auto& s: samples){
-		auto value = s.leaf.to_uint32();
+		auto value = to_test_type<test_type>(s.leaf);
 		if(s.expected_string.length() != 0){
 			ASSERT_INFO_ALWAYS(
 					s.leaf.to_string() == s.expected_string,
