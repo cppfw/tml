@@ -5,140 +5,104 @@
 #include <utki/debug.hpp>
 #include <papki/FSFile.hpp>
 
+namespace{
+template <class T> struct sample_template{
+	puu::leaf leaf;
+	std::string expected_string;
+	T expected_value;
+};
 
+template <class test_type> void test_int(){
+	typedef sample_template<test_type> sample;
+
+	std::vector<sample> samples = {{
+		sample{puu::leaf(), "", test_type(0)},
+		sample{puu::leaf(-13), "-13", test_type(-13)},
+		sample{puu::leaf(13), "13", test_type(13)},
+		sample{puu::leaf(-13L), "-13", test_type(-13)},
+		sample{puu::leaf(13L), "13", test_type(13)},
+		sample{puu::leaf(-13LL), "-13", test_type(-13)},
+		sample{puu::leaf(13LL), "13", test_type(13)},
+		sample{puu::leaf(-13.34f), "-13.34", test_type(-13)},
+	}};
+
+	for(auto& s: samples){
+		auto value = s.leaf.to_int32();
+		ASSERT_INFO_ALWAYS(s.leaf.to_string() == s.expected_string, "to_string() = " << s.leaf.to_string() << ", expected = " << s.expected_string)
+		ASSERT_INFO_ALWAYS(value == s.expected_value, "to_string() = " << s.leaf.to_string() << ", value = " << value)
+	}
+}
+
+template <class test_type> void test_uint(){
+	typedef sample_template<test_type> sample;
+
+	std::vector<sample> samples = {{
+		sample{puu::leaf(), "", 0},
+
+		sample{puu::leaf(0x8d), "141", test_type(0x8d)},
+		sample{puu::leaf(0x8du), "141", test_type(0x8d)},
+		// sample{puu::leaf(~0u), "", test_type(~0)},
+		// sample{puu::leaf(~0ul), "", test_type(~0)},
+		// sample{puu::leaf(~0ull), "", test_type(~0)},
+		sample{puu::leaf(13.34f), "13.34", 13},
+
+		sample{puu::leaf(074u, std::oct), "074", test_type(074)},
+		sample{puu::leaf(074ul, std::oct), "074", test_type(074)},
+		sample{puu::leaf(074ull, std::oct), "074", test_type(074)},
+		// sample{puu::leaf(~0u, std::oct), "", test_type(~0)},
+		// sample{puu::leaf(~0ul, std::oct), "", test_type(~0)},
+		// sample{puu::leaf(~0ull, std::oct), "", test_type(~0)},
+		sample{puu::leaf(0u, std::oct), "00", test_type(0)},
+		sample{puu::leaf(0ul, std::oct), "00", test_type(0)},
+		sample{puu::leaf(0ull, std::oct), "00", test_type(0)},
+
+		sample{puu::leaf(0x8du, std::hex), "0x8d", test_type(0x8d)},
+		sample{puu::leaf(0x8dul, std::hex), "0x8d", test_type(0x8d)},
+		// sample{puu::leaf(~0u, std::hex), "", test_type(~0)},
+		// sample{puu::leaf(~0ul, std::hex), "", test_type(~0)},
+		// sample{puu::leaf(~0ull, std::hex), "", test_type(~0)},
+		sample{puu::leaf(0u, std::hex), "0x0", test_type(0)},
+		sample{puu::leaf(0ul, std::hex), "0x0", test_type(0)},
+		sample{puu::leaf(0ull, std::hex), "0x0", test_type(0)},
+	}};
+
+	for(auto& s: samples){
+		auto value = s.leaf.to_uint32();
+		if(s.expected_string.length() != 0){
+			ASSERT_INFO_ALWAYS(s.leaf.to_string() == s.expected_string, "to_string() = " << s.leaf.to_string() << ", expected = " << s.expected_string)
+		}
+		ASSERT_INFO_ALWAYS(value == s.expected_value, "to_string() = " << s.leaf.to_string() << ", value = " << value << ", expected_value = " << s.expected_value)
+	}
+}
+
+}
 
 void test_puu_value_conversion(){
 	// bool
 	{
-		puu::branches roots;
+		typedef sample_template<bool> sample;
 
-		roots.emplace_back(puu::leaf(true));
-		roots.emplace_back(puu::leaf(false));
-		roots.emplace_back(puu::leaf(""));
-		roots.emplace_back(puu::leaf("qwerfqwef"));
+		std::vector<sample> samples = {{
+			sample{puu::leaf(true), "true", true},
+			sample{puu::leaf(false), "false", false},
+			sample{puu::leaf(""), "", false},
+			sample{puu::leaf("werqwe"), "werqwe", false},
+			sample{puu::leaf("false"), "false", false},
+			sample{puu::leaf("true"), "true", true}
+		}};
 
-		ASSERT_ALWAYS(roots.size() == 4)
-		ASSERT_ALWAYS(roots[0].value.to_string() == "true")
-		ASSERT_ALWAYS(roots[0].value.to_bool() == true)
-		ASSERT_ALWAYS(roots[1].value.to_string() == "false")
-		ASSERT_ALWAYS(roots[1].value.to_bool() == false)
-		ASSERT_INFO_ALWAYS(roots[2].value.to_bool() == false, roots[2].value.to_string())
-		ASSERT_ALWAYS(roots[3].value.to_bool() == false)
+		for(auto& s : samples){
+			auto value = s.leaf.to_bool();
+			ASSERT_INFO_ALWAYS(s.leaf.to_string() == s.expected_string, "to_string() = " << s.leaf.to_string() << ", expected = " << s.expected_string)
+			ASSERT_INFO_ALWAYS(value == s.expected_value, "to_string() = " << s.leaf.to_string() << ", value = " << value)
+		}
 	}
 
-	// int32
-	{
-		puu::branches roots;
+	test_int<int32_t>();
+	test_int<int64_t>();
 
-		roots.emplace_back(puu::leaf(-13));
-		roots.emplace_back(puu::leaf(13));
-		roots.emplace_back(puu::leaf());
-
-		ASSERT_ALWAYS(roots.size() == 3)
-		ASSERT_ALWAYS(roots[0].value.to_string() == "-13")
-		ASSERT_ALWAYS(roots[0].value.to_int32() == -13)
-		ASSERT_ALWAYS(roots[1].value.to_string() == "13")
-		ASSERT_ALWAYS(roots[1].value.to_int32() == 13)
-		ASSERT_ALWAYS(roots[2].value.to_string().length() == 0)
-		ASSERT_ALWAYS(roots[2].value.to_int32() == 0)
-	}
-
-	// uint32
-	{
-		puu::branches roots;
-
-		roots.emplace_back(puu::leaf(0xffffffffu));
-		roots.emplace_back(puu::leaf());
-		roots.emplace_back(puu::leaf(0x8du, std::hex));
-		roots.emplace_back(puu::leaf(0xffffffffu, std::hex));
-		roots.emplace_back(puu::leaf(0u, std::hex));
-		roots.emplace_back(puu::leaf(074u, std::oct));
-		roots.emplace_back(puu::leaf(037777777777u, std::oct));
-		roots.emplace_back(puu::leaf(0u, std::oct));
-
-		ASSERT_ALWAYS(roots.size() == 8)
-
-		ASSERT_INFO_ALWAYS(roots[0].value.to_string() == "4294967295", roots[0].value.to_string())
-		ASSERT_ALWAYS(roots[0].value.to_uint32() == 0xffffffffu)
-
-		ASSERT_ALWAYS(roots[1].value.to_string().length() == 0)
-		ASSERT_ALWAYS(roots[1].value.to_uint32() == 0)
-
-		ASSERT_INFO_ALWAYS(roots[2].value.to_string() == "0x8d", roots[2].value.to_string())
-		ASSERT_ALWAYS(roots[2].value.to_uint32() == 0x8d)
-
-		ASSERT_ALWAYS(roots[3].value.to_string() == "0xffffffff")
-		ASSERT_ALWAYS(roots[3].value.to_uint32() == 0xffffffff)
-
-		ASSERT_INFO_ALWAYS(roots[4].value.to_string() == "0x0", roots[4].value.to_string())
-		ASSERT_ALWAYS(roots[4].value.to_uint32() == 0)
-
-		ASSERT_INFO_ALWAYS(roots[5].value.to_string() == "074", roots[5].value.to_string())
-		ASSERT_ALWAYS(roots[5].value.to_uint32() == 074)
-
-		ASSERT_INFO_ALWAYS(roots[6].value.to_string() == "037777777777", roots[6].value.to_string())
-		ASSERT_ALWAYS(roots[6].value.to_uint32() == 037777777777)
-
-		ASSERT_INFO_ALWAYS(roots[7].value.to_string() == "00", roots[7].value.to_string())
-		ASSERT_ALWAYS(roots[7].value.to_uint32() == 0)
-	}
-
-	// int64
-	{
-		puu::branches roots;
-
-		roots.emplace_back(puu::leaf(-13L));
-		roots.emplace_back(puu::leaf(13L));
-		roots.emplace_back(puu::leaf());
-
-		ASSERT_ALWAYS(roots.size() == 3)
-		ASSERT_ALWAYS(roots[0].value.to_string() == "-13")
-		ASSERT_ALWAYS(roots[0].value.to_int64() == -13)
-		ASSERT_ALWAYS(roots[1].value.to_string() == "13")
-		ASSERT_ALWAYS(roots[1].value.to_int64() == 13)
-		ASSERT_ALWAYS(roots[2].value.to_string().length() == 0)
-		ASSERT_ALWAYS(roots[2].value.to_int64() == 0)
-	}
-
-	// uint64
-	{
-		puu::branches roots;
-
-		roots.emplace_back(puu::leaf(~0ul));
-		roots.emplace_back(puu::leaf());
-		roots.emplace_back(puu::leaf(0x8dul, std::hex));
-		roots.emplace_back(puu::leaf(~0ul, std::hex));
-		roots.emplace_back(puu::leaf(0ul, std::hex));
-		roots.emplace_back(puu::leaf(074ul, std::oct));
-		roots.emplace_back(puu::leaf(~0ul, std::oct));
-		roots.emplace_back(puu::leaf(0ul, std::oct));
-
-		ASSERT_ALWAYS(roots.size() == 8)
-
-		ASSERT_INFO_ALWAYS(roots[0].value.to_string() == "18446744073709551615", roots[0].value.to_string())
-		ASSERT_ALWAYS(roots[0].value.to_uint64() == 0xfffffffffffffffful)
-
-		ASSERT_ALWAYS(roots[1].value.to_string().length() == 0)
-		ASSERT_ALWAYS(roots[1].value.to_uint64() == 0)
-
-		ASSERT_INFO_ALWAYS(roots[2].value.to_string() == "0x8d", roots[2].value.to_string())
-		ASSERT_ALWAYS(roots[2].value.to_uint64() == 0x8d)
-
-		ASSERT_ALWAYS(roots[3].value.to_string() == "0xffffffffffffffff")
-		ASSERT_ALWAYS(roots[3].value.to_uint64() == 0xffffffffffffffff)
-
-		ASSERT_INFO_ALWAYS(roots[4].value.to_string() == "0x0", roots[4].value.to_string())
-		ASSERT_ALWAYS(roots[4].value.to_uint64() == 0)
-
-		ASSERT_INFO_ALWAYS(roots[5].value.to_string() == "074", roots[5].value.to_string())
-		ASSERT_ALWAYS(roots[5].value.to_uint64() == 074)
-
-		ASSERT_INFO_ALWAYS(roots[6].value.to_string() == "01777777777777777777777", roots[6].value.to_string())
-		ASSERT_ALWAYS(roots[6].value.to_uint64() == ~0ul)
-
-		ASSERT_INFO_ALWAYS(roots[7].value.to_string() == "00", roots[7].value.to_string())
-		ASSERT_ALWAYS(roots[7].value.to_uint64() == 0)
-	}
+	test_uint<uint32_t>();
+	test_uint<uint64_t>();
 
 	// float
 	{

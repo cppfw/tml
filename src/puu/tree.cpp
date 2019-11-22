@@ -268,15 +268,11 @@ leaf::leaf(bool value) :
 		string(value ? "true" : "false")
 {}
 
-bool leaf::to_bool()const{
-	return this->string == "true";
-}
-
-leaf::leaf(int32_t value) :
-		string([](int32_t value) -> std::string{
+leaf::leaf(int value) :
+		string([](int value) -> std::string{
 			char buf[64];
 
-			int res = snprintf(buf, sizeof(buf), "%" PRIi32, value);
+			int res = snprintf(buf, sizeof(buf), "%d", value);
 
 			if(0 <= res && res <= int(sizeof(buf))){
 				return std::string(buf, res);
@@ -285,21 +281,17 @@ leaf::leaf(int32_t value) :
 		}(value))
 {}
 
-int32_t leaf::to_int32()const{
-	return int32_t(strtol(this->string.c_str(), nullptr, 0));
-}
-
-leaf::leaf(uint32_t value, std::ios_base&(*base)(std::ios_base&)) :
-		string([](int32_t value, std::ios_base&(*base)(std::ios_base&)) -> std::string{
+leaf::leaf(unsigned int value, std::ios_base&(*base)(std::ios_base&)) :
+		string([](unsigned int value, std::ios_base&(*base)(std::ios_base&)) -> std::string{
 			char buf[64];
 
 			const char* format;
 			if(base == std::oct){
-				format = "0%" PRIo32;
+				format = "0%o";
 			}else if(base == std::hex){
-				format = "0x%" PRIx32;
+				format = "0x%x";
 			}else{ // std::dec
-				format = "%" PRIu32;
+				format = "%u";
 			}
 
 			int res = snprintf(buf, sizeof(buf), format, value);
@@ -311,16 +303,11 @@ leaf::leaf(uint32_t value, std::ios_base&(*base)(std::ios_base&)) :
 		}(value, base))
 {}
 
-uint32_t leaf::to_uint32()const{
-	return uint32_t(strtoul(this->string.c_str(), nullptr, 0));
-}
-
-
-leaf::leaf(int64_t value) :
-		string([](int64_t value) -> std::string{
+leaf::leaf(signed long int value) :
+		string([](long int value) -> std::string{
 			char buf[64];
 
-			int res = snprintf(buf, sizeof(buf), "%" PRIi64, value);
+			int res = snprintf(buf, sizeof(buf), "%ld", value);
 
 			if(0 <= res && res <= int(sizeof(buf))){
 				return std::string(buf, res);
@@ -329,21 +316,17 @@ leaf::leaf(int64_t value) :
 		}(value))
 {}
 
-int64_t leaf::to_int64()const{
-	return int64_t(strtoll(this->string.c_str(), nullptr, 0));
-}
-
-leaf::leaf(uint64_t value, std::ios_base&(*base)(std::ios_base&)) :
-		string([](uint64_t value, std::ios_base&(*base)(std::ios_base&)) -> std::string{
+leaf::leaf(unsigned long int value, std::ios_base&(*base)(std::ios_base&)) :
+		string([](unsigned long int value, std::ios_base&(*base)(std::ios_base&)) -> std::string{
 			char buf[64];
 
 			const char* format;
 			if(base == std::oct){
-				format = "0%" PRIo64;
+				format = "0%lo";
 			}else if(base == std::hex){
-				format = "0x%" PRIx64;
+				format = "0x%lx";
 			}else{ // std::dec
-				format = "%" PRIu64;
+				format = "%lu";
 			}
 
 			int res = snprintf(buf, sizeof(buf), format, value);
@@ -355,9 +338,40 @@ leaf::leaf(uint64_t value, std::ios_base&(*base)(std::ios_base&)) :
 		}(value, base))
 {}
 
-uint64_t leaf::to_uint64()const{
-	return uint64_t(strtoull(this->string.c_str(), nullptr, 0));
-}
+leaf::leaf(signed long long int value) :
+		string([](long long int value) -> std::string{
+			char buf[64];
+
+			int res = snprintf(buf, sizeof(buf), "%lld", value);
+
+			if(0 <= res && res <= int(sizeof(buf))){
+				return std::string(buf, res);
+			}
+			return std::string();
+		}(value))
+{}
+
+leaf::leaf(unsigned long long int value, std::ios_base&(*base)(std::ios_base&)) :
+		string([](unsigned long long int value, std::ios_base&(*base)(std::ios_base&)) -> std::string{
+			char buf[64];
+
+			const char* format;
+			if(base == std::oct){
+				format = "0%llo";
+			}else if(base == std::hex){
+				format = "0x%llx";
+			}else{ // std::dec
+				format = "%llu";
+			}
+
+			int res = snprintf(buf, sizeof(buf), format, value);
+
+			if(0 <= res && res <= int(sizeof(buf))){
+				return std::string(buf, res);
+			}
+			return std::string();
+		}(value, base))
+{}
 
 leaf::leaf(float value) :
 		string([](float value) -> std::string{
@@ -373,11 +387,6 @@ leaf::leaf(float value) :
 		}(value))
 {}
 
-float leaf::to_float()const{
-	return strtof(this->string.c_str(), nullptr);
-}
-
-
 leaf::leaf(double value) :
 		string([](double value) -> std::string{
 			char buf[64];
@@ -392,10 +401,6 @@ leaf::leaf(double value) :
 		}(value))
 {}
 
-double leaf::to_double()const{
-	return strtod(this->string.c_str(), nullptr);
-}
-
 leaf::leaf(long double value) :
 		string([](long double value) -> std::string{
 			char buf[128];
@@ -409,6 +414,34 @@ leaf::leaf(long double value) :
 			}
 		}(value))
 {}
+
+bool leaf::to_bool()const{
+	return this->string == "true";
+}
+
+int32_t leaf::to_int32()const{
+	return int32_t(strtol(this->string.c_str(), nullptr, 0));
+}
+
+uint32_t leaf::to_uint32()const{
+	return uint32_t(strtoul(this->string.c_str(), nullptr, 0));
+}
+
+int64_t leaf::to_int64()const{
+	return int64_t(strtoll(this->string.c_str(), nullptr, 0));
+}
+
+uint64_t leaf::to_uint64()const{
+	return uint64_t(strtoull(this->string.c_str(), nullptr, 0));
+}
+
+float leaf::to_float()const{
+	return strtof(this->string.c_str(), nullptr);
+}
+
+double leaf::to_double()const{
+	return strtod(this->string.c_str(), nullptr);
+}
 
 long double leaf::to_long_double()const{
 	return strtold(this->string.c_str(), nullptr);

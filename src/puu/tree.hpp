@@ -52,12 +52,17 @@ public:
     }
 
     explicit leaf(bool value);
-    explicit leaf(signed char value);
 
-    explicit leaf(int32_t value);
-    explicit leaf(uint32_t value, std::ios_base&(*base)(std::ios_base&) = std::dec);
-    explicit leaf(int64_t value);
-    explicit leaf(uint64_t value, std::ios_base&(*base)(std::ios_base&) = std::dec);
+    // explicit leaf(signed char value);
+    // explicit leaf(unsigned char value);
+    // explicit leaf(signed short value);
+    // explicit leaf(unsigned short value);
+    explicit leaf(signed int value);
+    explicit leaf(unsigned int value, std::ios_base&(*base)(std::ios_base&) = std::dec);
+    explicit leaf(signed long int value);
+    explicit leaf(unsigned long int value, std::ios_base&(*base)(std::ios_base&) = std::dec);
+    explicit leaf(signed long long int value);
+    explicit leaf(unsigned long long int value, std::ios_base&(*base)(std::ios_base&) = std::dec);
     explicit leaf(float value);
     explicit leaf(double value);
     explicit leaf(long double value);
