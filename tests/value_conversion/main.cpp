@@ -16,8 +16,6 @@ template <class test_type> void test_int(){
 	typedef sample_template<test_type> sample;
 
 	std::vector<sample> samples = {{
-		sample{puu::leaf(), "", test_type(0)},
-
 		sample{puu::leaf(int8_t(-13)), "-13", test_type(-13)},
 		sample{puu::leaf(int16_t(-13)), "-13", test_type(-13)},
 		sample{puu::leaf(int32_t(-13)), "-13", test_type(-13)},
@@ -48,8 +46,6 @@ template <class test_type> void test_uint(){
 	typedef sample_template<test_type> sample;
 
 	std::vector<sample> samples = {{
-		// sample{puu::leaf(), "", 0},
-
 		sample{puu::leaf(uint8_t(0x8d)), "141", test_type(0x8d)},
 		sample{puu::leaf(uint16_t(0x8d)), "141", test_type(0x8d)},
 		sample{puu::leaf(uint32_t(0x8d)), "141", test_type(0x8d)},
