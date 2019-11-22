@@ -419,30 +419,66 @@ bool leaf::to_bool()const{
 	return this->string == "true";
 }
 
+namespace{
+void throw_could_not_convert_exception(const std::string& string, const std::string& destination_type_name){
+	std::stringstream ss;
+	ss << "to_" << destination_type_name << "(): could not convert string: " << string;
+	throw puu::exception(ss.str());
+}
+}
+
 int32_t leaf::to_int32()const{
-	return int32_t(strtol(this->string.c_str(), nullptr, 0));
+	auto ret = int32_t(strtol(this->string.c_str(), nullptr, 0));
+	if(errno != 0){
+		throw_could_not_convert_exception(this->string, "int32");
+	}
+	return ret;
 }
 
 uint32_t leaf::to_uint32()const{
-	return uint32_t(strtoul(this->string.c_str(), nullptr, 0));
+	auto ret = uint32_t(strtoul(this->string.c_str(), nullptr, 0));
+	if(errno != 0){
+		throw_could_not_convert_exception(this->string, "uint32");
+	}
+	return ret;
 }
 
 int64_t leaf::to_int64()const{
-	return int64_t(strtoll(this->string.c_str(), nullptr, 0));
+	auto ret = int64_t(strtoll(this->string.c_str(), nullptr, 0));
+	if(errno != 0){
+		throw_could_not_convert_exception(this->string, "int64");
+	}
+	return ret;
 }
 
 uint64_t leaf::to_uint64()const{
-	return uint64_t(strtoull(this->string.c_str(), nullptr, 0));
+	auto ret = uint64_t(strtoull(this->string.c_str(), nullptr, 0));
+	if(errno != 0){
+		throw_could_not_convert_exception(this->string, "uint64");
+	}
+	return ret;
 }
 
 float leaf::to_float()const{
-	return strtof(this->string.c_str(), nullptr);
+	auto ret = strtof(this->string.c_str(), nullptr);
+	if(errno != 0){
+		throw_could_not_convert_exception(this->string, "float");
+	}
+	return ret;
 }
 
 double leaf::to_double()const{
-	return strtod(this->string.c_str(), nullptr);
+	auto ret = strtod(this->string.c_str(), nullptr);
+	if(errno != 0){
+		throw_could_not_convert_exception(this->string, "double");
+	}
+	return ret;
 }
 
 long double leaf::to_long_double()const{
-	return strtold(this->string.c_str(), nullptr);
+	auto ret = strtold(this->string.c_str(), nullptr);
+	if(errno != 0){
+		throw_could_not_convert_exception(this->string, "long_double");
+	}
+	return ret;
 }
