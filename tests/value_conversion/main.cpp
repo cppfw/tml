@@ -109,7 +109,7 @@ template <class test_type> void test_uint(){
 			ASSERT_INFO_ALWAYS(
 					s.leaf.to_string() == s.expected_string,
 					"to_string() = " << s.leaf.to_string() <<
-					", expected = " << s.expected_string <<
+					", expected_string = " << s.expected_string <<
 					", index = " << std::distance(
 							samples.begin(),
 							std::find_if(
@@ -144,7 +144,7 @@ void test_puu_value_conversion(){
 
 		for(auto& s : samples){
 			auto value = s.leaf.to_bool();
-			ASSERT_INFO_ALWAYS(s.leaf.to_string() == s.expected_string, "to_string() = " << s.leaf.to_string() << ", expected = " << s.expected_string)
+			ASSERT_INFO_ALWAYS(s.leaf.to_string() == s.expected_string, "to_string() = " << s.leaf.to_string() << ", expected_string = " << s.expected_string)
 			ASSERT_INFO_ALWAYS(value == s.expected_value, "to_string() = " << s.leaf.to_string() << ", value = " << value)
 		}
 	}
