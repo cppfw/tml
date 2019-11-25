@@ -457,14 +457,17 @@ void throw_could_not_convert_exception(const std::string& string, const std::str
 }
 
 int32_t leaf::to_int32()const{
+	errno = 0;
 	auto ret = int32_t(strtol(this->string.c_str(), nullptr, 0));
 	if(errno != 0){
+		// TRACE(<< "errno = " << errno << ", str = '" << this->string << "', " << " length = " << this->string.length() << std::endl)
 		throw_could_not_convert_exception(this->string, "int32");
 	}
 	return ret;
 }
 
 uint32_t leaf::to_uint32()const{
+	errno = 0;
 	auto ret = uint32_t(strtoul(this->string.c_str(), nullptr, 0));
 	if(errno != 0){
 		throw_could_not_convert_exception(this->string, "uint32");
@@ -473,6 +476,7 @@ uint32_t leaf::to_uint32()const{
 }
 
 int64_t leaf::to_int64()const{
+	errno = 0;
 	auto ret = int64_t(strtoll(this->string.c_str(), nullptr, 0));
 	if(errno != 0){
 		throw_could_not_convert_exception(this->string, "int64");
@@ -481,6 +485,7 @@ int64_t leaf::to_int64()const{
 }
 
 uint64_t leaf::to_uint64()const{
+	errno = 0;
 	auto ret = uint64_t(strtoull(this->string.c_str(), nullptr, 0));
 	if(errno != 0){
 		throw_could_not_convert_exception(this->string, "uint64");
@@ -489,6 +494,7 @@ uint64_t leaf::to_uint64()const{
 }
 
 float leaf::to_float()const{
+	errno = 0;
 	auto ret = strtof(this->string.c_str(), nullptr);
 	if(errno != 0){
 		throw_could_not_convert_exception(this->string, "float");
@@ -497,6 +503,7 @@ float leaf::to_float()const{
 }
 
 double leaf::to_double()const{
+	errno = 0;
 	auto ret = strtod(this->string.c_str(), nullptr);
 	if(errno != 0){
 		throw_could_not_convert_exception(this->string, "double");
@@ -505,6 +512,7 @@ double leaf::to_double()const{
 }
 
 long double leaf::to_long_double()const{
+	errno = 0;
 	auto ret = strtold(this->string.c_str(), nullptr);
 	if(errno != 0){
 		throw_could_not_convert_exception(this->string, "long_double");
