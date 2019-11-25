@@ -270,6 +270,7 @@ leaf::leaf(bool value) :
 
 leaf::leaf(int value) :
 		string([](int value) -> std::string{
+			// TRACE(<< "leaf::leaf(int): value = " << value << std::endl)
 			char buf[64];
 
 			int res = snprintf(buf, sizeof(buf), "%d", value);
@@ -281,25 +282,31 @@ leaf::leaf(int value) :
 		}(value))
 {}
 
-leaf::leaf(unsigned char value, std::ios_base&(*base)(std::ios_base&)) :
-		leaf((unsigned short int)value, base)
+leaf::leaf(unsigned char value, base conversion_base) :
+		leaf((unsigned short int)value, conversion_base)
 {}
 
-leaf::leaf(unsigned short int value, std::ios_base&(*base)(std::ios_base&)) :
-		leaf((unsigned int)value, base)
+leaf::leaf(unsigned short int value, base conversion_base) :
+		leaf((unsigned int)value, conversion_base)
 {}
 
-leaf::leaf(unsigned int value, std::ios_base&(*base)(std::ios_base&)) :
-		string([](unsigned int value, std::ios_base&(*base)(std::ios_base&)) -> std::string{
+leaf::leaf(unsigned int value, base conversion_base) :
+		string([](unsigned int value, base conversion_base) -> std::string{
+			// TRACE(<< "leaf::leaf(uint): value = " << value <<", base = " << int(conversion_base) << std::endl)
 			char buf[64];
 
 			const char* format;
-			if(base == std::oct){
-				format = "0%o";
-			}else if(base == std::hex){
-				format = "0x%x";
-			}else{ // std::dec
-				format = "%u";
+			switch(conversion_base){
+				case base::oct:
+					format = "0%o";
+					break;
+				case base::hex:
+					format = "0x%x";
+					break;
+				default:
+				case base::dec:
+					format = "%u";
+					break;
 			}
 
 			int res = snprintf(buf, sizeof(buf), format, value);
@@ -308,11 +315,12 @@ leaf::leaf(unsigned int value, std::ios_base&(*base)(std::ios_base&)) :
 				return std::string(buf, res);
 			}
 			return std::string();
-		}(value, base))
+		}(value, conversion_base))
 {}
 
 leaf::leaf(signed long int value) :
 		string([](long int value) -> std::string{
+			// TRACE(<< "leaf::leaf(long int): value = " << value << std::endl)
 			char buf[64];
 
 			int res = snprintf(buf, sizeof(buf), "%ld", value);
@@ -324,17 +332,23 @@ leaf::leaf(signed long int value) :
 		}(value))
 {}
 
-leaf::leaf(unsigned long int value, std::ios_base&(*base)(std::ios_base&)) :
-		string([](unsigned long int value, std::ios_base&(*base)(std::ios_base&)) -> std::string{
+leaf::leaf(unsigned long int value, base conversion_base) :
+		string([](unsigned long int value, base conversion_base) -> std::string{
+			// TRACE(<< "leaf::leaf(ulong): value = " << value << ", base = " << int(conversion_base) << std::endl)
 			char buf[64];
 
 			const char* format;
-			if(base == std::oct){
-				format = "0%lo";
-			}else if(base == std::hex){
-				format = "0x%lx";
-			}else{ // std::dec
-				format = "%lu";
+			switch(conversion_base){
+				case base::oct:
+					format = "0%lo";
+					break;
+				case base::hex:
+					format = "0x%lx";
+					break;
+				default:
+				case base::dec:
+					format = "%lu";
+					break;
 			}
 
 			int res = snprintf(buf, sizeof(buf), format, value);
@@ -343,11 +357,12 @@ leaf::leaf(unsigned long int value, std::ios_base&(*base)(std::ios_base&)) :
 				return std::string(buf, res);
 			}
 			return std::string();
-		}(value, base))
+		}(value, conversion_base))
 {}
 
 leaf::leaf(signed long long int value) :
 		string([](long long int value) -> std::string{
+			// TRACE(<< "leaf::leaf(long long): value = " << value << std::endl)
 			char buf[64];
 
 			int res = snprintf(buf, sizeof(buf), "%lld", value);
@@ -359,17 +374,23 @@ leaf::leaf(signed long long int value) :
 		}(value))
 {}
 
-leaf::leaf(unsigned long long int value, std::ios_base&(*base)(std::ios_base&)) :
-		string([](unsigned long long int value, std::ios_base&(*base)(std::ios_base&)) -> std::string{
+leaf::leaf(unsigned long long int value, base conversion_base) :
+		string([](unsigned long long int value, base conversion_base) -> std::string{
+			// TRACE(<< "leaf::leaf(u long long): value = " << value << ", base = " << int(conversion_base) << std::endl)
 			char buf[64];
 
 			const char* format;
-			if(base == std::oct){
-				format = "0%llo";
-			}else if(base == std::hex){
-				format = "0x%llx";
-			}else{ // std::dec
-				format = "%llu";
+			switch(conversion_base){
+				case base::oct:
+					format = "0%llo";
+					break;
+				case base::hex:
+					format = "0x%llx";
+					break;
+				default:
+				case base::dec:
+					format = "%llu";
+					break;
 			}
 
 			int res = snprintf(buf, sizeof(buf), format, value);
@@ -378,7 +399,7 @@ leaf::leaf(unsigned long long int value, std::ios_base&(*base)(std::ios_base&)) 
 				return std::string(buf, res);
 			}
 			return std::string();
-		}(value, base))
+		}(value, conversion_base))
 {}
 
 leaf::leaf(float value) :

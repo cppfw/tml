@@ -11,6 +11,12 @@
 //TODO: doxygen
 namespace puu{
 
+enum class base{
+    dec,
+    oct,
+    hex
+};
+
 class leaf{
     std::string string;
 public:
@@ -53,17 +59,17 @@ public:
 
     explicit leaf(bool value);
 
-    explicit leaf(unsigned char value, std::ios_base&(*base)(std::ios_base&) = std::dec);
-    explicit leaf(unsigned short int value, std::ios_base&(*base)(std::ios_base&) = std::dec);
+    explicit leaf(unsigned char value, base conversion_base = base::dec);
+    explicit leaf(unsigned short int value, base conversion_base = base::dec);
 
     explicit leaf(signed int value);
-    explicit leaf(unsigned int value, std::ios_base&(*base)(std::ios_base&) = std::dec);
+    explicit leaf(unsigned int value, base conversion_base = base::dec);
 
     explicit leaf(signed long int value);
-    explicit leaf(unsigned long int value, std::ios_base&(*base)(std::ios_base&) = std::dec);
+    explicit leaf(unsigned long int value, base conversion_base = base::dec);
 
     explicit leaf(signed long long int value);
-    explicit leaf(unsigned long long int value, std::ios_base&(*base)(std::ios_base&) = std::dec);
+    explicit leaf(unsigned long long int value, base conversion_base = base::dec);
 
     explicit leaf(float value);
     explicit leaf(double value);
