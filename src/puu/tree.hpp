@@ -53,6 +53,10 @@ public:
         return this->string.c_str();
     }
 
+    size_t length()const noexcept{
+        return this->string.length();
+    }
+
     const std::string& to_string()const noexcept{
         return this->string;
     }
