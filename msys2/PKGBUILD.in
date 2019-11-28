@@ -1,7 +1,7 @@
 # Maintainer: Ivan Gagis <igagis@gmail.com>
 
 if [ "$MSYSTEM" == "MSYS" ]; then
-	pkgPrefix=
+	pkgPrefix=lib
 	dirPrefix=/usr
 	arch=('x86_64' 'i686')
 elif [ "$MSYSTEM" == "MINGW32" ]; then
@@ -31,7 +31,7 @@ groups=()
 
 depends=("${pkgPrefix}utki" "${pkgPrefix}papki" "${pkgPrefix}unikod")
 
-makedepends=('myci' 'prorab' 'prorab-extra' 'doxygen' '${pkgPrefix}clargs')
+makedepends=('myci' 'prorab' 'prorab-extra' 'doxygen' "${pkgPrefix}clargs")
 checkdepends=('myci')
 optdepends=()
 provides=()
