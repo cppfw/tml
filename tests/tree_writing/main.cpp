@@ -1,5 +1,6 @@
 #include "../../src/puu/tree.hpp"
 
+#include <utki/config.hpp>
 #include <utki/debug.hpp>
 
 #include <papki/FSFile.hpp>
@@ -7,8 +8,19 @@
 
 #include <clargs/arguments.hpp>
 
+#if M_OS == M_OS_WINDOWS
+#	include <io.h>
+#	include <fcntl.h>
+#endif
+
 
 int main(int argc, char** argv){
+
+	// Set stdout to binary mode to prevent convertion of \n to \r\n by std::cout.
+#if M_OS == M_OS_WINDOWS
+	setmode(fileno(stdout), O_BINARY);
+#endif
+
 	clargs::arguments args;
 
 	bool formatted = false;
