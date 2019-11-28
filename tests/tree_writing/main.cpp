@@ -33,6 +33,7 @@ int main(int argc, char** argv){
 		auto data = outfi.resetData();
 
 		for(auto b : data){
+			ASSERT_INFO_ALWAYS(b != '\r', "output contains '\r' character")
 			std::cout << char(b);
 		}
 	}

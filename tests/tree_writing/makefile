@@ -29,7 +29,7 @@ $(eval $(prorab-build-app))
 
 ifeq ($(os),windows)
     # to avoid /C converted to C:\ need to escape it as //C
-    this_test_cmd = cmd //C 'set PATH=$(d)../../src;%PATH% && $$^ $1'
+    this_test_cmd = (cd $(d) && cmd //C "set PATH=../../src;%PATH% && cat_puu$(exeext) $1")
 else ifeq ($(os),macosx)
     this_test_cmd = DYLD_LIBRARY_PATH=$(d)../../src $$^ $1
 else ifeq ($(os),linux)
