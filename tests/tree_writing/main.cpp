@@ -6,7 +6,7 @@
 #include <papki/FSFile.hpp>
 #include <papki/MemoryFile.hpp>
 
-#include <clargs/arguments.hpp>
+#include <clargs/parser.hpp>
 
 #if M_OS == M_OS_WINDOWS
 #	include <io.h>
@@ -21,7 +21,7 @@ int main(int argc, char** argv){
 	setmode(fileno(stdout), O_BINARY);
 #endif
 
-	clargs::arguments args;
+	clargs::parser args;
 
 	bool formatted = false;
 

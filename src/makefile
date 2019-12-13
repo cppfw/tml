@@ -44,4 +44,6 @@ else
     this_cxxflags += -fPIC # Since we are building shared library, we need Position-Independend Code
 endif
 
+this_out_dir := build
+
 $(eval $(prorab-build-lib))

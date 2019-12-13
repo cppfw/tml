@@ -92,12 +92,12 @@ public:
     long double to_long_double()const;
 };
 
-typedef utki::tree<leaf> branch;
-typedef branch::container_type branches;
+typedef utki::tree<leaf> tree;
+typedef tree::container_type trees;
 
-branches read(const papki::File& fi);
+trees read(const papki::File& fi);
 
-void write(const branches& roots, papki::File& fi, bool formatted);
+void write(const trees& roots, papki::File& fi, bool formatted);
 
 class not_found_exception : public puu::exception{
 public:
@@ -107,10 +107,10 @@ public:
 };
 
 class crawler{
-    branches& b;
-    branches::iterator i;
+    trees& b;
+    trees::iterator i;
 public:
-    crawler(branches& b) :
+    crawler(trees& b) :
             b(b),
             i(b.begin())
     {
@@ -119,16 +119,16 @@ public:
         }
     }
 
-    crawler(const branches& b) :
-            crawler(const_cast<branches&>(b))
+    crawler(const trees& b) :
+            crawler(const_cast<trees&>(b))
     {}
 
-    branch& get()noexcept{
+    tree& get()noexcept{
         ASSERT(this->i != this->b.end())
         return *this->i;
     }
 
-    const branch& get()const noexcept{
+    const tree& get()const noexcept{
         ASSERT(this->i != this->b.end())
         return *this->i;
     }

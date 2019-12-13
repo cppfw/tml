@@ -8,33 +8,33 @@
 using namespace puu;
 
 
-branches puu::read(const papki::File& fi){
+trees puu::read(const papki::File& fi){
 	class the_listener : public puu::listener{
-		std::stack<branches> stack;
+		std::stack<trees> stack;
 
 	public:
-		branches cur_branches;
+		trees cur_trees;
 
 		void on_children_parse_started()override{
-			this->stack.push(std::move(this->cur_branches));
-            ASSERT(this->cur_branches.size() == 0)
+			this->stack.push(std::move(this->cur_trees));
+            ASSERT(this->cur_trees.size() == 0)
 		}
 
         void on_children_parse_finished()override{
             ASSERT(this->stack.size() != 0)
-            this->stack.top().back().children = std::move(this->cur_branches);
-            this->cur_branches = std::move(this->stack.top());
+            this->stack.top().back().children = std::move(this->cur_trees);
+            this->cur_trees = std::move(this->stack.top());
             this->stack.pop();
 		}
 
 		void on_string_parsed(const utki::Buf<char> str)override{
-			this->cur_branches.emplace_back(std::string(str.begin(), str.size()));
+			this->cur_trees.emplace_back(std::string(str.begin(), str.size()));
 		}
 	} listener;
 
 	puu::parse(fi, listener);
 
-	return std::move(listener.cur_branches);
+	return std::move(listener.cur_trees);
 }
 
 namespace{
@@ -115,7 +115,7 @@ void make_escaped_string(const char* str, utki::Buf<std::uint8_t> out){
 	}
 }
 
-void write_internal(const puu::branches& roots, papki::File& fi, bool formatted, unsigned indentation){
+void write_internal(const puu::trees& roots, papki::File& fi, bool formatted, unsigned indentation){
     const std::array<std::uint8_t, 1> quote = {{'"'}};
 	const std::array<std::uint8_t, 1> lcurly = {{'{'}};
 	const std::array<std::uint8_t, 1> rcurly = {{'}'}};
@@ -233,7 +233,7 @@ void write_internal(const puu::branches& roots, papki::File& fi, bool formatted,
 }
 }
 
-void puu::write(const puu::branches& roots, papki::File& fi, bool formatted){
+void puu::write(const puu::trees& roots, papki::File& fi, bool formatted){
     papki::File::Guard fileGuard(fi, papki::File::E_Mode::CREATE);
 
     write_internal(roots, fi, formatted, 0);

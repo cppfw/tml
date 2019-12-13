@@ -15,7 +15,7 @@ this_cxxflags += -O3
 this_srcs += main.cpp
 
 
-this_ldflags += -L$(d)../../src
+this_ldflags += -L$(d)../../src/build
 
 ifeq ($(os), macosx)
     this_cxxflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
@@ -33,6 +33,6 @@ $(eval $(prorab-build-app))
 include $(d)../test_rule.mk
 
 #add dependency on libpuu
-$(prorab_this_name): $(abspath $(d)../../src/libpuu$(soext))
+$(prorab_this_name): $(abspath $(d)../../src/build/libpuu$(soext))
 
 $(eval $(call prorab-try-include,$(d)../../src/makefile))

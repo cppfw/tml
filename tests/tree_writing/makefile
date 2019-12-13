@@ -13,7 +13,7 @@ this_cxxflags += -O3
 
 this_srcs += main.cpp
 
-this_ldflags += -L$(d)../../src
+this_ldflags += -L$(d)../../src/build
 
 ifeq ($(os), macosx)
     this_cxxflags += -stdlib=libc++ #this is needed to be able to use c++11 std lib
@@ -29,11 +29,11 @@ $(eval $(prorab-build-app))
 
 ifeq ($(os),windows)
     # to avoid /C converted to C:\ need to escape it as //C
-    this_test_cmd = (cd $(d) && cmd //C "set PATH=../../src;%PATH% && cat_puu$(exeext) $1")
+    this_test_cmd = (cd $(d) && cmd //C "set PATH=../../src/build;%PATH% && cat_puu$(exeext) $1")
 else ifeq ($(os),macosx)
-    this_test_cmd = (cd $(d) && DYLD_LIBRARY_PATH=../../src ./cat_puu$(exeext) $1)
+    this_test_cmd = (cd $(d) && DYLD_LIBRARY_PATH=../../src/build ./cat_puu$(exeext) $1)
 else ifeq ($(os),linux)
-    this_test_cmd = (cd $(d) && LD_LIBRARY_PATH=../../src ./cat_puu$(exeext) $1)
+    this_test_cmd = (cd $(d) && LD_LIBRARY_PATH=../../src/build ./cat_puu$(exeext) $1)
 else
     $(error "Unknown OS")
 endif
@@ -50,6 +50,6 @@ endef
 $(eval $(this_rules))
 
 #add dependency on libpuu
-$(prorab_this_name): $(abspath $(d)../../src/libpuu$(soext))
+$(prorab_this_name): $(abspath $(d)../../src/build/libpuu$(soext))
 
 $(eval $(call prorab-try-include,$(d)../../src/makefile))

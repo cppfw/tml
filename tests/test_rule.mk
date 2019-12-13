@@ -1,7 +1,7 @@
-ifeq ($(prorab_os),windows)
-    this_test_cmd := (cd $(d); cp ../../src/libpuu.dll .; $$^)
+ifeq ($(os),windows)
+    this_test_cmd := (cd $(d); cp ../../src/build/libpuu.dll .; $$^)
 else
-    this_test_cmd := (cd $(d); LD_LIBRARY_PATH=../../src $$^)
+    this_test_cmd := (cd $(d); LD_LIBRARY_PATH=../../srcbuild/ $$^)
 endif
 
 
