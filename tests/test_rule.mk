@@ -1,7 +1,7 @@
 ifeq ($(os),windows)
     this_test_cmd := (cd $(d); cp ../../src/build/libpuu.dll .; $$^)
 else
-    this_test_cmd := (cd $(d); LD_LIBRARY_PATH=../../srcbuild/ $$^)
+    this_test_cmd := (cd $(d); LD_LIBRARY_PATH=../../src/build $$^)
 endif
 
 
