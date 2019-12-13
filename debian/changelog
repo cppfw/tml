@@ -1,3 +1,9 @@
+libpuu (0.1.5) unstable; urgency=medium
+
+  * branches renamed to trees
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 13 Dec 2019 20:03:34 +0200
+
 libpuu (0.1.4) unstable; urgency=medium
 
   * deploy to msys2 from travis
