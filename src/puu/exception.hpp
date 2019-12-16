@@ -6,7 +6,7 @@
 
 
 
-#include <utki/Exc.hpp>
+#include <utki/exception.hpp>
 
 
 
@@ -17,14 +17,14 @@ namespace puu{
 /**
  * @brief Basic exception class.
  */
-class exception : public utki::Exc{
+class exception : public utki::exception{
 public:
 	/**
 	 * @brief Exception object constructor.
      * @param message - human readable message describing the error.
      */
 	exception(const std::string& message = std::string()) :
-			utki::Exc(message)
+			utki::exception(message)
 	{}
 };
 
