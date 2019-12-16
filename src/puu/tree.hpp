@@ -57,6 +57,10 @@ public:
         return this->string.length();
     }
 
+    char operator[](size_t i)const noexcept{
+        return this->string[i];
+    }
+
     const std::string& to_string()const noexcept{
         return this->string;
     }
