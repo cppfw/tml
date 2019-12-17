@@ -1,3 +1,9 @@
+libpuu (0.1.7) unstable; urgency=medium
+
+  * added puu::read(const char*) function
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 17 Dec 2019 16:33:07 +0200
+
 libpuu (0.1.6) unstable; urgency=medium
 
   * added leaf::operator[]
