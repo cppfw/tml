@@ -101,6 +101,8 @@ typedef tree::container_type trees;
 
 trees read(const papki::File& fi);
 
+trees read(const char* str);
+
 void write(const trees& roots, papki::File& fi, bool formatted);
 
 class not_found_exception : public puu::exception{

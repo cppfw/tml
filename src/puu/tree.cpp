@@ -4,6 +4,9 @@
 
 #include <stack>
 #include <cinttypes>
+#include <cstring>
+
+#include <papki/BufferFile.hpp>
 
 using namespace puu;
 
@@ -35,6 +38,20 @@ trees puu::read(const papki::File& fi){
 	puu::parse(fi, listener);
 
 	return std::move(listener.cur_trees);
+}
+
+trees puu::read(const char* str){
+	if(!str){
+		return {};
+	}
+
+	// TODO: optimize
+	size_t len = strlen(str);
+
+	//TODO: make const Buffer file
+	papki::BufferFile fi(utki::Buf<std::uint8_t>(reinterpret_cast<std::uint8_t*>(const_cast<char*>(str)), len));
+
+	return read(fi);
 }
 
 namespace{
