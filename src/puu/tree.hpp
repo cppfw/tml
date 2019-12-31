@@ -57,6 +57,10 @@ public:
         return this->string.length();
     }
 
+    bool empty()const noexcept{
+        return this->string.empty();
+    }
+
     char operator[](size_t i)const noexcept{
         return this->string[i];
     }
