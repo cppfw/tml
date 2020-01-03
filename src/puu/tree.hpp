@@ -41,12 +41,24 @@ public:
         return this->string == str;
     }
 
+    bool operator!=(const char* str)const{
+        return this->string != str;
+    }
+
     bool operator==(const std::string& str)const{
         return this->string == str;
     }
 
+    bool operator!=(const std::string& str)const{
+        return this->string != str;
+    }
+
     bool operator==(const leaf& l)const{
         return this->string == l.string;
+    }
+
+    bool operator!=(const leaf& l)const{
+        return this->string != l.string;
     }
 
     const char* c_str()const noexcept{
