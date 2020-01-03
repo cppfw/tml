@@ -1,3 +1,9 @@
+libpuu (0.1.10) unstable; urgency=medium
+
+  * msvs package to include tree.cpp
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 04 Jan 2020 00:27:46 +0200
+
 libpuu (0.1.9) unstable; urgency=medium
 
   * added leaf::operator!=()
