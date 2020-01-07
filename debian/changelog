@@ -1,3 +1,9 @@
+libpuu (0.1.11) unstable; urgency=medium
+
+  * update to latest libs
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 07 Jan 2020 22:49:48 +0200
+
 libpuu (0.1.10) unstable; urgency=medium
 
   * msvs package to include tree.cpp
