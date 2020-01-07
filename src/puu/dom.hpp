@@ -14,7 +14,7 @@
 #include <utki/Buf.hpp>
 #include <utki/Unique.hpp>
 
-#include <papki/File.hpp>
+#include <papki/file.hpp>
 
 #include <unikod/utf8.hpp>
 

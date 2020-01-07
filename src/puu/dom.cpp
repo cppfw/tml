@@ -207,7 +207,7 @@ void writeChainInternal(const puu::node* chain, papki::File& fi, bool formatted,
 		//indent
 		if(formatted){
 			for(unsigned i = 0; i != indentation; ++i){
-				fi.write(utki::wrapBuf(tab));
+				fi.write(utki::make_span(tab));
 			}
 		}
 
@@ -218,7 +218,7 @@ void writeChainInternal(const puu::node* chain, papki::File& fi, bool formatted,
 		bool unqouted = canStringBeUnquoted(n->value(), length, numEscapes);
 
 		if(!unqouted){
-			fi.write(utki::wrapBuf(quote));
+			fi.write(utki::make_span(quote));
 
 			if(numEscapes == 0){
 				fi.write(utki::Buf<std::uint8_t>(
@@ -228,12 +228,12 @@ void writeChainInternal(const puu::node* chain, papki::File& fi, bool formatted,
 			}else{
 				std::vector<std::uint8_t> buf(length + numEscapes);
 
-				MakeEscapedString(n->value(), utki::wrapBuf(buf));
+				MakeEscapedString(n->value(), utki::make_span(buf));
 
-				fi.write(utki::wrapBuf(buf));
+				fi.write(utki::make_span(buf));
 			}
 
-			fi.write(utki::wrapBuf(quote));
+			fi.write(utki::make_span(quote));
 		}else{
 			bool isQuotedEmptyString = false;
 			if(n->length() == 0){//if empty string
@@ -244,13 +244,13 @@ void writeChainInternal(const puu::node* chain, papki::File& fi, bool formatted,
 
 			//unquoted string
 			if(!formatted && prevWasUnquotedWithoutChildren && !isQuotedEmptyString){
-				fi.write(utki::wrapBuf(space));
+				fi.write(utki::make_span(space));
 			}
 
 			if(n->length() == 0){//if empty string
 				if(isQuotedEmptyString){
-					fi.write(utki::wrapBuf(quote));
-					fi.write(utki::wrapBuf(quote));
+					fi.write(utki::make_span(quote));
+					fi.write(utki::make_span(quote));
 				}
 			}else{
 				ASSERT(numEscapes == 0)
@@ -259,7 +259,7 @@ void writeChainInternal(const puu::node* chain, papki::File& fi, bool formatted,
 						length
 					));
 				if(!n->child() && length == 1 && n->value()[0] == 'R'){
-					fi.write(utki::wrapBuf(space));
+					fi.write(utki::make_span(space));
 				}
 			}
 		}
@@ -267,7 +267,7 @@ void writeChainInternal(const puu::node* chain, papki::File& fi, bool formatted,
 		prevHadChildren = (n->child() != nullptr);
 		if(!n->child()){
 			if(formatted){
-				fi.write(utki::wrapBuf(newLine));
+				fi.write(utki::make_span(newLine));
 			}
 			prevWasUnquotedWithoutChildren = (unqouted && n->length() != 0);
 			continue;
@@ -276,30 +276,30 @@ void writeChainInternal(const puu::node* chain, papki::File& fi, bool formatted,
 		}
 
 		if(!formatted){
-			fi.write(utki::wrapBuf(lcurly));
+			fi.write(utki::make_span(lcurly));
 
 			writeChainInternal(n->child(), fi, false, 0);
 
-			fi.write(utki::wrapBuf(rcurly));
+			fi.write(utki::make_span(rcurly));
 		}else{
 			if(n->child()->next() == 0 && n->child()->child() == 0){
 				//if only one child and that child has no children
 
-				fi.write(utki::wrapBuf(lcurly));
+				fi.write(utki::make_span(lcurly));
 				writeChainInternal(n->child(), fi, false, 0);
-				fi.write(utki::wrapBuf(rcurly));
-				fi.write(utki::wrapBuf(newLine));
+				fi.write(utki::make_span(rcurly));
+				fi.write(utki::make_span(newLine));
 			}else{
-				fi.write(utki::wrapBuf(lcurly));
-				fi.write(utki::wrapBuf(newLine));
+				fi.write(utki::make_span(lcurly));
+				fi.write(utki::make_span(newLine));
 				writeChainInternal(n->child(), fi, true, indentation + 1);
 
 				//indent
 				for(unsigned i = 0; i != indentation; ++i){
-					fi.write(utki::wrapBuf(tab));
+					fi.write(utki::make_span(tab));
 				}
-				fi.write(utki::wrapBuf(rcurly));
-				fi.write(utki::wrapBuf(newLine));
+				fi.write(utki::make_span(rcurly));
+				fi.write(utki::make_span(newLine));
 			}
 		}
 	}//~for()

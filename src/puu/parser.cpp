@@ -17,7 +17,7 @@ const size_t fileReadChinkSize_c = 0x4ff;
 }
 
 void parser::handleStringParsed(listener& listener){
-	listener.on_string_parsed(utki::wrapBuf(this->stringBuf));
+	listener.on_string_parsed(utki::make_span(this->stringBuf));
 	this->stringBuf.clear();
 }
 
@@ -32,7 +32,7 @@ void parser::processCharInIdle(char c, listener& listener){
 			this->state = State_e::IDLE;
 			break;
 		case '{':
-			listener.on_string_parsed();
+			listener.on_string_parsed(utki::span<char>());
 			listener.on_children_parse_started();
 			++this->nestingLevel;
 			break;
@@ -245,7 +245,7 @@ void parser::processCharInRawStringOpeningDelimeter(char c, listener& listener) 
 		case '"':
 			{
 				char r = 'R';
-				listener.on_string_parsed(utki::Buf<char>(&r, 1));
+				listener.on_string_parsed(utki::make_span(&r, 1));
 			}
 			this->handleStringParsed(listener);
 			this->state = State_e::STRING_PARSED;
@@ -347,7 +347,7 @@ void parser::processChar(char c, listener& listener){
 
 
 
-void parser::parse_data_chunk(const utki::Buf<std::uint8_t> chunk, listener& listener){
+void parser::parse_data_chunk(const utki::span<uint8_t> chunk, listener& listener){
 	for(auto c : chunk){
 		this->processChar(c, listener);
 	}
@@ -377,9 +377,9 @@ void puu::parse(const papki::File& fi, listener& listener){
 	size_t bytesRead;
 
 	do{
-		bytesRead = fi.read(utki::wrapBuf(buf));
+		bytesRead = fi.read(utki::make_span(buf));
 
-		parser.parse_data_chunk(utki::Buf<std::uint8_t>(&*buf.begin(), bytesRead), listener);
+		parser.parse_data_chunk(utki::make_span(&*buf.begin(), bytesRead), listener);
 	}while(bytesRead == buf.size());
 
 	parser.end_of_data(listener);

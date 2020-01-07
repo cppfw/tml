@@ -30,7 +30,7 @@ trees puu::read(const papki::File& fi){
             this->stack.pop();
 		}
 
-		void on_string_parsed(const utki::Buf<char> str)override{
+		void on_string_parsed(const utki::span<char> str)override{
 			this->cur_trees.emplace_back(std::string(str.begin(), str.size()));
 		}
 	} listener;
@@ -49,7 +49,7 @@ trees puu::read(const char* str){
 	size_t len = strlen(str);
 
 	//TODO: make const Buffer file
-	papki::BufferFile fi(utki::Buf<std::uint8_t>(reinterpret_cast<std::uint8_t*>(const_cast<char*>(str)), len));
+	papki::span_file fi(utki::make_span(reinterpret_cast<std::uint8_t*>(const_cast<char*>(str)), len));
 
 	return read(fi);
 }
@@ -88,7 +88,7 @@ bool can_string_be_unquoted(const char* s, size_t& out_length, unsigned& out_num
 	return ret;
 }
 
-void make_escaped_string(const char* str, utki::Buf<std::uint8_t> out){
+void make_escaped_string(const char* str, utki::span<std::uint8_t> out){
 	std::uint8_t *p = out.begin();
 	for(const char* c = str; *c != 0; ++c){
 		ASSERT(p != out.end())
@@ -149,7 +149,7 @@ void write_internal(const puu::trees& roots, papki::File& fi, bool formatted, un
 		//indent
 		if(formatted){
 			for(unsigned i = 0; i != indentation; ++i){
-				fi.write(utki::wrapBuf(tab));
+				fi.write(utki::make_span(tab));
 			}
 		}
 
@@ -162,22 +162,22 @@ void write_internal(const puu::trees& roots, papki::File& fi, bool formatted, un
 		bool unqouted = can_string_be_unquoted(n.value.c_str(), length, num_escapes);
 
 		if(!unqouted){
-			fi.write(utki::wrapBuf(quote));
+			fi.write(utki::make_span(quote));
 
 			if(num_escapes == 0){
-				fi.write(utki::Buf<uint8_t>(
+				fi.write(utki::span<uint8_t>(
 						const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(n.value.c_str())),
 						length
 					));
 			}else{
 				std::vector<uint8_t> buf(length + num_escapes);
 
-				make_escaped_string(n.value.c_str(), utki::wrapBuf(buf));
+				make_escaped_string(n.value.c_str(), utki::make_span(buf));
 
-				fi.write(utki::wrapBuf(buf));
+				fi.write(utki::make_span(buf));
 			}
 
-			fi.write(utki::wrapBuf(quote));
+			fi.write(utki::make_span(quote));
 		}else{
 			bool is_quoted_empty_string = false;
 
@@ -189,23 +189,23 @@ void write_internal(const puu::trees& roots, papki::File& fi, bool formatted, un
 
 			// if the string is unquoted then write space in case the output is unformatted
 			if(!formatted && prev_was_unquoted_without_children && !is_quoted_empty_string){
-				fi.write(utki::wrapBuf(space));
+				fi.write(utki::make_span(space));
 			}
 
 			if(length == 0){
 				if(is_quoted_empty_string){
-					fi.write(utki::wrapBuf(quote));
-					fi.write(utki::wrapBuf(quote));
+					fi.write(utki::make_span(quote));
+					fi.write(utki::make_span(quote));
 				}
 			}else{
 				ASSERT(num_escapes == 0)
-				fi.write(utki::Buf<std::uint8_t>(
-						const_cast<std::uint8_t*>(reinterpret_cast<const std::uint8_t*>(n.value.c_str())),
+				fi.write(utki::span<uint8_t>(
+						const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(n.value.c_str())),
 						length
 					));
 				ASSERT(n.value.to_string().length() != 0)
 				if(n.children.size() == 0 && length == 1 && n.value.c_str()[0] == 'R'){
-					fi.write(utki::wrapBuf(space));
+					fi.write(utki::make_span(space));
 				}
 			}
 		}
@@ -214,7 +214,7 @@ void write_internal(const puu::trees& roots, papki::File& fi, bool formatted, un
 
 		if(n.children.size() == 0){
 			if(formatted){
-				fi.write(utki::wrapBuf(newLine));
+				fi.write(utki::make_span(newLine));
 			}
 			prev_was_unquoted_without_children = (unqouted && length != 0);
 			continue;
@@ -223,28 +223,28 @@ void write_internal(const puu::trees& roots, papki::File& fi, bool formatted, un
 		}
 
 		if(!formatted){
-			fi.write(utki::wrapBuf(lcurly));
+			fi.write(utki::make_span(lcurly));
 
 			write_internal(n.children, fi, false, 0);
 
-			fi.write(utki::wrapBuf(rcurly));
+			fi.write(utki::make_span(rcurly));
 		}else{
-			fi.write(utki::wrapBuf(lcurly));
+			fi.write(utki::make_span(lcurly));
 
 			if(n.children.size() == 1 && n.children[0].children.size() == 0){
 				// if only one child and that child has no children then write the only child on the same line
 				write_internal(n.children, fi, false, 0);
 			}else{
-				fi.write(utki::wrapBuf(newLine));
+				fi.write(utki::make_span(newLine));
 				write_internal(n.children, fi, true, indentation + 1);
 
 				//indent
 				for(unsigned i = 0; i != indentation; ++i){
-					fi.write(utki::wrapBuf(tab));
+					fi.write(utki::make_span(tab));
 				}
 			}
-			fi.write(utki::wrapBuf(rcurly));
-			fi.write(utki::wrapBuf(newLine));
+			fi.write(utki::make_span(rcurly));
+			fi.write(utki::make_span(newLine));
 		}
 	}//~for
 }

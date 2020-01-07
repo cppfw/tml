@@ -1,8 +1,8 @@
 #pragma once
 
 
-#include <utki/Buf.hpp>
-#include <papki/File.hpp>
+#include <utki/span.hpp>
+#include <papki/file.hpp>
 
 
 
@@ -51,7 +51,7 @@ public:
 	 * This method is called by Parser when String token has been parsed.
      * @param str - parsed string.
      */
-	virtual void on_string_parsed(const utki::Buf<char> str = utki::Buf<char>()) = 0;
+	virtual void on_string_parsed(const utki::span<char> str) = 0;
 
 	/**
 	 * @brief Children list parsing started.
@@ -135,7 +135,7 @@ public:
      * @param listener - listener object which will receive notifications about parsed tokens.
 	 * @throw puu::exception - in case of malformed puu document.
      */
-	void parse_data_chunk(const utki::Buf<std::uint8_t> chunk, listener& listener);
+	void parse_data_chunk(const utki::span<std::uint8_t> chunk, listener& listener);
 
 	/**
 	 * @brief Finalize parsing.
