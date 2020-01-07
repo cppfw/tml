@@ -6,7 +6,7 @@
 #include <cinttypes>
 #include <cstring>
 
-#include <papki/BufferFile.hpp>
+#include <papki/span_file.hpp>
 
 using namespace puu;
 
@@ -48,8 +48,7 @@ trees puu::read(const char* str){
 	// TODO: optimize
 	size_t len = strlen(str);
 
-	//TODO: make const Buffer file
-	papki::span_file fi(utki::make_span(reinterpret_cast<std::uint8_t*>(const_cast<char*>(str)), len));
+	const papki::span_file fi(utki::make_span(reinterpret_cast<const std::uint8_t*>(str), len));
 
 	return read(fi);
 }
@@ -165,8 +164,8 @@ void write_internal(const puu::trees& roots, papki::File& fi, bool formatted, un
 			fi.write(utki::make_span(quote));
 
 			if(num_escapes == 0){
-				fi.write(utki::span<uint8_t>(
-						const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(n.value.c_str())),
+				fi.write(utki::make_span(
+						reinterpret_cast<const uint8_t*>(n.value.c_str()),
 						length
 					));
 			}else{
@@ -199,8 +198,8 @@ void write_internal(const puu::trees& roots, papki::File& fi, bool formatted, un
 				}
 			}else{
 				ASSERT(num_escapes == 0)
-				fi.write(utki::span<uint8_t>(
-						const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(n.value.c_str())),
+				fi.write(utki::make_span(
+						reinterpret_cast<const uint8_t*>(n.value.c_str()),
 						length
 					));
 				ASSERT(n.value.to_string().length() != 0)
