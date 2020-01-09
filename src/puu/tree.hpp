@@ -113,9 +113,6 @@ public:
 typedef utki::tree<leaf> tree;
 typedef tree::container_type forest;
 
-//TODO: deprecated, remove.
-typedef forest trees;
-
 forest read(const papki::file& fi);
 
 forest read(const char* str);
