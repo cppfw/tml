@@ -11,12 +11,12 @@
 using namespace puu;
 
 
-trees puu::read(const papki::File& fi){
+forest puu::read(const papki::file& fi){
 	class the_listener : public puu::listener{
-		std::stack<trees> stack;
+		std::stack<forest> stack;
 
 	public:
-		trees cur_trees;
+		forest cur_trees;
 
 		void on_children_parse_started()override{
 			this->stack.push(std::move(this->cur_trees));
@@ -40,7 +40,7 @@ trees puu::read(const papki::File& fi){
 	return std::move(listener.cur_trees);
 }
 
-trees puu::read(const char* str){
+forest puu::read(const char* str){
 	if(!str){
 		return {};
 	}
@@ -131,7 +131,7 @@ void make_escaped_string(const char* str, utki::span<std::uint8_t> out){
 	}
 }
 
-void write_internal(const puu::trees& roots, papki::File& fi, bool formatted, unsigned indentation){
+void write_internal(const puu::forest& roots, papki::file& fi, formatting fmt, unsigned indentation){
     const std::array<std::uint8_t, 1> quote = {{'"'}};
 	const std::array<std::uint8_t, 1> lcurly = {{'{'}};
 	const std::array<std::uint8_t, 1> rcurly = {{'}'}};
@@ -139,14 +139,14 @@ void write_internal(const puu::trees& roots, papki::File& fi, bool formatted, un
 	const std::array<std::uint8_t, 1> tab = {{'\t'}};
 	const std::array<std::uint8_t, 1> newLine = {{'\n'}};
 
-	//used to detect case of two adjacent unquoted strings without children, need to insert space between them
+	// used to detect case of two adjacent unquoted strings without children, need to insert space between them
 	bool prev_was_unquoted_without_children = false;
 
 	bool prev_had_children = true;
 
 	for(auto& n : roots){
 		//indent
-		if(formatted){
+		if(fmt == formatting::normal){
 			for(unsigned i = 0; i != indentation; ++i){
 				fi.write(utki::make_span(tab));
 			}
@@ -187,7 +187,7 @@ void write_internal(const puu::trees& roots, papki::File& fi, bool formatted, un
 			}
 
 			// if the string is unquoted then write space in case the output is unformatted
-			if(!formatted && prev_was_unquoted_without_children && !is_quoted_empty_string){
+			if(fmt != formatting::normal && prev_was_unquoted_without_children && !is_quoted_empty_string){
 				fi.write(utki::make_span(space));
 			}
 
@@ -212,7 +212,7 @@ void write_internal(const puu::trees& roots, papki::File& fi, bool formatted, un
 		prev_had_children = (n.children.size() != 0);
 
 		if(n.children.size() == 0){
-			if(formatted){
+			if(fmt == formatting::normal){
 				fi.write(utki::make_span(newLine));
 			}
 			prev_was_unquoted_without_children = (unqouted && length != 0);
@@ -221,10 +221,10 @@ void write_internal(const puu::trees& roots, papki::File& fi, bool formatted, un
 			prev_was_unquoted_without_children = false;
 		}
 
-		if(!formatted){
+		if(fmt != formatting::normal){
 			fi.write(utki::make_span(lcurly));
 
-			write_internal(n.children, fi, false, 0);
+			write_internal(n.children, fi, fmt, 0);
 
 			fi.write(utki::make_span(rcurly));
 		}else{
@@ -232,10 +232,10 @@ void write_internal(const puu::trees& roots, papki::File& fi, bool formatted, un
 
 			if(n.children.size() == 1 && n.children[0].children.size() == 0){
 				// if only one child and that child has no children then write the only child on the same line
-				write_internal(n.children, fi, false, 0);
+				write_internal(n.children, fi, formatting::minimal, 0);
 			}else{
 				fi.write(utki::make_span(newLine));
-				write_internal(n.children, fi, true, indentation + 1);
+				write_internal(n.children, fi, fmt, indentation + 1);
 
 				//indent
 				for(unsigned i = 0; i != indentation; ++i){
@@ -245,20 +245,20 @@ void write_internal(const puu::trees& roots, papki::File& fi, bool formatted, un
 			fi.write(utki::make_span(rcurly));
 			fi.write(utki::make_span(newLine));
 		}
-	}//~for
+	}
 }
 }
 
-void puu::write(const puu::trees& roots, papki::File& fi, bool formatted){
-    papki::File::Guard fileGuard(fi, papki::File::E_Mode::CREATE);
+void puu::write(const puu::forest& wood, papki::file& fi, formatting fmt){
+    papki::file::guard fileGuard(fi, papki::file::mode::create);
 
-    write_internal(roots, fi, formatted, 0);
+    write_internal(wood, fi, fmt, 0);
 }
 
 crawler crawler::up(){
 	ASSERT(this->i != this->b.end())
 	if(this->get().children.size() == 0){
-		throw puu::not_found_exception("crawler::up() failed, node has no children");
+		throw utki::not_found("crawler::up() failed, node has no children");
 	}
 	return crawler(this->get().children);
 }
@@ -267,7 +267,7 @@ crawler& crawler::next(){
 	ASSERT(this->i != this->b.end())
 	++this->i;
 	if(this->i == this->b.end()){
-		throw puu::not_found_exception("crawler::next() failed, reached end of node list");
+		throw utki::not_found("crawler::next() failed, reached end of node list");
 	}
 	return *this;
 }
@@ -277,7 +277,7 @@ crawler& crawler::to(const std::string& str){
 	if(this->i != this->b.end()){
 		return *this;
 	}
-	throw puu::not_found_exception("crawler::to() failed, reached end of node list");
+	throw utki::not_found("crawler::to() failed, reached end of node list");
 }
 
 leaf::leaf(bool value) :
@@ -468,7 +468,7 @@ namespace{
 void throw_could_not_convert_exception(const std::string& string, const std::string& destination_type_name){
 	std::stringstream ss;
 	ss << "to_" << destination_type_name << "(): could not convert string: " << string;
-	throw puu::exception(ss.str());
+	throw utki::invalid_state(ss.str());
 }
 }
 

@@ -527,7 +527,7 @@ size_t node::count_chain() const noexcept{
 
 std::unique_ptr<node> node::replace(std::unique_ptr<node> chain) {
 	if(!chain){
-		throw puu::exception("could not replace node by null chain");
+		throw std::invalid_argument("could not replace node by null chain");
 	}
 
 	//find chain's last node

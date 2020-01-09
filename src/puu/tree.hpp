@@ -6,8 +6,6 @@
 
 #include <string>
 
-#include "exception.hpp"
-
 //TODO: doxygen
 namespace puu{
 
@@ -113,36 +111,37 @@ public:
 };
 
 typedef utki::tree<leaf> tree;
-typedef tree::container_type trees;
+typedef tree::container_type forest;
 
-trees read(const papki::File& fi);
+//TODO: deprecated, remove.
+typedef forest trees;
 
-trees read(const char* str);
+forest read(const papki::file& fi);
 
-void write(const trees& roots, papki::File& fi, bool formatted);
+forest read(const char* str);
 
-class not_found_exception : public puu::exception{
-public:
-    not_found_exception(const std::string& message) :
-            exception(message)
-    {}
+enum class formatting{
+    normal,
+    minimal
 };
 
+void write(const forest& wood, papki::file& fi, formatting fmt = formatting::normal);
+
 class crawler{
-    trees& b;
-    trees::iterator i;
+    forest& b;
+    forest::iterator i;
 public:
-    crawler(trees& b) :
+    crawler(forest& b) :
             b(b),
             i(b.begin())
     {
         if(b.size() == 0){
-            throw puu::not_found_exception("crawler::crawler() failed, reached end of node list");
+            throw utki::not_found("crawler::crawler() failed, reached end of node list");
         }
     }
 
-    crawler(const trees& b) :
-            crawler(const_cast<trees&>(b))
+    crawler(const forest& b) :
+            crawler(const_cast<forest&>(b))
     {}
 
     tree& get()noexcept{
@@ -166,7 +165,7 @@ public:
         if(this->i != this->b.end()){
             return *this;
         }
-        throw puu::not_found_exception("crawler::to() failed, reached end of node list");
+        throw utki::not_found("crawler::to() failed, reached end of node list");
     }
 
     template <class Predicate> const crawler& to_if(Predicate p)const{

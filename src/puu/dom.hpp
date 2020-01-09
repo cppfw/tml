@@ -18,8 +18,6 @@
 
 #include <unikod/utf8.hpp>
 
-#include "exception.hpp"
-
 
 namespace puu{
 
@@ -62,24 +60,6 @@ public:
 	node(const char* value) :
 			node(utki::Buf<char>(const_cast<char*>(value), value == nullptr ? 0 : strlen(value)))
 	{}
-
-	class not_found_exc : puu::exception{
-	public:
-		not_found_exc(const std::string& message) :
-				puu::exception(message)
-		{}
-	};
-
-	// TODO: deprecated, remove in v1.0.0
-	typedef not_found_exc NodeNotFoundExc;
-
-	//TODO: is needed? can be replaced by not_found_exc?
-	class NodeHasNoChldrenExc : puu::exception{
-	public:
-		NodeHasNoChldrenExc(const std::string& message) :
-				puu::exception(message)
-		{}
-	};
 
 	~node()noexcept{}
 
@@ -767,7 +747,7 @@ public:
 	node& up(){
 		auto r = this->child();
 		if(!r){
-			throw NodeHasNoChldrenExc(this->value());
+			throw utki::not_found(this->value());
 		}
 		return *r;
 	}
@@ -791,7 +771,7 @@ public:
 	node& up(const char* value){
 		auto r = this->child(value).get_node();
 		if(!r){
-			throw not_found_exc(value);
+			throw utki::not_found(value);
 		}
 		return *r;
 	}
@@ -815,7 +795,7 @@ public:
 	node& side(const char* value){
 		auto r = this->thisOrNext(value).get_node();
 		if(!r){
-			throw not_found_exc(value);
+			throw utki::not_found(value);
 		}
 		return *r;
 	}

@@ -23,9 +23,9 @@ int main(int argc, char** argv){
 
 	clargs::parser args;
 
-	bool formatted = false;
+	puu::formatting formatted = puu::formatting::minimal;
 
-	args.add('f', "--formatted", "format output to be human friendly", [&formatted](){formatted = true;});
+	args.add('f', "--formatted", "format output to be human friendly", [&formatted](){formatted = puu::formatting::normal;});
 
 	auto in_files = args.parse(argc, argv);
 

@@ -48,7 +48,7 @@ void test_puu_crawling(){
 		try{
 			puu::crawler(roots).to("b-1");
 			ASSERT_ALWAYS(false)
-		}catch(puu::not_found_exception& e){
+		}catch(utki::not_found& e){
 			thrown = true;
 		}
 		ASSERT_ALWAYS(thrown)
@@ -60,7 +60,7 @@ void test_puu_crawling(){
 		try{
 			puu::crawler(roots).to_if(predicate_str("b6-1"));
 			ASSERT_ALWAYS(false)
-		}catch(puu::not_found_exception& e){
+		}catch(utki::not_found& e){
 			thrown = true;
 		}
 		ASSERT_ALWAYS(thrown)
@@ -72,7 +72,7 @@ void test_puu_crawling(){
 		try{
 			puu::crawler(roots).to("b6").up().to("b6_1").up().to("b6_1_1").up();
 			ASSERT_ALWAYS(false)
-		}catch(puu::not_found_exception& e){
+		}catch(utki::not_found& e){
 			thrown = true;
 		}
 		ASSERT_ALWAYS(thrown)
@@ -84,7 +84,7 @@ void test_puu_crawling(){
 		try{
 			puu::crawler(roots).to("b6").up().to("b6_1").next();
 			ASSERT_ALWAYS(false)
-		}catch(puu::not_found_exception& e){
+		}catch(utki::not_found& e){
 			thrown = true;
 		}
 		ASSERT_ALWAYS(thrown)

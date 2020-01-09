@@ -5,9 +5,6 @@
 
 #include <utki/debug.hpp>
 
-#include "exception.hpp"
-
-
 
 using namespace puu;
 
@@ -359,7 +356,7 @@ void parser::end_of_data(listener& listener){
 	this->processChar('\0', listener);
 
 	if(this->nestingLevel != 0 || this->state != State_e::IDLE){
-		throw puu::exception("Malformed puu document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
+		throw utki::invalid_state("Malformed puu document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
 	}
 
 	this->reset();
