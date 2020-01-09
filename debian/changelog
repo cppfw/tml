@@ -1,3 +1,9 @@
+libpuu (0.1.12) unstable; urgency=medium
+
+  * trees renamed to forest
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 09 Jan 2020 14:41:38 +0200
+
 libpuu (0.1.11) unstable; urgency=medium
 
   * update to latest libs
