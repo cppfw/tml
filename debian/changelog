@@ -1,3 +1,9 @@
+libpuu (0.1.13) unstable; urgency=medium
+
+  * debian/buster i386 packages
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 21 Jan 2020 20:00:13 +0200
+
 libpuu (0.1.12) unstable; urgency=medium
 
   * trees renamed to forest
