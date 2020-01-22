@@ -99,15 +99,29 @@ public:
 
     bool to_bool()const;
 
-    int32_t to_int32()const;
-    uint32_t to_uint32()const;
+    int32_t to_int32()const{
+        return int32_t(std::stoi(this->string, nullptr, 0));
+    }
+    uint32_t to_uint32()const{
+        return uint32_t(std::stoul(this->string, nullptr, 0));
+    }
 
-    int64_t to_int64()const;
-    uint64_t to_uint64()const;
+    int64_t to_int64()const{
+        return int64_t(std::stoll(this->string, nullptr, 0));
+    }
+    uint64_t to_uint64()const{
+        return uint64_t(std::stoull(this->string, nullptr, 0));
+    }
 
-    float to_float()const;
-    double to_double()const;
-    long double to_long_double()const;
+    float to_float()const{
+        return std::stof(this->string);
+    }
+    double to_double()const{
+        return std::stod(this->string);
+    }
+    long double to_long_double()const{
+        return std::stold(this->string);
+    }
 };
 
 typedef utki::tree<leaf> tree;
