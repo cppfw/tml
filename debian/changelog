@@ -1,3 +1,9 @@
+libpuu (0.1.15) unstable; urgency=medium
+
+  * to_string() conversion functions added
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 22 Jan 2020 20:37:54 +0200
+
 libpuu (0.1.14) unstable; urgency=medium
 
   * refactoring, use std::stoi() family of functions
