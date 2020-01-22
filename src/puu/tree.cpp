@@ -463,3 +463,24 @@ leaf::leaf(long double value) :
 bool leaf::to_bool()const{
 	return this->string == "true";
 }
+
+
+std::string puu::to_string(const tree& t){
+	std::stringstream ss;
+	ss << t.value.to_string();
+	if(!t.children.empty()){
+		ss << "{";
+		ss << to_string(t.children);
+		ss << "}";
+	}
+	return ss.str();
+}
+
+std::string puu::to_string(const forest& f){
+	std::stringstream ss;
+	for(auto& t : f){
+		ss << to_string(t);
+	}
+
+	return ss.str();
+}

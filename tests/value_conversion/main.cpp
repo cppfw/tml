@@ -202,11 +202,30 @@ void test_puu_value_conversion(){
 	}
 }
 
+void test_tree_to_string_conversion(){
+	auto forest = puu::read(R"qwertyuiop(
+		a{b{c}}d{e}f
+	)qwertyuiop");
 
+	ASSERT_ALWAYS(puu::to_string(forest[0]) == "a{b{c}}")
+}
+
+void test_forest_to_string_conversion(){
+	auto forest = puu::read(R"qwertyuiop(
+		a{b{c}}d{e}f
+	)qwertyuiop");
+
+	auto str = puu::to_string(forest);
+	ASSERT_INFO_ALWAYS(str == "a{b{c}}d{e}f", "forest = " << str)
+}
 
 int main(int argc, char** argv){
 
 	test_puu_value_conversion();
+
+	test_tree_to_string_conversion();
+
+	test_forest_to_string_conversion();
 
 	return 0;
 }

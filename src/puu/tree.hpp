@@ -138,6 +138,9 @@ enum class formatting{
 
 void write(const forest& wood, papki::file& fi, formatting fmt = formatting::normal);
 
+std::string to_string(const tree& t);
+std::string to_string(const forest& f);
+
 class crawler{
     forest& b;
     forest::iterator i;
