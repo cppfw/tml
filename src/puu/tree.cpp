@@ -7,6 +7,7 @@
 #include <cstring>
 
 #include <papki/span_file.hpp>
+#include <papki/vector_file.hpp>
 
 using namespace puu;
 
@@ -237,7 +238,7 @@ void write_internal(const puu::forest& roots, papki::file& fi, formatting fmt, u
 				fi.write(utki::make_span(newLine));
 				write_internal(n.children, fi, fmt, indentation + 1);
 
-				//indent
+				// indent
 				for(unsigned i = 0; i != indentation; ++i){
 					fi.write(utki::make_span(tab));
 				}
@@ -464,23 +465,9 @@ bool leaf::to_bool()const{
 	return this->string == "true";
 }
 
-
-std::string puu::to_string(const tree& t){
-	std::stringstream ss;
-	ss << t.value.to_string();
-	if(!t.children.empty()){
-		ss << "{";
-		ss << to_string(t.children);
-		ss << "}";
-	}
-	return ss.str();
-}
-
 std::string puu::to_string(const forest& f){
-	std::stringstream ss;
-	for(auto& t : f){
-		ss << to_string(t);
-	}
-
-	return ss.str();
+	papki::vector_file fi;
+	puu::write(f, fi, puu::formatting::minimal);
+	auto v = fi.reset_data();
+	return std::string(reinterpret_cast<char*>(v.data()), v.size());
 }
