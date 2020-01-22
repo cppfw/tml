@@ -1,3 +1,9 @@
+libpuu (0.1.14) unstable; urgency=medium
+
+  * refactoring, use std::stoi() family of functions
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 22 Jan 2020 18:06:31 +0200
+
 libpuu (0.1.13) unstable; urgency=medium
 
   * debian/buster i386 packages
