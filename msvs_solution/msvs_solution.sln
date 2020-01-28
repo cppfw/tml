@@ -7,8 +7,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "puu", "puu\puu.vcxproj", "{
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_parser", "test_parser\test_parser.vcxproj", "{6BA680AF-291C-414C-84D9-F2F4CFE81423}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_dom", "test_dom\test_dom.vcxproj", "{F64A50C3-EE8A-4BA7-AF31-0C9F58AFD8E8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		v140_Debug|x64 = v140_Debug|x64
