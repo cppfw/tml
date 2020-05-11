@@ -31,7 +31,7 @@ forest puu::read(const papki::file& fi){
             this->stack.pop();
 		}
 
-		void on_string_parsed(const utki::span<char> str)override{
+		void on_string_parsed(utki::span<const char> str)override{
 			this->cur_trees.emplace_back(std::string(str.begin(), str.size()));
 		}
 	} listener;

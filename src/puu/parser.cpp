@@ -344,7 +344,7 @@ void parser::processChar(char c, listener& listener){
 
 
 
-void parser::parse_data_chunk(const utki::span<uint8_t> chunk, listener& listener){
+void parser::parse_data_chunk(utki::span<const uint8_t> chunk, listener& listener){
 	for(auto c : chunk){
 		this->processChar(c, listener);
 	}

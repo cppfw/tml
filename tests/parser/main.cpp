@@ -31,7 +31,7 @@ class Listener : public puu::listener{
 		this->actions.pop_front();
 	}
 
-	void on_string_parsed(const utki::Buf<char> s)override{
+	void on_string_parsed(utki::span<const char> s)override{
 		std::string str(&*s.begin(), s.size());
 		// TRACE(<< "str = " << str << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)
