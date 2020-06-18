@@ -44,7 +44,7 @@ repositories {
     }
 }
 dependencies {
-    implementation project(path: ':puu', configuration: 'default')
+//    implementation project(path: ':puu', configuration: 'default')
 }
 
 
