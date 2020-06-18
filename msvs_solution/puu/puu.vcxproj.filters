@@ -18,10 +18,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\puu\dom.cpp">
+    <ClCompile Include="..\..\src\puu\parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\puu\parser.cpp">
+    <ClCompile Include="..\..\src\puu\tree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
