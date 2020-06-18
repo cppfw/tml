@@ -26,9 +26,8 @@ nuget{
 	}
 	dependencies {
 		packages : {
-			libutki/1.0.22;
-			libunikod/2.0.4;
-			libpapki/1.0.15;
+			libutki/1.1.93;
+			libpapki/1.0.82;
 		};
 	}
 	files {

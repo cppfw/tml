@@ -3,7 +3,7 @@ Section: libs
 Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
 Build-Depends: debhelper (>= 9), libc6-dev, myci, prorab, prorab-extra,
-		libutki-dev, libpapki-dev, libunikod-dev, libclargs-dev
+		libutki-dev, libpapki-dev, libclargs-dev
 Build-Depends-Indep: doxygen
 Standards-Version: 3.9.2
 
@@ -11,7 +11,7 @@ Package: libpuu-dev
 Section: libdevel
 Architecture: any
 Depends: libpuu$(soname) (= ${binary:Version}), libpuu$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
-		libutki-dev, libpapki-dev, libunikod-dev
+		libutki-dev, libpapki-dev
 Suggests: libpuu-doc
 Description: puu markup language C++ library.
  puu is a simple markup language.

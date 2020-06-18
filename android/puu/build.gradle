@@ -47,7 +47,6 @@ repositories {
 }
 dependencies {
     implementation 'io.github.igagis:utki:+'
-    implementation 'io.github.igagis:unikod:+'
     implementation 'io.github.igagis:papki:+'
 }
 

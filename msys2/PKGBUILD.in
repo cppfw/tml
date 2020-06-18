@@ -29,7 +29,7 @@ url="http://github.com/igagis/${packageName}"
 license=('MIT')
 groups=()
 
-depends=("${pkgPrefix}utki" "${pkgPrefix}papki" "${pkgPrefix}unikod")
+depends=("${pkgPrefix}utki" "${pkgPrefix}papki")
 
 makedepends=('myci' 'prorab' 'prorab-extra' 'doxygen' "${pkgPrefix}clargs")
 checkdepends=('myci')
