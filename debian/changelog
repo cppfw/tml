@@ -1,3 +1,9 @@
+libpuu (0.1.18) unstable; urgency=medium
+
+  * use android native bundle plugin
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 19 Jun 2020 01:35:27 +0300
+
 libpuu (0.1.17) unstable; urgency=medium
 
   * update to latest libs
