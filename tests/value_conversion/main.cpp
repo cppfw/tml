@@ -3,7 +3,7 @@
 #include <iomanip>
 
 #include <utki/debug.hpp>
-#include <papki/FSFile.hpp>
+#include <papki/fs_file.hpp>
 
 namespace{
 template <class T> struct sample_template{

@@ -1,12 +1,10 @@
 #include "../../src/puu/tree.hpp"
 
 #include <utki/debug.hpp>
-#include <papki/FSFile.hpp>
-
-
+#include <papki/fs_file.hpp>
 
 void test_puu_basic_parsing(){
-	papki::FSFile fi("test.puu");
+	papki::fs_file fi("test.puu");
 
 	auto roots = puu::read(fi);
 

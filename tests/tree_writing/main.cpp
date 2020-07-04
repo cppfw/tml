@@ -3,8 +3,8 @@
 #include <utki/config.hpp>
 #include <utki/debug.hpp>
 
-#include <papki/FSFile.hpp>
-#include <papki/MemoryFile.hpp>
+#include <papki/fs_file.hpp>
+#include <papki/vector_file.hpp>
 
 #include <clargs/parser.hpp>
 
@@ -32,17 +32,17 @@ int main(int argc, char** argv){
 //	TRACE(<< "num infiles = " << in_files.size() << std::endl)
 
 	for(auto& f : in_files){
-		papki::FSFile fi(f);
+		papki::fs_file fi(f);
 
 		auto roots = puu::read(fi);
 
 //		TRACE(<< "num roots read = " << roots.size() << std::endl)
 
-		papki::MemoryFile outfi;
+		papki::vector_file outfi;
 
 		puu::write(roots, outfi, formatted);
 
-		auto data = outfi.resetData();
+		auto data = outfi.reset_data();
 
 		for(auto b : data){
 			ASSERT_INFO_ALWAYS(b != '\r', "output contains '\r' character")

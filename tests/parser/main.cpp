@@ -4,9 +4,7 @@
 #include <deque>
 
 #include <utki/debug.hpp>
-#include <papki/FSFile.hpp>
-
-
+#include <papki/fs_file.hpp>
 
 namespace TestBasicParsing{
 
@@ -109,7 +107,7 @@ void Run(){
 
 	l.actions.push_back(T_Pair(STRING, "UnquotedStringAtTheVeryEndOfTheFile"));
 
-	papki::FSFile fi("test.puu");
+	papki::fs_file fi("test.puu");
 
 	puu::parse(fi, l);
 

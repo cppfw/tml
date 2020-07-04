@@ -1,10 +1,7 @@
 #pragma once
 
-
 #include <utki/span.hpp>
 #include <papki/file.hpp>
-
-
 
 /**
  * puu is a very simple markup language. It is used to describe object
@@ -37,8 +34,6 @@
  */
 namespace puu{
 
-
-
 /**
  * @brief Listener interface for puu parser.
  * During the puu document parsing the Parser notifies this listener object
@@ -67,8 +62,6 @@ public:
 
 	virtual ~listener()noexcept{}
 };
-
-
 
 /**
  * @brief puu parser.
@@ -133,7 +126,6 @@ public:
 	 * Use this method to feed the puu data to the parser.
      * @param chunk - data chunk to parse.
      * @param listener - listener object which will receive notifications about parsed tokens.
-	 * @throw puu::exception - in case of malformed puu document.
      */
 	void parse_data_chunk(utki::span<const std::uint8_t> chunk, listener& listener);
 
@@ -142,22 +134,16 @@ public:
 	 * Call this method to finalize parsing after all the available puu data has been fed to the parser.
 	 * This will tell parser that there will be no more data and the temporary stored data should be interpreted as it is.
      * @param listener - listener object which will receive notifications about parsed tokens.
-	 * @throw puu::exception - in case of malformed puu document.
      */
 	void end_of_data(listener& listener);
 };
-
-
 
 /**
  * @brief Parse puu document provided by given file interface.
  * Use this function to parse the puu document from file.
  * @param fi - file interface to use for getting the data to parse.
  * @param listener - listener object which will receive notifications about parsed tokens.
- * @throw puu::exception - in case of malformed puu document.
  */
-void parse(const papki::File& fi, listener& listener);
-
-
+void parse(const papki::file& fi, listener& listener);
 
 }

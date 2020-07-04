@@ -153,7 +153,7 @@ public:
             i(b.begin())
     {
         if(b.size() == 0){
-            throw utki::not_found("crawler::crawler() failed, reached end of node list");
+            throw std::logic_error("crawler::crawler() failed, reached end of node list");
         }
     }
 
@@ -177,15 +177,15 @@ public:
         return const_cast<crawler*>(this)->to(str);
     }
 
-    template <class Predicate> crawler& to_if(Predicate p){
+    template <class predicate_type> crawler& to_if(predicate_type p){
         this->i = std::find_if(this->i, this->b.end(), p);
         if(this->i != this->b.end()){
             return *this;
         }
-        throw utki::not_found("crawler::to() failed, reached end of node list");
+        throw std::runtime_error("crawler::to_if() failed, reached end of node list");
     }
 
-    template <class Predicate> const crawler& to_if(Predicate p)const{
+    template <class predicate_type> const crawler& to_if(predicate_type p)const{
         return const_cast<crawler*>(this)->to_if(p);
     }
 
@@ -195,10 +195,10 @@ public:
         return const_cast<crawler*>(this)->next();
     }
 
-    crawler up();
+    crawler in();
 
-    const crawler up()const{
-        return const_cast<crawler*>(this)->up();
+    const crawler in()const{
+        return const_cast<crawler*>(this)->in();
     }
 };
 

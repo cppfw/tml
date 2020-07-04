@@ -5,9 +5,7 @@
 
 #include <utki/debug.hpp>
 
-
 using namespace puu;
-
 
 namespace{
 const size_t fileReadChinkSize_c = 0x4ff;
@@ -303,7 +301,6 @@ void parser::processCharInRawStringClosingDelimeter(char c, listener& listener) 
 	}
 }
 
-
 void parser::processChar(char c, listener& listener){
 	switch(this->state){
 		case State_e::IDLE:
@@ -342,34 +339,28 @@ void parser::processChar(char c, listener& listener){
 	}
 }
 
-
-
 void parser::parse_data_chunk(utki::span<const uint8_t> chunk, listener& listener){
 	for(auto c : chunk){
 		this->processChar(c, listener);
 	}
 }
 
-
-
 void parser::end_of_data(listener& listener){
 	this->processChar('\0', listener);
 
 	if(this->nestingLevel != 0 || this->state != State_e::IDLE){
-		throw utki::invalid_state("Malformed puu document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
+		throw std::logic_error("Malformed puu document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
 	}
 
 	this->reset();
 }
 
-
-
-void puu::parse(const papki::File& fi, listener& listener){
-	papki::File::Guard fileGuard(fi);
+void puu::parse(const papki::file& fi, listener& listener){
+	papki::file::guard file_guard(fi);
 
 	puu::parser parser;
 
-	std::array<std::uint8_t, fileReadChinkSize_c> buf; //2kb read buffer.
+	std::array<std::uint8_t, fileReadChinkSize_c> buf; // 2kb read buffer.
 
 	size_t bytesRead;
 
@@ -381,8 +372,6 @@ void puu::parse(const papki::File& fi, listener& listener){
 
 	parser.end_of_data(listener);
 }
-
-
 
 void parser::reset(){
 	this->stringBuf.clear();
