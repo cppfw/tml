@@ -1,3 +1,9 @@
+libpuu (0.1.21) unstable; urgency=medium
+
+  * unify package namings
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 15 Sep 2020 16:02:08 +0300
+
 libpuu (0.1.20) unstable; urgency=medium
 
   * deploy to raspbian buster
