@@ -8,7 +8,7 @@ configurations {
 
 nuget{
 	nuspec{
-		id = puu;
+		id = libpuu;
 		version : $(version);
 		title: C++ puu parser library;
 		authors: {Ivan Gagis};
@@ -21,7 +21,7 @@ nuget{
 
 		description: @"C++ puu parser library";
 		releaseNotes: "Initial release";
-		copyright: Copyright 2015 Ivan Gagis;
+		copyright: Copyright 2020 Ivan Gagis;
 		tags: { native};
 	}
 	dependencies {

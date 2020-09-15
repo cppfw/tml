@@ -1,4 +1,4 @@
-class Puu < Formula
+class Libpuu < Formula
   desc "C++ cross-platform puu parser library."
   homepage "https://github.com/igagis/puu"
   url "https://github.com/igagis/puu/archive/$(version).tar.gz"
@@ -10,7 +10,7 @@ class Puu < Formula
 
   def install
     ENV['PATH'] += ':/usr/local/bin'
-    system "make", "-f", "src/makefile", "install", "PREFIX=#{prefix}"
+    system "make", "install", "PREFIX=#{prefix}"
   end
 
   test do
