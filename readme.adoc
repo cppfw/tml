@@ -1,0 +1,35 @@
+= puu
+
+|====
+| link:https://github.com/igagis/puu/releases[image:https://img.shields.io/github/tag/igagis/puu.svg[releases]] | link:https://travis-ci.org/igagis/puu[image:https://travis-ci.org/igagis/puu.svg?branch=master[Travis CI status]] | link:https://ci.appveyor.com/project/igagis/puu/branch/master[image:https://ci.appveyor.com/api/projects/status/owv6srivorp08lxu/branch/master?svg=true[Appveyor status]] | link:https://www.patreon.com/bePatron?u=2662824[image:https://img.shields.io/badge/become-patron-red.svg[patreon]]
+|====
+
+A lightweight markup language C++ library.
+
+See link:wiki/HomePage.adoc[WiKi] for installation instructions.
+
+puu document example:
+```
+"String object"
+AnotherStringObject
+"String with children"{
+	"child 1"
+	Child2
+	"child three"{
+		SubChild1
+		"Subchild two"
+
+		Property1 {Value1}
+		"Property two" {"Value 2"}
+		//comment
+
+		/* multi line
+		   comment */
+
+		"Escape sequences \" \n \r \t \\ \/"
+
+		//raw string
+		R"qwerty(raw string content " """ { } \ / )qwerty"
+	}
+}
+```
