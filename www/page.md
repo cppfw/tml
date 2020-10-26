@@ -1,6 +1,5 @@
 **puu** is a minimalistic general purpose markup language, proposed by Ivan Gagis in July 2012.
-The name of the language is an abbreviation from "**ST**ring **OB**jects" as the main element of
-the language is a string of text. **puu** allows describing of string hierarchies.
+The name **puu** just means _tree_ in Finnish. **puu** allows describing of string hierarchies.
 
 # Syntax
 puu syntax is very simple and intentionally kept minimalistic.
