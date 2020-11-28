@@ -2,7 +2,12 @@ configurations {
 	UserPlatformToolset {
 		// Needed because autopackage lacks VS2015+ support
 		key = "PlatformToolset";
-		choices: "v140,v141";
+		choices: "v140,v141,v142";
+	};
+
+	RuntimeLibrary {
+		key = "RuntimeLibrary"; // This is the key you can find in .vcxproj file
+		choices: "MultiThreaded,MultiThreadedDebug,MultiThreadedDLL,MultiThreadedDebugDLL"; // these choices must be valid values for .vcxproj file
 	};
 }
 
@@ -37,6 +42,8 @@ nuget{
 			"..\src\puu\**\*.hpp"
 		};
 
+		// ======== v140 ========
+
 		[x86,v140,release] {
 			lib: ..\msvs_solution\v140_Release\puu.lib;
 		}
@@ -53,6 +60,8 @@ nuget{
 			lib: ..\msvs_solution\x64\v140_Debug\puu.lib;
 		}
 
+		// ======== v141 ========
+
 		[x86,v141,release] {
 			lib: ..\msvs_solution\v141_Release\puu.lib;
 		}
@@ -67,6 +76,33 @@ nuget{
 
 		[x64,v141,debug] {
 			lib: ..\msvs_solution\x64\v141_Debug\puu.lib;
+		}
+
+		// ======== v142 ========
+
+		[x86,v142,release,MultiThreaded] {
+			lib: ..\msvs_solution\v142_Release_MT\puu.lib;
+		}
+		[x86,v142,debug,MultiThreadedDebug] {
+			lib: ..\msvs_solution\v142_Debug_MT\puu.lib;
+		}
+		[x64,v142,release,MultiThreaded] {
+			lib: ..\msvs_solution\x64\v142_Release_MT\puu.lib;
+		}
+		[x64,v142,debug,MultiThreadedDebug] {
+			lib: ..\msvs_solution\x64\v142_Debug_MT\puu.lib;
+		}
+		[x86,v142,release,MultiThreadedDLL] {
+			lib: ..\msvs_solution\v142_Release_MD\puu.lib;
+		}
+		[x86,v142,debug,MultiThreadedDebugDLL] {
+			lib: ..\msvs_solution\v142_Debug_MD\puu.lib;
+		}
+		[x64,v142,release,MultiThreadedDLL] {
+			lib: ..\msvs_solution\x64\v142_Release_MD\puu.lib;
+		}
+		[x64,v142,debug,MultiThreadedDebugDLL] {
+			lib: ..\msvs_solution\x64\v142_Debug_MD\puu.lib;
 		}
 	}
 }
