@@ -5,6 +5,7 @@ class Libpuu < Formula
   sha256 "$(sha256)"
 
   depends_on "prorab" => :build
+  depends_on "libclargs" => :build
   depends_on "libpapki"
   depends_on "libutki"
 
