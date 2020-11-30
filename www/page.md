@@ -55,7 +55,7 @@ AnotherStringObject
 ```
 
 # Libraries
-- [C++](https://github.com/igagis/puu)
+- [C++](https://github.com/cppfw/puu)
 - [C#](https://github.com/igagis/puu-cs)
 - [Java](https://github.com/igagis/puu-java)
 

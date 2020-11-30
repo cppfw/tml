@@ -18,9 +18,9 @@ nuget{
 		title: C++ puu parser library;
 		authors: {Ivan Gagis};
 		owners: {Ivan Gagis};
-		licenseUrl: "https://raw.githubusercontent.com/igagis/puu/master/LICENSE";
-		projectUrl: "https://github.com/igagis/puu";
-		iconUrl: "https://github.com/igagis/puu/blob/master/logo.svg";
+		licenseUrl: "https://raw.githubusercontent.com/cppfw/puu/master/LICENSE";
+		projectUrl: "https://github.com/cppfw/puu";
+		iconUrl: "https://github.com/cppfw/puu/blob/master/logo.svg";
 		requireLicenseAcceptance:false;
 		summary: C++ puu parser library;
 

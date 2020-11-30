@@ -1,0 +1,37 @@
+:name: puu
+
+= {name}
+
+|====
+| link:https://github.com/cppfw/{name}/releases[image:https://img.shields.io/github/tag/cppfw/{name}.svg[releases]] | link:https://github.com/cppfw/{name}/actions[image:https://github.com/cppfw/{name}/workflows/ci/badge.svg[ci status]]
+|====
+
+A lightweight markup language C++ library.
+
+See link:wiki/HomePage.adoc[WiKi] for installation instructions.
+
+document example:
+```
+"String object"
+AnotherStringObject
+"String with children"{
+	"child 1"
+	Child2
+	"child three"{
+		SubChild1
+		"Subchild two"
+
+		Property1 {Value1}
+		"Property two" {"Value 2"}
+		//comment
+
+		/* multi line
+		   comment */
+
+		"Escape sequences \" \n \r \t \\ \/"
+
+		//raw string
+		R"qwerty(raw string content " """ { } \ / )qwerty"
+	}
+}
+```

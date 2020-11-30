@@ -46,12 +46,12 @@ android {
 
 repositories {
     maven {
-        url 'https://dl.bintray.com/igagis/android/'
+        url 'https://dl.bintray.com/cppfw/android/'
     }
 }
 dependencies {
-    implementation 'io.github.igagis:utki:+'
-    implementation 'io.github.igagis:papki:+'
+    implementation 'io.github.cppfw:utki:+'
+    implementation 'io.github.cppfw:papki:+'
 }
 
 // copy and rename release AAR to unified name
