@@ -15,6 +15,6 @@ Pod::Spec.new do |s|
 
   s.ios.vendored_library = "lib/ios/lib#{s.name}.a"
 
-  s.dependency 'utki', '>= 1.1.93'
-  s.dependency 'papki', '>= 1.0.82'
+  s.dependency 'utki', '>= 1.1.111'
+  s.dependency 'papki', '>= 1.0.91'
 end
