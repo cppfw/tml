@@ -1,3 +1,9 @@
+libtreeml (0.1.26) unstable; urgency=medium
+
+  * rename puu -> treeml
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 26 Feb 2021 00:07:15 +0200
+
 libtreeml (0.1.25) unstable; urgency=medium
 
   * github actions build for rasbian and ubuntu focal
