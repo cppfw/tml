@@ -1,154 +1,154 @@
-libpuu (0.1.25) unstable; urgency=medium
+libtreeml (0.1.25) unstable; urgency=medium
 
   * github actions build for rasbian and ubuntu focal
 
  -- Ivan Gagis <igagis@gmail.com>  Thu, 31 Dec 2020 19:07:07 +0200
 
-libpuu (0.1.24) unstable; urgency=medium
+libtreeml (0.1.24) unstable; urgency=medium
 
   * github actions
 
  -- Ivan Gagis <igagis@gmail.com>  Mon, 30 Nov 2020 23:10:46 +0200
 
-libpuu (0.1.23) unstable; urgency=medium
+libtreeml (0.1.23) unstable; urgency=medium
 
   * msvs: build with v142 tools
 
  -- Ivan Gagis <igagis@gmail.com>  Sat, 28 Nov 2020 02:28:51 +0200
 
-libpuu (0.1.22) unstable; urgency=medium
+libtreeml (0.1.22) unstable; urgency=medium
 
   * msvs: build with v142 tools
 
  -- Ivan Gagis <igagis@gmail.com>  Sat, 28 Nov 2020 02:22:33 +0200
 
-libpuu (0.1.21) unstable; urgency=medium
+libtreeml (0.1.21) unstable; urgency=medium
 
   * unify package namings
 
  -- Ivan Gagis <igagis@gmail.com>  Tue, 15 Sep 2020 16:02:08 +0300
 
-libpuu (0.1.20) unstable; urgency=medium
+libtreeml (0.1.20) unstable; urgency=medium
 
   * deploy to raspbian buster
 
  -- Ivan Gagis <igagis@gmail.com>  Tue, 11 Aug 2020 15:19:54 +0300
 
-libpuu (0.1.19) unstable; urgency=medium
+libtreeml (0.1.19) unstable; urgency=medium
 
   * update to latest libs
 
  -- Ivan Gagis <igagis@gmail.com>  Sat, 04 Jul 2020 15:40:22 +0300
 
-libpuu (0.1.18) unstable; urgency=medium
+libtreeml (0.1.18) unstable; urgency=medium
 
   * use android native bundle plugin
 
  -- Ivan Gagis <igagis@gmail.com>  Fri, 19 Jun 2020 01:35:27 +0300
 
-libpuu (0.1.17) unstable; urgency=medium
+libtreeml (0.1.17) unstable; urgency=medium
 
   * update to latest libs
 
  -- Ivan Gagis <igagis@gmail.com>  Mon, 11 May 2020 19:38:13 +0300
 
-libpuu (0.1.16) unstable; urgency=medium
+libtreeml (0.1.16) unstable; urgency=medium
 
   * stob removed
 
  -- Ivan Gagis <igagis@gmail.com>  Tue, 28 Jan 2020 18:11:30 +0200
 
-libpuu (0.1.15) unstable; urgency=medium
+libtreeml (0.1.15) unstable; urgency=medium
 
   * to_string() conversion functions added
 
  -- Ivan Gagis <igagis@gmail.com>  Wed, 22 Jan 2020 20:37:54 +0200
 
-libpuu (0.1.14) unstable; urgency=medium
+libtreeml (0.1.14) unstable; urgency=medium
 
   * refactoring, use std::stoi() family of functions
 
  -- Ivan Gagis <igagis@gmail.com>  Wed, 22 Jan 2020 18:06:31 +0200
 
-libpuu (0.1.13) unstable; urgency=medium
+libtreeml (0.1.13) unstable; urgency=medium
 
   * debian/buster i386 packages
 
  -- Ivan Gagis <igagis@gmail.com>  Tue, 21 Jan 2020 20:00:13 +0200
 
-libpuu (0.1.12) unstable; urgency=medium
+libtreeml (0.1.12) unstable; urgency=medium
 
   * trees renamed to forest
 
  -- Ivan Gagis <igagis@gmail.com>  Thu, 09 Jan 2020 14:41:38 +0200
 
-libpuu (0.1.11) unstable; urgency=medium
+libtreeml (0.1.11) unstable; urgency=medium
 
   * update to latest libs
 
  -- Ivan Gagis <igagis@gmail.com>  Tue, 07 Jan 2020 22:49:48 +0200
 
-libpuu (0.1.10) unstable; urgency=medium
+libtreeml (0.1.10) unstable; urgency=medium
 
   * msvs package to include tree.cpp
 
  -- Ivan Gagis <igagis@gmail.com>  Sat, 04 Jan 2020 00:27:46 +0200
 
-libpuu (0.1.9) unstable; urgency=medium
+libtreeml (0.1.9) unstable; urgency=medium
 
   * added leaf::operator!=()
 
  -- Ivan Gagis <igagis@gmail.com>  Fri, 03 Jan 2020 17:21:42 +0200
 
-libpuu (0.1.8) unstable; urgency=medium
+libtreeml (0.1.8) unstable; urgency=medium
 
   * added leaf::empty() function
 
  -- Ivan Gagis <igagis@gmail.com>  Tue, 31 Dec 2019 20:17:48 +0200
 
-libpuu (0.1.7) unstable; urgency=medium
+libtreeml (0.1.7) unstable; urgency=medium
 
-  * added puu::read(const char*) function
+  * added treeml::read(const char*) function
 
  -- Ivan Gagis <igagis@gmail.com>  Tue, 17 Dec 2019 16:33:07 +0200
 
-libpuu (0.1.6) unstable; urgency=medium
+libtreeml (0.1.6) unstable; urgency=medium
 
   * added leaf::operator[]
 
  -- Ivan Gagis <igagis@gmail.com>  Mon, 16 Dec 2019 18:06:22 +0200
 
-libpuu (0.1.5) unstable; urgency=medium
+libtreeml (0.1.5) unstable; urgency=medium
 
   * branches renamed to trees
 
  -- Ivan Gagis <igagis@gmail.com>  Fri, 13 Dec 2019 20:03:34 +0200
 
-libpuu (0.1.4) unstable; urgency=medium
+libtreeml (0.1.4) unstable; urgency=medium
 
   * deploy to msys2 from travis
 
  -- Ivan Gagis <igagis@gmail.com>  Thu, 28 Nov 2019 18:19:59 +0200
 
-libpuu (0.1.3) unstable; urgency=medium
+libtreeml (0.1.3) unstable; urgency=medium
 
   * binary cocoapod
 
  -- Ivan Gagis <igagis@gmail.com>  Mon, 04 Nov 2019 14:48:34 +0200
 
-libpuu (0.1.2) unstable; urgency=medium
+libtreeml (0.1.2) unstable; urgency=medium
 
   * fix deploy
 
  -- Ivan Gagis <igagis@gmail.com>  Mon, 21 Oct 2019 17:28:05 +0300
 
-libpuu (0.1.1) unstable; urgency=medium
+libtreeml (0.1.1) unstable; urgency=medium
 
   * first release
 
  -- Ivan Gagis <igagis@gmail.com>  Mon, 21 Oct 2019 17:05:01 +0300
 
-libpuu (0.1.0) stable; urgency=low
+libtreeml (0.1.0) stable; urgency=low
 
   * Initial release
 

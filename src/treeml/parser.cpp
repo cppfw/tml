@@ -5,7 +5,7 @@
 
 #include <utki/debug.hpp>
 
-using namespace puu;
+using namespace treeml;
 
 namespace{
 const size_t fileReadChinkSize_c = 0x4ff;
@@ -349,16 +349,16 @@ void parser::end_of_data(listener& listener){
 	this->processChar('\0', listener);
 
 	if(this->nestingLevel != 0 || this->state != State_e::IDLE){
-		throw std::logic_error("Malformed puu document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
+		throw std::logic_error("Malformed treeml document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
 	}
 
 	this->reset();
 }
 
-void puu::parse(const papki::file& fi, listener& listener){
+void treeml::parse(const papki::file& fi, listener& listener){
 	papki::file::guard file_guard(fi);
 
-	puu::parser parser;
+	treeml::parser parser;
 
 	std::array<std::uint8_t, fileReadChinkSize_c> buf; // 2kb read buffer.
 

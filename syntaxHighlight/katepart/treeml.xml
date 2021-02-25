@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
 
-<language name="puu" section="Markup" version="1.0" kateversion="2.4" extensions="*.puu" mimetype="application/puu" author="Ivan Gagis (igagis@gmail.com)" license="MIT">
+<language name="treeml" section="Markup" version="1.0" kateversion="2.4" extensions="*.tml" mimetype="application/treeml" author="Ivan Gagis (igagis@gmail.com)" license="MIT">
   <general>
     <comments>
       <comment name="singleLine" start="//"/>

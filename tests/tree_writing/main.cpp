@@ -1,4 +1,4 @@
-#include "../../src/puu/tree.hpp"
+#include "../../src/treeml/tree.hpp"
 
 #include <utki/config.hpp>
 #include <utki/debug.hpp>
@@ -23,9 +23,9 @@ int main(int argc, char** argv){
 
 	clargs::parser args;
 
-	puu::formatting formatted = puu::formatting::minimal;
+	treeml::formatting formatted = treeml::formatting::minimal;
 
-	args.add('f', "--formatted", "format output to be human friendly", [&formatted](){formatted = puu::formatting::normal;});
+	args.add('f', "--formatted", "format output to be human friendly", [&formatted](){formatted = treeml::formatting::normal;});
 
 	auto in_files = args.parse(argc, argv);
 
@@ -34,13 +34,13 @@ int main(int argc, char** argv){
 	for(auto& f : in_files){
 		papki::fs_file fi(f);
 
-		auto roots = puu::read(fi);
+		auto roots = treeml::read(fi);
 
 //		TRACE(<< "num roots read = " << roots.size() << std::endl)
 
 		papki::vector_file outfi;
 
-		puu::write(roots, outfi, formatted);
+		treeml::write(roots, outfi, formatted);
 
 		auto data = outfi.reset_data();
 

@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
-  s.name         = "puu"
+  s.name         = "treeml"
   s.version      = "$(version)"
-  s.summary      = "C++ puu markup language library."
+  s.summary      = "C++ tree markup language library."
   s.homepage     = "https://github.com/cppfw/#{s.name}"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
   s.author       = { "Ivan Gagis" => "igagis@gmail.com" }

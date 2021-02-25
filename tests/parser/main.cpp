@@ -1,4 +1,4 @@
-#include "../../src/puu/parser.hpp"
+#include "../../src/treeml/parser.hpp"
 
 #include <string>
 #include <deque>
@@ -14,7 +14,7 @@ enum E_Action{
 	STRING
 };
 
-class Listener : public puu::listener{
+class Listener : public treeml::listener{
 	void on_children_parse_finished() override{
 		// TRACE(<< "}" << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)
@@ -107,9 +107,9 @@ void Run(){
 
 	l.actions.push_back(T_Pair(STRING, "UnquotedStringAtTheVeryEndOfTheFile"));
 
-	papki::fs_file fi("test.puu");
+	papki::fs_file fi("test.tml");
 
-	puu::parse(fi, l);
+	treeml::parse(fi, l);
 
 	ASSERT_ALWAYS(l.actions.size() == 0)
 }

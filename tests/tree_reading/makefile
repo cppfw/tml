@@ -23,7 +23,7 @@ ifeq ($(os), macosx)
 else ifeq ($(os),windows)
 endif
 
-this_ldlibs += -lpuu -lpapki -lstdc++
+this_ldlibs += -ltreeml -lpapki -lstdc++
 
 this_no_install := true
 
@@ -33,7 +33,7 @@ $(eval $(prorab-build-app))
 
 include $(d)../test_rule.mk
 
-#add dependency on libpuu
-$(prorab_this_name): $(abspath $(d)../../src/build/libpuu$(soext))
+#add dependency on libtreeml
+$(prorab_this_name): $(abspath $(d)../../src/build/libtreeml$(soext))
 
 $(eval $(call prorab-try-include,$(d)../../src/makefile))

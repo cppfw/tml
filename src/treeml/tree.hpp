@@ -7,7 +7,7 @@
 #include <string>
 
 //TODO: doxygen
-namespace puu{
+namespace treeml{
 
 enum class base{
     dec,
@@ -141,7 +141,7 @@ void write(const forest& wood, papki::file& fi, formatting fmt = formatting::nor
 std::string to_string(const forest& f);
 
 inline std::string to_string(const tree& t){
-    return to_string(puu::forest({t}));
+    return to_string(treeml::forest({t}));
 }
 
 class crawler{

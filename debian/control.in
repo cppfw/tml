@@ -1,4 +1,4 @@
-Source: libpuu
+Source: libtreeml
 Section: libs
 Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
@@ -7,32 +7,32 @@ Build-Depends: debhelper (>= 9), libc6-dev, myci, prorab, prorab-extra,
 Build-Depends-Indep: doxygen
 Standards-Version: 3.9.2
 
-Package: libpuu-dev
+Package: libtreeml-dev
 Section: libdevel
 Architecture: any
-Depends: libpuu$(soname) (= ${binary:Version}), libpuu$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
+Depends: libtreeml$(soname) (= ${binary:Version}), libtreeml$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
 		libutki-dev, libpapki-dev
-Suggests: libpuu-doc
-Description: puu markup language C++ library.
- puu is a simple markup language.
+Suggests: libtreeml-doc
+Description: tree markup language C++ library.
+ treeml is a simple markup language.
 
-Package: libpuu$(soname)
+Package: libtreeml$(soname)
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: puu markup language C++ library.
- puu is a simple markup language.
+Description: tree markup language C++ library.
+ treeml is a simple markup language.
 
-Package: libpuu$(soname)-dbg
+Package: libtreeml$(soname)-dbg
 Section: debug
 Architecture: any
-Depends: libpuu$(soname) (= ${binary:Version}), ${misc:Depends}
-Description: debugging symbols for libpuu$(soname) package.
+Depends: libtreeml$(soname) (= ${binary:Version}), ${misc:Depends}
+Description: debugging symbols for libtreeml$(soname) package.
 
-Package: libpuu-doc
+Package: libtreeml-doc
 Section: doc
 Architecture: all
 Depends: ${misc:Depends}
-Description: documentation for libpuu.
- Documentation for libpuu - puu markup language C++ library.
+Description: documentation for libtreeml.
+ Documentation for libtreeml - tree markup language C++ library.
 

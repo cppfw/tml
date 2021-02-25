@@ -1,0 +1,9 @@
+Name: treeml   # human-readable name
+Description: tree markup language C++ library
+Version: $(version)
+URL: http://github.com/cppfw/treeml
+Requires:
+Conflicts:
+Libs: -ltreeml
+Libs.private:
+Cflags:

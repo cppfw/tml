@@ -1,4 +1,4 @@
-:name: puu
+:name: treeml
 
 = {name}
 

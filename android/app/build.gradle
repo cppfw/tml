@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "io.github.cppfw.puu_tests"
+        applicationId "io.github.cppfw.treeml_tests"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
@@ -44,7 +44,7 @@ repositories {
     }
 }
 dependencies {
-//    implementation project(path: ':puu', configuration: 'default')
+//    implementation project(path: ':treeml', configuration: 'default')
 }
 
 

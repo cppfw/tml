@@ -1,8 +1,8 @@
-**puu** is a minimalistic general purpose markup language, proposed by Ivan Gagis in July 2012.
-The name **puu** just means _tree_ in Finnish. **puu** allows describing of string hierarchies.
+**treeml** is a minimalistic general purpose markup language, proposed by Ivan Gagis in July 2012.
+The name **treeml** just means _tree_ in Finnish. **treeml** allows describing of string hierarchies.
 
 # Syntax
-puu syntax is very simple and intentionally kept minimalistic.
+treeml syntax is very simple and intentionally kept minimalistic.
 Here are the syntax rules:
 
 1. The only type of language element is a string of text.
@@ -55,9 +55,9 @@ AnotherStringObject
 ```
 
 # Libraries
-- [C++](https://github.com/cppfw/puu)
-- [C#](https://github.com/igagis/puu-cs)
-- [Java](https://github.com/igagis/puu-java)
+- [C++](https://github.com/cppfw/treeml)
+- [C#](https://github.com/igagis/treeml-cs)
+- [Java](https://github.com/igagis/treeml-java)
 
 # Contact
 [Site admin](mailto:igagis@gmail.com)

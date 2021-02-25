@@ -1,4 +1,4 @@
-#include "../../src/puu/tree.hpp"
+#include "../../src/treeml/tree.hpp"
 
 #include <utki/debug.hpp>
 #include <papki/fs_file.hpp>
@@ -9,27 +9,27 @@ struct predicate_str{
 
 	predicate_str(const std::string& s) : s(s){}
 
-	bool operator()(const utki::tree<puu::leaf>& l){
+	bool operator()(const utki::tree<treeml::leaf>& l){
 		return l.value == s;
 	}
 };
 }
 
-void test_puu_crawling(){
-	papki::fs_file fi("test.puu");
+void test_treeml_crawling(){
+	papki::fs_file fi("test.tml");
 
-	auto roots = puu::read(fi);
+	auto roots = treeml::read(fi);
 
 	// non-const crawler
 	{
-		auto& b6_1_1 = puu::crawler(roots).to("b5").next().in().to_if(predicate_str("b6_1")).in().to("b6_1_1").get().value;
+		auto& b6_1_1 = treeml::crawler(roots).to("b5").next().in().to_if(predicate_str("b6_1")).in().to("b6_1_1").get().value;
 
 		ASSERT_ALWAYS(b6_1_1 == "b6_1_1")
 	}
 
 	// const crawler from non-const roots
 	{
-		auto& b6_1_1 = puu::const_crawler(roots).to("b5").next().in().to_if(predicate_str("b6_1")).in().to("b6_1_1").get().value;
+		auto& b6_1_1 = treeml::const_crawler(roots).to("b5").next().in().to_if(predicate_str("b6_1")).in().to("b6_1_1").get().value;
 
 		ASSERT_ALWAYS(b6_1_1 == "b6_1_1")
 	}
@@ -37,7 +37,7 @@ void test_puu_crawling(){
 	// const crawler from const roots
 	{
 		const auto& const_roots = roots;
-		auto& b6_1_1 = puu::const_crawler(const_roots).to("b5").next().in().to_if(predicate_str("b6_1")).in().to("b6_1_1").get().value;
+		auto& b6_1_1 = treeml::const_crawler(const_roots).to("b5").next().in().to_if(predicate_str("b6_1")).in().to("b6_1_1").get().value;
 
 		ASSERT_ALWAYS(b6_1_1 == "b6_1_1")
 	}
@@ -46,7 +46,7 @@ void test_puu_crawling(){
 	{
 		bool thrown = false;
 		try{
-			puu::crawler(roots).to("b-1");
+			treeml::crawler(roots).to("b-1");
 			ASSERT_ALWAYS(false)
 		}catch(std::runtime_error& e){
 			thrown = true;
@@ -58,7 +58,7 @@ void test_puu_crawling(){
 	{
 		bool thrown = false;
 		try{
-			puu::crawler(roots).to_if(predicate_str("b6-1"));
+			treeml::crawler(roots).to_if(predicate_str("b6-1"));
 			ASSERT_ALWAYS(false)
 		}catch(std::runtime_error& e){
 			thrown = true;
@@ -70,7 +70,7 @@ void test_puu_crawling(){
 	{
 		bool thrown = false;
 		try{
-			puu::crawler(roots).to("b6").in().to("b6_1").in().to("b6_1_1").in();
+			treeml::crawler(roots).to("b6").in().to("b6_1").in().to("b6_1_1").in();
 			ASSERT_ALWAYS(false)
 		}catch(std::logic_error& e){
 			thrown = true;
@@ -82,7 +82,7 @@ void test_puu_crawling(){
 	{
 		bool thrown = false;
 		try{
-			puu::crawler(roots).to("b6").in().to("b6_1").next();
+			treeml::crawler(roots).to("b6").in().to("b6_1").next();
 			ASSERT_ALWAYS(false)
 		}catch(std::logic_error& e){
 			thrown = true;
@@ -93,7 +93,7 @@ void test_puu_crawling(){
 
 int main(int argc, char** argv){
 
-	test_puu_crawling();
+	test_treeml_crawling();
 
 	return 0;
 }

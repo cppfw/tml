@@ -14,7 +14,7 @@ this_cxxflags += -O3
 
 this_srcs += main.cpp
 
-this_ldlibs += -lpuu -lpapki -lstdc++
+this_ldlibs += -ltreeml -lpapki -lstdc++
 this_ldflags += -L$(d)../../src/build
 
 ifeq ($(os), macosx)
@@ -32,7 +32,7 @@ $(eval $(prorab-build-app))
 
 include $(d)../test_rule.mk
 
-#add dependency on libpuu
-$(prorab_this_name): $(abspath $(d)../../src/build/libpuu$(soext))
+#add dependency on libtreeml
+$(prorab_this_name): $(abspath $(d)../../src/build/libtreeml$(soext))
 
 $(eval $(call prorab-try-include,$(d)../../src/makefile))

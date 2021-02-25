@@ -1,5 +1,5 @@
 ifeq ($(os),windows)
-    this_test_cmd := (cd $(d); cp ../../src/build/libpuu.dll .; $$^)
+    this_test_cmd := (cd $(d); cp ../../src/build/libtreeml.dll .; $$^)
 else
     this_test_cmd := (cd $(d); LD_LIBRARY_PATH=../../src/build $$^)
 endif

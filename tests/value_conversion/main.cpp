@@ -1,4 +1,4 @@
-#include "../../src/puu/tree.hpp"
+#include "../../src/treeml/tree.hpp"
 
 #include <iomanip>
 
@@ -7,26 +7,26 @@
 
 namespace{
 template <class T> struct sample_template{
-	puu::leaf leaf;
+	treeml::leaf leaf;
 	std::string expected_string;
 	T expected_value;
 };
 
-template <class test_type> test_type to_test_type(const puu::leaf& l);
+template <class test_type> test_type to_test_type(const treeml::leaf& l);
 
-template <> int32_t to_test_type<int32_t>(const puu::leaf& l){
+template <> int32_t to_test_type<int32_t>(const treeml::leaf& l){
 	return l.to_int32();
 }
 
-template <> int64_t to_test_type<int64_t>(const puu::leaf& l){
+template <> int64_t to_test_type<int64_t>(const treeml::leaf& l){
 	return l.to_int64();
 }
 
-template <> uint32_t to_test_type<uint32_t>(const puu::leaf& l){
+template <> uint32_t to_test_type<uint32_t>(const treeml::leaf& l){
 	return l.to_uint32();
 }
 
-template <> uint64_t to_test_type<uint64_t>(const puu::leaf& l){
+template <> uint64_t to_test_type<uint64_t>(const treeml::leaf& l){
 	return l.to_uint64();
 }
 
@@ -34,23 +34,23 @@ template <class test_type> void test_int(){
 	typedef sample_template<test_type> sample;
 
 	std::vector<sample> samples = {{
-		sample{puu::leaf(int8_t(-13)), "-13", test_type(-13)},
-		sample{puu::leaf(int16_t(-13)), "-13", test_type(-13)},
-		sample{puu::leaf(int32_t(-13)), "-13", test_type(-13)},
-		sample{puu::leaf(int64_t(-13)), "-13", test_type(-13)},
-		sample{puu::leaf(-13), "-13", test_type(-13)},
-		sample{puu::leaf(-13L), "-13", test_type(-13)},
-		sample{puu::leaf(-13LL), "-13", test_type(-13)},
+		sample{treeml::leaf(int8_t(-13)), "-13", test_type(-13)},
+		sample{treeml::leaf(int16_t(-13)), "-13", test_type(-13)},
+		sample{treeml::leaf(int32_t(-13)), "-13", test_type(-13)},
+		sample{treeml::leaf(int64_t(-13)), "-13", test_type(-13)},
+		sample{treeml::leaf(-13), "-13", test_type(-13)},
+		sample{treeml::leaf(-13L), "-13", test_type(-13)},
+		sample{treeml::leaf(-13LL), "-13", test_type(-13)},
 
-		sample{puu::leaf(int8_t(13)), "13", test_type(13)},
-		sample{puu::leaf(int16_t(13)), "13", test_type(13)},
-		sample{puu::leaf(int32_t(13)), "13", test_type(13)},
-		sample{puu::leaf(int64_t(13)), "13", test_type(13)},
-		sample{puu::leaf(13), "13", test_type(13)},
-		sample{puu::leaf(13L), "13", test_type(13)},
-		sample{puu::leaf(13LL), "13", test_type(13)},
+		sample{treeml::leaf(int8_t(13)), "13", test_type(13)},
+		sample{treeml::leaf(int16_t(13)), "13", test_type(13)},
+		sample{treeml::leaf(int32_t(13)), "13", test_type(13)},
+		sample{treeml::leaf(int64_t(13)), "13", test_type(13)},
+		sample{treeml::leaf(13), "13", test_type(13)},
+		sample{treeml::leaf(13L), "13", test_type(13)},
+		sample{treeml::leaf(13LL), "13", test_type(13)},
 
-		sample{puu::leaf(-13.34f), "-13.34", test_type(-13)},
+		sample{treeml::leaf(-13.34f), "-13.34", test_type(-13)},
 	}};
 
 	for(auto& s: samples){
@@ -64,43 +64,43 @@ template <class test_type> void test_uint(){
 	typedef sample_template<test_type> sample;
 
 	std::vector<sample> samples = {{
-		sample{puu::leaf(uint8_t(0x8d)), "141", test_type(0x8d)},
-		sample{puu::leaf(uint16_t(0x8d)), "141", test_type(0x8d)},
-		sample{puu::leaf(uint32_t(0x8d)), "141", test_type(0x8d)},
-		sample{puu::leaf(uint64_t(0x8d)), "141", test_type(0x8d)},
-		sample{puu::leaf(0x8d), "141", test_type(0x8d)},
-		sample{puu::leaf(0x8du), "141", test_type(0x8d)},
-		sample{puu::leaf(0x8dul), "141", test_type(0x8d)},
-		sample{puu::leaf(0x8dull), "141", test_type(0x8d)},
+		sample{treeml::leaf(uint8_t(0x8d)), "141", test_type(0x8d)},
+		sample{treeml::leaf(uint16_t(0x8d)), "141", test_type(0x8d)},
+		sample{treeml::leaf(uint32_t(0x8d)), "141", test_type(0x8d)},
+		sample{treeml::leaf(uint64_t(0x8d)), "141", test_type(0x8d)},
+		sample{treeml::leaf(0x8d), "141", test_type(0x8d)},
+		sample{treeml::leaf(0x8du), "141", test_type(0x8d)},
+		sample{treeml::leaf(0x8dul), "141", test_type(0x8d)},
+		sample{treeml::leaf(0x8dull), "141", test_type(0x8d)},
 
-		// sample{puu::leaf(~0u), "", test_type(~0)},
-		// sample{puu::leaf(~0ul), "", test_type(~0)},
-		// sample{puu::leaf(~0ull), "", test_type(~0)},
-		sample{puu::leaf(13.34f), "13.34", 13},
+		// sample{treeml::leaf(~0u), "", test_type(~0)},
+		// sample{treeml::leaf(~0ul), "", test_type(~0)},
+		// sample{treeml::leaf(~0ull), "", test_type(~0)},
+		sample{treeml::leaf(13.34f), "13.34", 13},
 
-		sample{puu::leaf(uint8_t(074), puu::base::oct), "074", test_type(074)},
-		sample{puu::leaf(uint16_t(074), puu::base::oct), "074", test_type(074)},
-		sample{puu::leaf(uint32_t(074), puu::base::oct), "074", test_type(074)},
-		sample{puu::leaf(uint64_t(074), puu::base::oct), "074", test_type(074)},
-		sample{puu::leaf(074u, puu::base::oct), "074", test_type(074)},
-		sample{puu::leaf(074ul, puu::base::oct), "074", test_type(074)},
-		sample{puu::leaf(074ull, puu::base::oct), "074", test_type(074)},
+		sample{treeml::leaf(uint8_t(074), treeml::base::oct), "074", test_type(074)},
+		sample{treeml::leaf(uint16_t(074), treeml::base::oct), "074", test_type(074)},
+		sample{treeml::leaf(uint32_t(074), treeml::base::oct), "074", test_type(074)},
+		sample{treeml::leaf(uint64_t(074), treeml::base::oct), "074", test_type(074)},
+		sample{treeml::leaf(074u, treeml::base::oct), "074", test_type(074)},
+		sample{treeml::leaf(074ul, treeml::base::oct), "074", test_type(074)},
+		sample{treeml::leaf(074ull, treeml::base::oct), "074", test_type(074)},
 
-		// sample{puu::leaf(~0u, puu::base::oct), "", test_type(~0)},
-		// sample{puu::leaf(~0ul, puu::base::oct), "", test_type(~0)},
-		// sample{puu::leaf(~0ull, puu::base::oct), "", test_type(~0)},
-		sample{puu::leaf(0u, puu::base::oct), "00", test_type(0)},
-		sample{puu::leaf(0ul, puu::base::oct), "00", test_type(0)},
-		sample{puu::leaf(0ull, puu::base::oct), "00", test_type(0)},
+		// sample{treeml::leaf(~0u, treeml::base::oct), "", test_type(~0)},
+		// sample{treeml::leaf(~0ul, treeml::base::oct), "", test_type(~0)},
+		// sample{treeml::leaf(~0ull, treeml::base::oct), "", test_type(~0)},
+		sample{treeml::leaf(0u, treeml::base::oct), "00", test_type(0)},
+		sample{treeml::leaf(0ul, treeml::base::oct), "00", test_type(0)},
+		sample{treeml::leaf(0ull, treeml::base::oct), "00", test_type(0)},
 
-		sample{puu::leaf(0x8du, puu::base::hex), "0x8d", test_type(0x8d)},
-		sample{puu::leaf(0x8dul, puu::base::hex), "0x8d", test_type(0x8d)},
-		// sample{puu::leaf(~0u, puu::base::hex), "", test_type(~0)},
-		// sample{puu::leaf(~0ul, puu::base::hex), "", test_type(~0)},
-		// sample{puu::leaf(~0ull, puu::base::hex), "", test_type(~0)},
-		sample{puu::leaf(0u, puu::base::hex), "0x0", test_type(0)},
-		sample{puu::leaf(0ul, puu::base::hex), "0x0", test_type(0)},
-		sample{puu::leaf(0ull, puu::base::hex), "0x0", test_type(0)},
+		sample{treeml::leaf(0x8du, treeml::base::hex), "0x8d", test_type(0x8d)},
+		sample{treeml::leaf(0x8dul, treeml::base::hex), "0x8d", test_type(0x8d)},
+		// sample{treeml::leaf(~0u, treeml::base::hex), "", test_type(~0)},
+		// sample{treeml::leaf(~0ul, treeml::base::hex), "", test_type(~0)},
+		// sample{treeml::leaf(~0ull, treeml::base::hex), "", test_type(~0)},
+		sample{treeml::leaf(0u, treeml::base::hex), "0x0", test_type(0)},
+		sample{treeml::leaf(0ul, treeml::base::hex), "0x0", test_type(0)},
+		sample{treeml::leaf(0ull, treeml::base::hex), "0x0", test_type(0)},
 	}};
 
 	for(auto& s: samples){
@@ -128,18 +128,18 @@ template <class test_type> void test_uint(){
 
 }
 
-void test_puu_value_conversion(){
+void test_treeml_value_conversion(){
 	// bool
 	{
 		typedef sample_template<bool> sample;
 
 		std::vector<sample> samples = {{
-			sample{puu::leaf(true), "true", true},
-			sample{puu::leaf(false), "false", false},
-			sample{puu::leaf(""), "", false},
-			sample{puu::leaf("werqwe"), "werqwe", false},
-			sample{puu::leaf("false"), "false", false},
-			sample{puu::leaf("true"), "true", true}
+			sample{treeml::leaf(true), "true", true},
+			sample{treeml::leaf(false), "false", false},
+			sample{treeml::leaf(""), "", false},
+			sample{treeml::leaf("werqwe"), "werqwe", false},
+			sample{treeml::leaf("false"), "false", false},
+			sample{treeml::leaf("true"), "true", true}
 		}};
 
 		for(auto& s : samples){
@@ -165,7 +165,7 @@ void test_puu_value_conversion(){
 		}};
 
 		for(auto n : samples){
-			puu::leaf l(n);
+			treeml::leaf l(n);
 			ASSERT_ALWAYS(l.to_float() == n)
 		}
 	}
@@ -180,7 +180,7 @@ void test_puu_value_conversion(){
 		}};
 
 		for(auto n : samples){
-			puu::leaf l(n);
+			treeml::leaf l(n);
 			ASSERT_ALWAYS(l.to_double() == n)
 		}
 	}
@@ -195,7 +195,7 @@ void test_puu_value_conversion(){
 		}};
 
 		for(auto n : samples){
-			puu::leaf l(n);
+			treeml::leaf l(n);
 			// TRACE(<< "l.to_string() = " << l.to_string() << ", n = " << std::setprecision(31) << n << ", l.to_long_double() = " << l.to_long_double() << std::endl)
 			ASSERT_INFO_ALWAYS(l.to_long_double() == n, "l.to_string() = " << l.to_string() << ", n = " << n << ", l.to_long_double() = " << l.to_long_double())
 		}
@@ -203,25 +203,25 @@ void test_puu_value_conversion(){
 }
 
 void test_tree_to_string_conversion(){
-	auto forest = puu::read(R"qwertyuiop(
+	auto forest = treeml::read(R"qwertyuiop(
 		a{b{c}}d{e}f
 	)qwertyuiop");
 
-	ASSERT_ALWAYS(puu::to_string(forest[0]) == "a{b{c}}")
+	ASSERT_ALWAYS(treeml::to_string(forest[0]) == "a{b{c}}")
 }
 
 void test_forest_to_string_conversion(){
-	auto forest = puu::read(R"qwertyuiop(
+	auto forest = treeml::read(R"qwertyuiop(
 		a{b{c}}d{e}f
 	)qwertyuiop");
 
-	auto str = puu::to_string(forest);
+	auto str = treeml::to_string(forest);
 	ASSERT_INFO_ALWAYS(str == "a{b{c}}d{e}f", "forest = " << str)
 }
 
 int main(int argc, char** argv){
 
-	test_puu_value_conversion();
+	test_treeml_value_conversion();
 
 	test_tree_to_string_conversion();
 

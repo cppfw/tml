@@ -17,13 +17,13 @@ else
 	exit 1
 fi
 
-packageName=puu
+packageName=treeml
 
 pkgname="${pkgPrefix}${packageName}"
 pkgver=$(version)
 pkgrel=1
 epoch=
-pkgdesc="puu markup language library in C++"
+pkgdesc="tree markup language library in C++"
 #arch=('any') #defined above
 url="http://github.com/cppfw/${packageName}"
 license=('MIT')

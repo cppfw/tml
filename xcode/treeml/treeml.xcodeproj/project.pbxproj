@@ -19,7 +19,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2C9E962823705120000F5DD7 /* libpuu.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libpuu.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C9E962823705120000F5DD7 /* libtreeml.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtreeml.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,7 +36,7 @@
 		2C9E961F23705120000F5DD7 = {
 			isa = PBXGroup;
 			children = (
-				2C9E962A23705120000F5DD7 /* puu */,
+				2C9E962A23705120000F5DD7 /* treeml */,
 				2C9E962923705120000F5DD7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -44,24 +44,24 @@
 		2C9E962923705120000F5DD7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2C9E962823705120000F5DD7 /* libpuu.a */,
+				2C9E962823705120000F5DD7 /* libtreeml.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		2C9E962A23705120000F5DD7 /* puu */ = {
+		2C9E962A23705120000F5DD7 /* treeml */ = {
 			isa = PBXGroup;
 			children = (
 			);
-			path = puu;
+			path = treeml;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2C9E962723705120000F5DD7 /* puu */ = {
+		2C9E962723705120000F5DD7 /* treeml */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2C9E963123705120000F5DD7 /* Build configuration list for PBXNativeTarget "puu" */;
+			buildConfigurationList = 2C9E963123705120000F5DD7 /* Build configuration list for PBXNativeTarget "treeml" */;
 			buildPhases = (
 				2C9E962423705120000F5DD7 /* Sources */,
 				2C9E962523705120000F5DD7 /* Frameworks */,
@@ -71,9 +71,9 @@
 			);
 			dependencies = (
 			);
-			name = puu;
-			productName = puu;
-			productReference = 2C9E962823705120000F5DD7 /* libpuu.a */;
+			name = treeml;
+			productName = treeml;
+			productReference = 2C9E962823705120000F5DD7 /* libtreeml.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -90,7 +90,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 2C9E962323705120000F5DD7 /* Build configuration list for PBXProject "puu" */;
+			buildConfigurationList = 2C9E962323705120000F5DD7 /* Build configuration list for PBXProject "treeml" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -103,7 +103,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2C9E962723705120000F5DD7 /* puu */,
+				2C9E962723705120000F5DD7 /* treeml */,
 			);
 		};
 /* End PBXProject section */
@@ -258,7 +258,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2C9E962323705120000F5DD7 /* Build configuration list for PBXProject "puu" */ = {
+		2C9E962323705120000F5DD7 /* Build configuration list for PBXProject "treeml" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2C9E962F23705120000F5DD7 /* Debug */,
@@ -267,7 +267,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2C9E963123705120000F5DD7 /* Build configuration list for PBXNativeTarget "puu" */ = {
+		2C9E963123705120000F5DD7 /* Build configuration list for PBXNativeTarget "treeml" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2C9E963223705120000F5DD7 /* Debug */,

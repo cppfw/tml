@@ -1,7 +1,7 @@
 usr/include
 usr/lib/pkgconfig
-usr/lib/libpuu.so
-usr/lib/libpuu.a
+usr/lib/libtreeml.so
+usr/lib/libtreeml.a
 usr/share/kde4
 usr/share/katepart5
 usr/share/gtksourceview-3.0

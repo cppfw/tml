@@ -1,7 +1,7 @@
-class Libpuu < Formula
-  desc "C++ cross-platform puu parser library."
-  homepage "https://github.com/cppfw/puu"
-  url "https://github.com/cppfw/puu/archive/$(version).tar.gz"
+class Libtreeml < Formula
+  desc "C++ cross-platform treeml parser library."
+  homepage "https://github.com/cppfw/treeml"
+  url "https://github.com/cppfw/treeml/archive/$(version).tar.gz"
   sha256 "$(sha256)"
 
   depends_on "prorab" => :build

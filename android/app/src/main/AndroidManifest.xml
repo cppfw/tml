@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
-    package="cppfw.github.io.puu_tests">
+    package="cppfw.github.io.treeml_tests">
 
     <application
         android:allowBackup="true"

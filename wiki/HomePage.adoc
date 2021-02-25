@@ -1,7 +1,7 @@
 = WiKi Home page
 
 == Istallation
-:package_name: puu
+:package_name: treeml
 
 . Setup your OS-preferred package system repo following link:https://github.com/cppfw/wiki/blob/master/EnableRepo.adoc[this manual]
 . Install package

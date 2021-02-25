@@ -13,18 +13,18 @@ configurations {
 
 nuget{
 	nuspec{
-		id = libpuu;
+		id = libtreeml;
 		version : $(version);
-		title: C++ puu parser library;
+		title: C++ treeml parser library;
 		authors: {Ivan Gagis};
 		owners: {Ivan Gagis};
-		licenseUrl: "https://raw.githubusercontent.com/cppfw/puu/master/LICENSE";
-		projectUrl: "https://github.com/cppfw/puu";
-		iconUrl: "https://github.com/cppfw/puu/blob/master/logo.svg";
+		licenseUrl: "https://raw.githubusercontent.com/cppfw/treeml/master/LICENSE";
+		projectUrl: "https://github.com/cppfw/treeml";
+		iconUrl: "https://github.com/cppfw/treeml/blob/master/logo.svg";
 		requireLicenseAcceptance:false;
-		summary: C++ puu parser library;
+		summary: C++ treeml parser library;
 
-		description: @"C++ puu parser library";
+		description: @"C++ treeml parser library";
 		releaseNotes: "Initial release";
 		copyright: Copyright 2020 Ivan Gagis;
 		tags: { native};
@@ -38,71 +38,71 @@ nuget{
 	files {
 		//this is needed to put headers in the base folder
 		nestedInclude: {
-			#destination = ${d_include}puu;
-			"..\src\puu\**\*.hpp"
+			#destination = ${d_include}treeml;
+			"..\src\treeml\**\*.hpp"
 		};
 
 		// ======== v140 ========
 
 		[x86,v140,release] {
-			lib: ..\msvs_solution\v140_Release\puu.lib;
+			lib: ..\msvs_solution\v140_Release\treeml.lib;
 		}
 
 		[x86,v140,debug] {
-			lib: ..\msvs_solution\v140_Debug\puu.lib;
+			lib: ..\msvs_solution\v140_Debug\treeml.lib;
 		}
 
 		[x64,v140,release] {
-			lib: ..\msvs_solution\x64\v140_Release\puu.lib;
+			lib: ..\msvs_solution\x64\v140_Release\treeml.lib;
 		}
 
 		[x64,v140,debug] {
-			lib: ..\msvs_solution\x64\v140_Debug\puu.lib;
+			lib: ..\msvs_solution\x64\v140_Debug\treeml.lib;
 		}
 
 		// ======== v141 ========
 
 		[x86,v141,release] {
-			lib: ..\msvs_solution\v141_Release\puu.lib;
+			lib: ..\msvs_solution\v141_Release\treeml.lib;
 		}
 
 		[x86,v141,debug] {
-			lib: ..\msvs_solution\v141_Debug\puu.lib;
+			lib: ..\msvs_solution\v141_Debug\treeml.lib;
 		}
 
 		[x64,v141,release] {
-			lib: ..\msvs_solution\x64\v141_Release\puu.lib;
+			lib: ..\msvs_solution\x64\v141_Release\treeml.lib;
 		}
 
 		[x64,v141,debug] {
-			lib: ..\msvs_solution\x64\v141_Debug\puu.lib;
+			lib: ..\msvs_solution\x64\v141_Debug\treeml.lib;
 		}
 
 		// ======== v142 ========
 
 		[x86,v142,release,MultiThreaded] {
-			lib: ..\msvs_solution\v142_Release_MT\puu.lib;
+			lib: ..\msvs_solution\v142_Release_MT\treeml.lib;
 		}
 		[x86,v142,debug,MultiThreadedDebug] {
-			lib: ..\msvs_solution\v142_Debug_MT\puu.lib;
+			lib: ..\msvs_solution\v142_Debug_MT\treeml.lib;
 		}
 		[x64,v142,release,MultiThreaded] {
-			lib: ..\msvs_solution\x64\v142_Release_MT\puu.lib;
+			lib: ..\msvs_solution\x64\v142_Release_MT\treeml.lib;
 		}
 		[x64,v142,debug,MultiThreadedDebug] {
-			lib: ..\msvs_solution\x64\v142_Debug_MT\puu.lib;
+			lib: ..\msvs_solution\x64\v142_Debug_MT\treeml.lib;
 		}
 		[x86,v142,release,MultiThreadedDLL] {
-			lib: ..\msvs_solution\v142_Release_MD\puu.lib;
+			lib: ..\msvs_solution\v142_Release_MD\treeml.lib;
 		}
 		[x86,v142,debug,MultiThreadedDebugDLL] {
-			lib: ..\msvs_solution\v142_Debug_MD\puu.lib;
+			lib: ..\msvs_solution\v142_Debug_MD\treeml.lib;
 		}
 		[x64,v142,release,MultiThreadedDLL] {
-			lib: ..\msvs_solution\x64\v142_Release_MD\puu.lib;
+			lib: ..\msvs_solution\x64\v142_Release_MD\treeml.lib;
 		}
 		[x64,v142,debug,MultiThreadedDebugDLL] {
-			lib: ..\msvs_solution\x64\v142_Debug_MD\puu.lib;
+			lib: ..\msvs_solution\x64\v142_Debug_MD\treeml.lib;
 		}
 	}
 }

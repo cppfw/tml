@@ -15,7 +15,7 @@ android {
 
         externalNativeBuild {
             cmake {
-                targets "puu"
+                targets "treeml"
             }
         }
     }

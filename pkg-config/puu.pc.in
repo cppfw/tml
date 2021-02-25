@@ -1,9 +1,0 @@
-Name: puu   # human-readable name
-Description: puu markup language C++ library
-Version: $(version)
-URL: http://puu.googlecode.com
-Requires:
-Conflicts:
-Libs: -lpuu
-Libs.private:
-Cflags:

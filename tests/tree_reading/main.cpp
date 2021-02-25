@@ -1,12 +1,12 @@
-#include "../../src/puu/tree.hpp"
+#include "../../src/treeml/tree.hpp"
 
 #include <utki/debug.hpp>
 #include <papki/fs_file.hpp>
 
-void test_puu_basic_parsing(){
-	papki::fs_file fi("test.puu");
+void test_treeml_basic_parsing(){
+	papki::fs_file fi("test.tml");
 
-	auto roots = puu::read(fi);
+	auto roots = treeml::read(fi);
 
 	auto i = roots.begin();
 
@@ -195,7 +195,7 @@ void test_puu_basic_parsing(){
 
 int main(int argc, char** argv){
 
-	test_puu_basic_parsing();
+	test_treeml_basic_parsing();
 
 	return 0;
 }

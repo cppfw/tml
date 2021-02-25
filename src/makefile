@@ -3,7 +3,7 @@ include prorab.mk
 debug := false
 
 
-this_name := puu
+this_name := treeml
 
 this_soname := $(shell cat $(prorab_this_dir)soname.txt)
 
