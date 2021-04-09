@@ -3,7 +3,9 @@ Section: libs
 Priority: extra
 Maintainer: Ivan Gagis <igagis@gmail.com>
 Build-Depends: debhelper (>= 9), libc6-dev, myci, prorab, prorab-extra,
-		libutki-dev, libpapki-dev, libclargs-dev
+		libutki-dev,
+		libpapki-dev,
+		libclargs-dev
 Build-Depends-Indep: doxygen
 Standards-Version: 3.9.2
 
@@ -11,7 +13,8 @@ Package: libtreeml-dev
 Section: libdevel
 Architecture: any
 Depends: libtreeml$(soname) (= ${binary:Version}), libtreeml$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
-		libutki-dev, libpapki-dev
+		libutki-dev,
+		libpapki-dev
 Suggests: libtreeml-doc
 Description: tree markup language C++ library.
  treeml is a simple markup language.
