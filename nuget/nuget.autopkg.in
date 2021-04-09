@@ -43,7 +43,7 @@ nuget{
 		};
 
 		// ======== v140 ========
-
+/*
 		[x86,v140,release] {
 			lib: ..\msvs_solution\v140_Release\treeml.lib;
 		}
@@ -59,9 +59,9 @@ nuget{
 		[x64,v140,debug] {
 			lib: ..\msvs_solution\x64\v140_Debug\treeml.lib;
 		}
-
+*/
 		// ======== v141 ========
-
+/*
 		[x86,v141,release] {
 			lib: ..\msvs_solution\v141_Release\treeml.lib;
 		}
@@ -77,7 +77,7 @@ nuget{
 		[x64,v141,debug] {
 			lib: ..\msvs_solution\x64\v141_Debug\treeml.lib;
 		}
-
+*/
 		// ======== v142 ========
 
 		[x86,v142,release,MultiThreaded] {
