@@ -1,4 +1,5 @@
 include prorab.mk
+include prorab-test.mk
 
 $(eval $(call prorab-config, ../../config))
 
@@ -14,9 +15,12 @@ this_no_install := true
 
 $(eval $(prorab-build-app))
 
-include $(d)../test_rule.mk
-
 # add dependency on libtreeml
 $(prorab_this_name): $(abspath $(d)../../src/out/$(c)/libtreeml$(dot_so))
+
+this_test_cmd := $(prorab_this_name)
+this_test_deps := $(prorab_this_name)
+this_test_ld_path := ../../src/out/$(c)
+$(eval $(prorab-test))
 
 $(eval $(call prorab-try-include,$(d)../../src/makefile))
