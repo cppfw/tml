@@ -1,3 +1,9 @@
+libtreeml (0.1.31) unstable; urgency=medium
+
+  * add read(std::string) overload
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 24 Apr 2021 01:38:34 +0300
+
 libtreeml (0.1.30) unstable; urgency=medium
 
   * relink to latest utki
