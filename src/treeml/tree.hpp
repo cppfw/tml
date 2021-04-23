@@ -131,6 +131,10 @@ forest read(const papki::file& fi);
 
 forest read(const char* str);
 
+inline forest read(const std::string& str){
+	return read(str.c_str());
+}
+
 enum class formatting{
     normal,
     minimal
