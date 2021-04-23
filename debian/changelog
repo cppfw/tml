@@ -1,3 +1,9 @@
+libtreeml (0.1.30) unstable; urgency=medium
+
+  * relink to latest utki
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 24 Apr 2021 00:05:26 +0300
+
 libtreeml (0.1.29) unstable; urgency=medium
 
   * do not use deprecated stuff
