@@ -30,7 +30,7 @@ void parser::process_char_in_idle(char c, listener& listener){
 		case ' ':
 		case '\t':
 		case '\r':
-			this->cur_flags.set(treeml::flags::space, true);
+			this->cur_flags.set(treeml::flags::space);
 			break;
 		case '\0':
 			this->cur_state = state::idle;
@@ -59,12 +59,13 @@ void parser::process_char_in_idle(char c, listener& listener){
 
 void parser::process_char_in_string_parsed(char c, listener& listener){
 	switch (c) {
-		case ' ':
 		case '\n':
 			++this->cur_line;
 			this->cur_line_offset = 0;
+		case ' ':
 		case '\r':
 		case '\t':
+			this->cur_flags.set(treeml::flags::space);
 			break;
 		case '/':
 			if(this->string_buf.size() != 0){
@@ -141,11 +142,11 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 				this->cur_state = state::quoted_string;
 			}
 			break;
-		case ' ':
-		case '\r':
 		case '\n':
 			++this->cur_line;
 			this->cur_line_offset = 0;
+		case ' ':
+		case '\r':
 		case '\t':
 			ASSERT(this->string_buf.size() != 0)
 			this->handle_string_parsed(listener);
@@ -185,10 +186,10 @@ void parser::process_char_in_quoted_string(char c, listener& listener){
 		case '\\':
 			this->cur_state = state::escape_sequence;
 			break;
-		case '\r':
 		case '\n':
 			++this->cur_line;
 			this->cur_line_offset = 0;
+		case '\r':
 		case '\t':
 			break;
 		default:
@@ -223,11 +224,12 @@ void parser::process_char_in_escape_sequence(char c, listener& listener){
 }
 
 void parser::process_char_in_single_line_comment(char c, listener& listener){
+	this->cur_flags.set(treeml::flags::space);
 	switch(c){
-		case '\0':
 		case '\n':
 			++this->cur_line;
 			this->cur_line_offset = 0;
+		case '\0':
 			this->cur_state = this->state_after_comment;
 			break;
 		default:

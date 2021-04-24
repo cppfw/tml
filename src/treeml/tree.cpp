@@ -31,7 +31,11 @@ forest treeml::read(const papki::file& fi){
 		}
 
 		void on_string_parsed(std::string_view str, utki::flags<treeml::flags> flags)override{
-			this->cur_trees.emplace_back(std::string(str.begin(), str.size()));
+			this->cur_trees.emplace_back(
+					leaf(
+							std::string(str.begin(), str.size())
+						)
+				);
 		}
 	} listener;
 
