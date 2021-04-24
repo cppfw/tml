@@ -11,12 +11,12 @@ namespace{
 const size_t fileReadChinkSize_c = 0x4ff;
 }
 
-void parser::handleStringParsed(listener& listener){
-	listener.on_string_parsed(utki::make_span(this->stringBuf));
-	this->stringBuf.clear();
+void parser::handle_string_parsed(listener& listener){
+	listener.on_string_parsed(utki::make_span(this->string_buf));
+	this->string_buf.clear();
 }
 
-void parser::processCharInIdle(char c, listener& listener){
+void parser::process_char_in_idle(char c, listener& listener){
 	switch(c){
 		case ' ':
 		case '\n':
@@ -29,23 +29,23 @@ void parser::processCharInIdle(char c, listener& listener){
 		case '{':
 			listener.on_string_parsed(utki::span<char>());
 			listener.on_children_parse_started();
-			++this->nestingLevel;
+			++this->nesting_level;
 			break;
 		case '}':
 			listener.on_children_parse_finished();
-			--this->nestingLevel;
+			--this->nesting_level;
 			break;
 		case '"':
 			this->cur_state = state::quoted_string;
 			break;
 		default:
-			this->stringBuf.push_back(c);
+			this->string_buf.push_back(c);
 			this->cur_state = state::unquoted_string;
 			break;
 	}
 }
 
-void parser::processCharInStringParsed(char c, listener& listener){
+void parser::process_char_in_string_parsed(char c, listener& listener){
 	switch (c) {
 		case ' ':
 		case '\n':
@@ -53,77 +53,77 @@ void parser::processCharInStringParsed(char c, listener& listener){
 		case '\t':
 			break;
 		case '/':
-			if(this->stringBuf.size() != 0){
-				ASSERT(this->stringBuf.size() == 1)
-				ASSERT(this->stringBuf[0] == '/')
-				this->stringBuf.clear();
-				this->stateAfterComment = state::string_parsed;
+			if(this->string_buf.size() != 0){
+				ASSERT(this->string_buf.size() == 1)
+				ASSERT(this->string_buf[0] == '/')
+				this->string_buf.clear();
+				this->state_after_comment = state::string_parsed;
 				this->cur_state = state::single_line_comment;
 			}else{
-				this->stringBuf.push_back(c);
+				this->string_buf.push_back(c);
 			}
 			break;
 		case '*':
-			if(this->stringBuf.size() != 0){
-				ASSERT(this->stringBuf.size() == 1)
-				ASSERT(this->stringBuf[0] == '/')
-				this->stringBuf.clear();
-				this->stateAfterComment = state::string_parsed;
+			if(this->string_buf.size() != 0){
+				ASSERT(this->string_buf.size() == 1)
+				ASSERT(this->string_buf[0] == '/')
+				this->string_buf.clear();
+				this->state_after_comment = state::string_parsed;
 				this->cur_state = state::multiline_comment;
 			}else{
 				this->cur_state = state::idle;
-				this->processCharInIdle(c, listener);
+				this->process_char_in_idle(c, listener);
 			}
 			break;
 		case '{':
 			listener.on_children_parse_started();
 			this->cur_state = state::idle;
-			++this->nestingLevel;
+			++this->nesting_level;
 			break;
 		default:
 			this->cur_state = state::idle;
-			this->processCharInIdle(c, listener);
+			this->process_char_in_idle(c, listener);
 			break;
 	}
 }
 
-void parser::processCharInUnquotedString(char c, listener& listener){
+void parser::process_char_in_unquoted_string(char c, listener& listener){
 	switch(c){
 		case '/':
-			if(this->stringBuf.size() != 0 && this->stringBuf.back() == '/'){
-				this->stringBuf.pop_back();
-				if(this->stringBuf.size() != 0){
-					this->handleStringParsed(listener);
-					this->stateAfterComment = state::string_parsed;
+			if(this->string_buf.size() != 0 && this->string_buf.back() == '/'){
+				this->string_buf.pop_back();
+				if(this->string_buf.size() != 0){
+					this->handle_string_parsed(listener);
+					this->state_after_comment = state::string_parsed;
 				}else{
-					this->stateAfterComment = state::idle;
+					this->state_after_comment = state::idle;
 				}
 				this->cur_state = state::single_line_comment;
 			}else{
-				this->stringBuf.push_back(c);
+				this->string_buf.push_back(c);
 			}
 			break;
 		case '*':
-			if(this->stringBuf.size() != 0 && this->stringBuf.back() == '/'){
-				this->stringBuf.pop_back();
-				if(this->stringBuf.size() != 0){
-					this->handleStringParsed(listener);
-					this->stateAfterComment = state::string_parsed;
+			if(this->string_buf.size() != 0 && this->string_buf.back() == '/'){
+				this->string_buf.pop_back();
+				if(this->string_buf.size() != 0){
+					this->handle_string_parsed(listener);
+					this->state_after_comment = state::string_parsed;
 				}else{
-					this->stateAfterComment = state::idle;
+					this->state_after_comment = state::idle;
 				}
 				this->cur_state = state::multiline_comment;
 			} else {
-				this->stringBuf.push_back(c);
+				this->string_buf.push_back(c);
 			}
 			break;
 		case '"':
-			ASSERT(this->stringBuf.size() != 0)
-			if(this->stringBuf.size() == 1 && this->stringBuf.back() == 'R'){
-				this->stringBuf.clear();
+			ASSERT(this->string_buf.size() != 0)
+			if(this->string_buf.size() == 1 && this->string_buf.back() == 'R'){
+				this->string_buf.clear();
 				this->cur_state = state::raw_string_opening_delimeter;
 			}else{
-				this->handleStringParsed(listener);
+				this->handle_string_parsed(listener);
 				this->cur_state = state::quoted_string;
 			}
 			break;
@@ -131,39 +131,39 @@ void parser::processCharInUnquotedString(char c, listener& listener){
 		case '\r':
 		case '\n':
 		case '\t':
-			ASSERT(this->stringBuf.size() != 0)
-			this->handleStringParsed(listener);
+			ASSERT(this->string_buf.size() != 0)
+			this->handle_string_parsed(listener);
 			this->cur_state = state::string_parsed;
 			break;
 		case '\0':
-			ASSERT(this->stringBuf.size() != 0)
-			this->handleStringParsed(listener);
+			ASSERT(this->string_buf.size() != 0)
+			this->handle_string_parsed(listener);
 			this->cur_state = state::idle;
 			break;
 		case '{':
-			ASSERT(this->stringBuf.size() != 0)
-			this->handleStringParsed(listener);
+			ASSERT(this->string_buf.size() != 0)
+			this->handle_string_parsed(listener);
 			this->cur_state = state::idle;
 			listener.on_children_parse_started();
-			++this->nestingLevel;
+			++this->nesting_level;
 			break;
 		case '}':
-			ASSERT(this->stringBuf.size() != 0)
-			this->handleStringParsed(listener);
+			ASSERT(this->string_buf.size() != 0)
+			this->handle_string_parsed(listener);
 			this->cur_state = state::idle;
 			listener.on_children_parse_finished();
-			--this->nestingLevel;
+			--this->nesting_level;
 			break;
 		default:
-			this->stringBuf.push_back(c);
+			this->string_buf.push_back(c);
 			break;
 	}
 }
 
-void parser::processCharInQuotedString(char c, listener& listener){
+void parser::process_char_in_quoted_string(char c, listener& listener){
 	switch (c) {
 		case '"':
-			this->handleStringParsed(listener);
+			this->handle_string_parsed(listener);
 			this->cur_state = state::string_parsed;
 			break;
 		case '\\':
@@ -174,164 +174,164 @@ void parser::processCharInQuotedString(char c, listener& listener){
 		case '\t':
 			break;
 		default:
-			this->stringBuf.push_back(c);
+			this->string_buf.push_back(c);
 			break;
 	}
 }
 
-void parser::processCharInEscapeSequence(char c, listener& listener){
+void parser::process_char_in_escape_sequence(char c, listener& listener){
 	switch (c) {
 		case '"':
-			this->stringBuf.push_back('"');
+			this->string_buf.push_back('"');
 			break;
 		case '\\':
-			this->stringBuf.push_back('\\');
+			this->string_buf.push_back('\\');
 			break;
 		case 'r':
-			this->stringBuf.push_back('\r');
+			this->string_buf.push_back('\r');
 			break;
 		case 'n':
-			this->stringBuf.push_back('\n');
+			this->string_buf.push_back('\n');
 			break;
 		case 't':
-			this->stringBuf.push_back('\t');
+			this->string_buf.push_back('\t');
 			break;
 		default:
-			this->stringBuf.push_back('\\');
-			this->stringBuf.push_back(c);
+			this->string_buf.push_back('\\');
+			this->string_buf.push_back(c);
 			break;
 	}
 	this->cur_state = state::quoted_string;
 }
 
-void parser::processCharInSingleLineComment(char c, listener& listener){
+void parser::process_char_in_single_line_comment(char c, listener& listener){
 	switch(c){
 		case '\0':
 		case '\n':
-			this->cur_state = this->stateAfterComment;
+			this->cur_state = this->state_after_comment;
 			break;
 		default:
 			break;
 	}
 }
 
-void parser::processCharInMultiLineComment(char c, listener& listener){
+void parser::process_char_in_multiline_comment(char c, listener& listener){
 	switch(c){
 		case '*':
-			ASSERT(this->stringBuf.size() == 0)
-			this->stringBuf.push_back('*');
+			ASSERT(this->string_buf.size() == 0)
+			this->string_buf.push_back('*');
 			break;
 		case '/':
-			if(this->stringBuf.size() != 0){
-				ASSERT(this->stringBuf.size() == 1)
-				ASSERT(this->stringBuf.back() == '*')
-				this->stringBuf.clear();
-				this->cur_state = this->stateAfterComment;
+			if(this->string_buf.size() != 0){
+				ASSERT(this->string_buf.size() == 1)
+				ASSERT(this->string_buf.back() == '*')
+				this->string_buf.clear();
+				this->cur_state = this->state_after_comment;
 			}
 			break;
 		default:
-			this->stringBuf.clear();
+			this->string_buf.clear();
 			break;
 	}
 }
 
-void parser::processCharInRawStringOpeningDelimeter(char c, listener& listener) {
+void parser::process_char_in_raw_string_opening_delimeter(char c, listener& listener) {
 	switch(c){
 		case '"':
 			{
 				char r = 'R';
 				listener.on_string_parsed(utki::make_span(&r, 1));
 			}
-			this->handleStringParsed(listener);
+			this->handle_string_parsed(listener);
 			this->cur_state = state::string_parsed;
 			break;
 		case '(':
-			this->rawStringDelimeter.assign(&*this->stringBuf.begin(), this->stringBuf.size());
-			this->stringBuf.clear();
+			this->raw_string_delimeter.assign(&*this->string_buf.begin(), this->string_buf.size());
+			this->string_buf.clear();
 			this->cur_state = state::raw_string;
 			break;
 		default:
-			this->stringBuf.push_back(c);
+			this->string_buf.push_back(c);
 			break;
 	}
 }
 
-void parser::processCharInRawString(char c, listener& listener) {
+void parser::process_char_in_raw_string(char c, listener& listener) {
 	switch(c){
 		case ')':
-			this->rawStringDelimeterIndex = 0;
+			this->raw_string_delimeter_index = 0;
 			this->cur_state = state::raw_string_closing_delimeter;
 			break;
 		default:
-			this->stringBuf.push_back(c);
+			this->string_buf.push_back(c);
 			break;
 	}
 }
 
-void parser::processCharInRawStringClosingDelimeter(char c, listener& listener) {
+void parser::process_char_in_raw_string_closing_delimeter(char c, listener& listener) {
 	switch(c){
 		case '"':
-			ASSERT(this->rawStringDelimeterIndex <= this->rawStringDelimeter.size())
-			if(this->rawStringDelimeterIndex != this->rawStringDelimeter.size()){
-				this->stringBuf.push_back(')');
-				for(size_t i = 0; i != this->rawStringDelimeterIndex; ++i){
-					this->stringBuf.push_back(this->rawStringDelimeter[i]);
+			ASSERT(this->raw_string_delimeter_index <= this->raw_string_delimeter.size())
+			if(this->raw_string_delimeter_index != this->raw_string_delimeter.size()){
+				this->string_buf.push_back(')');
+				for(size_t i = 0; i != this->raw_string_delimeter_index; ++i){
+					this->string_buf.push_back(this->raw_string_delimeter[i]);
 				}
 				this->cur_state = state::raw_string;
 			}else{
-				this->handleStringParsed(listener);
-				this->rawStringDelimeter.clear();
+				this->handle_string_parsed(listener);
+				this->raw_string_delimeter.clear();
 				this->cur_state = state::string_parsed;
 			}
 			break;
 		default:
-			ASSERT(this->rawStringDelimeterIndex <= this->rawStringDelimeter.size())
-			if(this->rawStringDelimeterIndex == this->rawStringDelimeter.size()
-					|| c != this->rawStringDelimeter[this->rawStringDelimeterIndex])
+			ASSERT(this->raw_string_delimeter_index <= this->raw_string_delimeter.size())
+			if(this->raw_string_delimeter_index == this->raw_string_delimeter.size()
+					|| c != this->raw_string_delimeter[this->raw_string_delimeter_index])
 			{
-				this->stringBuf.push_back(')');
-				for(size_t i = 0; i != this->rawStringDelimeterIndex; ++i){
-					this->stringBuf.push_back(this->rawStringDelimeter[i]);
+				this->string_buf.push_back(')');
+				for(size_t i = 0; i != this->raw_string_delimeter_index; ++i){
+					this->string_buf.push_back(this->raw_string_delimeter[i]);
 				}
 				this->cur_state = state::raw_string;
 			}else{
-				++this->rawStringDelimeterIndex;
+				++this->raw_string_delimeter_index;
 			}
 			break;
 	}
 }
 
-void parser::processChar(char c, listener& listener){
+void parser::process_char(char c, listener& listener){
 	switch(this->cur_state){
 		case state::idle:
-			this->processCharInIdle(c, listener);
+			this->process_char_in_idle(c, listener);
 			break;
 		case state::string_parsed:
-			this->processCharInStringParsed(c, listener);
+			this->process_char_in_string_parsed(c, listener);
 			break;
 		case state::unquoted_string:
-			this->processCharInUnquotedString(c, listener);
+			this->process_char_in_unquoted_string(c, listener);
 			break;
 		case state::quoted_string:
-			this->processCharInQuotedString(c, listener);
+			this->process_char_in_quoted_string(c, listener);
 			break;
 		case state::escape_sequence:
-			this->processCharInEscapeSequence(c, listener);
+			this->process_char_in_escape_sequence(c, listener);
 			break;
 		case state::single_line_comment:
-			this->processCharInSingleLineComment(c, listener);
+			this->process_char_in_single_line_comment(c, listener);
 			break;
 		case state::multiline_comment:
-			this->processCharInMultiLineComment(c, listener);
+			this->process_char_in_multiline_comment(c, listener);
 			break;
 		case state::raw_string_opening_delimeter:
-			this->processCharInRawStringOpeningDelimeter(c, listener);
+			this->process_char_in_raw_string_opening_delimeter(c, listener);
 			break;
 		case state::raw_string:
-			this->processCharInRawString(c, listener);
+			this->process_char_in_raw_string(c, listener);
 			break;
 		case state::raw_string_closing_delimeter:
-			this->processCharInRawStringClosingDelimeter(c, listener);
+			this->process_char_in_raw_string_closing_delimeter(c, listener);
 			break;
 		default:
 			ASSERT(false)
@@ -341,14 +341,14 @@ void parser::processChar(char c, listener& listener){
 
 void parser::parse_data_chunk(utki::span<const uint8_t> chunk, listener& listener){
 	for(auto c : chunk){
-		this->processChar(c, listener);
+		this->process_char(c, listener);
 	}
 }
 
 void parser::end_of_data(listener& listener){
-	this->processChar('\0', listener);
+	this->process_char('\0', listener);
 
-	if(this->nestingLevel != 0 || this->cur_state != state::idle){
+	if(this->nesting_level != 0 || this->cur_state != state::idle){
 		throw std::logic_error("Malformed treeml document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
 	}
 
@@ -374,7 +374,7 @@ void treeml::parse(const papki::file& fi, listener& listener){
 }
 
 void parser::reset(){
-	this->stringBuf.clear();
-	this->nestingLevel = 0;
+	this->string_buf.clear();
+	this->nesting_level = 0;
 	this->cur_state = state::idle;
 }

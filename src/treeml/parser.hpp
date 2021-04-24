@@ -69,13 +69,13 @@ public:
  * documents.
  */
 class parser{
-	std::vector<char> stringBuf; // buffer for current string being parsed
+	std::vector<char> string_buf; // buffer for current string being parsed
 
-	std::string rawStringDelimeter; // delimeter for raw string
-	size_t rawStringDelimeterIndex; // index into the raw string delimeter
+	std::string raw_string_delimeter; // delimeter for raw string
+	size_t raw_string_delimeter_index; // index into the raw string delimeter
 
 	// This variable is used for tracking current nesting level to make checks for detecting malformed treeml document
-	unsigned nestingLevel;
+	unsigned nesting_level;
 
 	enum class state{
 		idle,
@@ -90,21 +90,21 @@ class parser{
 		raw_string
 	} cur_state;
 
-	state stateAfterComment;
+	state state_after_comment;
 
-	void handleStringParsed(listener& listener);
+	void handle_string_parsed(treeml::listener& listener);
 
-	void processChar(char c, listener& listener);
-	void processCharInIdle(char c, listener& listener);
-	void processCharInStringParsed(char c, listener& listener);
-	void processCharInUnquotedString(char c, listener& listener);
-	void processCharInQuotedString(char c, listener& listener);
-	void processCharInEscapeSequence(char c, listener& listener);
-	void processCharInSingleLineComment(char c, listener& listener);
-	void processCharInMultiLineComment(char c, listener& listener);
-	void processCharInRawStringOpeningDelimeter(char c, listener& listener);
-	void processCharInRawString(char c, listener& listener);
-	void processCharInRawStringClosingDelimeter(char c, listener& listener);
+	void process_char(char c, treeml::listener& listener);
+	void process_char_in_idle(char c, treeml::listener& listener);
+	void process_char_in_string_parsed(char c, treeml::listener& listener);
+	void process_char_in_unquoted_string(char c, treeml::listener& listener);
+	void process_char_in_quoted_string(char c, treeml::listener& listener);
+	void process_char_in_escape_sequence(char c, treeml::listener& listener);
+	void process_char_in_single_line_comment(char c, treeml::listener& listener);
+	void process_char_in_multiline_comment(char c, treeml::listener& listener);
+	void process_char_in_raw_string_opening_delimeter(char c, treeml::listener& listener);
+	void process_char_in_raw_string(char c, treeml::listener& listener);
+	void process_char_in_raw_string_closing_delimeter(char c, treeml::listener& listener);
 
 public:
 	/**
