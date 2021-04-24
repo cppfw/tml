@@ -11,25 +11,33 @@ namespace{
 const size_t fileReadChinkSize_c = 0x4ff;
 }
 
-void parser::handle_string_parsed(listener& listener, utki::flags<treeml::flags> flags){
-	listener.on_string_parsed(std::string_view(this->string_buf.data(), this->string_buf.size()), flags);
+void parser::handle_string_parsed(listener& listener){
+	listener.on_string_parsed(std::string_view(this->string_buf.data(), this->string_buf.size()), this->cur_flags);
 	this->string_buf.clear();
+	this->cur_flags.clear();
+}
+
+void parser::set_string_start_pos(){
+	this->string_start_line = this->cur_line;
+	this->string_start_line_offset = this->cur_line_offset;
 }
 
 void parser::process_char_in_idle(char c, listener& listener){
 	switch(c){
-		case ' ':
 		case '\n':
 			++this->cur_line;
 			this->cur_line_offset = 0;
-		case '\r':
+		case ' ':
 		case '\t':
+		case '\r':
+			this->cur_flags.set(treeml::flags::space, true);
 			break;
 		case '\0':
 			this->cur_state = state::idle;
 			break;
 		case '{':
-			listener.on_string_parsed(std::string_view(nullptr, 0), {}); // TODO: correct flags?
+			this->string_buf.clear(); // empty string
+			this->handle_string_parsed(listener);
 			listener.on_children_parse_started();
 			++this->nesting_level;
 			break;
@@ -38,10 +46,12 @@ void parser::process_char_in_idle(char c, listener& listener){
 			--this->nesting_level;
 			break;
 		case '"':
+			this->set_string_start_pos();
 			this->cur_state = state::quoted_string;
 			break;
 		default:
 			this->string_buf.push_back(c);
+			this->set_string_start_pos();
 			this->cur_state = state::unquoted_string;
 			break;
 	}
@@ -97,7 +107,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			if(this->string_buf.size() != 0 && this->string_buf.back() == '/'){
 				this->string_buf.pop_back();
 				if(this->string_buf.size() != 0){
-					this->handle_string_parsed(listener, {}); // TODO: correct flags?
+					this->handle_string_parsed(listener);
 					this->state_after_comment = state::string_parsed;
 				}else{
 					this->state_after_comment = state::idle;
@@ -111,7 +121,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			if(this->string_buf.size() != 0 && this->string_buf.back() == '/'){
 				this->string_buf.pop_back();
 				if(this->string_buf.size() != 0){
-					this->handle_string_parsed(listener, {}); // TODO: correct flags?
+					this->handle_string_parsed(listener);
 					this->state_after_comment = state::string_parsed;
 				}else{
 					this->state_after_comment = state::idle;
@@ -127,7 +137,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 				this->string_buf.clear();
 				this->cur_state = state::raw_string_opening_delimeter;
 			}else{
-				this->handle_string_parsed(listener, {}); // TODO: correct flags?
+				this->handle_string_parsed(listener);
 				this->cur_state = state::quoted_string;
 			}
 			break;
@@ -138,24 +148,24 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			this->cur_line_offset = 0;
 		case '\t':
 			ASSERT(this->string_buf.size() != 0)
-			this->handle_string_parsed(listener, {}); // TODO: correct flags?
+			this->handle_string_parsed(listener);
 			this->cur_state = state::string_parsed;
 			break;
 		case '\0':
 			ASSERT(this->string_buf.size() != 0)
-			this->handle_string_parsed(listener, {}); // TODO: correct flags?
+			this->handle_string_parsed(listener);
 			this->cur_state = state::idle;
 			break;
 		case '{':
 			ASSERT(this->string_buf.size() != 0)
-			this->handle_string_parsed(listener, {}); // TODO: correct flags?
+			this->handle_string_parsed(listener);
 			this->cur_state = state::idle;
 			listener.on_children_parse_started();
 			++this->nesting_level;
 			break;
 		case '}':
 			ASSERT(this->string_buf.size() != 0)
-			this->handle_string_parsed(listener, {}); // TODO: correct flags?
+			this->handle_string_parsed(listener);
 			this->cur_state = state::idle;
 			listener.on_children_parse_finished();
 			--this->nesting_level;
@@ -169,7 +179,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 void parser::process_char_in_quoted_string(char c, listener& listener){
 	switch (c) {
 		case '"':
-			this->handle_string_parsed(listener, {}); // TODO: correct flags?
+			this->handle_string_parsed(listener);
 			this->cur_state = state::string_parsed;
 			break;
 		case '\\':
@@ -248,11 +258,15 @@ void parser::process_char_in_multiline_comment(char c, listener& listener){
 void parser::process_char_in_raw_string_opening_delimeter(char c, listener& listener) {
 	switch(c){
 		case '"':
+			// not a C++ style raw string, report 'R' string and a quoted string
+			this->cur_flags.clear(treeml::flags::cpp_raw);
 			{
 				char r = 'R';
-				listener.on_string_parsed(std::string_view(&r, 1), {}); // TODO: correct flags?
+				listener.on_string_parsed(std::string_view(&r, 1), this->cur_flags); // TODO: correct flags?
 			}
-			this->handle_string_parsed(listener, {}); // TODO: correct flags?
+			this->cur_flags.clear(treeml::flags::space);
+			this->cur_flags.set(treeml::flags::quoted);
+			this->handle_string_parsed(listener);
 			this->cur_state = state::string_parsed;
 			break;
 		case '(':
@@ -289,7 +303,7 @@ void parser::process_char_in_raw_string_closing_delimeter(char c, listener& list
 				}
 				this->cur_state = state::raw_string;
 			}else{
-				this->handle_string_parsed(listener, {}); // TODO: correct flags?
+				this->handle_string_parsed(listener);
 				this->raw_string_delimeter.clear();
 				this->cur_state = state::string_parsed;
 			}
@@ -352,6 +366,7 @@ void parser::process_char(char c, listener& listener){
 void parser::parse_data_chunk(utki::span<const uint8_t> chunk, listener& listener){
 	for(auto c : chunk){
 		this->process_char(c, listener);
+		++this->cur_line_offset;
 	}
 }
 

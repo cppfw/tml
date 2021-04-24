@@ -44,11 +44,12 @@ namespace treeml{
  */
 enum class flags{
 	/**
-	 * @brief No space between previous node.
-	 * Indicates that in the original text there was no space between this node and previous node.
-	 * This is possible in case ptevious node had curly braces or previous or this node is a quoted string.
+	 * @brief Space between previous node and this node.
+	 * Indicates that in the original text there was a space between this node and previous node.
+	 * Absence of space is possible in case of very first document's node or previous node had
+	 * curly braces or previous or this node is a quoted string.
 	 */
-	no_space,
+	space,
 
 	/**
 	 * @brief The node was specified as quoted string.
@@ -121,7 +122,7 @@ class parser{
 
 	state state_after_comment;
 
-	void handle_string_parsed(treeml::listener& listener, utki::flags<treeml::flags> flags);
+	void handle_string_parsed(treeml::listener& listener);
 
 	void process_char(char c, treeml::listener& listener);
 	void process_char_in_idle(char c, treeml::listener& listener);
@@ -139,6 +140,10 @@ class parser{
 	size_t cur_line_offset = 0;
 	size_t string_start_line;
 	size_t string_start_line_offset;
+
+	void set_string_start_pos();
+
+	utki::flags<treeml::flags> cur_flags;
 public:
 	/**
 	 * @brief Constructor.
