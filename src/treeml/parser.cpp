@@ -44,6 +44,7 @@ void parser::process_char_in_idle(char c, listener& listener){
 		case '}':
 			listener.on_children_parse_finished();
 			--this->nesting_level;
+			this->cur_flags.clear(flag::space);
 			break;
 		case '"':
 			this->set_string_start_pos();
@@ -139,6 +140,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			if(this->string_buf.size() == 1 && this->string_buf.back() == 'R'){
 				this->string_buf.clear();
 				this->cur_state = state::raw_string_opening_delimeter;
+				this->cur_flags.set(flag::raw_cpp);
 			}else{
 				this->handle_string_parsed(listener);
 				this->cur_state = state::quoted_string;
@@ -265,12 +267,12 @@ void parser::process_char_in_raw_string_opening_delimeter(char c, listener& list
 	switch(c){
 		case '"':
 			// not a C++ style raw string, report 'R' string and a quoted string
-			this->cur_flags.clear(treeml::flag::cpp_raw);
+			this->cur_flags.clear(treeml::flag::raw_cpp);
 			{
 				char r = 'R';
 				listener.on_string_parsed(std::string_view(&r, 1), this->cur_flags); // TODO: correct flags?
+				this->cur_flags.clear(treeml::flag::space);
 			}
-			this->cur_flags.clear(treeml::flag::space);
 			this->cur_flags.set(treeml::flag::quoted);
 			this->handle_string_parsed(listener);
 			this->cur_state = state::string_parsed;

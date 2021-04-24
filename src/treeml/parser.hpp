@@ -59,7 +59,7 @@ enum class flag{
 	/**
 	 * @brief The node was specified as C++ style raw string.
 	 */
-	cpp_raw,
+	raw_cpp,
 
 	enum_size
 };
