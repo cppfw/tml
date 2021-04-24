@@ -42,7 +42,7 @@ namespace treeml{
  * @brief Additional information flags.
  * These are the flags indicating additional formatting information of the parsed treeml node.
  */
-enum class flags{
+enum class flag{
 	/**
 	 * @brief Space between previous node and this node.
 	 * Indicates that in the original text there was a space between this node and previous node.
@@ -77,7 +77,7 @@ public:
      * @param str - parsed string.
 	 * @param flags - additional informatin flags.
      */
-	virtual void on_string_parsed(std::string_view str, utki::flags<treeml::flags> flags) = 0;
+	virtual void on_string_parsed(std::string_view str, utki::flags<treeml::flag> flags) = 0;
 
 	/**
 	 * @brief Children list parsing started.
@@ -144,7 +144,7 @@ class parser{
 
 	void set_string_start_pos();
 
-	utki::flags<treeml::flags> cur_flags;
+	utki::flags<treeml::flag> cur_flags;
 public:
 	/**
 	 * @brief Constructor.

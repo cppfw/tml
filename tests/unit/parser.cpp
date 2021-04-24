@@ -25,10 +25,10 @@ tst::set set("parser", [](auto& suite){
 
 				struct listener : public treeml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, utki::flags<treeml::flags> flags)override{
+					void on_string_parsed(std::string_view str, utki::flags<treeml::flag> flags)override{
 						if(str == "hello"){
 							string_parsed = true;
-							tst::check(!flags.get(treeml::flags::space), SL);
+							tst::check(!flags.get(treeml::flag::space), SL);
 						}
 					}
 
@@ -79,10 +79,10 @@ tst::set set("parser", [](auto& suite){
 
 				struct listener : public treeml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, utki::flags<treeml::flags> flags)override{
+					void on_string_parsed(std::string_view str, utki::flags<treeml::flag> flags)override{
 						if(str == "hello"){
 							string_parsed = true;
-							tst::check(flags.get(treeml::flags::space), SL);
+							tst::check(flags.get(treeml::flag::space), SL);
 						}
 					}
 
