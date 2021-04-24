@@ -135,6 +135,10 @@ class parser{
 	void process_char_in_raw_string(char c, treeml::listener& listener);
 	void process_char_in_raw_string_closing_delimeter(char c, treeml::listener& listener);
 
+	size_t cur_line = 0;
+	size_t cur_line_offset = 0;
+	size_t string_start_line;
+	size_t string_start_line_offset;
 public:
 	/**
 	 * @brief Constructor.
@@ -176,3 +180,4 @@ public:
 void parse(const papki::file& fi, listener& listener);
 
 }
+

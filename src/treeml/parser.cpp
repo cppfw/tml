@@ -20,6 +20,8 @@ void parser::process_char_in_idle(char c, listener& listener){
 	switch(c){
 		case ' ':
 		case '\n':
+			++this->cur_line;
+			this->cur_line_offset = 0;
 		case '\r':
 		case '\t':
 			break;
@@ -49,6 +51,8 @@ void parser::process_char_in_string_parsed(char c, listener& listener){
 	switch (c) {
 		case ' ':
 		case '\n':
+			++this->cur_line;
+			this->cur_line_offset = 0;
 		case '\r':
 		case '\t':
 			break;
@@ -130,6 +134,8 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 		case ' ':
 		case '\r':
 		case '\n':
+			++this->cur_line;
+			this->cur_line_offset = 0;
 		case '\t':
 			ASSERT(this->string_buf.size() != 0)
 			this->handle_string_parsed(listener, {}); // TODO: correct flags?
@@ -171,6 +177,8 @@ void parser::process_char_in_quoted_string(char c, listener& listener){
 			break;
 		case '\r':
 		case '\n':
+			++this->cur_line;
+			this->cur_line_offset = 0;
 		case '\t':
 			break;
 		default:
@@ -208,6 +216,8 @@ void parser::process_char_in_single_line_comment(char c, listener& listener){
 	switch(c){
 		case '\0':
 		case '\n':
+			++this->cur_line;
+			this->cur_line_offset = 0;
 			this->cur_state = this->state_after_comment;
 			break;
 		default:
