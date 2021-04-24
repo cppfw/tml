@@ -77,20 +77,20 @@ class parser{
 	// This variable is used for tracking current nesting level to make checks for detecting malformed treeml document
 	unsigned nestingLevel;
 
-	enum class State_e{
-		IDLE,
-		STRING_PARSED,
-		QUOTED_STRING,
-		ESCAPE_SEQUENCE,
-		UNQUOTED_STRING,
-		SINGLE_LINE_COMMENT,
-		MULTILINE_COMMENT,
-		RAW_STRING_OPENING_DELIMETER,
-		RAW_STRING_CLOSING_DELIMETER,
-		RAW_STRING
-	} state;
+	enum class state{
+		idle,
+		string_parsed,
+		quoted_string,
+		escape_sequence,
+		unquoted_string,
+		single_line_comment,
+		multiline_comment,
+		raw_string_opening_delimeter,
+		raw_string_closing_delimeter,
+		raw_string
+	} cur_state;
 
-	State_e stateAfterComment;
+	state stateAfterComment;
 
 	void handleStringParsed(listener& listener);
 
