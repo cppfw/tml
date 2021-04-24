@@ -48,6 +48,7 @@ void parser::process_char_in_idle(char c, listener& listener){
 		case '"':
 			this->set_string_start_pos();
 			this->cur_state = state::quoted_string;
+			this->cur_flags.set(flag::quoted);
 			break;
 		default:
 			this->string_buf.push_back(c);
@@ -141,6 +142,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			}else{
 				this->handle_string_parsed(listener);
 				this->cur_state = state::quoted_string;
+				this->cur_flags.set(flag::quoted);
 			}
 			break;
 		case '\n':

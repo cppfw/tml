@@ -96,5 +96,85 @@ tst::set set("parser", [](auto& suite){
 				tst::check(l.string_parsed, SL);
 			}
 		);
+	
+	suite.template add<const char*>(
+			"flag_quoted_should_be_false",
+			{
+				"hello",
+				" hello",
+				"pre hello",
+				" hello post",
+				" hello \"post\"",
+				"\"pre\"hello",
+				" \"pre\"hello",
+				"\"pre\" hello",
+				"\"pre\"\thello",
+				"\"pre\"\nhello",
+				"R\"qwe(hello)qwe\"",
+				" R\"qwe(hello)qwe\"post",
+			},
+			[](const auto& p){
+				treeml::parser parser;
+
+				struct listener : public treeml::listener{
+					bool string_parsed = false;
+					void on_string_parsed(std::string_view str, utki::flags<treeml::flag> flags)override{
+						if(str == "hello"){
+							string_parsed = true;
+							tst::check(!flags.get(treeml::flag::quoted), SL);
+						}
+					}
+
+					void on_children_parse_started()override{}
+					void on_children_parse_finished()override{}
+				} l;
+
+				parser.parse_data_chunk(p, l);
+				parser.end_of_data(l);
+
+				tst::check(l.string_parsed, SL);
+			}
+		);
+	
+	suite.template add<const char*>(
+			"flag_quoted_should_be_true",
+			{
+				"\"hello\"",
+				" \"hello\"",
+				"pre\"hello\"",
+				"pre \"hello\"",
+				"pre\n\"hello\"",
+				"pre\t\"hello\"",
+				"\"pre\"\"hello\"",
+				"\"pre\" \"hello\"",
+				"\"pre\"\n\"hello\"",
+				"\"pre\"\t\"hello\"",
+				" R\"qwe(pre)qwe\"\"hello\"",
+				" R\"qwe(pre)qwe\" \"hello\"",
+				" R\"qwe(pre)qwe\"\n\"hello\"",
+				" R\"qwe(pre)qwe\"\t\"hello\"",
+			},
+			[](const auto& p){
+				treeml::parser parser;
+
+				struct listener : public treeml::listener{
+					bool string_parsed = false;
+					void on_string_parsed(std::string_view str, utki::flags<treeml::flag> flags)override{
+						if(str == "hello"){
+							string_parsed = true;
+							tst::check(flags.get(treeml::flag::quoted), SL);
+						}
+					}
+
+					void on_children_parse_started()override{}
+					void on_children_parse_finished()override{}
+				} l;
+
+				parser.parse_data_chunk(p, l);
+				parser.end_of_data(l);
+
+				tst::check(l.string_parsed, SL);
+			}
+		);
 });
 }
