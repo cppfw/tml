@@ -12,7 +12,7 @@ const size_t fileReadChinkSize_c = 0x4ff;
 }
 
 void parser::handle_string_parsed(listener& listener, utki::flags<treeml::flags> flags){
-	listener.on_string_parsed(utki::make_span(this->string_buf), flags);
+	listener.on_string_parsed(std::string_view(this->string_buf.data(), this->string_buf.size()), flags);
 	this->string_buf.clear();
 }
 
@@ -27,7 +27,7 @@ void parser::process_char_in_idle(char c, listener& listener){
 			this->cur_state = state::idle;
 			break;
 		case '{':
-			listener.on_string_parsed(utki::span<char>(), {}); // TODO: correct flags?
+			listener.on_string_parsed(std::string_view(nullptr, 0), {}); // TODO: correct flags?
 			listener.on_children_parse_started();
 			++this->nesting_level;
 			break;
@@ -240,7 +240,7 @@ void parser::process_char_in_raw_string_opening_delimeter(char c, listener& list
 		case '"':
 			{
 				char r = 'R';
-				listener.on_string_parsed(utki::make_span(&r, 1), {}); // TODO: correct flags?
+				listener.on_string_parsed(std::string_view(&r, 1), {}); // TODO: correct flags?
 			}
 			this->handle_string_parsed(listener, {}); // TODO: correct flags?
 			this->cur_state = state::string_parsed;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string_view>
+
 #include <utki/span.hpp>
 #include <utki/flags.hpp>
 
@@ -73,7 +75,7 @@ public:
 	 * This method is called by Parser when String token has been parsed.
      * @param str - parsed string.
      */
-	virtual void on_string_parsed(utki::span<const char> str, utki::flags<treeml::flags> flags) = 0;
+	virtual void on_string_parsed(std::string_view str, utki::flags<treeml::flags> flags) = 0;
 
 	/**
 	 * @brief Children list parsing started.
