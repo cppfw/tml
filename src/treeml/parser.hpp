@@ -75,6 +75,7 @@ public:
 	 * @brief A string token has been parsed.
 	 * This method is called by Parser when String token has been parsed.
      * @param str - parsed string.
+	 * @param flags - additional informatin flags.
      */
 	virtual void on_string_parsed(std::string_view str, utki::flags<treeml::flags> flags) = 0;
 

@@ -15,7 +15,7 @@ $(eval $(prorab-build-app))
 
 $(eval $(call prorab-depend, $(prorab_this_name), $(this_libtreeml)))
 
-this_test_cmd := $(prorab_this_name)
+this_test_cmd := $(prorab_this_name) --jobs=auto
 this_test_deps := $(prorab_this_name)
 this_test_ld_path := $(dir $(this_libtreeml))
 $(eval $(prorab-test))

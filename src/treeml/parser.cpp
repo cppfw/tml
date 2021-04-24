@@ -94,6 +94,7 @@ void parser::process_char_in_string_parsed(char c, listener& listener){
 			listener.on_children_parse_started();
 			this->cur_state = state::idle;
 			++this->nesting_level;
+			this->cur_flags.clear(treeml::flags::space);
 			break;
 		default:
 			this->cur_state = state::idle;
@@ -151,6 +152,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			ASSERT(this->string_buf.size() != 0)
 			this->handle_string_parsed(listener);
 			this->cur_state = state::string_parsed;
+			this->cur_flags.set(treeml::flags::space);
 			break;
 		case '\0':
 			ASSERT(this->string_buf.size() != 0)
