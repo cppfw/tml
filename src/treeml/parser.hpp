@@ -1,6 +1,8 @@
 #pragma once
 
 #include <utki/span.hpp>
+#include <utki/flags.hpp>
+
 #include <papki/file.hpp>
 
 /**
@@ -35,6 +37,31 @@
 namespace treeml{
 
 /**
+ * @brief Additional information flags.
+ * These are the flags indicating additional formatting information of the parsed treeml node.
+ */
+enum class flags{
+	/**
+	 * @brief No space between previous node.
+	 * Indicates that in the original text there was no space between this node and previous node.
+	 * This is possible in case ptevious node had curly braces or previous or this node is a quoted string.
+	 */
+	no_space,
+
+	/**
+	 * @brief The node was specified as quoted string.
+	 */
+	quoted,
+
+	/**
+	 * @brief The node was specified as C++ style raw string.
+	 */
+	cpp_raw,
+
+	enum_size
+};
+
+/**
  * @brief Listener interface for treeml parser.
  * During the treeml document parsing the Parser notifies this listener object
  * about parsed tokens.
@@ -46,7 +73,7 @@ public:
 	 * This method is called by Parser when String token has been parsed.
      * @param str - parsed string.
      */
-	virtual void on_string_parsed(utki::span<const char> str) = 0;
+	virtual void on_string_parsed(utki::span<const char> str, utki::flags<treeml::flags> flags) = 0;
 
 	/**
 	 * @brief Children list parsing started.
@@ -92,7 +119,7 @@ class parser{
 
 	state state_after_comment;
 
-	void handle_string_parsed(treeml::listener& listener);
+	void handle_string_parsed(treeml::listener& listener, utki::flags<treeml::flags> flags);
 
 	void process_char(char c, treeml::listener& listener);
 	void process_char_in_idle(char c, treeml::listener& listener);

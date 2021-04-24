@@ -11,8 +11,8 @@ namespace{
 const size_t fileReadChinkSize_c = 0x4ff;
 }
 
-void parser::handle_string_parsed(listener& listener){
-	listener.on_string_parsed(utki::make_span(this->string_buf));
+void parser::handle_string_parsed(listener& listener, utki::flags<treeml::flags> flags){
+	listener.on_string_parsed(utki::make_span(this->string_buf), flags);
 	this->string_buf.clear();
 }
 
@@ -27,7 +27,7 @@ void parser::process_char_in_idle(char c, listener& listener){
 			this->cur_state = state::idle;
 			break;
 		case '{':
-			listener.on_string_parsed(utki::span<char>());
+			listener.on_string_parsed(utki::span<char>(), {}); // TODO: correct flags?
 			listener.on_children_parse_started();
 			++this->nesting_level;
 			break;
@@ -93,7 +93,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			if(this->string_buf.size() != 0 && this->string_buf.back() == '/'){
 				this->string_buf.pop_back();
 				if(this->string_buf.size() != 0){
-					this->handle_string_parsed(listener);
+					this->handle_string_parsed(listener, {}); // TODO: correct flags?
 					this->state_after_comment = state::string_parsed;
 				}else{
 					this->state_after_comment = state::idle;
@@ -107,7 +107,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			if(this->string_buf.size() != 0 && this->string_buf.back() == '/'){
 				this->string_buf.pop_back();
 				if(this->string_buf.size() != 0){
-					this->handle_string_parsed(listener);
+					this->handle_string_parsed(listener, {}); // TODO: correct flags?
 					this->state_after_comment = state::string_parsed;
 				}else{
 					this->state_after_comment = state::idle;
@@ -123,7 +123,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 				this->string_buf.clear();
 				this->cur_state = state::raw_string_opening_delimeter;
 			}else{
-				this->handle_string_parsed(listener);
+				this->handle_string_parsed(listener, {}); // TODO: correct flags?
 				this->cur_state = state::quoted_string;
 			}
 			break;
@@ -132,24 +132,24 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 		case '\n':
 		case '\t':
 			ASSERT(this->string_buf.size() != 0)
-			this->handle_string_parsed(listener);
+			this->handle_string_parsed(listener, {}); // TODO: correct flags?
 			this->cur_state = state::string_parsed;
 			break;
 		case '\0':
 			ASSERT(this->string_buf.size() != 0)
-			this->handle_string_parsed(listener);
+			this->handle_string_parsed(listener, {}); // TODO: correct flags?
 			this->cur_state = state::idle;
 			break;
 		case '{':
 			ASSERT(this->string_buf.size() != 0)
-			this->handle_string_parsed(listener);
+			this->handle_string_parsed(listener, {}); // TODO: correct flags?
 			this->cur_state = state::idle;
 			listener.on_children_parse_started();
 			++this->nesting_level;
 			break;
 		case '}':
 			ASSERT(this->string_buf.size() != 0)
-			this->handle_string_parsed(listener);
+			this->handle_string_parsed(listener, {}); // TODO: correct flags?
 			this->cur_state = state::idle;
 			listener.on_children_parse_finished();
 			--this->nesting_level;
@@ -163,7 +163,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 void parser::process_char_in_quoted_string(char c, listener& listener){
 	switch (c) {
 		case '"':
-			this->handle_string_parsed(listener);
+			this->handle_string_parsed(listener, {}); // TODO: correct flags?
 			this->cur_state = state::string_parsed;
 			break;
 		case '\\':
@@ -240,9 +240,9 @@ void parser::process_char_in_raw_string_opening_delimeter(char c, listener& list
 		case '"':
 			{
 				char r = 'R';
-				listener.on_string_parsed(utki::make_span(&r, 1));
+				listener.on_string_parsed(utki::make_span(&r, 1), {}); // TODO: correct flags?
 			}
-			this->handle_string_parsed(listener);
+			this->handle_string_parsed(listener, {}); // TODO: correct flags?
 			this->cur_state = state::string_parsed;
 			break;
 		case '(':
@@ -279,7 +279,7 @@ void parser::process_char_in_raw_string_closing_delimeter(char c, listener& list
 				}
 				this->cur_state = state::raw_string;
 			}else{
-				this->handle_string_parsed(listener);
+				this->handle_string_parsed(listener, {}); // TODO: correct flags?
 				this->raw_string_delimeter.clear();
 				this->cur_state = state::string_parsed;
 			}
