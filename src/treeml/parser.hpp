@@ -71,13 +71,19 @@ enum class flag{
  */
 class listener{
 public:
+	struct text_info{
+		size_t line;
+		size_t line_offset;
+		utki::flags<treeml::flag> flags;
+	};
+
 	/**
 	 * @brief A string token has been parsed.
 	 * This method is called by Parser when String token has been parsed.
      * @param str - parsed string.
 	 * @param flags - additional informatin flags.
      */
-	virtual void on_string_parsed(std::string_view str, utki::flags<treeml::flag> flags) = 0;
+	virtual void on_string_parsed(std::string_view str, const text_info& info) = 0;
 
 	/**
 	 * @brief Children list parsing started.
@@ -137,14 +143,13 @@ class parser{
 	void process_char_in_raw_string(char c, treeml::listener& listener);
 	void process_char_in_raw_string_closing_delimeter(char c, treeml::listener& listener);
 
-	size_t cur_line = 0;
-	size_t cur_line_offset = 0;
-	size_t string_start_line;
-	size_t string_start_line_offset;
+	size_t line = 0;
+	size_t line_offset = 1;
+
+	listener::text_info info;
 
 	void set_string_start_pos();
 
-	utki::flags<treeml::flag> cur_flags;
 public:
 	/**
 	 * @brief Constructor.

@@ -29,7 +29,7 @@ class Listener : public treeml::listener{
 		this->actions.pop_front();
 	}
 
-	void on_string_parsed(std::string_view s, utki::flags<treeml::flag> flags)override{
+	void on_string_parsed(std::string_view s, const text_info& info)override{
 		std::string str(&*s.begin(), s.size());
 		// TRACE(<< "str = " << str << std::endl)
 		ASSERT_ALWAYS(this->actions.size() > 0)
