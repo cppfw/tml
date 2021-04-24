@@ -167,6 +167,16 @@ public:
      */
 	void parse_data_chunk(utki::span<const std::uint8_t> chunk, listener& listener);
 
+	void parse_data_chunk(std::string_view chunk, listener& listener){
+		this->parse_data_chunk(
+				utki::make_span(
+						reinterpret_cast<const uint8_t*>(chunk.data()),
+						chunk.size()
+					),
+				listener
+			);
+	}
+
 	/**
 	 * @brief Finalize parsing.
 	 * Call this method to finalize parsing after all the available treeml data has been fed to the parser.

@@ -6,6 +6,7 @@ class Libtreeml < Formula
 
   depends_on "prorab" => :build
   depends_on "libclargs" => :build
+  depends_on "libtst" => :build
   depends_on "libpapki"
   depends_on "libutki"
 
