@@ -9,41 +9,47 @@
             "command": "make autojobs=true",
             "problemMatcher": [
                 "$gcc"
-            ]
+            ],
+            "group": "build"
         },
         {
-            "label": "test",
+            "label": "test_",
             "type": "shell",
             "command": "make test autojobs=true",
             "dependsOn": "build",
-            "problemMatcher": []
+            "problemMatcher": [],
+            "group": "build"
         },
         {
             "label": "test tree reading",
             "type": "shell",
             "command": "make -C tests/tree_reading test autojobs=true --no-print-directory",
             "dependsOn": "build",
-            "problemMatcher": []
+            "problemMatcher": [],
+            "group": "build"
         },
         {
             "label": "test tree writing",
             "type": "shell",
             "command": "make -C tests/tree_writing test autojobs=true --no-print-directory",
             "dependsOn": "build",
-            "problemMatcher": []
+            "problemMatcher": [],
+            "group": "build"
         },
         {
             "label": "test crawler",
             "type": "shell",
             "command": "make -C tests/crawler test autojobs=true --no-print-directory",
             "dependsOn": "build",
-            "problemMatcher": []
+            "problemMatcher": [],
+            "group": "build"
         },
         {
             "label": "clean-all",
             "type": "shell",
             "command": "make clean-all",
-            "problemMatcher": []
+            "problemMatcher": [],
+            "group": "build"
         }
     ]
 }
