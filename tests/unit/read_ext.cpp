@@ -19,24 +19,24 @@ tst::set set("read_ext", [](auto& suite){
 		tst::check(hello.value.get_info().flags.get(treeml::flag::space), SL);
 		tst::check(!hello.value.get_info().flags.get(treeml::flag::quoted), SL);
 		tst::check(!hello.value.get_info().flags.get(treeml::flag::raw_cpp), SL);
-		tst::check_eq(hello.value.get_info().line, size_t(1), SL);
-		tst::check_eq(hello.value.get_info().line_offset, size_t(3), SL);
+		tst::check_eq(hello.value.get_info().location.line, size_t(1), SL);
+		tst::check_eq(hello.value.get_info().location.offset, size_t(3), SL);
 
 		auto& world = tml[1];
 		tst::check_eq(world.value.to_string(), std::string("world!"), SL);
 		tst::check(world.value.get_info().flags.get(treeml::flag::quoted), SL);
 		tst::check(!world.value.get_info().flags.get(treeml::flag::space), SL);
 		tst::check(!world.value.get_info().flags.get(treeml::flag::raw_cpp), SL);
-		tst::check_eq(world.value.get_info().line, size_t(1), SL);
-		tst::check_eq(world.value.get_info().line_offset, size_t(8), SL);
+		tst::check_eq(world.value.get_info().location.line, size_t(1), SL);
+		tst::check_eq(world.value.get_info().location.offset, size_t(8), SL);
 
 		auto& how = tml[2];
 		tst::check_eq(how.value.to_string(), std::string("how"), SL);
 		tst::check(how.value.get_info().flags.get(treeml::flag::space), SL);
 		tst::check(!how.value.get_info().flags.get(treeml::flag::quoted), SL);
 		tst::check(!how.value.get_info().flags.get(treeml::flag::raw_cpp), SL);
-		tst::check_eq(how.value.get_info().line, size_t(2), SL);
-		tst::check_eq(how.value.get_info().line_offset, size_t(3), SL);
+		tst::check_eq(how.value.get_info().location.line, size_t(2), SL);
+		tst::check_eq(how.value.get_info().location.offset, size_t(3), SL);
 
 		{
 			tst::check_eq(how.children.size(), size_t(4), SL);
@@ -46,16 +46,16 @@ tst::set set("read_ext", [](auto& suite){
 			tst::check(doing.value.get_info().flags.get(treeml::flag::space), SL);
 			tst::check(doing.value.get_info().flags.get(treeml::flag::quoted), SL);
 			tst::check(!doing.value.get_info().flags.get(treeml::flag::raw_cpp), SL);
-			tst::check_eq(doing.value.get_info().line, size_t(2), SL);
-			tst::check_eq(doing.value.get_info().line_offset, size_t(16), SL);
+			tst::check_eq(doing.value.get_info().location.line, size_t(2), SL);
+			tst::check_eq(doing.value.get_info().location.offset, size_t(16), SL);
 
 			auto& qm = how.children[3];
 			tst::check_eq(qm.value.to_string(), std::string("?"), SL);
 			tst::check(!qm.value.get_info().flags.get(treeml::flag::space), SL);
 			tst::check(!qm.value.get_info().flags.get(treeml::flag::quoted), SL);
 			tst::check(!qm.value.get_info().flags.get(treeml::flag::raw_cpp), SL);
-			tst::check_eq(qm.value.get_info().line, size_t(2), SL);
-			tst::check_eq(qm.value.get_info().line_offset, size_t(23), SL);
+			tst::check_eq(qm.value.get_info().location.line, size_t(2), SL);
+			tst::check_eq(qm.value.get_info().location.offset, size_t(23), SL);
 		}
 
 		auto& im = tml[3];
@@ -63,8 +63,8 @@ tst::set set("read_ext", [](auto& suite){
 		tst::check(!im.value.get_info().flags.get(treeml::flag::space), SL);
 		tst::check(!im.value.get_info().flags.get(treeml::flag::quoted), SL);
 		tst::check(!im.value.get_info().flags.get(treeml::flag::raw_cpp), SL);
-		tst::check_eq(im.value.get_info().line, size_t(3), SL);
-		tst::check_eq(im.value.get_info().line_offset, size_t(4), SL);
+		tst::check_eq(im.value.get_info().location.line, size_t(3), SL);
+		tst::check_eq(im.value.get_info().location.offset, size_t(4), SL);
 
 		auto& okay = tml[4];
 		tst::check_eq(okay.value.to_string(), std::string("okay"), SL);

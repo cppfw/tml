@@ -11,6 +11,11 @@ namespace{
 const size_t fileReadChinkSize_c = 0x4ff;
 }
 
+void parser::next_line(){
+	++this->cur_loc.line;
+	this->cur_loc.offset = 0;
+}
+
 void parser::handle_string_parsed(listener& listener){
 	listener.on_string_parsed(std::string_view(this->string_buf.data(), this->string_buf.size()), this->info);
 	this->string_buf.clear();
@@ -18,15 +23,14 @@ void parser::handle_string_parsed(listener& listener){
 }
 
 void parser::set_string_start_pos(){
-	this->info.line = this->line;
-	this->info.line_offset = this->line_offset - 1; // line offset numbering starts from 1
+	this->info.location = this->cur_loc;
+	this->info.location.offset -= 1; // current line offset numbering starts from 1
 }
 
 void parser::process_char_in_idle(char c, listener& listener){
 	switch(c){
 		case '\n':
-			++this->line;
-			this->line_offset = 0;
+			this->next_line();
 		case ' ':
 		case '\t':
 		case '\r':
@@ -62,8 +66,7 @@ void parser::process_char_in_idle(char c, listener& listener){
 void parser::process_char_in_string_parsed(char c, listener& listener){
 	switch (c) {
 		case '\n':
-			++this->line;
-			this->line_offset = 0;
+			this->next_line();
 		case ' ':
 		case '\r':
 		case '\t':
@@ -149,8 +152,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			}
 			break;
 		case '\n':
-			++this->line;
-			this->line_offset = 0;
+			this->next_line();
 		case ' ':
 		case '\r':
 		case '\t':
@@ -194,8 +196,7 @@ void parser::process_char_in_quoted_string(char c, listener& listener){
 			this->cur_state = state::escape_sequence;
 			break;
 		case '\n':
-			++this->line;
-			this->line_offset = 0;
+			this->next_line();
 		case '\r':
 		case '\t':
 			break;
@@ -234,8 +235,7 @@ void parser::process_char_in_single_line_comment(char c, listener& listener){
 	this->info.flags.set(treeml::flag::space);
 	switch(c){
 		case '\n':
-			++this->line;
-			this->line_offset = 0;
+			this->next_line();
 		case '\0':
 			this->cur_state = this->state_after_comment;
 			break;
@@ -274,7 +274,7 @@ void parser::process_char_in_raw_string_opening_delimeter(char c, listener& list
 				listener.on_string_parsed(std::string_view(&r, 1), this->info);
 				this->info.flags.clear(treeml::flag::space);
 			}
-			++this->info.line_offset;
+			++this->info.location.offset;
 			this->info.flags.set(treeml::flag::quoted);
 			this->handle_string_parsed(listener);
 			this->cur_state = state::string_parsed;
@@ -297,8 +297,7 @@ void parser::process_char_in_raw_string(char c, listener& listener) {
 			this->cur_state = state::raw_string_closing_delimeter;
 			break;
 		case '\n':
-			++this->line;
-			this->line_offset = 0;
+			this->next_line();
 		default:
 			this->string_buf.push_back(c);
 			break;
@@ -379,7 +378,7 @@ void parser::process_char(char c, listener& listener){
 void parser::parse_data_chunk(utki::span<const uint8_t> chunk, listener& listener){
 	for(auto c : chunk){
 		this->process_char(c, listener);
-		++this->line_offset;
+		++this->cur_loc.offset;
 	}
 }
 

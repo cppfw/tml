@@ -30,9 +30,13 @@ enum class flag{
 	enum_size
 };
 
-struct extra_info{
+struct location{
 	size_t line;
-	size_t line_offset;
+	size_t offset;
+};
+
+struct extra_info{
+	treeml::location location;
 	utki::flags<treeml::flag> flags;
 };
 

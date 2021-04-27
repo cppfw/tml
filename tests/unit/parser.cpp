@@ -424,8 +424,8 @@ tst::set set2("parser_location", [](auto& suite){
 				parser.end_of_data(l);
 
 				tst::check(l.string_parsed, SL);
-				tst::check_eq(l.info.line, std::get<1>(p), SL);
-				tst::check_eq(l.info.line_offset, std::get<2>(p), SL);
+				tst::check_eq(l.info.location.line, std::get<1>(p), SL);
+				tst::check_eq(l.info.location.offset, std::get<2>(p), SL);
 			}
 		);
 });

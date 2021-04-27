@@ -39,8 +39,6 @@
  */
 namespace treeml{
 
-
-
 /**
  * @brief Listener interface for treeml parser.
  * During the treeml document parsing the Parser notifies this listener object
@@ -114,8 +112,9 @@ class parser{
 	void process_char_in_raw_string(char c, treeml::listener& listener);
 	void process_char_in_raw_string_closing_delimeter(char c, treeml::listener& listener);
 
-	size_t line = 0;
-	size_t line_offset = 1;
+	location cur_loc = {0, 1}; // offset starts with 1
+
+	void next_line();
 
 	extra_info info;
 
