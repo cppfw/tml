@@ -28,7 +28,7 @@ tst::set set1("parser_flags", [](auto& suite){
 
 				struct listener : public treeml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const text_info& info)override{
+					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
 						if(str == "hello"){
 							this->string_parsed = true;
 							tst::check(!info.flags.get(treeml::flag::space), SL);
@@ -82,7 +82,7 @@ tst::set set1("parser_flags", [](auto& suite){
 
 				struct listener : public treeml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const text_info& info)override{
+					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
 						if(str == "hello"){
 							this->string_parsed = true;
 							tst::check(info.flags.get(treeml::flag::space), SL);
@@ -121,7 +121,7 @@ tst::set set1("parser_flags", [](auto& suite){
 
 				struct listener : public treeml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const text_info& info)override{
+					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
 						if(str == "hello"){
 							this->string_parsed = true;
 							tst::check(!info.flags.get(treeml::flag::quoted), SL);
@@ -162,7 +162,7 @@ tst::set set1("parser_flags", [](auto& suite){
 
 				struct listener : public treeml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const text_info& info)override{
+					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
 						if(str == "hello"){
 							this->string_parsed = true;
 							tst::check(info.flags.get(treeml::flag::quoted), SL);
@@ -212,7 +212,7 @@ tst::set set1("parser_flags", [](auto& suite){
 
 				struct listener : public treeml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const text_info& info)override{
+					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
 						if(str == "hello"){
 							this->string_parsed = true;
 							tst::check(!info.flags.get(treeml::flag::raw_cpp), SL);
@@ -247,7 +247,7 @@ tst::set set1("parser_flags", [](auto& suite){
 
 				struct listener : public treeml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const text_info& info)override{
+					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
 						if(str == "hello"){
 							this->string_parsed = true;
 							tst::check(info.flags.get(treeml::flag::raw_cpp), SL);
@@ -282,7 +282,7 @@ tst::set set1("parser_flags", [](auto& suite){
 
 				struct listener : public treeml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const text_info& info)override{
+					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
 						if(str == "R"){
 							this->string_parsed = true;
 							tst::check(!info.flags.get(treeml::flag::quoted), SL);
@@ -318,7 +318,7 @@ tst::set set1("parser_flags", [](auto& suite){
 
 				struct listener : public treeml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const text_info& info)override{
+					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
 						if(str == "R"){
 							this->string_parsed = true;
 							tst::check(!info.flags.get(treeml::flag::space), SL);
@@ -355,7 +355,7 @@ tst::set set1("parser_flags", [](auto& suite){
 
 				struct listener : public treeml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const text_info& info)override{
+					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
 						if(str == "R"){
 							this->string_parsed = true;
 							tst::check(info.flags.get(treeml::flag::space), SL);
@@ -405,8 +405,8 @@ tst::set set2("parser_location", [](auto& suite){
 
 				struct listener : public treeml::listener{
 					bool string_parsed = false;
-					text_info info = {0, 0};
-					void on_string_parsed(std::string_view str, const text_info& info)override{
+					treeml::extra_info info = {0, 0};
+					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
 						if(str == "hello"){
 							this->string_parsed = true;
 							this->info = info;
