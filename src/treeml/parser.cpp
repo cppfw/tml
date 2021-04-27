@@ -70,10 +70,15 @@ void parser::process_char_in_string_parsed(char c, listener& listener){
 		case ' ':
 		case '\r':
 		case '\t':
+			if(!this->string_buf.empty()){
+				ASSERT(this->string_buf.size() == 1)
+				ASSERT(this->string_buf[0] == '/')
+				this->handle_string_parsed(listener);
+			}
 			this->info.flags.set(treeml::flag::space);
 			break;
 		case '/':
-			if(this->string_buf.size() != 0){
+			if(!this->string_buf.empty()){
 				ASSERT(this->string_buf.size() == 1)
 				ASSERT(this->string_buf[0] == '/')
 				this->string_buf.clear();
@@ -81,6 +86,7 @@ void parser::process_char_in_string_parsed(char c, listener& listener){
 				this->cur_state = state::single_line_comment;
 			}else{
 				this->string_buf.push_back(c);
+				this->set_string_start_pos();
 			}
 			break;
 		case '*':
@@ -96,6 +102,11 @@ void parser::process_char_in_string_parsed(char c, listener& listener){
 			}
 			break;
 		case '{':
+			if(!this->string_buf.empty()){
+				ASSERT(this->string_buf.size() == 1)
+				ASSERT(this->string_buf[0] == '/')
+				this->handle_string_parsed(listener);
+			}
 			listener.on_children_parse_started();
 			this->cur_state = state::idle;
 			++this->nesting_level;
