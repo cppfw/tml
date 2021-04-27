@@ -1,6 +1,8 @@
 #pragma once
 
 #include "tree.hpp"
+#include "extra_info.hpp"
+
 namespace treeml{
 
 class leaf_ext : public leaf{

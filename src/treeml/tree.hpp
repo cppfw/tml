@@ -6,8 +6,6 @@
 
 #include <string>
 
-#include "extra_info.hpp"
-
 //TODO: doxygen
 namespace treeml{
 
