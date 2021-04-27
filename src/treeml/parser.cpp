@@ -145,6 +145,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 				this->handle_string_parsed(listener);
 				this->cur_state = state::quoted_string;
 				this->info.flags.set(flag::quoted);
+				this->set_string_start_pos();
 			}
 			break;
 		case '\n':
@@ -273,6 +274,7 @@ void parser::process_char_in_raw_string_opening_delimeter(char c, listener& list
 				listener.on_string_parsed(std::string_view(&r, 1), this->info);
 				this->info.flags.clear(treeml::flag::space);
 			}
+			++this->info.line_offset;
 			this->info.flags.set(treeml::flag::quoted);
 			this->handle_string_parsed(listener);
 			this->cur_state = state::string_parsed;

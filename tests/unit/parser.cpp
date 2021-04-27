@@ -390,6 +390,8 @@ tst::set set2("parser_location", [](auto& suite){
 				{" \"hello\"", 0, 1},
 				{"\n\"hello\"", 1, 0},
 				{"\n  \"hello\"", 1, 2},
+				{"\n   pre\"hello\"", 1, 6},
+				{"\n   pre \"hello\"", 1, 7},
 				{"bla bla{child} bla{}\n  \"hello\"", 1, 2},
 				{"bla bla{child} \"bla\n bla\" bla bla{child}\"hello\" bla bla", 1, 20},
 				{"R\"qwe(hello)qwe\"", 0, 0},
@@ -399,6 +401,7 @@ tst::set set2("parser_location", [](auto& suite){
 				{"bla bla{child} bla{}\n  R\"qwe(hello)qwe\"", 1, 2},
 				{"bla bla{child} \"bla\n bla\" bla bla{child}R\"qwe(hello)qwe\" bla bla", 1, 20},
 				{"bla bla{child} R\"qwe(bla\n bla)qwe\" bla bla{child}R\"qwe(hello)qwe\" bla bla", 1, 24},
+				{" R\"hello\"", 0, 2},
 			},
 			[](const auto& p){
 				treeml::parser parser;
