@@ -16,7 +16,7 @@ tst::set set("read_ext", [](auto& suite){
 
 		auto& hello = tml[0];
 		tst::check_eq(hello.value.to_string(), std::string("hello"), SL);
-		tst::check(hello.value.get_info().flags.get(treeml::flag::space), SL);
+		tst::check(!hello.value.get_info().flags.get(treeml::flag::space), SL);
 		tst::check(!hello.value.get_info().flags.get(treeml::flag::quoted), SL);
 		tst::check(!hello.value.get_info().flags.get(treeml::flag::raw_cpp), SL);
 		tst::check_eq(hello.value.get_info().location.line, size_t(1), SL);

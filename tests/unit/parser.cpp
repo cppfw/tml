@@ -9,7 +9,7 @@ tst::set set1("parser_flags", [](auto& suite){
 			"flag_space_should_be_false",
 			{
 				"hello",
-				"hello", // TODO: add leading space
+				" hello",
 				"hello post",
 				"pre\"hello\"",
 				"\"pre\"hello",
@@ -50,12 +50,12 @@ tst::set set1("parser_flags", [](auto& suite){
 	suite.template add<const char*>(
 			"flag_space_should_be_true",
 			{
-				" hello",
-				"\nhello",
-				"\thello",
-				" hello post",
-				"\nhello post",
-				"\thello post",
+				"pre hello",
+				"pre\nhello",
+				"pre\thello",
+				"pre hello post",
+				"pre\nhello post",
+				"pre\thello post",
 				"pre \"hello\"",
 				"pre\n \"hello\"",
 				"pre\t\"hello\"",
@@ -306,6 +306,10 @@ tst::set set1("parser_flags", [](auto& suite){
 			"space_flag_should_be_false_for_r",
 			{
 				"R\"hello\"",
+				" R\"hello\"",
+				"\rR\"hello\"",
+				"\nR\"hello\"",
+				"\tR\"hello\"",
 				"R\"hello\" ",
 				"pre{}R\"hello\" ",
 				"pre { child}R\"hello\" post",
@@ -340,8 +344,7 @@ tst::set set1("parser_flags", [](auto& suite){
 	suite.template add<const char*>(
 			"space_flag_should_be_true_for_r",
 			{
-				" R\"hello\"",
-				" R\"hello\" ",
+				"pre R\"hello\"",
 				"pre R\"hello\" ",
 				"pre R\"hello\" post",
 				"pre\nR\"hello\"\npost",

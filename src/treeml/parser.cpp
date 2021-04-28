@@ -27,8 +27,27 @@ void parser::set_string_start_pos(){
 	this->info.location.offset -= 1; // current line offset numbering starts from 1
 }
 
+void parser::process_char_in_initial(char c, listener& listener){
+	ASSERT(this->cur_state == state::initial)
+	switch(c){
+		case '\n':
+			this->next_line();
+		case ' ':
+		case '\t':
+		case '\r':
+			break;
+		case '/':
+			this->set_string_start_pos();
+			this->state_after_comment = state::initial;
+			this->cur_state = state::comment_seqence;
+			break;
+		default:
+			this->process_char_in_idle(c, listener);
+			break;
+	}
+}
+
 void parser::process_char_in_idle(char c, listener& listener){
-	ASSERT(this->cur_state == state::idle)
 	switch(c){
 		case '\n':
 			this->next_line();
@@ -48,6 +67,7 @@ void parser::process_char_in_idle(char c, listener& listener){
 		case '}':
 			listener.on_children_parse_finished();
 			--this->nesting_level;
+			this->cur_state = state::idle; // this is needed because some other states forward processing to 'process_char_in_idle()'
 			this->info.flags.clear(flag::space);
 			break;
 		case '"':
@@ -350,6 +370,9 @@ void parser::process_char_in_raw_string_closing_delimeter(char c, listener& list
 
 void parser::process_char(char c, listener& listener){
 	switch(this->cur_state){
+		case state::initial:
+			this->process_char_in_initial(c, listener);
+			break;
 		case state::idle:
 			this->process_char_in_idle(c, listener);
 			break;
@@ -427,5 +450,5 @@ void treeml::parse(const papki::file& fi, listener& listener){
 void parser::reset(){
 	this->string_buf.clear();
 	this->nesting_level = 0;
-	this->cur_state = state::idle;
+	this->cur_state = state::initial;
 }

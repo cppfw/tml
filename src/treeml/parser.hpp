@@ -50,7 +50,7 @@ public:
 	 * @brief A string token has been parsed.
 	 * This method is called by Parser when String token has been parsed.
      * @param str - parsed string.
-	 * @param flags - additional informatin flags.
+	 * @param info - extra information, like line:offset position in original text file.
      */
 	virtual void on_string_parsed(std::string_view str, const extra_info& info) = 0;
 
@@ -84,6 +84,7 @@ class parser{
 	unsigned nesting_level;
 
 	enum class state{
+		initial,
 		idle,
 		string_parsed,
 		quoted_string,
@@ -102,6 +103,7 @@ class parser{
 	void handle_string_parsed(treeml::listener& listener);
 
 	void process_char(char c, treeml::listener& listener);
+	void process_char_in_initial(char c, treeml::listener& listener);
 	void process_char_in_idle(char c, treeml::listener& listener);
 	void process_char_in_string_parsed(char c, treeml::listener& listener);
 	void process_char_in_unquoted_string(char c, treeml::listener& listener);
