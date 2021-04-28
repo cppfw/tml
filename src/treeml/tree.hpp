@@ -122,6 +122,11 @@ public:
     long double to_long_double()const{
         return std::stold(this->string);
     }
+
+	friend std::ostream& operator<<(std::ostream& o, const leaf& l){
+		o << l.to_string();
+		return o;
+	}
 };
 
 typedef utki::tree<leaf> tree;
