@@ -29,6 +29,14 @@
             "problemMatcher": [],
             "group": "build"
         },
+        {
+            "label": "test_unit_dbg",
+            "type": "shell",
+            "command": "make test autojobs=true config=dbg -C tests/unit",
+            "dependsOn": "build_dbg",
+            "problemMatcher": [],
+            "group": "build"
+        },
 		{
             "label": "test_dbg",
             "type": "shell",

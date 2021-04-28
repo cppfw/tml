@@ -28,6 +28,7 @@ void parser::set_string_start_pos(){
 }
 
 void parser::process_char_in_idle(char c, listener& listener){
+	ASSERT(this->cur_state == state::idle)
 	switch(c){
 		case '\n':
 			this->next_line();
@@ -37,11 +38,10 @@ void parser::process_char_in_idle(char c, listener& listener){
 			this->info.flags.set(treeml::flag::space);
 			break;
 		case '\0':
-			this->cur_state = state::idle;
 			break;
 		case '{':
-			this->string_buf.clear(); // empty string
-			this->handle_string_parsed(listener);
+			ASSERT(this->string_buf.empty())
+			this->handle_string_parsed(listener); // report empty string
 			listener.on_children_parse_started();
 			++this->nesting_level;
 			break;
@@ -55,6 +55,11 @@ void parser::process_char_in_idle(char c, listener& listener){
 			this->cur_state = state::quoted_string;
 			this->info.flags.set(flag::quoted);
 			break;
+		case '/':
+			this->set_string_start_pos();
+			this->state_after_comment = state::idle;
+			this->cur_state = state::comment_seqence;
+			break;
 		default:
 			this->string_buf.push_back(c);
 			this->set_string_start_pos();
@@ -64,49 +69,21 @@ void parser::process_char_in_idle(char c, listener& listener){
 }
 
 void parser::process_char_in_string_parsed(char c, listener& listener){
+	ASSERT(this->cur_state == state::string_parsed)
 	switch (c) {
 		case '\n':
 			this->next_line();
 		case ' ':
 		case '\r':
 		case '\t':
-			if(!this->string_buf.empty()){
-				ASSERT(this->string_buf.size() == 1)
-				ASSERT(this->string_buf[0] == '/')
-				this->handle_string_parsed(listener);
-			}
 			this->info.flags.set(treeml::flag::space);
 			break;
 		case '/':
-			if(!this->string_buf.empty()){
-				ASSERT(this->string_buf.size() == 1)
-				ASSERT(this->string_buf[0] == '/')
-				this->string_buf.clear();
-				this->state_after_comment = state::string_parsed;
-				this->cur_state = state::single_line_comment;
-			}else{
-				this->string_buf.push_back(c);
-				this->set_string_start_pos();
-			}
-			break;
-		case '*':
-			if(this->string_buf.size() != 0){
-				ASSERT(this->string_buf.size() == 1)
-				ASSERT(this->string_buf[0] == '/')
-				this->string_buf.clear();
-				this->state_after_comment = state::string_parsed;
-				this->cur_state = state::multiline_comment;
-			}else{
-				this->cur_state = state::idle;
-				this->process_char_in_idle(c, listener);
-			}
+			this->set_string_start_pos();
+			this->state_after_comment = state::string_parsed;
+			this->cur_state = state::comment_seqence;
 			break;
 		case '{':
-			if(!this->string_buf.empty()){
-				ASSERT(this->string_buf.size() == 1)
-				ASSERT(this->string_buf[0] == '/')
-				this->handle_string_parsed(listener);
-			}
 			listener.on_children_parse_started();
 			this->cur_state = state::idle;
 			++this->nesting_level;
@@ -120,34 +97,11 @@ void parser::process_char_in_string_parsed(char c, listener& listener){
 }
 
 void parser::process_char_in_unquoted_string(char c, listener& listener){
+	ASSERT(this->cur_state == state::unquoted_string)
 	switch(c){
 		case '/':
-			if(this->string_buf.size() != 0 && this->string_buf.back() == '/'){
-				this->string_buf.pop_back();
-				if(this->string_buf.size() != 0){
-					this->handle_string_parsed(listener);
-					this->state_after_comment = state::string_parsed;
-				}else{
-					this->state_after_comment = state::idle;
-				}
-				this->cur_state = state::single_line_comment;
-			}else{
-				this->string_buf.push_back(c);
-			}
-			break;
-		case '*':
-			if(this->string_buf.size() != 0 && this->string_buf.back() == '/'){
-				this->string_buf.pop_back();
-				if(this->string_buf.size() != 0){
-					this->handle_string_parsed(listener);
-					this->state_after_comment = state::string_parsed;
-				}else{
-					this->state_after_comment = state::idle;
-				}
-				this->cur_state = state::multiline_comment;
-			} else {
-				this->string_buf.push_back(c);
-			}
+			this->state_after_comment = state::string_parsed;
+			this->cur_state = state::comment_seqence;
 			break;
 		case '"':
 			ASSERT(this->string_buf.size() != 0)
@@ -198,7 +152,8 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 }
 
 void parser::process_char_in_quoted_string(char c, listener& listener){
-	switch (c) {
+	ASSERT(this->cur_state == state::quoted_string)
+	switch(c){
 		case '"':
 			this->handle_string_parsed(listener);
 			this->cur_state = state::string_parsed;
@@ -218,6 +173,7 @@ void parser::process_char_in_quoted_string(char c, listener& listener){
 }
 
 void parser::process_char_in_escape_sequence(char c, listener& listener){
+	ASSERT(this->cur_state == state::escape_sequence)
 	switch (c) {
 		case '"':
 			this->string_buf.push_back('"');
@@ -242,7 +198,47 @@ void parser::process_char_in_escape_sequence(char c, listener& listener){
 	this->cur_state = state::quoted_string;
 }
 
+void parser::process_char_in_comment_sequence(char c, listener& listener){
+	ASSERT(this->cur_state == state::comment_seqence)
+	switch(c){
+		case '/':
+			if(!this->string_buf.empty()){
+				this->handle_string_parsed(listener);
+			}
+			this->cur_state = state::single_line_comment;
+			break;
+		case '*':
+			if(!this->string_buf.empty()){
+				this->handle_string_parsed(listener);
+			}
+			this->cur_state = state::multiline_comment;
+			break;
+		case '{':
+			this->string_buf.push_back('/');
+			this->handle_string_parsed(listener);
+			listener.on_children_parse_started();
+			++this->nesting_level;
+			this->cur_state = state::idle;
+			break;
+		case '\n':
+			this->next_line();
+		case '\r':
+		case '\t':
+		case ' ':
+			this->string_buf.push_back('/');
+			this->handle_string_parsed(listener);
+			this->cur_state = state::string_parsed;
+			break;
+		default:
+			this->string_buf.push_back('/');
+			this->string_buf.push_back(c);
+			this->cur_state = state::unquoted_string;
+			break;
+	}
+}
+
 void parser::process_char_in_single_line_comment(char c, listener& listener){
+	ASSERT(this->cur_state == state::single_line_comment)
 	this->info.flags.set(treeml::flag::space);
 	switch(c){
 		case '\n':
@@ -256,6 +252,7 @@ void parser::process_char_in_single_line_comment(char c, listener& listener){
 }
 
 void parser::process_char_in_multiline_comment(char c, listener& listener){
+	ASSERT(this->cur_state == state::multiline_comment)
 	switch(c){
 		case '*':
 			ASSERT(this->string_buf.size() == 0)
@@ -275,7 +272,8 @@ void parser::process_char_in_multiline_comment(char c, listener& listener){
 	}
 }
 
-void parser::process_char_in_raw_string_opening_delimeter(char c, listener& listener) {
+void parser::process_char_in_raw_string_opening_delimeter(char c, listener& listener){
+	ASSERT(this->cur_state == state::raw_string_opening_delimeter)
 	switch(c){
 		case '"':
 			// not a C++ style raw string, report 'R' string and a quoted string
@@ -301,7 +299,8 @@ void parser::process_char_in_raw_string_opening_delimeter(char c, listener& list
 	}
 }
 
-void parser::process_char_in_raw_string(char c, listener& listener) {
+void parser::process_char_in_raw_string(char c, listener& listener){
+	ASSERT(this->cur_state == state::raw_string)
 	switch(c){
 		case ')':
 			this->raw_string_delimeter_index = 0;
@@ -315,7 +314,8 @@ void parser::process_char_in_raw_string(char c, listener& listener) {
 	}
 }
 
-void parser::process_char_in_raw_string_closing_delimeter(char c, listener& listener) {
+void parser::process_char_in_raw_string_closing_delimeter(char c, listener& listener){
+	ASSERT(this->cur_state == state::raw_string_closing_delimeter)
 	switch(c){
 		case '"':
 			ASSERT(this->raw_string_delimeter_index <= this->raw_string_delimeter.size())
@@ -365,6 +365,9 @@ void parser::process_char(char c, listener& listener){
 		case state::escape_sequence:
 			this->process_char_in_escape_sequence(c, listener);
 			break;
+		case state::comment_seqence:
+			this->process_char_in_comment_sequence(c, listener);
+			break;
 		case state::single_line_comment:
 			this->process_char_in_single_line_comment(c, listener);
 			break;
@@ -381,7 +384,7 @@ void parser::process_char(char c, listener& listener){
 			this->process_char_in_raw_string_closing_delimeter(c, listener);
 			break;
 		default:
-			ASSERT(false)
+			ASSERT(false, [&](auto&o){o << "this->cur_state = " << unsigned(this->cur_state);})
 			break;
 	}
 }

@@ -89,6 +89,7 @@ class parser{
 		quoted_string,
 		escape_sequence,
 		unquoted_string,
+		comment_seqence,
 		single_line_comment,
 		multiline_comment,
 		raw_string_opening_delimeter,
@@ -106,6 +107,7 @@ class parser{
 	void process_char_in_unquoted_string(char c, treeml::listener& listener);
 	void process_char_in_quoted_string(char c, treeml::listener& listener);
 	void process_char_in_escape_sequence(char c, treeml::listener& listener);
+	void process_char_in_comment_sequence(char c, treeml::listener& listener);
 	void process_char_in_single_line_comment(char c, treeml::listener& listener);
 	void process_char_in_multiline_comment(char c, treeml::listener& listener);
 	void process_char_in_raw_string_opening_delimeter(char c, treeml::listener& listener);

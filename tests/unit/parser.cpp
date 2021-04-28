@@ -9,6 +9,7 @@ tst::set set1("parser_flags", [](auto& suite){
 			"flag_space_should_be_false",
 			{
 				"hello",
+				"hello", // TODO: add leading space
 				"hello post",
 				"pre\"hello\"",
 				"\"pre\"hello",

@@ -27,5 +27,48 @@ tst::set set1("parser_correctness", [](auto& suite){
 				tst::check_eq(r[5].value.to_string(), std::string(p.second), SL);
 			}
 		);
+	
+	suite.template add<std::string>(
+			"comment_in_the_beginning_is_ignored",
+			{
+				"// bla bla" "\n"
+				"/* bla bla bla" "\n"
+				"bla bla */ first" "\n"
+				"second",
+
+				"\n"
+				"// bla bla" "\n"
+				"/* bla bla bla" "\n"
+				"bla bla */ first" "\n"
+				"second",
+
+				"\n"
+				" // bla bla" "\n"
+				"/* bla bla bla" "\n"
+				"bla bla */ first" "\n"
+				"second",
+
+				"/* bla bla bla" "\n"
+				"bla bla */ first" "\n"
+				"second",
+
+				"\n"
+				"/* bla bla bla" "\n"
+				"bla bla */ first" "\n"
+				"second",
+
+				"\n"
+				" /* bla bla bla" "\n"
+				"bla bla */ first" "\n"
+				"second",
+			},
+			[](auto& p){
+				auto in = treeml::read(p);
+				
+				tst::check_eq(in.size(), size_t(2), SL);
+				tst::check_eq(in[0].value.to_string(), std::string("first"), SL);
+				tst::check_eq(in[1].value.to_string(), std::string("second"), SL);
+			}
+		);
 });
 }
