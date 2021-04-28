@@ -239,7 +239,7 @@ void parser::process_char_in_comment_sequence(char c, listener& listener){
 			this->handle_string_parsed(listener);
 			listener.on_children_parse_started();
 			++this->nesting_level;
-			this->cur_state = state::idle;
+			this->cur_state = state::initial;
 			break;
 		case '\n':
 			this->next_line();

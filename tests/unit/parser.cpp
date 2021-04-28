@@ -28,10 +28,12 @@ tst::set set1("parser_flags", [](auto& suite){
 				"{} {hello child2}",
 				"pre{hello child2}",
 				"pre {hello child2}",
+				"pre /{hello child2}",
 				"{ hello child2}",
 				"{} { hello child2}",
 				"pre{ hello child2}",
 				"pre { hello child2}",
+				"pre /{ hello child2}",
 			},
 			[](const auto& p){
 				treeml::parser parser;
