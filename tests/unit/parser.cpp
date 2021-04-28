@@ -22,7 +22,16 @@ tst::set set1("parser_flags", [](auto& suite){
 				"R\"qwe(raw string)qwe\"hello",
 				"R\"qwe(hello)qwe\"",
 				"pre {}R\"qwe(hello)qwe\"",
-				"pre{hello child2}"
+				"pre{hello child2}",
+				"pre{ hello child2}",
+				"{hello child2}",
+				"{} {hello child2}",
+				"pre{hello child2}",
+				"pre {hello child2}",
+				"{ hello child2}",
+				"{} { hello child2}",
+				"pre{ hello child2}",
+				"pre { hello child2}",
 			},
 			[](const auto& p){
 				treeml::parser parser;
@@ -74,9 +83,9 @@ tst::set set1("parser_flags", [](auto& suite){
 				"pre R\"qwe(hello)qwe\"",
 				"pre\nR\"qwe(hello)qwe\"",
 				"pre\tR\"qwe(hello)qwe\"",
-				"pre{ hello child2}",
-				"pre{\nhello child2}",
-				"pre{\thello child2}",
+				"pre{pre hello child2}",
+				"pre{pre\nhello child2}",
+				"pre{pre\thello child2}",
 			},
 			[](const auto& p){
 				treeml::parser parser;

@@ -84,7 +84,7 @@ class parser{
 	unsigned nesting_level;
 
 	enum class state{
-		initial,
+		initial, // state before parsing the first node
 		idle,
 		string_parsed,
 		quoted_string,
