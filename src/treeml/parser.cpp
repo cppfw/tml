@@ -8,7 +8,7 @@
 using namespace treeml;
 
 namespace{
-const size_t fileReadChinkSize_c = 0x4ff;
+const size_t file_read_chunk_size = 0x4ff;
 }
 
 void parser::next_line(){
@@ -510,7 +510,7 @@ void treeml::parse(const papki::file& fi, listener& listener){
 
 	treeml::parser parser;
 
-	std::array<std::uint8_t, fileReadChinkSize_c> buf; // 2kb read buffer.
+	std::array<std::uint8_t, file_read_chunk_size> buf; // 2kb read buffer.
 
 	size_t bytesRead;
 
