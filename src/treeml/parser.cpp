@@ -128,7 +128,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			ASSERT(this->string_buf.size() != 0)
 			if(this->string_buf.size() == 1 && this->string_buf.back() == 'R'){
 				this->string_buf.clear();
-				this->cur_state = state::raw_string_opening_delimeter;
+				this->cur_state = state::raw_cpp_string_opening_delimeter;
 				this->info.flags.set(flag::raw_cpp);
 			}else{
 				this->handle_string_parsed(listener);
@@ -293,8 +293,8 @@ void parser::process_char_in_multiline_comment(char c, listener& listener){
 	}
 }
 
-void parser::process_char_in_raw_string_opening_delimeter(char c, listener& listener){
-	ASSERT(this->cur_state == state::raw_string_opening_delimeter)
+void parser::process_char_in_raw_cpp_string_opening_delimeter(char c, listener& listener){
+	ASSERT(this->cur_state == state::raw_cpp_string_opening_delimeter)
 	switch(c){
 		case '"':
 			// not a C++ style raw string, report 'R' string and a quoted string
@@ -312,7 +312,7 @@ void parser::process_char_in_raw_string_opening_delimeter(char c, listener& list
 		case '(':
 			this->raw_string_delimeter.assign(&*this->string_buf.begin(), this->string_buf.size());
 			this->string_buf.clear();
-			this->cur_state = state::raw_string;
+			this->cur_state = state::raw_cpp_string;
 			break;
 		default:
 			this->string_buf.push_back(c);
@@ -320,12 +320,12 @@ void parser::process_char_in_raw_string_opening_delimeter(char c, listener& list
 	}
 }
 
-void parser::process_char_in_raw_string(char c, listener& listener){
-	ASSERT(this->cur_state == state::raw_string)
+void parser::process_char_in_raw_cpp_string(char c, listener& listener){
+	ASSERT(this->cur_state == state::raw_cpp_string)
 	switch(c){
 		case ')':
 			this->raw_string_delimeter_index = 0;
-			this->cur_state = state::raw_string_closing_delimeter;
+			this->cur_state = state::raw_cpp_string_closing_delimeter;
 			break;
 		case '\n':
 			this->next_line();
@@ -335,8 +335,8 @@ void parser::process_char_in_raw_string(char c, listener& listener){
 	}
 }
 
-void parser::process_char_in_raw_string_closing_delimeter(char c, listener& listener){
-	ASSERT(this->cur_state == state::raw_string_closing_delimeter)
+void parser::process_char_in_raw_cpp_string_closing_delimeter(char c, listener& listener){
+	ASSERT(this->cur_state == state::raw_cpp_string_closing_delimeter)
 	switch(c){
 		case '"':
 			ASSERT(this->raw_string_delimeter_index <= this->raw_string_delimeter.size())
@@ -345,7 +345,7 @@ void parser::process_char_in_raw_string_closing_delimeter(char c, listener& list
 				for(size_t i = 0; i != this->raw_string_delimeter_index; ++i){
 					this->string_buf.push_back(this->raw_string_delimeter[i]);
 				}
-				this->cur_state = state::raw_string;
+				this->cur_state = state::raw_cpp_string;
 			}else{
 				this->handle_string_parsed(listener);
 				this->raw_string_delimeter.clear();
@@ -361,7 +361,7 @@ void parser::process_char_in_raw_string_closing_delimeter(char c, listener& list
 				for(size_t i = 0; i != this->raw_string_delimeter_index; ++i){
 					this->string_buf.push_back(this->raw_string_delimeter[i]);
 				}
-				this->cur_state = state::raw_string;
+				this->cur_state = state::raw_cpp_string;
 			}else{
 				++this->raw_string_delimeter_index;
 			}
@@ -398,14 +398,14 @@ void parser::process_char(char c, listener& listener){
 		case state::multiline_comment:
 			this->process_char_in_multiline_comment(c, listener);
 			break;
-		case state::raw_string_opening_delimeter:
-			this->process_char_in_raw_string_opening_delimeter(c, listener);
+		case state::raw_cpp_string_opening_delimeter:
+			this->process_char_in_raw_cpp_string_opening_delimeter(c, listener);
 			break;
-		case state::raw_string:
-			this->process_char_in_raw_string(c, listener);
+		case state::raw_cpp_string:
+			this->process_char_in_raw_cpp_string(c, listener);
 			break;
-		case state::raw_string_closing_delimeter:
-			this->process_char_in_raw_string_closing_delimeter(c, listener);
+		case state::raw_cpp_string_closing_delimeter:
+			this->process_char_in_raw_cpp_string_closing_delimeter(c, listener);
 			break;
 		default:
 			ASSERT(false, [&](auto&o){o << "this->cur_state = " << unsigned(this->cur_state);})
