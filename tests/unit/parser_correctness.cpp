@@ -95,6 +95,8 @@ tst::set set1("parser_correctness", [](auto& suite){
 				{"\"pre\" \"\"\"hello\"\"\" ", {{"pre"}, {"hello"}}},
 				{"\"\" \"\"\"hello\"\"\" ", {{""}, {"hello"}}},
 				{"\"\" \"\"\"hello\"\"\"\"\" ", {{""}, {"hello"}, {""}}},
+				{"\"\"\"hello\" \"\"\"", {{"hello\" "}}},
+				{"\"\"\"he\"\"llo\"\"\"", {{"he\"\"llo"}}},
 
 				// if new line goes as very first or very last char of the raw string, then it is ignored.
 				// python-style raw strings
