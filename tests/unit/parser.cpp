@@ -227,7 +227,7 @@ tst::set set1("parser_flags", [](auto& suite){
 					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
 						if(str == "hello"){
 							this->string_parsed = true;
-							tst::check(!info.flags.get(treeml::flag::raw_cpp), SL);
+							tst::check(!info.flags.get(treeml::flag::raw), SL);
 						}
 					}
 
@@ -262,7 +262,8 @@ tst::set set1("parser_flags", [](auto& suite){
 					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
 						if(str == "hello"){
 							this->string_parsed = true;
-							tst::check(info.flags.get(treeml::flag::raw_cpp), SL);
+							tst::check(info.flags.get(treeml::flag::raw), SL);
+							tst::check(!info.flags.get(treeml::flag::raw_python_style), SL);
 						}
 					}
 
@@ -298,7 +299,7 @@ tst::set set1("parser_flags", [](auto& suite){
 						if(str == "R"){
 							this->string_parsed = true;
 							tst::check(!info.flags.get(treeml::flag::quoted), SL);
-							tst::check(!info.flags.get(treeml::flag::raw_cpp), SL);
+							tst::check(!info.flags.get(treeml::flag::raw), SL);
 						}
 					}
 

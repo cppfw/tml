@@ -75,7 +75,7 @@ public:
  * documents.
  */
 class parser{
-	std::vector<char> string_buf; // buffer for current string being parsed
+	std::vector<char> buf; // buffer for current string being parsed
 
 	std::string raw_cpp_string_sequenece;
 	size_t raw_string_sequence_index;

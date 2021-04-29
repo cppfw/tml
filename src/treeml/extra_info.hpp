@@ -25,14 +25,16 @@ enum class flag{
 	quoted,
 
 	/**
-	 * @brief The node was specified as C++ style raw string.
+	 * @brief The node was specified as raw string.
 	 */
-	raw_cpp,
+	raw,
 
 	/**
 	 * @brief The node was specified as Python style raw string.
+	 * In case this flag is not set for the raw string, then it is specified
+	 * as C++ style syntax.
 	 */
-	raw_python,
+	raw_python_style,
 
 	enum_size
 };

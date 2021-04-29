@@ -81,6 +81,7 @@ tst::set set1("parser_correctness", [](auto& suite){
 	suite.template add<std::pair<std::string, treeml::forest>>(
 			"parsed_tree_is_as_expected",
 			{
+				// python-style raw strings
 				{"\"\"\"hello\"\"\"", {{"hello"}}},
 				{" \"\"\"hello\"\"\"", {{"hello"}}},
 				{"\n\"\"\"hello\"\"\" ", {{"hello"}}},
@@ -94,6 +95,35 @@ tst::set set1("parser_correctness", [](auto& suite){
 				{"\"pre\" \"\"\"hello\"\"\" ", {{"pre"}, {"hello"}}},
 				{"\"\" \"\"\"hello\"\"\" ", {{""}, {"hello"}}},
 				{"\"\" \"\"\"hello\"\"\"\"\" ", {{""}, {"hello"}, {""}}},
+
+				// if new line goes as very first or very last char of the raw string, then it is ignored.
+				// python-style raw strings
+				{"\"\" \"\"\"\nhello\"\"\"\"\" ", {{""}, {"hello"}, {""}}},
+				{"\"\" \"\"\"hello\n\"\"\"\"\" ", {{""}, {"hello"}, {""}}},
+				{"\"\" \"\"\"h\nello\n\"\"\"\"\" ", {{""}, {"h\nello"}, {""}}},
+				{"\"\" \"\"\"\nhello\n\"\"\"\"\" ", {{""}, {"hello"}, {""}}},
+				{"\"\" \"\"\"hello\n\n\"\"\"\"\" ", {{""}, {"hello\n"}, {""}}},
+				{"\"\" \"\"\"\n\nhello\"\"\"\"\" ", {{""}, {"\nhello"}, {""}}},
+				{"\"\"\"\r\nhello\"\"\"", {{"hello"}}},
+				{"\"\"\"hello\r\n\"\"\"", {{"hello"}}},
+				{"\"\"\"\r\nhello\r\n\"\"\"", {{"hello"}}},
+				{"\"\"\"\r \nhello\"\"\"", {{"\r \nhello"}}},
+				{"\"\"\"hello\r \n\"\"\"", {{"hello\r "}}},
+				{"\"\"\"\r\n\r\nhello\r\n\r\n\"\"\"", {{"\r\nhello\r\n"}}},
+
+				// cpp-style raw strings
+				{"\"\" R\"(\nhello)\"\"\" ", {{""}, {"hello"}, {""}}},
+				{"\"\" R\"(hello\n)\"\"\" ", {{""}, {"hello"}, {""}}},
+				{"\"\" R\"(h\nello\n)\"\"\" ", {{""}, {"h\nello"}, {""}}},
+				{"\"\" R\"(\nhello\n)\"\"\" ", {{""}, {"hello"}, {""}}},
+				{"\"\" R\"(hello\n\n)\"\"\" ", {{""}, {"hello\n"}, {""}}},
+				{"\"\" R\"(\n\nhello)\"\"\" ", {{""}, {"\nhello"}, {""}}},
+				{"R\"(\r\nhello)\"", {{"hello"}}},
+				{"R\"(hello\r\n)\"", {{"hello"}}},
+				{"R\"(\r\nhello\r\n)\"", {{"hello"}}},
+				{"R\"(\r \nhello)\"", {{"\r \nhello"}}},
+				{"R\"(hello\r \n)\"", {{"hello\r "}}},
+				{"R\"(\r\n\r\nhello\r\n\r\n)\"", {{"\r\nhello\r\n"}}},
 			},
 			[](auto& p){
 				auto r = treeml::read(p.first);
