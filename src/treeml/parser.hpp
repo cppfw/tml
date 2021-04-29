@@ -77,8 +77,8 @@ public:
 class parser{
 	std::vector<char> string_buf; // buffer for current string being parsed
 
-	std::string raw_string_delimeter; // delimeter for raw string
-	size_t raw_string_delimeter_index; // index into the raw string delimeter
+	std::string raw_cpp_string_sequenece;
+	size_t raw_string_sequence_index;
 
 	// This variable is used for tracking current nesting level to make checks for detecting malformed treeml document
 	unsigned nesting_level;

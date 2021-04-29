@@ -30,11 +30,22 @@ class Listener : public treeml::listener{
 	}
 
 	void on_string_parsed(std::string_view s, const treeml::extra_info& info)override{
-		std::string str(&*s.begin(), s.size());
-		// TRACE(<< "str = " << str << std::endl)
-		ASSERT_ALWAYS(this->actions.size() > 0)
-		ASSERT_INFO_ALWAYS(this->actions.front().first == STRING, "first = " << this->actions.front().first << " second = " << this->actions.front().second)
-		ASSERT_INFO_ALWAYS(this->actions.front().second == str, "first = " << this->actions.front().first << " second = " << this->actions.front().second << " str = " << str)
+		std::string str(s);
+		utki::log([&](auto&o){
+			o << "str = " << str;
+			o << " line = " << info.location.line << '\n';
+		});
+		utki::assert(this->actions.size() > 0, SL);
+		utki::assert(this->actions.front().first == STRING, [&](auto&o){
+				o << "first = " << this->actions.front().first;
+				o << " second = " << this->actions.front().second;
+				o << " line = " << info.location.line;
+			}, SL);
+		utki::assert(this->actions.front().second == str, [&](auto&o){
+				o << "first = " << this->actions.front().first;
+				o << " second = " << this->actions.front().second;
+				o << " str = " << str;
+			}, SL);
 		this->actions.pop_front();
 	}
 
