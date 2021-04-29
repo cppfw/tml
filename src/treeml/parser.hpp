@@ -93,9 +93,12 @@ class parser{
 		comment_seqence,
 		single_line_comment,
 		multiline_comment,
-		raw_cpp_string_opening_delimeter,
-		raw_cpp_string_closing_delimeter,
-		raw_cpp_string
+		raw_cpp_string_opening_sequence,
+		raw_cpp_string_closing_sequence,
+		raw_cpp_string,
+		raw_python_string_opening_sequence,
+		raw_python_string_closing_sequence,
+		raw_python_string,
 	} cur_state;
 
 	state state_after_comment;
@@ -112,9 +115,12 @@ class parser{
 	void process_char_in_comment_sequence(char c, treeml::listener& listener);
 	void process_char_in_single_line_comment(char c, treeml::listener& listener);
 	void process_char_in_multiline_comment(char c, treeml::listener& listener);
-	void process_char_in_raw_cpp_string_opening_delimeter(char c, treeml::listener& listener);
+	void process_char_in_raw_cpp_string_opening_sequence(char c, treeml::listener& listener);
 	void process_char_in_raw_cpp_string(char c, treeml::listener& listener);
-	void process_char_in_raw_cpp_string_closing_delimeter(char c, treeml::listener& listener);
+	void process_char_in_raw_cpp_string_closing_sequence(char c, treeml::listener& listener);
+	void process_char_in_raw_python_string_opening_sequence(char c, treeml::listener& listener);
+	void process_char_in_raw_python_string(char c, treeml::listener& listener);
+	void process_char_in_raw_python_string_closing_sequence(char c, treeml::listener& listener);
 
 	location cur_loc = {0, 1}; // offset starts with 1
 

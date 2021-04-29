@@ -29,6 +29,11 @@ enum class flag{
 	 */
 	raw_cpp,
 
+	/**
+	 * @brief The node was specified as Python style raw string.
+	 */
+	raw_python,
+
 	enum_size
 };
 

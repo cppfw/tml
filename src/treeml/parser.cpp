@@ -128,7 +128,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			ASSERT(this->string_buf.size() != 0)
 			if(this->string_buf.size() == 1 && this->string_buf.back() == 'R'){
 				this->string_buf.clear();
-				this->cur_state = state::raw_cpp_string_opening_delimeter;
+				this->cur_state = state::raw_cpp_string_opening_sequence;
 				this->info.flags.set(flag::raw_cpp);
 			}else{
 				this->handle_string_parsed(listener);
@@ -293,8 +293,8 @@ void parser::process_char_in_multiline_comment(char c, listener& listener){
 	}
 }
 
-void parser::process_char_in_raw_cpp_string_opening_delimeter(char c, listener& listener){
-	ASSERT(this->cur_state == state::raw_cpp_string_opening_delimeter)
+void parser::process_char_in_raw_cpp_string_opening_sequence(char c, listener& listener){
+	ASSERT(this->cur_state == state::raw_cpp_string_opening_sequence)
 	switch(c){
 		case '"':
 			// not a C++ style raw string, report 'R' string and a quoted string
@@ -305,9 +305,15 @@ void parser::process_char_in_raw_cpp_string_opening_delimeter(char c, listener& 
 				this->info.flags.clear(treeml::flag::space);
 			}
 			++this->info.location.offset;
-			this->info.flags.set(treeml::flag::quoted);
-			this->handle_string_parsed(listener);
-			this->cur_state = state::string_parsed;
+
+			// if(!this->string_buf.empty())
+				this->info.flags.set(treeml::flag::quoted);
+				this->handle_string_parsed(listener);
+				this->cur_state = state::string_parsed;
+			// }else{
+			// 	// can be python-style raw string opening sequence
+			// 	// TODO:
+			// }
 			break;
 		case '(':
 			this->raw_string_delimeter.assign(&*this->string_buf.begin(), this->string_buf.size());
@@ -325,7 +331,7 @@ void parser::process_char_in_raw_cpp_string(char c, listener& listener){
 	switch(c){
 		case ')':
 			this->raw_string_delimeter_index = 0;
-			this->cur_state = state::raw_cpp_string_closing_delimeter;
+			this->cur_state = state::raw_cpp_string_closing_sequence;
 			break;
 		case '\n':
 			this->next_line();
@@ -335,8 +341,8 @@ void parser::process_char_in_raw_cpp_string(char c, listener& listener){
 	}
 }
 
-void parser::process_char_in_raw_cpp_string_closing_delimeter(char c, listener& listener){
-	ASSERT(this->cur_state == state::raw_cpp_string_closing_delimeter)
+void parser::process_char_in_raw_cpp_string_closing_sequence(char c, listener& listener){
+	ASSERT(this->cur_state == state::raw_cpp_string_closing_sequence)
 	switch(c){
 		case '"':
 			ASSERT(this->raw_string_delimeter_index <= this->raw_string_delimeter.size())
@@ -369,6 +375,82 @@ void parser::process_char_in_raw_cpp_string_closing_delimeter(char c, listener& 
 	}
 }
 
+void parser::process_char_in_raw_python_string_opening_sequence(char c, listener& listener){
+	ASSERT(this->cur_state == state::raw_python_string_opening_sequence)
+	switch(c){
+		// case '"':
+		// 	// not a C++ style raw string, report 'R' string and a quoted string
+		// 	this->info.flags.clear(treeml::flag::raw_cpp);
+		// 	{
+		// 		char r = 'R';
+		// 		listener.on_string_parsed(std::string_view(&r, 1), this->info);
+		// 		this->info.flags.clear(treeml::flag::space);
+		// 	}
+		// 	++this->info.location.offset;
+		// 	this->info.flags.set(treeml::flag::quoted);
+		// 	this->handle_string_parsed(listener);
+		// 	this->cur_state = state::string_parsed;
+		// 	break;
+		// case '(':
+		// 	this->raw_string_delimeter.assign(&*this->string_buf.begin(), this->string_buf.size());
+		// 	this->string_buf.clear();
+		// 	this->cur_state = state::raw_cpp_string;
+		// 	break;
+		// default:
+		// 	this->string_buf.push_back(c);
+		// 	break;
+	}
+}
+
+void parser::process_char_in_raw_python_string(char c, listener& listener){
+	ASSERT(this->cur_state == state::raw_python_string)
+	switch(c){
+		// case ')':
+		// 	this->raw_string_delimeter_index = 0;
+		// 	this->cur_state = state::raw_cpp_string_closing_sequence;
+		// 	break;
+		// case '\n':
+		// 	this->next_line();
+		// default:
+		// 	this->string_buf.push_back(c);
+		// 	break;
+	}
+}
+
+void parser::process_char_in_raw_python_string_closing_sequence(char c, listener& listener){
+	ASSERT(this->cur_state == state::raw_python_string_closing_sequence)
+	switch(c){
+		// case '"':
+		// 	ASSERT(this->raw_string_delimeter_index <= this->raw_string_delimeter.size())
+		// 	if(this->raw_string_delimeter_index != this->raw_string_delimeter.size()){
+		// 		this->string_buf.push_back(')');
+		// 		for(size_t i = 0; i != this->raw_string_delimeter_index; ++i){
+		// 			this->string_buf.push_back(this->raw_string_delimeter[i]);
+		// 		}
+		// 		this->cur_state = state::raw_cpp_string;
+		// 	}else{
+		// 		this->handle_string_parsed(listener);
+		// 		this->raw_string_delimeter.clear();
+		// 		this->cur_state = state::string_parsed;
+		// 	}
+		// 	break;
+		// default:
+		// 	ASSERT(this->raw_string_delimeter_index <= this->raw_string_delimeter.size())
+		// 	if(this->raw_string_delimeter_index == this->raw_string_delimeter.size()
+		// 			|| c != this->raw_string_delimeter[this->raw_string_delimeter_index])
+		// 	{
+		// 		this->string_buf.push_back(')');
+		// 		for(size_t i = 0; i != this->raw_string_delimeter_index; ++i){
+		// 			this->string_buf.push_back(this->raw_string_delimeter[i]);
+		// 		}
+		// 		this->cur_state = state::raw_cpp_string;
+		// 	}else{
+		// 		++this->raw_string_delimeter_index;
+		// 	}
+		// 	break;
+	}
+}
+
 void parser::process_char(char c, listener& listener){
 	switch(this->cur_state){
 		case state::initial:
@@ -398,14 +480,23 @@ void parser::process_char(char c, listener& listener){
 		case state::multiline_comment:
 			this->process_char_in_multiline_comment(c, listener);
 			break;
-		case state::raw_cpp_string_opening_delimeter:
-			this->process_char_in_raw_cpp_string_opening_delimeter(c, listener);
+		case state::raw_cpp_string_opening_sequence:
+			this->process_char_in_raw_cpp_string_opening_sequence(c, listener);
 			break;
 		case state::raw_cpp_string:
 			this->process_char_in_raw_cpp_string(c, listener);
 			break;
-		case state::raw_cpp_string_closing_delimeter:
-			this->process_char_in_raw_cpp_string_closing_delimeter(c, listener);
+		case state::raw_cpp_string_closing_sequence:
+			this->process_char_in_raw_cpp_string_closing_sequence(c, listener);
+			break;
+		case state::raw_python_string_opening_sequence:
+			this->process_char_in_raw_python_string_opening_sequence(c, listener);
+			break;
+		case state::raw_python_string:
+			this->process_char_in_raw_python_string(c, listener);
+			break;
+		case state::raw_python_string_closing_sequence:
+			this->process_char_in_raw_python_string_closing_sequence(c, listener);
 			break;
 		default:
 			ASSERT(false, [&](auto&o){o << "this->cur_state = " << unsigned(this->cur_state);})
