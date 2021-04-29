@@ -70,5 +70,35 @@ tst::set set1("parser_correctness", [](auto& suite){
 				tst::check_eq(in[1].value.to_string(), std::string("second"), SL);
 			}
 		);
+	
+	suite.add("only_python_style_raw_string_in_the_document", [](){
+		auto r = treeml::read("\"\"\"hello\"\"\"");
+		tst::check_eq(r.size(), size_t(1), SL);
+		tst::check_eq(r.front().children.size(), size_t(0), SL);
+		tst::check_eq(r.front().value.to_string(), std::string("hello"), SL);
+	});
+
+	suite.template add<std::pair<std::string, treeml::forest>>(
+			"parsed_tree_is_as_expected",
+			{
+				{"\"\"\"hello\"\"\"", {{"hello"}}},
+				{" \"\"\"hello\"\"\"", {{"hello"}}},
+				{"\n\"\"\"hello\"\"\" ", {{"hello"}}},
+				{"\t\"\"\"hello\"\"\" ", {{"hello"}}},
+				{"pre\"\"\"hello\"\"\" ", {{"pre"}, {"hello"}}},
+				{"pre{}\"\"\"hello\"\"\"{child} ", {{"pre"}, {"hello", {{"child"}}}}},
+				{"pre{} \"\"\"hello\"\"\" {child} ", {{"pre"}, {"hello", {{"child"}}}}},
+				{"pre{} \"\"\"hello\"\"\"\n{child} ", {{"pre"}, {"hello", {{"child"}}}}},
+				{"pre{} \"\"\"hello\"\"\"\t{child} ", {{"pre"}, {"hello", {{"child"}}}}},
+				{"\"pre\"\"\"\"hello\"\"\" ", {{"pre"}, {"hello"}}},
+				{"\"pre\" \"\"\"hello\"\"\" ", {{"pre"}, {"hello"}}},
+				{"\"\" \"\"\"hello\"\"\" ", {{""}, {"hello"}}},
+				{"\"\" \"\"\"hello\"\"\"\"\" ", {{""}, {"hello"}, {""}}},
+			},
+			[](auto& p){
+				auto r = treeml::read(p.first);
+				tst::check_eq(r, p.second, SL);
+			}
+		);
 });
 }

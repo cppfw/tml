@@ -421,7 +421,8 @@ void parser::process_char_in_raw_python_string_closing_sequence(char c, listener
 		case '"':
 			++this->raw_string_sequence_index;
 			if(this->raw_string_sequence_index == 3){
-
+				this->handle_string_parsed(listener);
+				this->cur_state = state::string_parsed;
 			}
 			break;
 		default:
