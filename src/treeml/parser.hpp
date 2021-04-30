@@ -77,7 +77,7 @@ public:
 class parser{
 	std::vector<char> buf; // buffer for current string being parsed
 
-	std::string sequenece; // used for raw string open/close sequences and for storing string before child block is parsed
+	std::string sequenece; // used for raw string open/close sequences
 	size_t sequence_index;
 
 	// This variable is used for tracking current nesting level to make checks for detecting malformed treeml document
