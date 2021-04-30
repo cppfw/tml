@@ -36,6 +36,13 @@ enum class flag{
 	 */
 	raw_python_style,
 
+	/**
+	 * @brief The node has children list.
+	 * Indicates that the node had children list specified, possibly empty.
+	 * In other words, this indicates that there is an opening curly brace following the string.
+	 */
+	children,
+
 	enum_size
 };
 
