@@ -34,12 +34,6 @@ tst::set set1("parser_flags", [](auto& suite){
 				"pre{ hello child2}",
 				"pre { hello child2}",
 				"pre /{ hello child2}",
-				"pre//bla bla\nhello",
-				"pre//bla bla\n\"hello\"",
-				"pre/*bla bla*/hello",
-				"pre/*bla bla*/\"hello\"",
-				"\"pre\"/*bla bla*/hello",
-				"\"pre\"/*bla bla*/\"hello\"",
 			},
 			[](const auto& p){
 				treeml::parser parser;
@@ -104,6 +98,12 @@ tst::set set1("parser_flags", [](auto& suite){
 				"\"pre\"/*bla bla*/\n\"hello\"",
 				"\"pre\"\n/*bla bla*/hello",
 				"\"pre\"\n/*bla bla*/\"hello\"",
+				"pre//bla bla\nhello",
+				"pre//bla bla\n\"hello\"",
+				"pre/*bla bla*/hello",
+				"pre/*bla bla*/\"hello\"",
+				"\"pre\"/*bla bla*/hello",
+				"\"pre\"/*bla bla*/\"hello\"",
 			},
 			[](const auto& p){
 				treeml::parser parser;

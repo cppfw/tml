@@ -278,6 +278,7 @@ void parser::process_char_in_comment_sequence(char c, listener& listener){
 
 void parser::process_char_in_single_line_comment(char c, listener& listener){
 	ASSERT(this->cur_state == state::single_line_comment)
+	this->info.flags.set(treeml::flag::space);
 	switch(c){
 		case '\n':
 		case '\0':
@@ -290,6 +291,7 @@ void parser::process_char_in_single_line_comment(char c, listener& listener){
 
 void parser::process_char_in_multiline_comment(char c, listener& listener){
 	ASSERT(this->cur_state == state::multiline_comment)
+	this->info.flags.set(treeml::flag::space);
 	switch(c){
 		case '*':
 			ASSERT(this->buf.size() == 0)
