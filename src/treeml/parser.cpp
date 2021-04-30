@@ -522,7 +522,11 @@ void parser::parse_data_chunk(utki::span<const uint8_t> chunk, listener& listene
 void parser::end_of_data(listener& listener){
 	this->process_char('\0', listener);
 
-	if(this->nesting_level != 0 || this->cur_state != state::idle){
+	if(this->nesting_level != 0){
+		throw std::invalid_argument("Malformed treeml document fed. Document end reached while parsing children block.");
+	}
+
+	if(this->cur_state != state::idle){
 		throw std::invalid_argument("Malformed treeml document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
 	}
 
