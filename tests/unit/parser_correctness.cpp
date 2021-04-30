@@ -126,6 +126,14 @@ tst::set set1("parser_correctness", [](auto& suite){
 				{"R\"(\r \nhello)\"", {{"\r \nhello"}}},
 				{"R\"(hello\r \n)\"", {{"hello\r "}}},
 				{"R\"(\r\n\r\nhello\r\n\r\n)\"", {{"\r\nhello\r\n"}}},
+
+				// unquoted string terminated by comment
+				{"hello//", {{"hello"}}},
+				{"hello//bla bla", {{"hello"}}},
+				{"hello/*", {{"hello"}}},
+				{"hello/*bla bla", {{"hello"}}},
+				{"hello/**/", {{"hello"}}},
+				{"hello/*bla bla*/", {{"hello"}}},
 			},
 			[](auto& p){
 				auto r = treeml::read(p.first);

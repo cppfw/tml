@@ -280,8 +280,11 @@ void parser::process_char_in_single_line_comment(char c, listener& listener){
 	ASSERT(this->cur_state == state::single_line_comment)
 	this->info.flags.set(treeml::flag::space);
 	switch(c){
-		case '\n':
 		case '\0':
+			this->cur_state = this->state_after_comment;
+			this->process_char('\0', listener);
+			break;
+		case '\n':
 			this->cur_state = this->state_after_comment;
 			break;
 		default:
@@ -520,7 +523,7 @@ void parser::end_of_data(listener& listener){
 	this->process_char('\0', listener);
 
 	if(this->nesting_level != 0 || this->cur_state != state::idle){
-		throw std::logic_error("Malformed treeml document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
+		throw std::invalid_argument("Malformed treeml document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
 	}
 
 	this->reset();
