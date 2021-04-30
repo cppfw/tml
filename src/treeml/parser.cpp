@@ -93,7 +93,7 @@ void parser::process_char_in_idle(char c, listener& listener){
 		case '"':
 			this->set_string_start_pos();
 			this->cur_state = state::raw_python_string_opening_sequence;
-			this->raw_string_sequence_index = 1;
+			this->sequence_index = 1;
 			break;
 		case '/':
 			this->set_string_start_pos();
@@ -150,7 +150,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			}else{
 				this->handle_string_parsed(listener);
 				this->cur_state = state::raw_python_string_opening_sequence;
-				this->raw_string_sequence_index = 1;
+				this->sequence_index = 1;
 				this->set_string_start_pos();
 			}
 			break;
@@ -327,7 +327,7 @@ void parser::process_char_in_raw_cpp_string_opening_sequence(char c, listener& l
 
 			if(this->buf.empty()){
 				this->cur_state = state::raw_python_string_opening_sequence;
-				this->raw_string_sequence_index = 2;
+				this->sequence_index = 2;
 			}else{
 				this->info.flags.set(treeml::flag::quoted);
 				this->handle_string_parsed(listener);
@@ -335,7 +335,7 @@ void parser::process_char_in_raw_cpp_string_opening_sequence(char c, listener& l
 			}
 			break;
 		case '(':
-			this->raw_cpp_string_sequenece.assign(&*this->buf.begin(), this->buf.size());
+			this->sequenece.assign(&*this->buf.begin(), this->buf.size());
 			this->buf.clear();
 			this->cur_state = state::raw_cpp_string;
 			this->info.flags.set(flag::raw);
@@ -350,7 +350,7 @@ void parser::process_char_in_raw_cpp_string(char c, listener& listener){
 	ASSERT(this->cur_state == state::raw_cpp_string)
 	switch(c){
 		case ')':
-			this->raw_string_sequence_index = 0;
+			this->sequence_index = 0;
 			this->cur_state = state::raw_cpp_string_closing_sequence;
 			break;
 		default:
@@ -363,31 +363,31 @@ void parser::process_char_in_raw_cpp_string_closing_sequence(char c, listener& l
 	ASSERT(this->cur_state == state::raw_cpp_string_closing_sequence)
 	switch(c){
 		case '"':
-			ASSERT(this->raw_string_sequence_index <= this->raw_cpp_string_sequenece.size())
-			if(this->raw_string_sequence_index != this->raw_cpp_string_sequenece.size()){
+			ASSERT(this->sequence_index <= this->sequenece.size())
+			if(this->sequence_index != this->sequenece.size()){
 				this->buf.push_back(')');
-				for(size_t i = 0; i != this->raw_string_sequence_index; ++i){
-					this->buf.push_back(this->raw_cpp_string_sequenece[i]);
+				for(size_t i = 0; i != this->sequence_index; ++i){
+					this->buf.push_back(this->sequenece[i]);
 				}
 				this->cur_state = state::raw_cpp_string;
 			}else{
 				this->handle_string_parsed(listener);
-				this->raw_cpp_string_sequenece.clear();
+				this->sequenece.clear();
 				this->cur_state = state::string_parsed;
 			}
 			break;
 		default:
-			ASSERT(this->raw_string_sequence_index <= this->raw_cpp_string_sequenece.size())
-			if(this->raw_string_sequence_index == this->raw_cpp_string_sequenece.size()
-					|| c != this->raw_cpp_string_sequenece[this->raw_string_sequence_index])
+			ASSERT(this->sequence_index <= this->sequenece.size())
+			if(this->sequence_index == this->sequenece.size()
+					|| c != this->sequenece[this->sequence_index])
 			{
 				this->buf.push_back(')');
-				for(size_t i = 0; i != this->raw_string_sequence_index; ++i){
-					this->buf.push_back(this->raw_cpp_string_sequenece[i]);
+				for(size_t i = 0; i != this->sequence_index; ++i){
+					this->buf.push_back(this->sequenece[i]);
 				}
 				this->cur_state = state::raw_cpp_string;
 			}else{
-				++this->raw_string_sequence_index;
+				++this->sequence_index;
 			}
 			break;
 	}
@@ -398,8 +398,8 @@ void parser::process_char_in_raw_python_string_opening_sequence(char c, listener
 	ASSERT(this->buf.empty())
 	switch(c){
 		case '"':
-			++this->raw_string_sequence_index;
-			if(this->raw_string_sequence_index == 3){
+			++this->sequence_index;
+			if(this->sequence_index == 3){
 				this->cur_state = state::raw_python_string;
 				this->info.flags.set(flag::raw);
 				this->info.flags.set(flag::raw_python_style);
@@ -407,7 +407,7 @@ void parser::process_char_in_raw_python_string_opening_sequence(char c, listener
 			break;
 		default:
 			this->info.flags.set(flag::quoted);
-			switch(this->raw_string_sequence_index){
+			switch(this->sequence_index){
 				default:
 					ASSERT(false)
 				case 1:
@@ -430,7 +430,7 @@ void parser::process_char_in_raw_python_string(char c, listener& listener){
 	switch(c){
 		case '"':
 			this->cur_state = state::raw_python_string_closing_sequence;
-			this->raw_string_sequence_index = 1;
+			this->sequence_index = 1;
 			break;
 		default:
 			this->buf.push_back(c);
@@ -442,14 +442,14 @@ void parser::process_char_in_raw_python_string_closing_sequence(char c, listener
 	ASSERT(this->cur_state == state::raw_python_string_closing_sequence)
 	switch(c){
 		case '"':
-			++this->raw_string_sequence_index;
-			if(this->raw_string_sequence_index == 3){
+			++this->sequence_index;
+			if(this->sequence_index == 3){
 				this->handle_string_parsed(listener);
 				this->cur_state = state::string_parsed;
 			}
 			break;
 		default:
-			this->buf.insert(this->buf.end(), this->raw_string_sequence_index, '"');
+			this->buf.insert(this->buf.end(), this->sequence_index, '"');
 			this->buf.push_back(c);
 			this->cur_state = state::raw_python_string;
 			break;
