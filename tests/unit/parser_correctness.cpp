@@ -96,7 +96,7 @@ tst::set set1("parser_correctness", [](auto& suite){
 				{"\"\" \"\"\"hello\"\"\" ", {{""}, {"hello"}}},
 				{"\"\" \"\"\"hello\"\"\"\"\" ", {{""}, {"hello"}, {""}}},
 				{"\"\"\"hello\" \"\"\"", {{"hello\" "}}},
-				{"\"\"\"he\"\"llo\"\"\"", {{"he\"\"llo"}}},
+				{"\"\"\"he\"\"llo\"\"\"", {{"he\"\"llo"}}},	// #14
 
 				// if new line goes as very first or very last char of the raw string, then it is ignored.
 				// python-style raw strings
@@ -111,7 +111,7 @@ tst::set set1("parser_correctness", [](auto& suite){
 				{"\"\"\"\r\nhello\r\n\"\"\"", {{"hello"}}},
 				{"\"\"\"\r \nhello\"\"\"", {{"\r \nhello"}}},
 				{"\"\"\"hello\r \n\"\"\"", {{"hello\r "}}},
-				{"\"\"\"\r\n\r\nhello\r\n\r\n\"\"\"", {{"\r\nhello\r\n"}}},
+				{"\"\"\"\r\n\r\nhello\r\n\r\n\"\"\"", {{"\r\nhello\r\n"}}}, // #26
 
 				// cpp-style raw strings
 				{"\"\" R\"(\nhello)\"\"\" ", {{""}, {"hello"}, {""}}},
@@ -125,13 +125,13 @@ tst::set set1("parser_correctness", [](auto& suite){
 				{"R\"(\r\nhello\r\n)\"", {{"hello"}}},
 				{"R\"(\r \nhello)\"", {{"\r \nhello"}}},
 				{"R\"(hello\r \n)\"", {{"hello\r "}}},
-				{"R\"(\r\n\r\nhello\r\n\r\n)\"", {{"\r\nhello\r\n"}}},
+				{"R\"(\r\n\r\nhello\r\n\r\n)\"", {{"\r\nhello\r\n"}}}, // #38
 
 				// unquoted string terminated by comment
 				{"hello//", {{"hello"}}},
+				{"hello//\n", {{"hello"}}},
 				{"hello//bla bla", {{"hello"}}},
-				{"hello/*", {{"hello"}}},
-				{"hello/*bla bla", {{"hello"}}},
+				{"hello//bla bla\n", {{"hello"}}},
 				{"hello/**/", {{"hello"}}},
 				{"hello/*bla bla*/", {{"hello"}}},
 			},
