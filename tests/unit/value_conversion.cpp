@@ -2,6 +2,7 @@
 #include <tst/check.hpp>
 
 #include "../../src/treeml/tree.hpp"
+#include "../../src/treeml/tree_ext.hpp"
 
 namespace{
 template <class T> struct sample_template{
@@ -204,5 +205,13 @@ tst::set set0("value_conversion", [](auto& suite){
 				tst::check_eq(str, p.second, SL);
 			}
 		);
+	
+	suite.add("string_to_leaf_ext", [](){
+		std::string str = "hello!";
+
+		treeml::leaf_ext l{std::string(str)};
+
+		tst::check_eq(l.to_string(), str, SL);
+	});
 });
 }
