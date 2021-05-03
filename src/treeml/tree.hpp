@@ -153,4 +153,9 @@ inline std::ostream& operator<<(std::ostream& o, const forest& f){
 	return o;
 }
 
+inline std::ostream& operator<<(std::ostream& o, const tree& t){
+	o << to_string(t);
+	return o;
+}
+
 }

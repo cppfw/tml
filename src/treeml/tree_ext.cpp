@@ -41,3 +41,22 @@ forest_ext treeml::read_ext(const std::string& str){
 
 	return read_ext(fi);
 }
+
+tree treeml::to_non_ext(const tree_ext& t){
+	tree ret;
+
+	ret.value = t.value;
+	ret.children = to_non_ext(t.children);
+
+	return ret;
+}
+
+forest treeml::to_non_ext(const forest_ext& f){
+	forest ret;
+
+	for(const auto& c : f){
+		ret.push_back(to_non_ext(c));
+	}
+
+	return ret;
+}

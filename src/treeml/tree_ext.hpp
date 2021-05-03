@@ -24,4 +24,7 @@ typedef tree_ext::container_type forest_ext;
 forest_ext read_ext(const papki::file& fi);
 forest_ext read_ext(const std::string& str);
 
+tree to_non_ext(const tree_ext& t);
+forest to_non_ext(const forest_ext& f);
+
 }
