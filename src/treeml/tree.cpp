@@ -243,7 +243,7 @@ void write_internal(const treeml::forest& roots, papki::file& fi, formatting fmt
 }
 
 void treeml::write(const treeml::forest& wood, papki::file& fi, formatting fmt){
-    papki::file::guard fileGuard(fi, papki::file::mode::create);
+    papki::file::guard file_guard(fi, papki::file::mode::create);
 
     write_internal(wood, fi, fmt, 0);
 }
