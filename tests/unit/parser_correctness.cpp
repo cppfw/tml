@@ -134,6 +134,9 @@ tst::set set1("parser_correctness", [](auto& suite){
 				{"hello//bla bla\n", {{"hello"}}},
 				{"hello/**/", {{"hello"}}},
 				{"hello/*bla bla*/", {{"hello"}}},
+
+				// parsing empty document
+				{"", {}} // #45
 			},
 			[](auto& p){
 				auto r = treeml::read(p.first);

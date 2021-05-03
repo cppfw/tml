@@ -60,6 +60,9 @@ void parser::process_char_in_initial(char c, listener& listener){
 			this->state_after_comment = state::initial;
 			this->cur_state = state::comment_seqence;
 			break;
+		case '\0':
+			this->cur_state = state::idle; // parser should remain in idle state after data end
+			break;
 		default:
 			this->process_char_in_idle(c, listener);
 			break;
