@@ -137,13 +137,6 @@ tst::set set1("parser_correctness", [](auto& suite){
 
 				// parsing empty document
 				{"", {}}, // #45
-
-				{R"(
-					def{
-						v{bla bla}
-					}
-					if{{}}}then{Hello}else{World}
-				)", {}}
 			},
 			[](auto& p){
 				auto r = treeml::read(p.first);
