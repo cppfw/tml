@@ -1,3 +1,9 @@
+libtreeml (0.1.40) unstable; urgency=medium
+
+  * add another constructor to leaf_ext
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 03 May 2021 23:40:19 +0300
+
 libtreeml (0.1.39) unstable; urgency=medium
 
   * add functions to convert tree_ext to tree
