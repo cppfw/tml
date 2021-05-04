@@ -8,8 +8,26 @@ namespace treeml{
 class leaf_ext : public leaf{
 	extra_info info;
 public:
+	leaf_ext(const char* str) :
+			leaf(str)
+	{}
+
+	leaf_ext(const std::string& str) :
+			leaf(str)
+	{}
+
 	leaf_ext(std::string&& str) :
 			leaf(std::move(str))
+	{}
+
+	leaf_ext(const char* str, const extra_info& info) :
+			leaf(str),
+			info(info)
+	{}
+
+	leaf_ext(const std::string& str, const extra_info& info) :
+			leaf(str),
+			info(info)
 	{}
 
 	leaf_ext(std::string&& str, const extra_info& info) :
