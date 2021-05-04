@@ -122,7 +122,7 @@ class parser{
 	void process_char_in_raw_python_string(char c, treeml::listener& listener);
 	void process_char_in_raw_python_string_closing_sequence(char c, treeml::listener& listener);
 
-	location cur_loc = {0, 1}; // offset starts with 1
+	location cur_loc = {1, 1}; // offset starts with 1
 
 	void next_line();
 

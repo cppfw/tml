@@ -44,7 +44,6 @@ void parser::handle_string_parsed(listener& listener){
 
 void parser::set_string_start_pos(){
 	this->info.location = this->cur_loc;
-	this->info.location.offset -= 1; // current line offset numbering starts from 1
 }
 
 void parser::process_char_in_initial(char c, listener& listener){
