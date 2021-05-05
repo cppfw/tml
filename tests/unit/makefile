@@ -9,7 +9,7 @@ this_srcs := $(call prorab-src-dir,.)
 
 this_libtreeml := $(d)../../src/out/$(c)/libtreeml$(dot_so)
 
-this_ldlibs += $(this_libtreeml) -ltst -lutki
+this_ldlibs += $(this_libtreeml) -ltst -lutki -lpapki
 
 $(eval $(prorab-build-app))
 
