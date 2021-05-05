@@ -57,7 +57,7 @@ tst::set set0("crawler", [](auto& suite){
 		try{
 			treeml::crawler(roots).to("b-1");
 			tst::check(false, SL);
-		}catch(std::runtime_error& e){
+		}catch(std::runtime_error&){
 			thrown = true;
 		}
 		tst::check(thrown, SL);
@@ -68,7 +68,7 @@ tst::set set0("crawler", [](auto& suite){
 		try{
 			treeml::crawler(roots).to_if(predicate_str("b6-1"));
 			tst::check(false, SL);
-		}catch(std::runtime_error& e){
+		}catch(std::runtime_error&){
 			thrown = true;
 		}
 		tst::check(thrown, SL);
@@ -79,7 +79,7 @@ tst::set set0("crawler", [](auto& suite){
 		try{
 			treeml::crawler(roots).to("b6").in().to("b6_1").in().to("b6_1_1").in();
 			tst::check(false, SL);
-		}catch(std::logic_error& e){
+		}catch(std::logic_error&){
 			thrown = true;
 		}
 		tst::check(thrown, SL);
@@ -90,7 +90,7 @@ tst::set set0("crawler", [](auto& suite){
 		try{
 			treeml::crawler(roots).to("b6").in().to("b6_1").next();
 			tst::check(false, SL);
-		}catch(std::logic_error& e){
+		}catch(std::logic_error&){
 			thrown = true;
 		}
 		tst::check(thrown, SL);
