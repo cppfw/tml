@@ -1,3 +1,9 @@
+libtreeml (0.1.45) unstable; urgency=medium
+
+  * make leaf_ext::info public field
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 06 May 2021 01:21:06 +0300
+
 libtreeml (0.1.44) unstable; urgency=medium
 
   * number lines and offsets from 1
