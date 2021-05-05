@@ -6,8 +6,9 @@
 namespace treeml{
 
 class leaf_ext : public leaf{
-	extra_info info;
 public:
+	extra_info info;
+
 	leaf_ext(const char* str) :
 			leaf(str)
 	{}
@@ -34,10 +35,6 @@ public:
 			leaf(std::move(str)),
 			info(info)
 	{}
-
-	const extra_info& get_info()const noexcept{
-		return this->info;
-	}
 };
 
 typedef utki::tree<leaf_ext> tree_ext;
