@@ -54,13 +54,15 @@ tst::set set("tree_writing", [](auto& suite){
 			);
 	}
 
-	suite.template add<std::string>(
+	// TODO: re-eanble when problem in qemu is ifxed, see https://bugs.launchpad.net/qemu/+bug/1805913
+	suite.template add_disabled<std::string>(
 		"write_unformatted",
 		decltype(files)(files),
 		make_test_proc<false>()
 	);
 
-	suite.template add<std::string>(
+	// TODO: re-eanble when problem in qemu is ifxed, see https://bugs.launchpad.net/qemu/+bug/1805913
+	suite.template add_disabled<std::string>(
 		"write_formatted",
 		decltype(files)(files),
 		make_test_proc<true>()
