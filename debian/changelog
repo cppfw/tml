@@ -1,3 +1,9 @@
+libtreeml (0.1.46) unstable; urgency=medium
+
+  * add graceful error reporting in case of unopened curly brace
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 10 May 2021 19:23:08 +0300
+
 libtreeml (0.1.45) unstable; urgency=medium
 
   * make leaf_ext::info public field
