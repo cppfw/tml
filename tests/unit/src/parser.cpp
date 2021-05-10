@@ -17,14 +17,14 @@ enum E_Action{
 
 namespace{
 class Listener : public treeml::listener{
-	void on_children_parse_finished() override{
+	void on_children_parse_finished(treeml::location)override{
 		// TRACE(<< "}" << std::endl)
 		tst::check(this->actions.size() > 0, SL);
 		tst::check(this->actions.front().first == CHILDREN_END, SL) << "first = " << this->actions.front().first << " second = " << this->actions.front().second;
 		this->actions.pop_front();
 	}
 
-	void on_children_parse_started() override{
+	void on_children_parse_started(treeml::location)override{
 		// TRACE(<< "{" << std::endl)
 		tst::check(this->actions.size() > 0, SL);
 		tst::check(this->actions.front().first == CHILDREN_START, SL) << "first = " << this->actions.front().first << " second = " << this->actions.front().second;

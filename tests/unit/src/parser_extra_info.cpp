@@ -51,8 +51,8 @@ tst::set set1("parser_flags", [](auto& suite){
 						}
 					}
 
-					void on_children_parse_started()override{}
-					void on_children_parse_finished()override{}
+					void on_children_parse_started(treeml::location)override{}
+					void on_children_parse_finished(treeml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -117,8 +117,8 @@ tst::set set1("parser_flags", [](auto& suite){
 						}
 					}
 
-					void on_children_parse_started()override{}
-					void on_children_parse_finished()override{}
+					void on_children_parse_started(treeml::location)override{}
+					void on_children_parse_finished(treeml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -156,8 +156,8 @@ tst::set set1("parser_flags", [](auto& suite){
 						}
 					}
 
-					void on_children_parse_started()override{}
-					void on_children_parse_finished()override{}
+					void on_children_parse_started(treeml::location)override{}
+					void on_children_parse_finished(treeml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -197,8 +197,8 @@ tst::set set1("parser_flags", [](auto& suite){
 						}
 					}
 
-					void on_children_parse_started()override{}
-					void on_children_parse_finished()override{}
+					void on_children_parse_started(treeml::location)override{}
+					void on_children_parse_finished(treeml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -247,8 +247,8 @@ tst::set set1("parser_flags", [](auto& suite){
 						}
 					}
 
-					void on_children_parse_started()override{}
-					void on_children_parse_finished()override{}
+					void on_children_parse_started(treeml::location)override{}
+					void on_children_parse_finished(treeml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -283,8 +283,8 @@ tst::set set1("parser_flags", [](auto& suite){
 						}
 					}
 
-					void on_children_parse_started()override{}
-					void on_children_parse_finished()override{}
+					void on_children_parse_started(treeml::location)override{}
+					void on_children_parse_finished(treeml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -319,8 +319,8 @@ tst::set set1("parser_flags", [](auto& suite){
 						}
 					}
 
-					void on_children_parse_started()override{}
-					void on_children_parse_finished()override{}
+					void on_children_parse_started(treeml::location)override{}
+					void on_children_parse_finished(treeml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -358,8 +358,8 @@ tst::set set1("parser_flags", [](auto& suite){
 						}
 					}
 
-					void on_children_parse_started()override{}
-					void on_children_parse_finished()override{}
+					void on_children_parse_started(treeml::location)override{}
+					void on_children_parse_finished(treeml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -394,8 +394,8 @@ tst::set set1("parser_flags", [](auto& suite){
 						}
 					}
 
-					void on_children_parse_started()override{}
-					void on_children_parse_finished()override{}
+					void on_children_parse_started(treeml::location)override{}
+					void on_children_parse_finished(treeml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -448,8 +448,8 @@ tst::set set2("parser_location", [](auto& suite){
 						}
 					}
 
-					void on_children_parse_started()override{}
-					void on_children_parse_finished()override{}
+					void on_children_parse_started(treeml::location)override{}
+					void on_children_parse_finished(treeml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(std::get<0>(p), l);

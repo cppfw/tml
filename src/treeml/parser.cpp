@@ -82,12 +82,12 @@ void parser::process_char_in_idle(char c, listener& listener){
 			ASSERT(this->buf.empty())
 			this->set_string_start_pos();
 			this->handle_string_parsed(listener); // report empty string
-			listener.on_children_parse_started();
+			listener.on_children_parse_started(this->cur_loc);
 			++this->nesting_level;
 			this->cur_state = state::initial;
 			break;
 		case '}':
-			listener.on_children_parse_finished();
+			listener.on_children_parse_finished(this->cur_loc);
 			--this->nesting_level;
 			this->cur_state = state::idle; // this is needed because some other states forward processing to 'process_char_in_idle()'
 			this->info.flags.clear(flag::space);
@@ -125,7 +125,7 @@ void parser::process_char_in_string_parsed(char c, listener& listener){
 			this->cur_state = state::comment_seqence;
 			break;
 		case '{':
-			listener.on_children_parse_started();
+			listener.on_children_parse_started(this->cur_loc);
 			this->cur_state = state::initial;
 			++this->nesting_level;
 			this->info.flags.clear(treeml::flag::space);
@@ -174,14 +174,14 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			ASSERT(this->buf.size() != 0)
 			this->handle_string_parsed(listener);
 			this->cur_state = state::initial;
-			listener.on_children_parse_started();
+			listener.on_children_parse_started(this->cur_loc);
 			++this->nesting_level;
 			break;
 		case '}':
 			ASSERT(this->buf.size() != 0)
 			this->handle_string_parsed(listener);
 			this->cur_state = state::idle;
-			listener.on_children_parse_finished();
+			listener.on_children_parse_finished(this->cur_loc);
 			--this->nesting_level;
 			break;
 		default:
@@ -258,7 +258,7 @@ void parser::process_char_in_comment_sequence(char c, listener& listener){
 			}
 			this->buf.push_back('/');
 			this->handle_string_parsed(listener);
-			listener.on_children_parse_started();
+			listener.on_children_parse_started(this->cur_loc);
 			++this->nesting_level;
 			this->cur_state = state::initial;
 			break;

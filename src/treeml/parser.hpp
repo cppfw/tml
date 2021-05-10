@@ -58,13 +58,13 @@ public:
 	 * @brief Children list parsing started.
 	 * This method is called by Parser when '{' token has been parsed.
      */
-	virtual void on_children_parse_started() = 0;
+	virtual void on_children_parse_started(location loc) = 0;
 
 	/**
 	 * @brief Children list parsing finished.
 	 * This method is called by Parser when '}' token has been parsed.
      */
-	virtual void on_children_parse_finished() = 0;
+	virtual void on_children_parse_finished(location loc) = 0;
 
 	virtual ~listener()noexcept{}
 };

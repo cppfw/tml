@@ -14,13 +14,18 @@ forest_ext treeml::read_ext(const papki::file& fi){
 	public:
 		forest_ext cur_forest;
 
-		void on_children_parse_started()override{
+		void on_children_parse_started(location loc)override{
 			this->stack.push(std::move(this->cur_forest));
             ASSERT(this->cur_forest.size() == 0)
 		}
 
-        void on_children_parse_finished()override{
-            ASSERT(this->stack.size() != 0)
+        void on_children_parse_finished(location loc)override{
+            if(this->stack.size() == 0){
+				std::stringstream ss;
+				ss << "malformed treeml: unopened curly brace encountered at ";
+				ss << loc.line << ":" << loc.offset;
+				throw std::invalid_argument(ss.str());
+			}
             this->stack.top().back().children = std::move(this->cur_forest);
             this->cur_forest = std::move(this->stack.top());
             this->stack.pop();
