@@ -3,6 +3,8 @@ include prorab-test.mk
 
 $(eval $(call prorab-config, ../../config))
 
+this_no_install := true
+
 this_name := tests
 
 this_srcs := $(call prorab-src-dir, src)
