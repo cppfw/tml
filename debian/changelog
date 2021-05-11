@@ -1,3 +1,9 @@
+libtreeml (0.1.47) unstable; urgency=medium
+
+  * do not install test app
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 11 May 2021 16:04:50 +0300
+
 libtreeml (0.1.46) unstable; urgency=medium
 
   * add graceful error reporting in case of unopened curly brace
