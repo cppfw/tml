@@ -1,3 +1,9 @@
+libtreeml (0.1.48) unstable; urgency=medium
+
+  * relink to latest utki
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 30 May 2021 01:31:11 +0300
+
 libtreeml (0.1.47) unstable; urgency=medium
 
   * do not install test app
