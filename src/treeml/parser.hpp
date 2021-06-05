@@ -151,12 +151,12 @@ public:
      * @param chunk - data chunk to parse.
      * @param listener - listener object which will receive notifications about parsed tokens.
      */
-	void parse_data_chunk(utki::span<const std::uint8_t> chunk, listener& listener);
+	void parse_data_chunk(utki::span<const char> chunk, listener& listener);
 
-	void parse_data_chunk(std::string_view chunk, listener& listener){
+	void parse_data_chunk(utki::span<const uint8_t> chunk, listener& listener){
 		this->parse_data_chunk(
 				utki::make_span(
-						reinterpret_cast<const uint8_t*>(chunk.data()),
+						reinterpret_cast<const char*>(chunk.data()),
 						chunk.size()
 					),
 				listener
@@ -181,4 +181,3 @@ public:
 void parse(const papki::file& fi, listener& listener);
 
 }
-

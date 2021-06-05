@@ -42,7 +42,7 @@ forest_ext treeml::read_ext(const papki::file& fi){
 }
 
 forest_ext treeml::read_ext(const std::string& str){
-	const papki::span_file fi(utki::make_span(reinterpret_cast<const std::uint8_t*>(str.data()), str.size()));
+	const papki::span_file fi(utki::make_span(reinterpret_cast<const uint8_t*>(str.data()), str.size()));
 
 	return read_ext(fi);
 }

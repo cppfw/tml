@@ -46,7 +46,7 @@ forest treeml::read(const papki::file& fi){
 }
 
 forest treeml::read(const std::string& str){
-	const papki::span_file fi(utki::make_span(reinterpret_cast<const std::uint8_t*>(str.data()), str.size()));
+	const papki::span_file fi(utki::make_span(reinterpret_cast<const uint8_t*>(str.data()), str.size()));
 
 	return read(fi);
 }
@@ -85,8 +85,8 @@ bool can_string_be_unquoted(const char* s, size_t& out_length, unsigned& out_num
 	return ret;
 }
 
-void make_escaped_string(const char* str, utki::span<std::uint8_t> out){
-	std::uint8_t *p = out.begin();
+void make_escaped_string(const char* str, utki::span<uint8_t> out){
+	uint8_t *p = out.begin();
 	for(const char* c = str; *c != 0; ++c){
 		ASSERT(p != out.end())
 
@@ -130,12 +130,12 @@ void make_escaped_string(const char* str, utki::span<std::uint8_t> out){
 }
 
 void write_internal(const treeml::forest& roots, papki::file& fi, formatting fmt, unsigned indentation){
-    const std::array<std::uint8_t, 1> quote = {{'"'}};
-	const std::array<std::uint8_t, 1> lcurly = {{'{'}};
-	const std::array<std::uint8_t, 1> rcurly = {{'}'}};
-	const std::array<std::uint8_t, 1> space = {{' '}};
-	const std::array<std::uint8_t, 1> tab = {{'\t'}};
-	const std::array<std::uint8_t, 1> newLine = {{'\n'}};
+    const std::array<uint8_t, 1> quote = {{'"'}};
+	const std::array<uint8_t, 1> lcurly = {{'{'}};
+	const std::array<uint8_t, 1> rcurly = {{'}'}};
+	const std::array<uint8_t, 1> space = {{' '}};
+	const std::array<uint8_t, 1> tab = {{'\t'}};
+	const std::array<uint8_t, 1> newLine = {{'\n'}};
 
 	// used to detect case of two adjacent unquoted strings without children, need to insert space between them
 	bool prev_was_unquoted_without_children = false;

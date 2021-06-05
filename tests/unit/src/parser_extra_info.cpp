@@ -5,7 +5,7 @@
 
 namespace{
 tst::set set1("parser_flags", [](auto& suite){
-	suite.template add<const char*>(
+	suite.template add<std::string_view>(
 			"flag_space_should_be_false",
 			{
 				"hello",
@@ -62,7 +62,7 @@ tst::set set1("parser_flags", [](auto& suite){
 			}
 		);
 	
-	suite.template add<const char*>(
+	suite.template add<std::string_view>(
 			"flag_space_should_be_true",
 			{
 				"pre hello",
@@ -128,7 +128,7 @@ tst::set set1("parser_flags", [](auto& suite){
 			}
 		);
 	
-	suite.template add<const char*>(
+	suite.template add<std::string_view>(
 			"flag_quoted_should_be_false",
 			{
 				"hello",
@@ -167,7 +167,7 @@ tst::set set1("parser_flags", [](auto& suite){
 			}
 		);
 	
-	suite.template add<const char*>(
+	suite.template add<std::string_view>(
 			"flag_quoted_should_be_true",
 			{
 				"\"hello\"",
@@ -208,7 +208,7 @@ tst::set set1("parser_flags", [](auto& suite){
 			}
 		);
 
-	suite.template add<const char*>(
+	suite.template add<std::string_view>(
 			"flag_cpp_raw_should_be_false",
 			{
 				"\"hello\"",
@@ -258,7 +258,7 @@ tst::set set1("parser_flags", [](auto& suite){
 			}
 		);
 	
-	suite.template add<const char*>(
+	suite.template add<std::string_view>(
 			"flag_cpp_raw_should_be_true",
 			{
 				"R\"qwe(hello)qwe\"",
@@ -294,7 +294,7 @@ tst::set set1("parser_flags", [](auto& suite){
 			}
 		);
 	
-	suite.template add<const char*>(
+	suite.template add<std::string_view>(
 			"raw_cpp_and_quoted_flags_should_be_false_for_r",
 			{
 				"R\"hello\"",
@@ -330,7 +330,7 @@ tst::set set1("parser_flags", [](auto& suite){
 			}
 		);
 	
-	suite.template add<const char*>(
+	suite.template add<std::string_view>(
 			"space_flag_should_be_false_for_r",
 			{
 				"R\"hello\"",
@@ -369,7 +369,7 @@ tst::set set1("parser_flags", [](auto& suite){
 			}
 		);
 	
-	suite.template add<const char*>(
+	suite.template add<std::string_view>(
 			"space_flag_should_be_true_for_r",
 			{
 				"pre R\"hello\"",
@@ -409,7 +409,7 @@ tst::set set1("parser_flags", [](auto& suite){
 
 namespace{
 tst::set set2("parser_location", [](auto& suite){
-	suite.template add<std::tuple<const char*, size_t, size_t>>(
+	suite.template add<std::tuple<std::string_view, size_t, size_t>>(
 			"location",
 			{
 				{"hello", 1, 1},

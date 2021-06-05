@@ -511,7 +511,7 @@ void parser::process_char(char c, listener& listener){
 	}
 }
 
-void parser::parse_data_chunk(utki::span<const uint8_t> chunk, listener& listener){
+void parser::parse_data_chunk(utki::span<const char> chunk, listener& listener){
 	for(auto c : chunk){
 		if(c == '\n'){
 			this->next_line();
@@ -540,7 +540,7 @@ void treeml::parse(const papki::file& fi, listener& listener){
 
 	treeml::parser parser;
 
-	std::array<std::uint8_t, file_read_chunk_size> buf; // 2kb read buffer.
+	std::array<uint8_t, file_read_chunk_size> buf; // 2kb read buffer.
 
 	size_t bytesRead;
 
