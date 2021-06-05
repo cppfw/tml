@@ -23,15 +23,18 @@ AnotherStringObject
 
 		Property1 {Value1}
 		"Property two" {"Value 2"}
-		//comment
+		// comment
 
 		/* multi line
 		   comment */
 
 		"Escape sequences \" \n \r \t \\ \/"
 
-		//raw string
+		// C++-style raw string
 		R"qwerty(raw string content " """ { } \ / )qwerty"
+		
+		// python-style raw string
+		"""bla bla {} "" and "quoted" bla bla"""
 	}
 }
 ```
