@@ -1,5 +1,5 @@
 **treeml** is a minimalistic general purpose markup language, proposed by Ivan Gagis in July 2012.
-The name **treeml** just means _tree_ in Finnish. **treeml** allows describing of string hierarchies.
+**treeml** allows describing of string hierarchies.
 
 # Syntax
 treeml syntax is very simple and intentionally kept minimalistic.
