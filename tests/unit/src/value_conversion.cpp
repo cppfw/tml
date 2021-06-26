@@ -33,7 +33,7 @@ template <> uint64_t to_test_type<uint64_t>(const treeml::leaf& l){
 namespace{
 template <class test_type>
 void test_int(tst::suite& suite, const std::string& test_name){
-	suite.template add<sample_template<test_type>>(
+	suite.add<sample_template<test_type>>(
 			test_name,
 			{
 				{treeml::leaf(int8_t(-13)), "-13", test_type(-13)},
@@ -64,7 +64,7 @@ void test_int(tst::suite& suite, const std::string& test_name){
 namespace{
 template <class test_type>
 void test_uint(tst::suite& suite, const std::string& test_name){
-	suite.template add<sample_template<test_type>>(
+	suite.add<sample_template<test_type>>(
 			test_name,
 			{
 				{treeml::leaf(uint8_t(0x8d)), "141", test_type(0x8d)},
@@ -110,15 +110,15 @@ void test_uint(tst::suite& suite, const std::string& test_name){
 				if(p.expected_string.length() != 0){
 					tst::check_eq(p.leaf.to_string(), p.expected_string, SL);
 				}
-				tst::check_eq(value, p.expected_value, SL) << "to_string() = " << p.leaf.to_string();
+				tst::check_eq(value, p.expected_value, SL) << " to_string() = " << p.leaf.to_string();
 			}
 		);
 }
 }
 
 namespace{
-tst::set set0("value_conversion", [](auto& suite){
-	suite.template add<sample_template<bool>>(
+tst::set set0("value_conversion", [](tst::suite& suite){
+	suite.add<sample_template<bool>>(
 			"convert_to_bool",
 			{
 				{treeml::leaf(true), "true", true},
@@ -140,7 +140,7 @@ tst::set set0("value_conversion", [](auto& suite){
 	test_uint<uint32_t>(suite, "convert_to_uint32_t");
 	test_uint<uint64_t>(suite, "convert_to_uint64_t");
 
-	suite.template add<float>(
+	suite.add<float>(
 			"convert_to_float",
 			{
 				3.14f,
@@ -154,7 +154,7 @@ tst::set set0("value_conversion", [](auto& suite){
 			}
 		);
 	
-	suite.template add<double>(
+	suite.add<double>(
 			"convert_to_double",
 			{
 				3.14,
@@ -168,7 +168,7 @@ tst::set set0("value_conversion", [](auto& suite){
 			}
 		);
 	
-	suite.template add<long double>(
+	suite.add<long double>(
 			"convert_to_long_double",
 			{
 				3.14l,
@@ -182,7 +182,7 @@ tst::set set0("value_conversion", [](auto& suite){
 			}
 		);
 	
-	suite.template add<std::pair<std::string, std::string>>(
+	suite.add<std::pair<std::string, std::string>>(
 			"convert_tree_to_string",
 			{
 				{"a{b{c}}d{e}f", "a{b{c}}"},
@@ -194,7 +194,7 @@ tst::set set0("value_conversion", [](auto& suite){
 			}
 		);
 	
-	suite.template add<std::pair<std::string, std::string>>(
+	suite.add<std::pair<std::string, std::string>>(
 			"convert_forest_to_string",
 			{
 				{"a{b{c}}d{e}f", "a{b{c}}d{e}f"},

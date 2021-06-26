@@ -1,6 +1,7 @@
 #pragma once
 
 #include <utki/tree.hpp>
+#include <utki/string.hpp>
 
 #include <papki/file.hpp>
 
@@ -10,8 +11,9 @@
 namespace treeml{
 
 enum class base{
-    dec,
+    bin,
     oct,
+    dec,
     hex
 };
 
@@ -99,27 +101,38 @@ public:
 
     bool to_bool()const;
 
+    template <typename number_type>
+    std::enable_if_t<std::is_arithmetic_v<number_type>, number_type> to()const{
+        return utki::string_parser(this->string).read_number<number_type>();
+    }
+
     int32_t to_int32()const{
-        return int32_t(std::stoi(this->string, nullptr, 0));
+        return utki::string_parser(this->string).read_number<int32_t>();
     }
     uint32_t to_uint32()const{
+        // TODO:
+        // return utki::string_parser(this->string).read_number<uint32_t>();
         return uint32_t(std::stoul(this->string, nullptr, 0));
     }
 
     int64_t to_int64()const{
-        return int64_t(std::stoll(this->string, nullptr, 0));
+        return utki::string_parser(this->string).read_number<int64_t>();
     }
     uint64_t to_uint64()const{
+        // TODO:
+        // return utki::string_parser(this->string).read_number<uint64_t>();
         return uint64_t(std::stoull(this->string, nullptr, 0));
     }
 
     float to_float()const{
-        return std::stof(this->string);
+        return utki::string_parser(this->string).read_number<float>();
     }
     double to_double()const{
-        return std::stod(this->string);
+        return utki::string_parser(this->string).read_number<double>();
     }
     long double to_long_double()const{
+        // TODO:
+        // return utki::string_parser(this->string).read_number<long double>();
         return std::stold(this->string);
     }
 

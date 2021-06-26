@@ -143,14 +143,14 @@ void write_internal(const treeml::forest& roots, papki::file& fi, formatting fmt
 	bool prev_had_children = true;
 
 	for(auto& n : roots){
-		//indent
+		// indent
 		if(fmt == formatting::normal){
 			for(unsigned i = 0; i != indentation; ++i){
 				fi.write(utki::make_span(tab));
 			}
 		}
 
-		//write node value
+		// write node value
 
 //		TRACE(<< "writing node: " << n.value.c_str() << std::endl)
 
@@ -257,18 +257,70 @@ leaf::leaf(bool value) :
 		string(value ? "true" : "false")
 {}
 
+namespace{
+int to_int(base conversion_base){
+	switch(conversion_base){
+		case base::bin:
+			return 2;
+		case base::oct:
+			return 8;
+		default:
+			[[fallthrough]];
+		case base::dec:
+			return 10;
+		case base::hex:
+			return 16;
+	}
+}
+}
+
+namespace{
+template <typename number_type>
+std::string to_string(number_type value, base conversion_base = base::dec){
+	std::array<char, 64> buf; // 64 chars is large enough to hold any built-in integral or floating point type
+	auto begin_ptr = buf.data();
+	auto end_ptr = buf.data() + buf.size();
+
+	if constexpr (std::is_unsigned_v<number_type>){
+		switch(conversion_base){
+			case base::bin:
+				buf[0] = '0';
+				buf[1] = 'b';
+				begin_ptr += 2;
+				break;
+			case base::oct:
+				buf[0] = '0';
+				++begin_ptr;
+				break;
+			case base::hex:
+				buf[0] = '0';
+				buf[1] = 'x';
+				begin_ptr += 2;
+				break;
+			default:
+				break;
+		}
+	}
+
+	auto res = std::to_chars(
+			begin_ptr,
+			end_ptr,
+			value,
+			to_int(conversion_base)
+		);
+
+	if(res.ec != std::errc()){
+		return std::string();
+	}
+
+	ASSERT(res.ptr <= end_ptr)
+
+	return std::string(buf.data(), res.ptr - buf.data());
+}
+}
+
 leaf::leaf(int value) :
-		string([](int value) -> std::string{
-			// TRACE(<< "leaf::leaf(int): value = " << value << std::endl)
-			char buf[64];
-
-			int res = snprintf(buf, sizeof(buf), "%d", value);
-
-			if(0 <= res && res <= int(sizeof(buf))){
-				return std::string(buf, res);
-			}
-			return std::string();
-		}(value))
+		string(::to_string(value))
 {}
 
 leaf::leaf(unsigned char value, base conversion_base) :
@@ -280,119 +332,28 @@ leaf::leaf(unsigned short int value, base conversion_base) :
 {}
 
 leaf::leaf(unsigned int value, base conversion_base) :
-		string([](unsigned int value, base conversion_base) -> std::string{
-			// TRACE(<< "leaf::leaf(uint): value = " << value <<", base = " << int(conversion_base) << std::endl)
-			char buf[64];
-
-			const char* format;
-			switch(conversion_base){
-				case base::oct:
-					format = "0%o";
-					break;
-				case base::hex:
-					format = "0x%x";
-					break;
-				default:
-				case base::dec:
-					format = "%u";
-					break;
-			}
-
-			int res = snprintf(buf, sizeof(buf), format, value);
-
-			if(0 <= res && res <= int(sizeof(buf))){
-				return std::string(buf, res);
-			}
-			return std::string();
-		}(value, conversion_base))
+		string(::to_string(value, conversion_base))
 {}
 
 leaf::leaf(signed long int value) :
-		string([](long int value) -> std::string{
-			// TRACE(<< "leaf::leaf(long int): value = " << value << std::endl)
-			char buf[64];
-
-			int res = snprintf(buf, sizeof(buf), "%ld", value);
-
-			if(0 <= res && res <= int(sizeof(buf))){
-				return std::string(buf, res);
-			}
-			return std::string();
-		}(value))
+		string(::to_string(value))
 {}
 
 leaf::leaf(unsigned long int value, base conversion_base) :
-		string([](unsigned long int value, base conversion_base) -> std::string{
-			// TRACE(<< "leaf::leaf(ulong): value = " << value << ", base = " << int(conversion_base) << std::endl)
-			char buf[64];
-
-			const char* format;
-			switch(conversion_base){
-				case base::oct:
-					format = "0%lo";
-					break;
-				case base::hex:
-					format = "0x%lx";
-					break;
-				default:
-				case base::dec:
-					format = "%lu";
-					break;
-			}
-
-			int res = snprintf(buf, sizeof(buf), format, value);
-
-			if(0 <= res && res <= int(sizeof(buf))){
-				return std::string(buf, res);
-			}
-			return std::string();
-		}(value, conversion_base))
+		string(::to_string(value, conversion_base))
 {}
 
 leaf::leaf(signed long long int value) :
-		string([](long long int value) -> std::string{
-			// TRACE(<< "leaf::leaf(long long): value = " << value << std::endl)
-			char buf[64];
-
-			int res = snprintf(buf, sizeof(buf), "%lld", value);
-
-			if(0 <= res && res <= int(sizeof(buf))){
-				return std::string(buf, res);
-			}
-			return std::string();
-		}(value))
+		string(::to_string(value))
 {}
 
 leaf::leaf(unsigned long long int value, base conversion_base) :
-		string([](unsigned long long int value, base conversion_base) -> std::string{
-			// TRACE(<< "leaf::leaf(u long long): value = " << value << ", base = " << int(conversion_base) << std::endl)
-			char buf[64];
-
-			const char* format;
-			switch(conversion_base){
-				case base::oct:
-					format = "0%llo";
-					break;
-				case base::hex:
-					format = "0x%llx";
-					break;
-				default:
-				case base::dec:
-					format = "%llu";
-					break;
-			}
-
-			int res = snprintf(buf, sizeof(buf), format, value);
-
-			if(0 <= res && res <= int(sizeof(buf))){
-				return std::string(buf, res);
-			}
-			return std::string();
-		}(value, conversion_base))
+		string(::to_string(value, conversion_base))
 {}
 
 leaf::leaf(float value) :
 		string([](float value) -> std::string{
+			// TODO: use ::to_string<float>() when to_chars<float>() becomes available
 			char buf[64];
 
 			int res = snprintf(buf, sizeof(buf), "%.8G", double(value));
@@ -407,6 +368,7 @@ leaf::leaf(float value) :
 
 leaf::leaf(double value) :
 		string([](double value) -> std::string{
+			// TODO: use ::to_string<double>() when to_chars<double>() becomes available
 			char buf[64];
 
 			int res = snprintf(buf, sizeof(buf), "%.17G", value);
@@ -421,6 +383,7 @@ leaf::leaf(double value) :
 
 leaf::leaf(long double value) :
 		string([](long double value) -> std::string{
+			// TODO: use ::to_string<long double>() when to_chars<long double>() becomes available
 			char buf[128];
 
 			int res = snprintf(buf, sizeof(buf), "%.31LG", value);
