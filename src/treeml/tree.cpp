@@ -277,7 +277,7 @@ int to_int(base conversion_base){
 namespace{
 template <typename number_type>
 std::string to_string(number_type value, base conversion_base = base::dec){
-	std::array<char, 64> buf; // 64 chars is large enough to hold any built-in integral or floating point type
+	std::array<char, 128> buf; // 128 chars is large enough to hold any built-in integral or floating point type
 	auto begin_ptr = buf.data();
 	auto end_ptr = buf.data() + buf.size();
 
