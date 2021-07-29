@@ -1,3 +1,11 @@
+libtreeml (0.2.0) UNRELEASED; urgency=medium
+
+  * add unicode escape sequence
+  * add escape sequences to unquoted strings
+  * forbid comments inside of unquoted strings
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 29 Jul 2021 17:59:09 +0300
+
 libtreeml (0.1.50) unstable; urgency=medium
 
   * deploy to own repo
