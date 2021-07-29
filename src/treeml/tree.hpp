@@ -110,18 +110,14 @@ public:
         return utki::string_parser(this->string).read_number<int32_t>();
     }
     uint32_t to_uint32()const{
-        // TODO:
-        // return utki::string_parser(this->string).read_number<uint32_t>();
-        return uint32_t(std::stoul(this->string, nullptr, 0));
+        return utki::string_parser(this->string).read_number<uint32_t>();
     }
 
     int64_t to_int64()const{
         return utki::string_parser(this->string).read_number<int64_t>();
     }
     uint64_t to_uint64()const{
-        // TODO:
-        // return utki::string_parser(this->string).read_number<uint64_t>();
-        return uint64_t(std::stoull(this->string, nullptr, 0));
+        return utki::string_parser(this->string).read_number<uint64_t>();
     }
 
     float to_float()const{
@@ -131,9 +127,7 @@ public:
         return utki::string_parser(this->string).read_number<double>();
     }
     long double to_long_double()const{
-        // TODO:
-        // return utki::string_parser(this->string).read_number<long double>();
-        return std::stold(this->string);
+        return utki::string_parser(this->string).read_number<long double>();
     }
 
 	friend std::ostream& operator<<(std::ostream& o, const leaf& l){

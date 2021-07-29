@@ -171,7 +171,7 @@ tst::set set0("value_conversion", [](tst::suite& suite){
 	suite.add<long double>(
 			"convert_to_long_double",
 			{
-				3.14l,
+				3.140000000000000000095409791179,
 				13.0l,
 				-0.0l,
 				0.0l
