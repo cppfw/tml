@@ -102,6 +102,11 @@ void parser::process_char_in_idle(char c, listener& listener){
 			this->previous_state = state::idle;
 			this->cur_state = state::comment_seqence;
 			break;
+		case '\\':
+			this->set_string_start_pos();
+			this->previous_state = state::unquoted_string;
+			this->cur_state = state::escape_sequence;
+			break;
 		default:
 			this->buf.push_back(c);
 			this->set_string_start_pos();
@@ -166,6 +171,10 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			this->handle_string_parsed(listener);
 			this->cur_state = state::idle;
 			break;
+		case '\\':
+			this->previous_state = this->cur_state;
+			this->cur_state = state::escape_sequence;
+			break;
 		case '{':
 			ASSERT(this->buf.size() != 0)
 			this->handle_string_parsed(listener);
@@ -194,6 +203,7 @@ void parser::process_char_in_quoted_string(char c, listener& listener){
 			this->cur_state = state::string_parsed;
 			break;
 		case '\\':
+			this->previous_state = this->cur_state;
 			this->cur_state = state::escape_sequence;
 			break;
 		case '\n':
@@ -208,13 +218,7 @@ void parser::process_char_in_quoted_string(char c, listener& listener){
 
 void parser::process_char_in_escape_sequence(char c, listener& listener){
 	ASSERT(this->cur_state == state::escape_sequence)
-	switch (c) {
-		case '"':
-			this->buf.push_back('"');
-			break;
-		case '\\':
-			this->buf.push_back('\\');
-			break;
+	switch(c){
 		case 'r':
 			this->buf.push_back('\r');
 			break;
@@ -224,12 +228,21 @@ void parser::process_char_in_escape_sequence(char c, listener& listener){
 		case 't':
 			this->buf.push_back('\t');
 			break;
+		case '\n':
+			break;
+		case ' ':
+		case '"':
+		case '\\':
+		case '{':
+		case '}':
+			this->buf.push_back(c);
+			break;
 		default:
 			this->buf.push_back('\\');
 			this->buf.push_back(c);
 			break;
 	}
-	this->cur_state = state::quoted_string;
+	this->cur_state = this->previous_state;
 }
 
 void parser::process_char_in_comment_sequence(char c, listener& listener){

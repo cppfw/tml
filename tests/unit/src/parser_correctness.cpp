@@ -138,6 +138,13 @@ tst::set set1("parser_correctness", [](tst::suite& suite){
 
 				// parsing empty document
 				{"", {}},
+
+				// escape sequences
+				{"hello\\ world", {{"hello world"}}},
+				{"hello\\\\ world", {{"hello\\"}, {"world"}}},
+				{"hello\\\nworld", {{"helloworld"}}},
+				{"\\\"hello\\\" \\{world\\}", {{"\"hello\""}, {"{world}"}}},
+				{"hello {\\\"world}", {{"hello", {{"\"world"}} }} },
 			},
 			[](auto& p){
 				auto r = treeml::read(p.first);
