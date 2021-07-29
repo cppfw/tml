@@ -2,8 +2,10 @@
 
 #include <sstream>
 #include <cstring>
+#include <charconv>
 
 #include <utki/debug.hpp>
+#include <utki/unicode.hpp>
 
 using namespace treeml;
 
@@ -219,6 +221,16 @@ void parser::process_char_in_quoted_string(char c, listener& listener){
 void parser::process_char_in_escape_sequence(char c, listener& listener){
 	ASSERT(this->cur_state == state::escape_sequence)
 	switch(c){
+		case 'u':
+			this->cur_state = state::unicode_sequence;
+			this->sequence_index = 0;
+			this->sequence.resize(4);
+			return;
+		case 'U':
+			this->cur_state = state::unicode_sequence;
+			this->sequence_index = 0;
+			this->sequence.resize(8);
+			return;
 		case 'r':
 			this->buf.push_back('\r');
 			break;
@@ -243,6 +255,30 @@ void parser::process_char_in_escape_sequence(char c, listener& listener){
 			break;
 	}
 	this->cur_state = this->previous_state;
+}
+
+void parser::process_char_in_unicode_sequence(char c, listener& listener){
+	ASSERT(this->cur_state == state::unicode_sequence)
+
+	this->sequence[this->sequence_index] = c;
+	++this->sequence_index;
+
+	if(this->sequence_index == this->sequence.size()){
+		uint32_t value = 0;
+		auto res = std::from_chars(this->sequence.data(), this->sequence.data() + this->sequence.size(), value, 16);
+		if(res.ec == std::errc::invalid_argument){
+			throw std::invalid_argument("malformed document: could not parse hexadecimal number of unicode escape sequence");
+		}
+
+		auto bytes = utki::to_utf8(char32_t(value));
+
+		for(auto i = bytes.begin(); *i != '\0' && i != bytes.end(); ++i){
+			this->buf.push_back(*i);
+		}
+		
+		this->cur_state = this->previous_state;
+		this->sequence.clear();
+	}
 }
 
 void parser::process_char_in_comment_sequence(char c, listener& listener){
@@ -346,7 +382,7 @@ void parser::process_char_in_raw_cpp_string_opening_sequence(char c, listener& l
 			}
 			break;
 		case '(':
-			this->sequenece.assign(&*this->buf.begin(), this->buf.size());
+			this->sequence.assign(&*this->buf.begin(), this->buf.size());
 			this->buf.clear();
 			this->cur_state = state::raw_cpp_string;
 			this->info.flags.set(flag::raw);
@@ -374,27 +410,27 @@ void parser::process_char_in_raw_cpp_string_closing_sequence(char c, listener& l
 	ASSERT(this->cur_state == state::raw_cpp_string_closing_sequence)
 	switch(c){
 		case '"':
-			ASSERT(this->sequence_index <= this->sequenece.size())
-			if(this->sequence_index != this->sequenece.size()){
+			ASSERT(this->sequence_index <= this->sequence.size())
+			if(this->sequence_index != this->sequence.size()){
 				this->buf.push_back(')');
 				for(size_t i = 0; i != this->sequence_index; ++i){
-					this->buf.push_back(this->sequenece[i]);
+					this->buf.push_back(this->sequence[i]);
 				}
 				this->cur_state = state::raw_cpp_string;
 			}else{
 				this->handle_string_parsed(listener);
-				this->sequenece.clear();
+				this->sequence.clear();
 				this->cur_state = state::string_parsed;
 			}
 			break;
 		default:
-			ASSERT(this->sequence_index <= this->sequenece.size())
-			if(this->sequence_index == this->sequenece.size()
-					|| c != this->sequenece[this->sequence_index])
+			ASSERT(this->sequence_index <= this->sequence.size())
+			if(this->sequence_index == this->sequence.size()
+					|| c != this->sequence[this->sequence_index])
 			{
 				this->buf.push_back(')');
 				for(size_t i = 0; i != this->sequence_index; ++i){
-					this->buf.push_back(this->sequenece[i]);
+					this->buf.push_back(this->sequence[i]);
 				}
 				this->cur_state = state::raw_cpp_string;
 			}else{
@@ -486,6 +522,9 @@ void parser::process_char(char c, listener& listener){
 			break;
 		case state::escape_sequence:
 			this->process_char_in_escape_sequence(c, listener);
+			break;
+		case state::unicode_sequence:
+			this->process_char_in_unicode_sequence(c, listener);
 			break;
 		case state::comment_seqence:
 			this->process_char_in_comment_sequence(c, listener);

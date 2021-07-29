@@ -145,6 +145,8 @@ tst::set set1("parser_correctness", [](tst::suite& suite){
 				{"hello\\\nworld", {{"helloworld"}}},
 				{"\\\"hello\\\" \\{world\\}", {{"\"hello\""}, {"{world}"}}},
 				{"hello {\\\"world}", {{"hello", {{"\"world"}} }} },
+				{"hello\\u0bf5", {{"hello\u0bf5"}} },
+				{"hello\\U00026218", {{"hello\U00026218"}} }
 			},
 			[](auto& p){
 				auto r = treeml::read(p.first);

@@ -77,7 +77,8 @@ public:
 class parser{
 	std::vector<char> buf; // buffer for current string being parsed
 
-	std::string sequenece; // used for raw string open/close sequences
+	// used for raw string open/close sequences, unicode sequences etc.
+	std::string sequence;
 	size_t sequence_index;
 
 	// This variable is used for tracking current nesting level to make checks for detecting malformed treeml document
@@ -89,6 +90,7 @@ class parser{
 		string_parsed,
 		quoted_string,
 		escape_sequence,
+		unicode_sequence,
 		unquoted_string,
 		comment_seqence,
 		single_line_comment,
@@ -112,6 +114,7 @@ class parser{
 	void process_char_in_unquoted_string(char c, treeml::listener& listener);
 	void process_char_in_quoted_string(char c, treeml::listener& listener);
 	void process_char_in_escape_sequence(char c, treeml::listener& listener);
+	void process_char_in_unicode_sequence(char c, treeml::listener& listener);
 	void process_char_in_comment_sequence(char c, treeml::listener& listener);
 	void process_char_in_single_line_comment(char c, treeml::listener& listener);
 	void process_char_in_multiline_comment(char c, treeml::listener& listener);
