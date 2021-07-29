@@ -10,10 +10,10 @@ multiline comment
 //tralivali
 */
 
-string_interrupted//tro lo lo
+string_interrupted//tro
 _by_comment
 
-string_broken/*tro lo lo*/_by_comment{}
+string_broken/*tro */_by_comment{}
 
 {}
 {{}{}}

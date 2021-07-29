@@ -140,10 +140,6 @@ void parser::process_char_in_string_parsed(char c, listener& listener){
 void parser::process_char_in_unquoted_string(char c, listener& listener){
 	ASSERT(this->cur_state == state::unquoted_string)
 	switch(c){
-		case '/':
-			this->state_after_comment = state::string_parsed;
-			this->cur_state = state::comment_seqence;
-			break;
 		case '"':
 			ASSERT(this->buf.size() != 0)
 			if(this->buf.size() == 1 && this->buf.back() == 'R'){

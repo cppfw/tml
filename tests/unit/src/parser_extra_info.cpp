@@ -8,33 +8,33 @@ tst::set set1("parser_flags", [](auto& suite){
 	suite.template add<std::string_view>(
 			"flag_space_should_be_false",
 			{
-				"hello",
+				"hello", // 0
 				" hello",
 				"hello post",
 				"pre\"hello\"",
 				"\"pre\"hello",
-				"{}hello",
+				"{}hello", // 5
 				" pre {}hello", // space between string and children list does not count
 				" pre {\n}hello",
 				" pre {child}hello",
 				" pre {child }hello",
-				"pre{child1 child2}hello post",
+				"pre{child1 child2}hello post", // 10
 				"R\"qwe(raw string)qwe\"hello",
 				"R\"qwe(hello)qwe\"",
 				"pre {}R\"qwe(hello)qwe\"",
 				"pre{hello child2}",
-				"pre{ hello child2}",
+				"pre{ hello child2}", // 15
 				"{hello child2}",
 				"{} {hello child2}",
 				"pre{hello child2}",
 				"pre {hello child2}",
-				"pre /{hello child2}",
+				"pre /{hello child2}", // 20
 				"{ hello child2}",
 				"{} { hello child2}",
 				"pre{ hello child2}",
 				"pre { hello child2}",
-				"pre /{ hello child2}",
-				"pre/*bla bla*/hello",
+				"pre /{ hello child2}", // 25
+				"pre{}/*bla bla*/hello",
 				"pre/*bla bla*/\"hello\"",
 				"\"pre\"/*bla bla*/hello",
 				"\"pre\"/*bla bla*/\"hello\"",

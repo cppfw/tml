@@ -6,7 +6,7 @@
 #include "../../../src/treeml/tree.hpp"
 
 namespace{
-tst::set set("tree_reading", [](auto& suite){
+tst::set set("tree_reading", [](tst::suite& suite){
 	suite.add("read", [](){
 		papki::fs_file fi("tree_reading_data/test.tml");
 
@@ -49,7 +49,7 @@ tst::set set("tree_reading", [](auto& suite){
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "string_interrupted", SL) << i->value.to_string();
+		tst::check(i->value == "string_interrupted//tro", SL) << i->value.to_string();
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
@@ -59,12 +59,12 @@ tst::set set("tree_reading", [](auto& suite){
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "string_broken", SL) << i->value.to_string();
+		tst::check(i->value == "string_broken/*tro", SL) << i->value.to_string();
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "_by_comment", SL) << i->value.to_string();
+		tst::check(i->value == "*/_by_comment", SL) << i->value.to_string();
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
