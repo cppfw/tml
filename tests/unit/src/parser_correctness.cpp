@@ -134,9 +134,10 @@ tst::set set1("parser_correctness", [](tst::suite& suite){
 				{"hello//bla bla\n", {{"hello//bla"}, {"bla"}}},
 				{"hello/**/", {{"hello/**/"}}},
 				{"hello/*bla bla*/", {{"hello/*bla"}, {"bla*/"}}},
+				{"url = http://my-site.com/path/index.html (homepage)", {{"url"}, {"="}, {"http://my-site.com/path/index.html"}, {"(homepage)"}}}, // 45
 
 				// parsing empty document
-				{"", {}}, // #45
+				{"", {}},
 			},
 			[](auto& p){
 				auto r = treeml::read(p.first);
