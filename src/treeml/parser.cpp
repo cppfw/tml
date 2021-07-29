@@ -56,7 +56,7 @@ void parser::process_char_in_initial(char c, listener& listener){
 			break;
 		case '/':
 			this->set_string_start_pos();
-			this->state_after_comment = state::initial;
+			this->previous_state = state::initial;
 			this->cur_state = state::comment_seqence;
 			break;
 		case '\0':
@@ -99,7 +99,7 @@ void parser::process_char_in_idle(char c, listener& listener){
 			break;
 		case '/':
 			this->set_string_start_pos();
-			this->state_after_comment = state::idle;
+			this->previous_state = state::idle;
 			this->cur_state = state::comment_seqence;
 			break;
 		default:
@@ -121,7 +121,7 @@ void parser::process_char_in_string_parsed(char c, listener& listener){
 			break;
 		case '/':
 			this->set_string_start_pos();
-			this->state_after_comment = state::string_parsed;
+			this->previous_state = state::string_parsed;
 			this->cur_state = state::comment_seqence;
 			break;
 		case '{':
@@ -279,11 +279,11 @@ void parser::process_char_in_single_line_comment(char c, listener& listener){
 	this->info.flags.set(treeml::flag::space);
 	switch(c){
 		case '\0':
-			this->cur_state = this->state_after_comment;
+			this->cur_state = this->previous_state;
 			this->process_char('\0', listener);
 			break;
 		case '\n':
-			this->cur_state = this->state_after_comment;
+			this->cur_state = this->previous_state;
 			break;
 		default:
 			break;
@@ -302,7 +302,7 @@ void parser::process_char_in_multiline_comment(char c, listener& listener){
 				ASSERT(this->buf.size() == 1)
 				ASSERT(this->buf.back() == '*')
 				this->buf.clear();
-				this->cur_state = this->state_after_comment;
+				this->cur_state = this->previous_state;
 			}
 			break;
 		default:

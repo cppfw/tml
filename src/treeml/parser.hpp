@@ -101,7 +101,7 @@ class parser{
 		raw_python_string,
 	} cur_state;
 
-	state state_after_comment;
+	state previous_state;
 
 	void handle_string_parsed(treeml::listener& listener);
 
