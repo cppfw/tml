@@ -1,3 +1,9 @@
+libtreeml (0.2.1) unstable; urgency=medium
+
+  * use latest make in homebrew formulae
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 11 Aug 2021 14:56:41 +0300
+
 libtreeml (0.2.0) unstable; urgency=medium
 
   * add unicode escape sequence
