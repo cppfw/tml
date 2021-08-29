@@ -1,3 +1,9 @@
+libtreeml (0.2.2) unstable; urgency=medium
+
+  * build for debian bullseye
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 29 Aug 2021 23:40:13 +0300
+
 libtreeml (0.2.1) unstable; urgency=medium
 
   * use latest make in homebrew formulae
