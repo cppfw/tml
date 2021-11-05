@@ -1,3 +1,9 @@
+libtreeml (0.2.3) unstable; urgency=medium
+
+  * xcode: static framework
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 05 Nov 2021 17:56:06 +0200
+
 libtreeml (0.2.2) unstable; urgency=medium
 
   * build for debian bullseye
