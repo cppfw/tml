@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		2C805A292735827900A2475C /* treeml.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = treeml.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C87418027397A4E001B9B17 /* treeml.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = treeml.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		2C805A262735827900A2475C /* Frameworks */ = {
+		2C87417D27397A4E001B9B17 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -21,23 +21,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2C805A1F2735827900A2475C = {
+		2C87417627397A4E001B9B17 = {
 			isa = PBXGroup;
 			children = (
-				2C805A2B2735827900A2475C /* treeml */,
-				2C805A2A2735827900A2475C /* Products */,
+				2C87418227397A4E001B9B17 /* treeml */,
+				2C87418127397A4E001B9B17 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		2C805A2A2735827900A2475C /* Products */ = {
+		2C87418127397A4E001B9B17 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2C805A292735827900A2475C /* treeml.framework */,
+				2C87418027397A4E001B9B17 /* treeml.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		2C805A2B2735827900A2475C /* treeml */ = {
+		2C87418227397A4E001B9B17 /* treeml */ = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -47,7 +47,7 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		2C805A242735827900A2475C /* Headers */ = {
+		2C87417B27397A4E001B9B17 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -57,14 +57,14 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		2C805A282735827900A2475C /* treeml */ = {
+		2C87417F27397A4E001B9B17 /* treeml */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2C805A302735827900A2475C /* Build configuration list for PBXNativeTarget "treeml" */;
+			buildConfigurationList = 2C87418727397A4E001B9B17 /* Build configuration list for PBXNativeTarget "treeml" */;
 			buildPhases = (
-				2C805A242735827900A2475C /* Headers */,
-				2C805A252735827900A2475C /* Sources */,
-				2C805A262735827900A2475C /* Frameworks */,
-				2C805A272735827900A2475C /* Resources */,
+				2C87417B27397A4E001B9B17 /* Headers */,
+				2C87417C27397A4E001B9B17 /* Sources */,
+				2C87417D27397A4E001B9B17 /* Frameworks */,
+				2C87417E27397A4E001B9B17 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -72,24 +72,24 @@
 			);
 			name = treeml;
 			productName = treeml;
-			productReference = 2C805A292735827900A2475C /* treeml.framework */;
+			productReference = 2C87418027397A4E001B9B17 /* treeml.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		2C805A202735827900A2475C /* Project object */ = {
+		2C87417727397A4E001B9B17 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastUpgradeCheck = 1310;
 				TargetAttributes = {
-					2C805A282735827900A2475C = {
+					2C87417F27397A4E001B9B17 = {
 						CreatedOnToolsVersion = 13.1;
 					};
 				};
 			};
-			buildConfigurationList = 2C805A232735827900A2475C /* Build configuration list for PBXProject "treeml" */;
+			buildConfigurationList = 2C87417A27397A4E001B9B17 /* Build configuration list for PBXProject "treeml" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -97,18 +97,18 @@
 				en,
 				Base,
 			);
-			mainGroup = 2C805A1F2735827900A2475C;
-			productRefGroup = 2C805A2A2735827900A2475C /* Products */;
+			mainGroup = 2C87417627397A4E001B9B17;
+			productRefGroup = 2C87418127397A4E001B9B17 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2C805A282735827900A2475C /* treeml */,
+				2C87417F27397A4E001B9B17 /* treeml */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		2C805A272735827900A2475C /* Resources */ = {
+		2C87417E27397A4E001B9B17 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -118,7 +118,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		2C805A252735827900A2475C /* Sources */ = {
+		2C87417C27397A4E001B9B17 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -128,7 +128,7 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		2C805A2E2735827900A2475C /* Debug */ = {
+		2C87418527397A4E001B9B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -190,7 +190,7 @@
 			};
 			name = Debug;
 		};
-		2C805A2F2735827900A2475C /* Release */ = {
+		2C87418627397A4E001B9B17 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -246,7 +246,7 @@
 			};
 			name = Release;
 		};
-		2C805A312735827900A2475C /* Debug */ = {
+		2C87418827397A4E001B9B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -258,7 +258,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -276,7 +276,7 @@
 			};
 			name = Debug;
 		};
-		2C805A322735827900A2475C /* Release */ = {
+		2C87418927397A4E001B9B17 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -288,7 +288,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -309,25 +309,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2C805A232735827900A2475C /* Build configuration list for PBXProject "treeml" */ = {
+		2C87417A27397A4E001B9B17 /* Build configuration list for PBXProject "treeml" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2C805A2E2735827900A2475C /* Debug */,
-				2C805A2F2735827900A2475C /* Release */,
+				2C87418527397A4E001B9B17 /* Debug */,
+				2C87418627397A4E001B9B17 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2C805A302735827900A2475C /* Build configuration list for PBXNativeTarget "treeml" */ = {
+		2C87418727397A4E001B9B17 /* Build configuration list for PBXNativeTarget "treeml" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2C805A312735827900A2475C /* Debug */,
-				2C805A322735827900A2475C /* Release */,
+				2C87418827397A4E001B9B17 /* Debug */,
+				2C87418927397A4E001B9B17 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 2C805A202735827900A2475C /* Project object */;
+	rootObject = 2C87417727397A4E001B9B17 /* Project object */;
 }
