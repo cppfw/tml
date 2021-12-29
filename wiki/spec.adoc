@@ -72,7 +72,7 @@ string_without_spaces
  * beginning of the line
  */
 
-		"Escape sequences inside single double quotes: \" \n \r \t \\ \/"
+		"Escape sequences inside single double quotes: \" \n \t \\ \/"
 
 		// C++-style raw string
 		R"qwerty(raw string content " """ { } \ / )qwerty"
