@@ -43,8 +43,11 @@ Here are the syntax rules:
 = Example
 
 ```
-"a string"
-string_without_spaces
+"quoted string"
+unquoted_string
+string_one string_two "string_three"
+string_four"string five"
+"string six"string_seven
 "string with children"{
 	"child 1"
 	Child2
@@ -52,8 +55,10 @@ string_without_spaces
 		SubChild1
 		"Subchild two"
 
+		// properties can be expressed as string with just one child (property's value)
 		Property1 {Value1}
 		"Property two" {"Value 2"}
+
 		// comment
 
 		/* multi line
@@ -92,7 +97,7 @@ verbatim text
 block"""
 
 		// in order to make the new line at the beginning/ending of
-		// the string to be part of the document, just add an extra one(s):
+		// the raw string to be part of the document, just add an extra one(s):
 """
 
 verbatim text block which has a
