@@ -8,13 +8,13 @@
 
 A lightweight markup language C++ library.
 
-See link:wiki/HomePage.adoc[WiKi] for installation instructions.
+The idea is that the document is just a tree of strings. Each string can have a number of children strings or no children at all, an so on.
 
 document example:
 ```
-"String object"
-AnotherStringObject
-"String with children"{
+"a string"
+string_without_spaces
+"string with children"{
 	"child 1"
 	Child2
 	"child three"{
@@ -28,7 +28,12 @@ AnotherStringObject
 		/* multi line
 		   comment */
 
-		"Escape sequences \" \n \r \t \\ \/"
+		// single line comment should have whitespace
+		// before double slash //, otherwise it is not treated as comment.
+		// This is in order to make possible URLs as unquoted strings:
+		http://website.com/some/url
+
+		"Escape sequences inside single double quotes: \" \n \r \t \\ \/"
 
 		// C++-style raw string
 		R"qwerty(raw string content " """ { } \ / )qwerty"
@@ -38,3 +43,7 @@ AnotherStringObject
 	}
 }
 ```
+
+= Installation and Documentation
+
+See link:wiki/main.adoc[WiKi].

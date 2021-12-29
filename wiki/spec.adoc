@@ -1,0 +1,68 @@
+= treeml syntax specification
+
+treeml syntax is very simple and intentionally kept minimalistic.
+Here are the syntax rules:
+
+. The only type of language element is a string of text.
+  - Unquoted string is a string which does not contain any of the following characters:
+	* space
+	* tabulation
+	* new line
+	* carriage return
+	* left curly brace `{`
+	* right curly brace `}`
+	* double quote `"`
+  - Quoted string is a string which is enclosed in double quotes. The following characters of the quoted string are not part of the document (ignored by parser):
+    * tabulation
+	* new line
+	* carriage return
+  - Quoted string can have the following escape sequences:
+    * `\n` - new line
+    * `\r` - carriage return
+    * `\"` - double quote
+    * `\\` - back slash
+    * `\t` - tabulation
+  - C++-style raw string: `R"<sequence>(The {cpp} raw string)<sequence>"`
+  - Python-style raw string: `"""The Python raw string"""`
+  - If any raw string, C++ or Python-style, starts with a new line character, then this first leading new line character is not a part of the document (ignored by parser). **TODO:** what about end new line with some indentation?
+. String can have arbitrary number of child strings. Those are optionally listed in the curly brackets following the string. If string does not have any children then the curly brackets can be omitted.
+. Parts of a document can be commented. C++ commenting rules apply.
+  - A line of the document can be commented using double slash `//` sequence preceeded by whitespace or at the line beginning. Everything past that sequence and till the end of the line is a comment and is not a part of the ducement (ignored by the parser). Note, that the `//` should be at the line beginning or should have preceeding whitespace, this is in order to make possible URLs (which start with e.g. `http://website.com`) to be unquoted strings.
+  - A multi-line comment is achieved using C-style commenting, i.e. everything between `/\*` and `*/` is ignored
+    by the parser. **TODO:** should there be leading whitespace too for opening `/*`?
+  - Comments are not regarded inside quoted and raw strings.
+
+= Example
+
+```
+"a string"
+string_without_spaces
+"string with children"{
+	"child 1"
+	Child2
+	"child three"{
+		SubChild1
+		"Subchild two"
+
+		Property1 {Value1}
+		"Property two" {"Value 2"}
+		// comment
+
+		/* multi line
+		   comment */
+
+		// single line comment should have whitespace
+		// before double slash //, otherwise it is not treated as comment.
+		// This is in order to make possible URLs as unquoted strings:
+		http://website.com/some/url
+
+		"Escape sequences inside single double quotes: \" \n \r \t \\ \/"
+
+		// C++-style raw string
+		R"qwerty(raw string content " """ { } \ / )qwerty"
+		
+		// python-style raw string
+		"""bla bla {} "" and "quoted" bla bla"""
+	}
+}
+```

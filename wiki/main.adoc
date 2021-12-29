@@ -1,6 +1,10 @@
 = WiKi Home page
 
-== Istallation
+== Specification
+
+link:spec.adoc[treeml specification]
+
+== Installation
 :package_name: treeml
 
 . Setup your OS-preferred package system repo following link:https://github.com/cppfw/wiki/blob/master/EnableRepo.adoc[this manual]
