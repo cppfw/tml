@@ -51,10 +51,18 @@ string_without_spaces
 		/* multi line
 		   comment */
 
-		// single line comment should have whitespace
-		// before double slash //, otherwise it is not treated as comment.
-		// This is in order to make possible URLs as unquoted strings:
-		http://website.com/some/url
+		// comment opening sequence should have preceding whitespace
+		// or be at the beginning of the line.
+		// the following line does not make any comments
+		http://website.com/some/url/*
+
+// comment at the beginning of the line
+
+/*
+ * multiline
+ * comment at the
+ * beginning of the line
+ */
 
 		"Escape sequences inside single double quotes: \" \n \r \t \\ \/"
 
