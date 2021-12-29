@@ -24,12 +24,12 @@ Here are the syntax rules:
     * `\t` - tabulation
   - C++-style raw string: `R"<sequence>(The {cpp} raw string)<sequence>"`
   - Python-style raw string: `"""The Python raw string"""`
-  - If any raw string, C++ or Python-style, starts with a new line character, then this first leading new line character is not a part of the document (ignored by parser). **TODO:** what about end new line with some indentation?
+  - If any raw string, C++ or Python-style, starts or ends with a new line character, then this first leading new line character and/or last trailing new line character is not a part of the document (ignored by parser).
 . String can have arbitrary number of child strings. Those are optionally listed in the curly brackets following the string. If string does not have any children then the curly brackets can be omitted.
 . Parts of a document can be commented. C++ commenting rules apply.
-  - A line of the document can be commented using double slash `//` sequence preceeded by whitespace or at the line beginning. Everything past that sequence and till the end of the line is a comment and is not a part of the ducement (ignored by the parser). Note, that the `//` should be at the line beginning or should have preceeding whitespace, this is in order to make possible URLs (which start with e.g. `http://website.com`) to be unquoted strings.
-  - A multi-line comment is achieved using C-style commenting, i.e. everything between `/\*` and `*/` is ignored
-    by the parser. **TODO:** should there be leading whitespace too for opening `/*`?
+  - single-line comment is opened by a sequence of two forward slashes `//` and is closed by the end of the line.
+  - A multi-line comment is opened by forward slash and asterisk sequence `/\*` and is closed by asterisk and forward slash sequence `*/`.
+  - Comment's opening sequence, for both, single and multi-line comments, should be preceeded by whitespace or be at the beginning of the line. Otherwise it is not recognized as comment opening sequence. This is in order to make possible URLs (e.g. `http://website.com/*`) to be unquoted strings.
   - Comments are not regarded inside quoted and raw strings.
 
 = Example
@@ -63,6 +63,28 @@ string_without_spaces
 		
 		// python-style raw string
 		"""bla bla {} "" and "quoted" bla bla"""
+
+		// the leading and ending new line is ignored in raw strings:
+"""
+multiline
+verbatim text
+block
+"""
+		// is same as
+		"""multiline
+verbatim text
+block"""
+
+		// in order to make the new line at the beginning/ending of
+		// the string to be part of the document, just add an extra one(s):
+"""
+
+verbatim text block which has a
+single new line at its beginning
+and at its ending
+
+"""
+
 	}
 }
 ```
