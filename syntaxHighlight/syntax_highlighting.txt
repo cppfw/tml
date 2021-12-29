@@ -7,7 +7,7 @@ b) The items which should be highlighted with their own configurable font style
 
    2. Strings in double quotes
 
-   3. escaped characters inside "": \" \n \r \t \\ \/
+   3. escaped characters inside "": \" \n \t \\ \/
 
    4. Unquoted strings starting with small letter, highlight only if it has '{' after it ('{' may be on next line).
 

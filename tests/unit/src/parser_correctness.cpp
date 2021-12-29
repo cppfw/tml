@@ -7,7 +7,7 @@ namespace{
 tst::set set1("parser_correctness", [](tst::suite& suite){
 	suite.add<std::pair<const char*, const char*>>(
 			"single_slash_is_parsed_as_node",
-			// the test checks start 5th element is as expected
+			// the test checks that 5th element is as expected
 			{
 				{"a b c d e f g", "f"},
 				{"a b c d e / g", "/"},
@@ -139,14 +139,26 @@ tst::set set1("parser_correctness", [](tst::suite& suite){
 				// parsing empty document
 				{"", {}},
 
-				// escape sequences
+				// unquoted string escape sequences
 				{"hello\\ world", {{"hello world"}}},
 				{"hello\\\\ world", {{"hello\\"}, {"world"}}},
-				{"hello\\\nworld", {{"helloworld"}}},
+				{"hello\\\nworld", {{"hello\\"}, {"world"}}}, // in unquoted string the new line terminates the string
+				{"hello\\nworld", {{"hello\nworld"}}},
+				{"hello\\tworld", {{"hello\tworld"}}},
 				{"\\\"hello\\\" \\{world\\}", {{"\"hello\""}, {"{world}"}}},
 				{"hello {\\\"world}", {{"hello", {{"\"world"}} }} },
 				{"hello\\u0bf5", {{"hello\u0bf5"}} },
-				{"hello\\U00026218", {{"hello\U00026218"}} }
+				{"hello\\U00026218", {{"hello\U00026218"}} },
+
+				// quoted string escape sequences
+				{"\"hello\\ world\"", {{"hello\\ world"}}},
+				{"\"hello\\\nworld\"", {{"hello\\world"}}}, // in quoted strings the new line is ignored
+				{"\"hello\\nworld\"", {{"hello\nworld"}}},
+				{"\"hello\\tworld\"", {{"hello\tworld"}}},
+				{"hello {\"\\\"world\"}", {{"hello", {{"\"world"}} }} },
+				{"\"\\\"hello\\\"\" \"\\{world\\}\"", {{"\"hello\""}, {"\\{world\\}"}}},
+				{"\"hello\\u0bf5\"", {{"hello\u0bf5"}} },
+				{"\"hello\\U00026218\"", {{"hello\U00026218"}} },
 			},
 			[](auto& p){
 				auto r = treeml::read(p.first);

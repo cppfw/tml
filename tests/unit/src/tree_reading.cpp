@@ -141,7 +141,7 @@ tst::set set("tree_reading", [](tst::suite& suite){
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Carriagereturn\r Doublequotes\" {}{}{}{}", SL);
+		tst::check(i->value == "Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Doublequotes\" {}{}{}{}", SL);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;

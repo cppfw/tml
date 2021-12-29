@@ -36,32 +36,8 @@ SOFTWARE.
 
 /**
  * treeml is a very simple markup language. It is used to describe object
- * hierarchies. The only kind of objects present in treeml are Strings.
- * The name of the language comes from "STring OBjects".
+ * hierarchies. The only kind of objects present in treeml are strings.
  * Objects (which are strings) can have arbitrary number of child objects.
- * Example:
- * @code
- * "String object"
- * AnotherStringObject
- * "String with children"{
- *	"child 1"
- *	Child2
- *	"child three"{
- *		SubChild1
- *		"Subchild two"
- *
- *		Property1 {value1}
- *		"Property two" {"value 2"}
- *
- *		//comment
- *
- *		/ * multi line
- *		   comments as in C * /
- *
- *		"Escape sequences \" \n \r \t \\ \/"
- *	}
- * }
- * @endcode
  */
 namespace treeml{
 

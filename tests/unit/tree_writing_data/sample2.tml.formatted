@@ -1,6 +1,6 @@
 "test string"
 Unquoted_String
-"Escapes: \n \r \t \\ \" {}"
+"Escapes: \n \t \\ \" {}"
 "Quoted{String"{
 	""
 	Child2

@@ -46,7 +46,7 @@ string_broken/*tro */_by_comment{}
 //comment blah blah
 
 //Escape sequences
-"Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Carriagereturn\r Doublequotes\" {}{}{}{}"
+"Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Doublequotes\" {}{}{}{}"
 
 
 "quoted string with trailing slash /"

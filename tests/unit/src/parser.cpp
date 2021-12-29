@@ -111,7 +111,7 @@ tst::set set("parser", [](auto& suite){
 
 		l.actions.push_back(T_Pair(CHILDREN_END, ""));
 
-		l.actions.push_back(T_Pair(STRING, "Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Carriagereturn\r Doublequotes\" {}{}{}{}"));
+		l.actions.push_back(T_Pair(STRING, "Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Doublequotes\" {}{}{}{}"));
 
 		l.actions.push_back(T_Pair(STRING, "quoted string with trailing slash /"));
 

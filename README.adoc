@@ -33,7 +33,7 @@ string_without_spaces
 		// This is in order to make possible URLs as unquoted strings:
 		http://website.com/some/url
 
-		"Escape sequences inside single double quotes: \" \n \r \t \\ \/"
+		"Escape sequences inside single double quotes: \" \n \t \\ \/"
 
 		// C++-style raw string
 		R"qwerty(raw string content " """ { } \ / )qwerty"

@@ -3,7 +3,7 @@
 treeml syntax is very simple and intentionally kept minimalistic.
 Here are the syntax rules:
 
-. The only type of language element is a string of text.
+. The only type of language element is a string of text. Strings can be unquoted, quoted, C++-style raw trings, Python-style raw strings.
   - Unquoted string is a string which does not contain any of the following characters:
 	* space
 	* tabulation
@@ -12,16 +12,24 @@ Here are the syntax rules:
 	* left curly brace `{`
 	* right curly brace `}`
 	* double quote `"`
+  - Unquoted string can have the following escape sequences:
+    * space `\<space>`
+	* backslash `\\`
+	* double quote `\"`
+	* curly braces `\{` and `\}`
+	* 4 hex digit unicode symbol `\uXXXX`
+	* 8 hex digit unicode symbol `\UXXXXXXXX`
   - Quoted string is a string which is enclosed in double quotes. The following characters of the quoted string are not part of the document (ignored by parser):
     * tabulation
 	* new line
 	* carriage return
   - Quoted string can have the following escape sequences:
     * `\n` - new line
-    * `\r` - carriage return
     * `\"` - double quote
     * `\\` - back slash
     * `\t` - tabulation
+	* 4 hex digit unicode symbol `\uXXXX`
+	* 8 hex digit unicode symbol `\UXXXXXXXX`
   - C++-style raw string: `R"<sequence>(The {cpp} raw string)<sequence>"`
   - Python-style raw string: `"""The Python raw string"""`
   - If any raw string, C++ or Python-style, starts or ends with a new line character, then this first leading new line character and/or last trailing new line character is not a part of the document (ignored by parser).

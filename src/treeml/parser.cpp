@@ -257,9 +257,6 @@ void parser::process_char_in_escape_sequence(char c, listener& listener){
 			this->sequence_index = 0;
 			this->sequence.resize(8);
 			return;
-		case 'r':
-			this->buf.push_back('\r');
-			break;
 		case 'n':
 			this->buf.push_back('\n');
 			break;
@@ -267,12 +264,23 @@ void parser::process_char_in_escape_sequence(char c, listener& listener){
 			this->buf.push_back('\t');
 			break;
 		case '\n':
+			this->buf.push_back('\\');
+			if(this->previous_state == state::unquoted_string){
+				this->cur_state = state::unquoted_string;
+				this->process_char_in_unquoted_string('\n', listener);
+				return;
+			}
 			break;
-		case ' ':
 		case '"':
 		case '\\':
+			this->buf.push_back(c);
+			break;
+		case ' ':
 		case '{':
 		case '}':
+			if(this->previous_state == state::quoted_string){
+				this->buf.push_back('\\');
+			}
 			this->buf.push_back(c);
 			break;
 		default:

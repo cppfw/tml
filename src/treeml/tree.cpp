@@ -95,7 +95,6 @@ bool can_string_be_unquoted(const char* s, size_t& out_length, unsigned& out_num
 		switch(*s){
 			case '\t':
 			case '\n':
-			case '\r':
 			case '\\':
 			case '"':
 				++out_num_escapes;
@@ -128,12 +127,6 @@ void make_escaped_string(const char* str, utki::span<uint8_t> out){
 				++p;
 				ASSERT(p != out.end())
 				*p = 'n';
-				break;
-			case '\r':
-				*p = '\\';
-				++p;
-				ASSERT(p != out.end())
-				*p = 'r';
 				break;
 			case '\\':
 				*p = '\\';

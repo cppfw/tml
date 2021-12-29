@@ -1,6 +1,6 @@
 ttt"test string" "anot/her string" unqu/otedString
 
-R"qwer(qwdqwdwqd wdqw wq dqw d \n \r \" "  
+R"qwer(qwdqwdwqd wdqw wq dqw d \n \" "  
 	\t } { )qwer"
 
 R"werwe"wer(
@@ -71,7 +71,7 @@ string_broken/*tro lo lo*/by_comment{}
 //comment blah blah
 
 //Escape sequences
-"Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Carriagereturn\r Doublequotes\" {}{}{}{}"
+"Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Doublequotes\" {}{}{}{}"
 
 
 "quoted string with trailing slash /"
