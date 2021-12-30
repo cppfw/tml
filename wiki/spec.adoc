@@ -5,14 +5,14 @@ Here are the syntax rules:
 
 . The only type of language element is a string of text. Strings can be unquoted, quoted, C++-style raw trings, Python-style raw strings.
   - Unquoted string is a string which does not contain any of the following characters:
-	* space
+	* space (except when it is preceeded by `\`, see escape sequences below)
 	* tabulation
 	* new line
 	* carriage return
 	* left curly brace `{`
 	* right curly brace `}`
 	* double quote `"`
-  - Unquoted string can have the following escape sequences:
+  - Unquoted string can contain the following escape sequences:
     * space `\<space>`
 	* backslash `\\`
 	* double quote `\"`
@@ -23,7 +23,7 @@ Here are the syntax rules:
     * tabulation
 	* new line
 	* carriage return
-  - Quoted string can have the following escape sequences:
+  - Quoted string can contain the following escape sequences:
     * `\n` - new line
     * `\"` - double quote
     * `\\` - back slash
