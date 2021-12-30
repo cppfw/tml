@@ -9,9 +9,9 @@ Here are the syntax rules:
 	* tabulation
 	* new line
 	* carriage return
-	* left curly brace `{`
-	* right curly brace `}`
-	* double quote `"`
+	* left curly brace `{` (except when it is preceeded by `\`, see escape sequences below)
+	* right curly brace `}` (except when it is preceeded by `\`, see escape sequences below)
+	* double quote `"` (except when it is preceeded by `\`, see escape sequences below)
   - Unquoted string can contain the following escape sequences:
     * space `\<space>`
 	* backslash `\\`
