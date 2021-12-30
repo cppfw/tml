@@ -1,6 +1,6 @@
 = treeml syntax specification
 
-treeml syntax is very simple and intentionally kept minimalistic.
+treeml markup language's purpose is to describe tree of text strings. The language syntax is very simple and intentionally kept minimalistic.
 Here are the syntax rules:
 
 . The only type of language element is a string of text. Strings can be unquoted, quoted, C++-style raw trings, Python-style raw strings.
@@ -91,7 +91,7 @@ multiline
 verbatim text
 block
 """
-		// is same as
+		// is the same as
 		"""multiline
 verbatim text
 block"""
