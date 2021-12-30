@@ -28,8 +28,8 @@ Here are the syntax rules:
     * `\"` - double quote
     * `\\` - back slash
     * `\t` - tabulation
-	* 4 hex digit unicode symbol `\uXXXX`
-	* 8 hex digit unicode symbol `\UXXXXXXXX`
+	* 4 hex digit unicode value `\uXXXX`
+	* 8 hex digit unicode value `\UXXXXXXXX`
   - C++-style raw string: `R"<sequence>(The {cpp} raw string)<sequence>"`
   - Python-style raw string: `"""The Python raw string"""`
   - If any raw string, C++ or Python-style, starts or ends with a new line character, then this first leading new line character and/or last trailing new line character is not a part of the document (ignored by parser).
