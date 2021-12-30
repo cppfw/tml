@@ -17,8 +17,8 @@ Here are the syntax rules:
 	* backslash `\\`
 	* double quote `\"`
 	* curly braces `\{` and `\}`
-	* 4 hex digit unicode symbol `\uXXXX`
-	* 8 hex digit unicode symbol `\UXXXXXXXX`
+	* 4 hex digit unicode value `\uXXXX`
+	* 8 hex digit unicode value `\UXXXXXXXX`
   - Quoted string is a string which is enclosed in double quotes. The following characters of the quoted string are not part of the document (ignored by parser):
     * tabulation
 	* new line
