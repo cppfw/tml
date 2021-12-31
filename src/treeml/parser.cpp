@@ -108,11 +108,11 @@ void parser::process_char_in_idle(char c, listener& listener){
 			break;
 		case '{':
 			ASSERT(this->buf.empty())
-			this->set_string_start_pos();
-			this->handle_string_parsed(listener); // report empty string
-			listener.on_children_parse_started(this->cur_loc);
-			++this->nesting_level;
-			this->cur_state = state::initial;
+			{
+				std::stringstream ss;
+				ss << "Malformed treeml document fed. Unexpected { at line: " << this->cur_loc.line;
+				throw std::invalid_argument(ss.str()); 
+			}
 			break;
 		case '}':
 			listener.on_children_parse_finished(this->cur_loc);
@@ -301,7 +301,9 @@ void parser::process_char_in_unicode_sequence(char c, listener& listener){
 		uint32_t value = 0;
 		auto res = std::from_chars(this->sequence.data(), this->sequence.data() + this->sequence.size(), value, 16);
 		if(res.ec == std::errc::invalid_argument){
-			throw std::invalid_argument("malformed document: could not parse hexadecimal number of unicode escape sequence");
+			std::stringstream ss;
+			ss << "malformed document: could not parse hexadecimal number of unicode escape sequence at line: " << this->cur_loc.line;
+			throw std::invalid_argument(ss.str());
 		}
 
 		auto bytes = utki::to_utf8(char32_t(value));

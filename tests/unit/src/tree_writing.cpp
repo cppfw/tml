@@ -36,31 +36,30 @@ std::function<void(const std::string&)> make_test_proc(){
 }
 
 namespace{
-tst::set set("tree_writing", [](auto& suite){
-	std::vector<std::string> files = {"sample1.tml", "sample2.tml"};
+tst::set set("tree_writing", [](tst::suite& suite){
+	std::vector<std::string> files;
 
-	// TODO: re-enable when problem in qemu is fixed, see https://bugs.launchpad.net/qemu/+bug/1805913
-	// {
-	// 	const std::regex tml_regex("^.*\\.tml$");
-	// 	auto all_files = papki::fs_file(data_dir).list_dir();
+	{
+		const std::regex tml_regex("^.*\\.tml$");
+		auto all_files = papki::fs_file(data_dir).list_dir();
 
-	// 	std::copy_if(
-	// 			all_files.begin(),
-	// 			all_files.end(),
-	// 			std::back_inserter(files),
-	// 			[&tml_regex](auto& f){
-	// 				return std::regex_match(f, tml_regex);
-	// 			}
-	// 		);
-	// }
+		std::copy_if(
+				all_files.begin(),
+				all_files.end(),
+				std::back_inserter(files),
+				[&tml_regex](auto& f){
+					return std::regex_match(f, tml_regex);
+				}
+			);
+	}
 
-	suite.template add<std::string>(
+	suite.add<std::string>(
 		"write_unformatted",
 		decltype(files)(files),
 		make_test_proc<false>()
 	);
 
-	suite.template add<std::string>(
+	suite.add<std::string>(
 		"write_formatted",
 		decltype(files)(files),
 		make_test_proc<true>()

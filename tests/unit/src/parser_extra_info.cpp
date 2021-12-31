@@ -13,7 +13,7 @@ tst::set set1("parser_flags", [](auto& suite){
 				"hello post",
 				"pre\"hello\"",
 				"\"pre\"hello",
-				"{}hello", // 5
+				"\"\"{}hello", // 5
 				" pre {}hello", // space between string and children list does not count
 				" pre {\n}hello",
 				" pre {child}hello",
@@ -24,13 +24,13 @@ tst::set set1("parser_flags", [](auto& suite){
 				"pre {}R\"qwe(hello)qwe\"",
 				"pre{hello child2}",
 				"pre{ hello child2}", // 15
-				"{hello child2}",
-				"{} {hello child2}",
+				"\"\"{hello child2}",
+				"\"\"{} \"\"{hello child2}",
 				"pre{hello child2}",
 				"pre {hello child2}",
 				"pre /{hello child2}", // 20
-				"{ hello child2}",
-				"{} { hello child2}",
+				"\"\"{ hello child2}",
+				"\"\"{} \"\"{ hello child2}",
 				"pre{ hello child2}",
 				"pre { hello child2}",
 				"pre /{ hello child2}", // 25
@@ -77,9 +77,9 @@ tst::set set1("parser_flags", [](auto& suite){
 				"\"pre\" hello",
 				"\"pre\"\nhello",
 				"\"pre\"\thello",
-				"{} hello",
-				"{}\nhello",
-				"{}\thello",
+				"\"\"{} hello",
+				"\"\"{}\nhello",
+				"\"\"{}\thello",
 				"pre{child1 child2} hello post",
 				"pre{child1 child2}\nhello post",
 				"pre{child1 child2}\thello post",
@@ -370,7 +370,7 @@ tst::set set1("parser_flags", [](auto& suite){
 		);
 	
 	suite.template add<std::string_view>(
-			"space_flag_should_be_true_for_r",
+			"space_flag_should_be_true_for_cpp_raw_string",
 			{
 				"pre R\"hello\"",
 				"pre R\"hello\" ",
@@ -379,8 +379,8 @@ tst::set set1("parser_flags", [](auto& suite){
 				"pre\tR\"hello\"\tpost",
 				"pre{} R\"hello\" post",
 				"pre {\n} R\"hello\" post",
-				"{} R\"hello\" post",
-				"\n{} R\"hello\" post",
+				"\"\"{} R\"hello\" post",
+				"\"\"\n{} R\"hello\" post",
 			},
 			[](const auto& p){
 				treeml::parser parser;

@@ -15,8 +15,8 @@ _by_comment
 
 string_broken/*tro */_by_comment{}
 
-{}
-{{}{}}
+""{}
+""{""{}""{}}
 
 	// /* 
 
@@ -40,7 +40,7 @@ string_broken/*tro */_by_comment{}
 		ccc{
 			"ddd"
 		}
-{}
+""{}
 	}
 
 //comment blah blah
