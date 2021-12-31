@@ -1,3 +1,9 @@
+libtreeml (0.2.5) unstable; urgency=medium
+
+  * change minor language details
+
+ -- Ivan Gagis <igagis@gmail.com>  Fri, 31 Dec 2021 22:19:53 +0200
+
 libtreeml (0.2.4) unstable; urgency=medium
 
   * build for raspbian bullseye
