@@ -165,5 +165,24 @@ tst::set set1("parser_correctness", [](tst::suite& suite){
 				tst::check_eq(r, p.second, SL);
 			}
 		);
+	
+	suite.add<std::string_view>(
+		"malformed_document_should_throw_exception",
+		{
+			"{}",
+			"{",
+			"}",
+			" {qw}",
+			"asdf{{}}",
+			"afd{}{}"
+		},
+		[](const auto& p){
+			try{
+				treeml::read(std::string(p));
+				tst::check(false, SL) << "exception is unexpectedly not thrown";
+			}catch(const std::invalid_argument&){
+			}
+		}
+	);
 });
 }
