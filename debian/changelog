@@ -1,3 +1,9 @@
+libtreeml (0.2.6) unstable; urgency=medium
+
+  * introduce tml namespace
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 13 Feb 2022 01:07:30 +0200
+
 libtreeml (0.2.5) unstable; urgency=medium
 
   * change minor language details
