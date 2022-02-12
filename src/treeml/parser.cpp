@@ -33,7 +33,7 @@ SOFTWARE.
 #include <utki/debug.hpp>
 #include <utki/unicode.hpp>
 
-using namespace treeml;
+using namespace tml;
 
 namespace{
 const size_t file_read_chunk_size = 0x4ff;
@@ -102,7 +102,7 @@ void parser::process_char_in_idle(char c, listener& listener){
 		case ' ':
 		case '\t':
 		case '\r':
-			this->info.flags.set(treeml::flag::space);
+			this->info.flags.set(tml::flag::space);
 			break;
 		case '\0':
 			break;
@@ -150,7 +150,7 @@ void parser::process_char_in_string_parsed(char c, listener& listener){
 		case ' ':
 		case '\r':
 		case '\t':
-			this->info.flags.set(treeml::flag::space);
+			this->info.flags.set(tml::flag::space);
 			break;
 		case '/':
 			this->set_string_start_pos();
@@ -161,7 +161,7 @@ void parser::process_char_in_string_parsed(char c, listener& listener){
 			listener.on_children_parse_started(this->cur_loc);
 			this->cur_state = state::initial;
 			++this->nesting_level;
-			this->info.flags.clear(treeml::flag::space);
+			this->info.flags.clear(tml::flag::space);
 			break;
 		default:
 			this->cur_state = state::idle;
@@ -192,7 +192,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			ASSERT(this->buf.size() != 0)
 			this->handle_string_parsed(listener);
 			this->cur_state = state::string_parsed;
-			this->info.flags.set(treeml::flag::space);
+			this->info.flags.set(tml::flag::space);
 			break;
 		case '\0':
 			ASSERT(this->buf.size() != 0)
@@ -361,7 +361,7 @@ void parser::process_char_in_comment_sequence(char c, listener& listener){
 
 void parser::process_char_in_single_line_comment(char c, listener& listener){
 	ASSERT(this->cur_state == state::single_line_comment)
-	this->info.flags.set(treeml::flag::space);
+	this->info.flags.set(tml::flag::space);
 	switch(c){
 		case '\0':
 			this->cur_state = this->previous_state;
@@ -404,7 +404,7 @@ void parser::process_char_in_raw_cpp_string_opening_sequence(char c, listener& l
 			{
 				char r = 'R';
 				listener.on_string_parsed(std::string_view(&r, 1), this->info);
-				this->info.flags.clear(treeml::flag::space);
+				this->info.flags.clear(tml::flag::space);
 			}
 			++this->info.location.offset;
 
@@ -412,7 +412,7 @@ void parser::process_char_in_raw_cpp_string_opening_sequence(char c, listener& l
 				this->cur_state = state::raw_python_string_opening_sequence;
 				this->sequence_index = 2;
 			}else{
-				this->info.flags.set(treeml::flag::quoted);
+				this->info.flags.set(tml::flag::quoted);
 				this->handle_string_parsed(listener);
 				this->cur_state = state::string_parsed;
 			}
@@ -619,10 +619,10 @@ void parser::end_of_data(listener& listener){
 	this->reset();
 }
 
-void treeml::parse(const papki::file& fi, listener& listener){
+void tml::parse(const papki::file& fi, listener& listener){
 	papki::file::guard file_guard(fi);
 
-	treeml::parser parser;
+	tml::parser parser;
 
 	std::array<uint8_t, file_read_chunk_size> buf; // 2kb read buffer.
 

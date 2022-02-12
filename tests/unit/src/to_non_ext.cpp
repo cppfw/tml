@@ -13,10 +13,10 @@ tst::set set0("to_non_ext", [](auto& suite){
                 "hello{world!{how \"are\" you?}}",
             },
             [](auto& p){
-                auto in = treeml::read_ext(p)[0];
-                auto expected = treeml::read(p)[0];
+                auto in = tml::read_ext(p)[0];
+                auto expected = tml::read(p)[0];
 
-                auto out = treeml::to_non_ext(in);
+                auto out = tml::to_non_ext(in);
 
                 tst::check_eq(out, expected, SL);
             }
@@ -30,10 +30,10 @@ tst::set set0("to_non_ext", [](auto& suite){
                 "hello{world!{how \"are\" you?}} world!{bla{one two three} bla bla}",
             },
             [](auto& p){
-                auto in = treeml::read_ext(p);
-                auto expected = treeml::read(p);
+                auto in = tml::read_ext(p);
+                auto expected = tml::read(p);
 
-                auto out = treeml::to_non_ext(in);
+                auto out = tml::to_non_ext(in);
 
                 tst::check_eq(out, expected, SL);
             }

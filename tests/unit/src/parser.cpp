@@ -16,22 +16,22 @@ enum E_Action{
 }
 
 namespace{
-class Listener : public treeml::listener{
-	void on_children_parse_finished(treeml::location)override{
+class Listener : public tml::listener{
+	void on_children_parse_finished(tml::location)override{
 		// TRACE(<< "}" << std::endl)
 		tst::check(this->actions.size() > 0, SL);
 		tst::check(this->actions.front().first == CHILDREN_END, SL) << "first = " << this->actions.front().first << " second = " << this->actions.front().second;
 		this->actions.pop_front();
 	}
 
-	void on_children_parse_started(treeml::location)override{
+	void on_children_parse_started(tml::location)override{
 		// TRACE(<< "{" << std::endl)
 		tst::check(this->actions.size() > 0, SL);
 		tst::check(this->actions.front().first == CHILDREN_START, SL) << "first = " << this->actions.front().first << " second = " << this->actions.front().second;
 		this->actions.pop_front();
 	}
 
-	void on_string_parsed(std::string_view s, const treeml::extra_info& info)override{
+	void on_string_parsed(std::string_view s, const tml::extra_info& info)override{
 		std::string str(s);
 		// utki::log([&](auto&o){
 		// 	o << "str = " << str;
@@ -125,7 +125,7 @@ tst::set set("parser", [](auto& suite){
 
 		papki::fs_file fi("parser_data/test.tml");
 
-		treeml::parse(fi, l);
+		tml::parse(fi, l);
 
 		tst::check(l.actions.size() == 0, SL);
 	});

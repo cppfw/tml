@@ -17,7 +17,7 @@ tst::set set("snippets", [](auto& suite){
             },
             [](const auto& p){
                 try{
-                    auto r = treeml::read(p);
+                    auto r = tml::read(p);
                     tst::check(false, SL);
                 }catch(std::invalid_argument& e){
                 }catch(...){

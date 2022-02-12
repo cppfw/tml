@@ -39,7 +39,7 @@ SOFTWARE.
  * hierarchies. The only kind of objects present in treeml are strings.
  * Objects (which are strings) can have arbitrary number of child objects.
  */
-namespace treeml{
+namespace tml{
 
 /**
  * @brief Listener interface for treeml parser.
@@ -107,25 +107,25 @@ class parser{
 
 	state previous_state;
 
-	void handle_string_parsed(treeml::listener& listener);
+	void handle_string_parsed(tml::listener& listener);
 
-	void process_char(char c, treeml::listener& listener);
-	void process_char_in_initial(char c, treeml::listener& listener);
-	void process_char_in_idle(char c, treeml::listener& listener);
-	void process_char_in_string_parsed(char c, treeml::listener& listener);
-	void process_char_in_unquoted_string(char c, treeml::listener& listener);
-	void process_char_in_quoted_string(char c, treeml::listener& listener);
-	void process_char_in_escape_sequence(char c, treeml::listener& listener);
-	void process_char_in_unicode_sequence(char c, treeml::listener& listener);
-	void process_char_in_comment_sequence(char c, treeml::listener& listener);
-	void process_char_in_single_line_comment(char c, treeml::listener& listener);
-	void process_char_in_multiline_comment(char c, treeml::listener& listener);
-	void process_char_in_raw_cpp_string_opening_sequence(char c, treeml::listener& listener);
-	void process_char_in_raw_cpp_string(char c, treeml::listener& listener);
-	void process_char_in_raw_cpp_string_closing_sequence(char c, treeml::listener& listener);
-	void process_char_in_raw_python_string_opening_sequence(char c, treeml::listener& listener);
-	void process_char_in_raw_python_string(char c, treeml::listener& listener);
-	void process_char_in_raw_python_string_closing_sequence(char c, treeml::listener& listener);
+	void process_char(char c, tml::listener& listener);
+	void process_char_in_initial(char c, tml::listener& listener);
+	void process_char_in_idle(char c, tml::listener& listener);
+	void process_char_in_string_parsed(char c, tml::listener& listener);
+	void process_char_in_unquoted_string(char c, tml::listener& listener);
+	void process_char_in_quoted_string(char c, tml::listener& listener);
+	void process_char_in_escape_sequence(char c, tml::listener& listener);
+	void process_char_in_unicode_sequence(char c, tml::listener& listener);
+	void process_char_in_comment_sequence(char c, tml::listener& listener);
+	void process_char_in_single_line_comment(char c, tml::listener& listener);
+	void process_char_in_multiline_comment(char c, tml::listener& listener);
+	void process_char_in_raw_cpp_string_opening_sequence(char c, tml::listener& listener);
+	void process_char_in_raw_cpp_string(char c, tml::listener& listener);
+	void process_char_in_raw_cpp_string_closing_sequence(char c, tml::listener& listener);
+	void process_char_in_raw_python_string_opening_sequence(char c, tml::listener& listener);
+	void process_char_in_raw_python_string(char c, tml::listener& listener);
+	void process_char_in_raw_python_string_closing_sequence(char c, tml::listener& listener);
 
 	location cur_loc = {1, 1}; // offset starts with 1
 

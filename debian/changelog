@@ -296,7 +296,7 @@ libtreeml (0.1.8) unstable; urgency=medium
 
 libtreeml (0.1.7) unstable; urgency=medium
 
-  * added treeml::read(const char*) function
+  * added tml::read(const char*) function
 
  -- Ivan Gagis <igagis@gmail.com>  Tue, 17 Dec 2019 16:33:07 +0200
 

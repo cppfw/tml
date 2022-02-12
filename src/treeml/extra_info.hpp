@@ -28,7 +28,7 @@ SOFTWARE.
 
 #include <utki/flags.hpp>
 
-namespace treeml{
+namespace tml{
 
 /**
  * @brief Additional information flags.
@@ -71,8 +71,8 @@ struct location{
 };
 
 struct extra_info{
-	treeml::location location;
-	utki::flags<treeml::flag> flags;
+	tml::location location;
+	utki::flags<tml::flag> flags;
 };
 
 }

@@ -26,7 +26,7 @@ SOFTWARE.
 
 #include "crawler.hpp"
 
-using namespace treeml;
+using namespace tml;
 
 
 crawler crawler::in(){

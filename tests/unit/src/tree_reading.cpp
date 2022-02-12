@@ -10,7 +10,7 @@ tst::set set("tree_reading", [](tst::suite& suite){
 	suite.add("read", [](){
 		papki::fs_file fi("tree_reading_data/test.tml");
 
-		auto roots = treeml::read(fi);
+		auto roots = tml::read(fi);
 
 		auto i = roots.begin();
 

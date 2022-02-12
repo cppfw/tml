@@ -20,7 +20,7 @@ tst::set set1("parser_correctness", [](tst::suite& suite){
 				{"a b c d e //{z} g\nf g", "f"},
 			},
 			[](auto& p){
-				auto r = treeml::read(p.first);
+				auto r = tml::read(p.first);
 
 				tst::check_ge(r.size(), size_t(5), SL);
 
@@ -63,7 +63,7 @@ tst::set set1("parser_correctness", [](tst::suite& suite){
 				"second",
 			},
 			[](auto& p){
-				auto in = treeml::read(p);
+				auto in = tml::read(p);
 				
 				tst::check_eq(in.size(), size_t(2), SL);
 				tst::check_eq(in[0].value.to_string(), std::string("first"), SL);
@@ -72,13 +72,13 @@ tst::set set1("parser_correctness", [](tst::suite& suite){
 		);
 	
 	suite.add("only_python_style_raw_string_in_the_document", [](){
-		auto r = treeml::read("\"\"\"hello\"\"\"");
+		auto r = tml::read("\"\"\"hello\"\"\"");
 		tst::check_eq(r.size(), size_t(1), SL);
 		tst::check_eq(r.front().children.size(), size_t(0), SL);
 		tst::check_eq(r.front().value.to_string(), std::string("hello"), SL);
 	});
 
-	suite.add<std::pair<std::string, treeml::forest>>(
+	suite.add<std::pair<std::string, tml::forest>>(
 			"parsed_tree_is_as_expected",
 			{
 				// python-style raw strings
@@ -161,7 +161,7 @@ tst::set set1("parser_correctness", [](tst::suite& suite){
 				{"\"hello\\U00026218\"", {{"hello\U00026218"}} },
 			},
 			[](auto& p){
-				auto r = treeml::read(p.first);
+				auto r = tml::read(p.first);
 				tst::check_eq(r, p.second, SL);
 			}
 		);
@@ -178,7 +178,7 @@ tst::set set1("parser_correctness", [](tst::suite& suite){
 		},
 		[](const auto& p){
 			try{
-				treeml::read(std::string(p));
+				tml::read(std::string(p));
 				tst::check(false, SL) << "exception is unexpectedly not thrown";
 			}catch(const std::invalid_argument&){
 			}

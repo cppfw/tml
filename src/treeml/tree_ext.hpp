@@ -29,7 +29,7 @@ SOFTWARE.
 #include "tree.hpp"
 #include "extra_info.hpp"
 
-namespace treeml{
+namespace tml{
 
 class leaf_ext : public leaf{
 public:

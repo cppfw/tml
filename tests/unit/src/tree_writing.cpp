@@ -18,11 +18,11 @@ std::function<void(const std::string&)> make_test_proc(){
 	return [](const std::string& p){
 		papki::fs_file fi(data_dir + p);
 
-		auto roots = treeml::read(fi);
+		auto roots = tml::read(fi);
 
 		papki::vector_file outfi;
 
-		treeml::write(roots, outfi, formatted ? treeml::formatting::normal : treeml::formatting::minimal);
+		tml::write(roots, outfi, formatted ? tml::formatting::normal : tml::formatting::minimal);
 
 		auto data = outfi.reset_data();
 

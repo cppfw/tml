@@ -6,26 +6,26 @@
 
 namespace{
 template <class T> struct sample_template{
-	treeml::leaf leaf;
+	tml::leaf leaf;
 	std::string expected_string;
 	T expected_value;
 };
 
-template <class test_type> test_type to_test_type(const treeml::leaf& l);
+template <class test_type> test_type to_test_type(const tml::leaf& l);
 
-template <> int32_t to_test_type<int32_t>(const treeml::leaf& l){
+template <> int32_t to_test_type<int32_t>(const tml::leaf& l){
 	return l.to_int32();
 }
 
-template <> int64_t to_test_type<int64_t>(const treeml::leaf& l){
+template <> int64_t to_test_type<int64_t>(const tml::leaf& l){
 	return l.to_int64();
 }
 
-template <> uint32_t to_test_type<uint32_t>(const treeml::leaf& l){
+template <> uint32_t to_test_type<uint32_t>(const tml::leaf& l){
 	return l.to_uint32();
 }
 
-template <> uint64_t to_test_type<uint64_t>(const treeml::leaf& l){
+template <> uint64_t to_test_type<uint64_t>(const tml::leaf& l){
 	return l.to_uint64();
 }
 }
@@ -36,21 +36,21 @@ void test_int(tst::suite& suite, const std::string& test_name){
 	suite.add<sample_template<test_type>>(
 			test_name,
 			{
-				{treeml::leaf(int8_t(-13)), "-13", test_type(-13)},
-				{treeml::leaf(int16_t(-13)), "-13", test_type(-13)},
-				{treeml::leaf(int32_t(-13)), "-13", test_type(-13)},
-				{treeml::leaf(int64_t(-13)), "-13", test_type(-13)},
-				{treeml::leaf(-13), "-13", test_type(-13)},
-				{treeml::leaf(-13L), "-13", test_type(-13)},
-				{treeml::leaf(-13LL), "-13", test_type(-13)},
-				{treeml::leaf(int8_t(13)), "13", test_type(13)},
-				{treeml::leaf(int16_t(13)), "13", test_type(13)},
-				{treeml::leaf(int32_t(13)), "13", test_type(13)},
-				{treeml::leaf(int64_t(13)), "13", test_type(13)},
-				{treeml::leaf(13), "13", test_type(13)},
-				{treeml::leaf(13L), "13", test_type(13)},
-				{treeml::leaf(13LL), "13", test_type(13)},
-				{treeml::leaf(-13.34f), "-13.34", test_type(-13)},
+				{tml::leaf(int8_t(-13)), "-13", test_type(-13)},
+				{tml::leaf(int16_t(-13)), "-13", test_type(-13)},
+				{tml::leaf(int32_t(-13)), "-13", test_type(-13)},
+				{tml::leaf(int64_t(-13)), "-13", test_type(-13)},
+				{tml::leaf(-13), "-13", test_type(-13)},
+				{tml::leaf(-13L), "-13", test_type(-13)},
+				{tml::leaf(-13LL), "-13", test_type(-13)},
+				{tml::leaf(int8_t(13)), "13", test_type(13)},
+				{tml::leaf(int16_t(13)), "13", test_type(13)},
+				{tml::leaf(int32_t(13)), "13", test_type(13)},
+				{tml::leaf(int64_t(13)), "13", test_type(13)},
+				{tml::leaf(13), "13", test_type(13)},
+				{tml::leaf(13L), "13", test_type(13)},
+				{tml::leaf(13LL), "13", test_type(13)},
+				{tml::leaf(-13.34f), "-13.34", test_type(-13)},
 			},
 			[](auto& p){
 				auto value = to_test_type<test_type>(p.leaf);
@@ -67,43 +67,43 @@ void test_uint(tst::suite& suite, const std::string& test_name){
 	suite.add<sample_template<test_type>>(
 			test_name,
 			{
-				{treeml::leaf(uint8_t(0x8d)), "141", test_type(0x8d)},
-				{treeml::leaf(uint16_t(0x8d)), "141", test_type(0x8d)},
-				{treeml::leaf(uint32_t(0x8d)), "141", test_type(0x8d)},
-				{treeml::leaf(uint64_t(0x8d)), "141", test_type(0x8d)},
-				{treeml::leaf(0x8d), "141", test_type(0x8d)},
-				{treeml::leaf(0x8du), "141", test_type(0x8d)},
-				{treeml::leaf(0x8dul), "141", test_type(0x8d)},
-				{treeml::leaf(0x8dull), "141", test_type(0x8d)},
+				{tml::leaf(uint8_t(0x8d)), "141", test_type(0x8d)},
+				{tml::leaf(uint16_t(0x8d)), "141", test_type(0x8d)},
+				{tml::leaf(uint32_t(0x8d)), "141", test_type(0x8d)},
+				{tml::leaf(uint64_t(0x8d)), "141", test_type(0x8d)},
+				{tml::leaf(0x8d), "141", test_type(0x8d)},
+				{tml::leaf(0x8du), "141", test_type(0x8d)},
+				{tml::leaf(0x8dul), "141", test_type(0x8d)},
+				{tml::leaf(0x8dull), "141", test_type(0x8d)},
 
-				// {treeml::leaf(~0u), "", test_type(~0)},
-				// {treeml::leaf(~0ul), "", test_type(~0)},
-				// {treeml::leaf(~0ull), "", test_type(~0)},
-				{treeml::leaf(13.34f), "13.34", 13},
+				// {tml::leaf(~0u), "", test_type(~0)},
+				// {tml::leaf(~0ul), "", test_type(~0)},
+				// {tml::leaf(~0ull), "", test_type(~0)},
+				{tml::leaf(13.34f), "13.34", 13},
 
-				{treeml::leaf(uint8_t(074), treeml::base::oct), "074", test_type(074)},
-				{treeml::leaf(uint16_t(074), treeml::base::oct), "074", test_type(074)},
-				{treeml::leaf(uint32_t(074), treeml::base::oct), "074", test_type(074)},
-				{treeml::leaf(uint64_t(074), treeml::base::oct), "074", test_type(074)},
-				{treeml::leaf(074u, treeml::base::oct), "074", test_type(074)},
-				{treeml::leaf(074ul, treeml::base::oct), "074", test_type(074)},
-				{treeml::leaf(074ull, treeml::base::oct), "074", test_type(074)},
+				{tml::leaf(uint8_t(074), tml::base::oct), "074", test_type(074)},
+				{tml::leaf(uint16_t(074), tml::base::oct), "074", test_type(074)},
+				{tml::leaf(uint32_t(074), tml::base::oct), "074", test_type(074)},
+				{tml::leaf(uint64_t(074), tml::base::oct), "074", test_type(074)},
+				{tml::leaf(074u, tml::base::oct), "074", test_type(074)},
+				{tml::leaf(074ul, tml::base::oct), "074", test_type(074)},
+				{tml::leaf(074ull, tml::base::oct), "074", test_type(074)},
 
-				// {treeml::leaf(~0u, treeml::base::oct), "", test_type(~0)},
-				// {treeml::leaf(~0ul, treeml::base::oct), "", test_type(~0)},
-				// {treeml::leaf(~0ull, treeml::base::oct), "", test_type(~0)},
-				{treeml::leaf(0u, treeml::base::oct), "00", test_type(0)},
-				{treeml::leaf(0ul, treeml::base::oct), "00", test_type(0)},
-				{treeml::leaf(0ull, treeml::base::oct), "00", test_type(0)},
+				// {tml::leaf(~0u, tml::base::oct), "", test_type(~0)},
+				// {tml::leaf(~0ul, tml::base::oct), "", test_type(~0)},
+				// {tml::leaf(~0ull, tml::base::oct), "", test_type(~0)},
+				{tml::leaf(0u, tml::base::oct), "00", test_type(0)},
+				{tml::leaf(0ul, tml::base::oct), "00", test_type(0)},
+				{tml::leaf(0ull, tml::base::oct), "00", test_type(0)},
 
-				{treeml::leaf(0x8du, treeml::base::hex), "0x8d", test_type(0x8d)},
-				{treeml::leaf(0x8dul, treeml::base::hex), "0x8d", test_type(0x8d)},
-				// {treeml::leaf(~0u, treeml::base::hex), "", test_type(~0)},
-				// {treeml::leaf(~0ul, treeml::base::hex), "", test_type(~0)},
-				// {treeml::leaf(~0ull, treeml::base::hex), "", test_type(~0)},
-				{treeml::leaf(0u, treeml::base::hex), "0x0", test_type(0)},
-				{treeml::leaf(0ul, treeml::base::hex), "0x0", test_type(0)},
-				{treeml::leaf(0ull, treeml::base::hex), "0x0", test_type(0)},
+				{tml::leaf(0x8du, tml::base::hex), "0x8d", test_type(0x8d)},
+				{tml::leaf(0x8dul, tml::base::hex), "0x8d", test_type(0x8d)},
+				// {tml::leaf(~0u, tml::base::hex), "", test_type(~0)},
+				// {tml::leaf(~0ul, tml::base::hex), "", test_type(~0)},
+				// {tml::leaf(~0ull, tml::base::hex), "", test_type(~0)},
+				{tml::leaf(0u, tml::base::hex), "0x0", test_type(0)},
+				{tml::leaf(0ul, tml::base::hex), "0x0", test_type(0)},
+				{tml::leaf(0ull, tml::base::hex), "0x0", test_type(0)},
 			},
 			[](auto& p){
 				auto value = to_test_type<test_type>(p.leaf);
@@ -121,12 +121,12 @@ tst::set set0("value_conversion", [](tst::suite& suite){
 	suite.add<sample_template<bool>>(
 			"convert_to_bool",
 			{
-				{treeml::leaf(true), "true", true},
-				{treeml::leaf(false), "false", false},
-				{treeml::leaf(""), "", false},
-				{treeml::leaf("werqwe"), "werqwe", false},
-				{treeml::leaf("false"), "false", false},
-				{treeml::leaf("true"), "true", true}
+				{tml::leaf(true), "true", true},
+				{tml::leaf(false), "false", false},
+				{tml::leaf(""), "", false},
+				{tml::leaf("werqwe"), "werqwe", false},
+				{tml::leaf("false"), "false", false},
+				{tml::leaf("true"), "true", true}
 			},
 			[](auto& p){
 				auto value = p.leaf.to_bool();
@@ -149,7 +149,7 @@ tst::set set0("value_conversion", [](tst::suite& suite){
 				0.0f
 			},
 			[](auto& p){
-				treeml::leaf l(p);
+				tml::leaf l(p);
 				tst::check_eq(l.to_float(), p, SL);
 			}
 		);
@@ -163,7 +163,7 @@ tst::set set0("value_conversion", [](tst::suite& suite){
 				0.0
 			},
 			[](auto& p){
-				treeml::leaf l(p);
+				tml::leaf l(p);
 				tst::check_eq(l.to_double(), p, SL);
 			}
 		);
@@ -177,7 +177,7 @@ tst::set set0("value_conversion", [](tst::suite& suite){
 				0.0l
 			},
 			[](auto& p){
-				treeml::leaf l(p);
+				tml::leaf l(p);
 				tst::check_eq(l.to_long_double(), p, SL) << "l.to_string() = " << l.to_string();
 			}
 		);
@@ -189,8 +189,8 @@ tst::set set0("value_conversion", [](tst::suite& suite){
 				{"a{b{c}c{\"d\"}}d{e}f", "a{b{c}c{d}}"},
 			},
 			[](auto& p){
-				auto forest = treeml::read(p.first);
-				tst::check_eq(treeml::to_string(forest[0]), p.second, SL);
+				auto forest = tml::read(p.first);
+				tst::check_eq(tml::to_string(forest[0]), p.second, SL);
 			}
 		);
 	
@@ -200,8 +200,8 @@ tst::set set0("value_conversion", [](tst::suite& suite){
 				{"a{b{c}}d{e}f", "a{b{c}}d{e}f"},
 			},
 			[](auto& p){
-				auto forest = treeml::read(p.first);
-				auto str = treeml::to_string(forest);
+				auto forest = tml::read(p.first);
+				auto str = tml::to_string(forest);
 				tst::check_eq(str, p.second, SL);
 			}
 		);
@@ -209,7 +209,7 @@ tst::set set0("value_conversion", [](tst::suite& suite){
 	suite.add("string_to_leaf_ext", [](){
 		std::string str = "hello!";
 
-		treeml::leaf_ext l{std::string(str)};
+		tml::leaf_ext l{std::string(str)};
 
 		tst::check_eq(l.to_string(), str, SL);
 	});

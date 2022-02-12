@@ -34,7 +34,7 @@ SOFTWARE.
 #include <string>
 
 //TODO: doxygen
-namespace treeml{
+namespace tml{
 
 enum class base{
     bin,
@@ -178,7 +178,7 @@ void write(const forest& wood, papki::file& fi, formatting fmt = formatting::nor
 std::string to_string(const forest& f);
 
 inline std::string to_string(const tree& t){
-    return to_string(treeml::forest({t}));
+    return to_string(tml::forest({t}));
 }
 
 inline std::ostream& operator<<(std::ostream& o, const forest& f){
@@ -192,3 +192,6 @@ inline std::ostream& operator<<(std::ostream& o, const tree& t){
 }
 
 }
+
+// TODO: remove?
+namespace treeml = tml;

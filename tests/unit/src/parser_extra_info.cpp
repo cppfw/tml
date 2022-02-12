@@ -40,19 +40,19 @@ tst::set set1("parser_flags", [](auto& suite){
 				"\"pre\"/*bla bla*/\"hello\"",
 			},
 			[](const auto& p){
-				treeml::parser parser;
+				tml::parser parser;
 
-				struct listener : public treeml::listener{
+				struct listener : public tml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
+					void on_string_parsed(std::string_view str, const tml::extra_info& info)override{
 						if(str == "hello"){
 							this->string_parsed = true;
-							tst::check(!info.flags.get(treeml::flag::space), SL);
+							tst::check(!info.flags.get(tml::flag::space), SL);
 						}
 					}
 
-					void on_children_parse_started(treeml::location)override{}
-					void on_children_parse_finished(treeml::location)override{}
+					void on_children_parse_started(tml::location)override{}
+					void on_children_parse_finished(tml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -106,19 +106,19 @@ tst::set set1("parser_flags", [](auto& suite){
 				"pre//bla bla\n\"hello\"",
 			},
 			[](const auto& p){
-				treeml::parser parser;
+				tml::parser parser;
 
-				struct listener : public treeml::listener{
+				struct listener : public tml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
+					void on_string_parsed(std::string_view str, const tml::extra_info& info)override{
 						if(str == "hello"){
 							this->string_parsed = true;
-							tst::check(info.flags.get(treeml::flag::space), SL);
+							tst::check(info.flags.get(tml::flag::space), SL);
 						}
 					}
 
-					void on_children_parse_started(treeml::location)override{}
-					void on_children_parse_finished(treeml::location)override{}
+					void on_children_parse_started(tml::location)override{}
+					void on_children_parse_finished(tml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -145,19 +145,19 @@ tst::set set1("parser_flags", [](auto& suite){
 				" R\"qwe(hello)qwe\"post",
 			},
 			[](const auto& p){
-				treeml::parser parser;
+				tml::parser parser;
 
-				struct listener : public treeml::listener{
+				struct listener : public tml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
+					void on_string_parsed(std::string_view str, const tml::extra_info& info)override{
 						if(str == "hello"){
 							this->string_parsed = true;
-							tst::check(!info.flags.get(treeml::flag::quoted), SL);
+							tst::check(!info.flags.get(tml::flag::quoted), SL);
 						}
 					}
 
-					void on_children_parse_started(treeml::location)override{}
-					void on_children_parse_finished(treeml::location)override{}
+					void on_children_parse_started(tml::location)override{}
+					void on_children_parse_finished(tml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -186,19 +186,19 @@ tst::set set1("parser_flags", [](auto& suite){
 				" R\"qwe(pre)qwe\"\t\"hello\"",
 			},
 			[](const auto& p){
-				treeml::parser parser;
+				tml::parser parser;
 
-				struct listener : public treeml::listener{
+				struct listener : public tml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
+					void on_string_parsed(std::string_view str, const tml::extra_info& info)override{
 						if(str == "hello"){
 							this->string_parsed = true;
-							tst::check(info.flags.get(treeml::flag::quoted), SL);
+							tst::check(info.flags.get(tml::flag::quoted), SL);
 						}
 					}
 
-					void on_children_parse_started(treeml::location)override{}
-					void on_children_parse_finished(treeml::location)override{}
+					void on_children_parse_started(tml::location)override{}
+					void on_children_parse_finished(tml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -236,19 +236,19 @@ tst::set set1("parser_flags", [](auto& suite){
 				"pre R\"hello\" ",
 			},
 			[](const auto& p){
-				treeml::parser parser;
+				tml::parser parser;
 
-				struct listener : public treeml::listener{
+				struct listener : public tml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
+					void on_string_parsed(std::string_view str, const tml::extra_info& info)override{
 						if(str == "hello"){
 							this->string_parsed = true;
-							tst::check(!info.flags.get(treeml::flag::raw), SL);
+							tst::check(!info.flags.get(tml::flag::raw), SL);
 						}
 					}
 
-					void on_children_parse_started(treeml::location)override{}
-					void on_children_parse_finished(treeml::location)override{}
+					void on_children_parse_started(tml::location)override{}
+					void on_children_parse_finished(tml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -271,20 +271,20 @@ tst::set set1("parser_flags", [](auto& suite){
 				"pre\tR\"qwe(hello)qwe\"\tpost",
 			},
 			[](const auto& p){
-				treeml::parser parser;
+				tml::parser parser;
 
-				struct listener : public treeml::listener{
+				struct listener : public tml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
+					void on_string_parsed(std::string_view str, const tml::extra_info& info)override{
 						if(str == "hello"){
 							this->string_parsed = true;
-							tst::check(info.flags.get(treeml::flag::raw), SL);
-							tst::check(!info.flags.get(treeml::flag::raw_python_style), SL);
+							tst::check(info.flags.get(tml::flag::raw), SL);
+							tst::check(!info.flags.get(tml::flag::raw_python_style), SL);
 						}
 					}
 
-					void on_children_parse_started(treeml::location)override{}
-					void on_children_parse_finished(treeml::location)override{}
+					void on_children_parse_started(tml::location)override{}
+					void on_children_parse_finished(tml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -307,20 +307,20 @@ tst::set set1("parser_flags", [](auto& suite){
 				"pre\tR\"hello\"\tpost",
 			},
 			[](const auto& p){
-				treeml::parser parser;
+				tml::parser parser;
 
-				struct listener : public treeml::listener{
+				struct listener : public tml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
+					void on_string_parsed(std::string_view str, const tml::extra_info& info)override{
 						if(str == "R"){
 							this->string_parsed = true;
-							tst::check(!info.flags.get(treeml::flag::quoted), SL);
-							tst::check(!info.flags.get(treeml::flag::raw), SL);
+							tst::check(!info.flags.get(tml::flag::quoted), SL);
+							tst::check(!info.flags.get(tml::flag::raw), SL);
 						}
 					}
 
-					void on_children_parse_started(treeml::location)override{}
-					void on_children_parse_finished(treeml::location)override{}
+					void on_children_parse_started(tml::location)override{}
+					void on_children_parse_finished(tml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -347,19 +347,19 @@ tst::set set1("parser_flags", [](auto& suite){
 				"pre{\t}R\"hello\"\tpost",
 			},
 			[](const auto& p){
-				treeml::parser parser;
+				tml::parser parser;
 
-				struct listener : public treeml::listener{
+				struct listener : public tml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
+					void on_string_parsed(std::string_view str, const tml::extra_info& info)override{
 						if(str == "R"){
 							this->string_parsed = true;
-							tst::check(!info.flags.get(treeml::flag::space), SL);
+							tst::check(!info.flags.get(tml::flag::space), SL);
 						}
 					}
 
-					void on_children_parse_started(treeml::location)override{}
-					void on_children_parse_finished(treeml::location)override{}
+					void on_children_parse_started(tml::location)override{}
+					void on_children_parse_finished(tml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -383,19 +383,19 @@ tst::set set1("parser_flags", [](auto& suite){
 				"\"\"\n{} R\"hello\" post",
 			},
 			[](const auto& p){
-				treeml::parser parser;
+				tml::parser parser;
 
-				struct listener : public treeml::listener{
+				struct listener : public tml::listener{
 					bool string_parsed = false;
-					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
+					void on_string_parsed(std::string_view str, const tml::extra_info& info)override{
 						if(str == "R"){
 							this->string_parsed = true;
-							tst::check(info.flags.get(treeml::flag::space), SL);
+							tst::check(info.flags.get(tml::flag::space), SL);
 						}
 					}
 
-					void on_children_parse_started(treeml::location)override{}
-					void on_children_parse_finished(treeml::location)override{}
+					void on_children_parse_started(tml::location)override{}
+					void on_children_parse_finished(tml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(p, l);
@@ -436,20 +436,20 @@ tst::set set2("parser_location", [](auto& suite){
 				{" R\"hello\"", 1, 3},
 			},
 			[](const auto& p){
-				treeml::parser parser;
+				tml::parser parser;
 
-				struct listener : public treeml::listener{
+				struct listener : public tml::listener{
 					bool string_parsed = false;
-					treeml::extra_info info = {{0, 0}};
-					void on_string_parsed(std::string_view str, const treeml::extra_info& info)override{
+					tml::extra_info info = {{0, 0}};
+					void on_string_parsed(std::string_view str, const tml::extra_info& info)override{
 						if(str == "hello"){
 							this->string_parsed = true;
 							this->info = info;
 						}
 					}
 
-					void on_children_parse_started(treeml::location)override{}
-					void on_children_parse_finished(treeml::location)override{}
+					void on_children_parse_started(tml::location)override{}
+					void on_children_parse_finished(tml::location)override{}
 				} l;
 
 				parser.parse_data_chunk(std::get<0>(p), l);

@@ -28,7 +28,7 @@ SOFTWARE.
 
 #include "tree.hpp"
 
-namespace treeml{
+namespace tml{
 
 class crawler{
     forest& b;

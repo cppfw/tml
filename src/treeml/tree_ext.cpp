@@ -31,10 +31,10 @@ SOFTWARE.
 
 #include "parser.hpp"
 
-using namespace treeml;
+using namespace tml;
 
-forest_ext treeml::read_ext(const papki::file& fi){
-	class the_listener : public treeml::listener{
+forest_ext tml::read_ext(const papki::file& fi){
+	class the_listener : public tml::listener{
 		std::stack<forest_ext> stack;
 
 	public:
@@ -62,18 +62,18 @@ forest_ext treeml::read_ext(const papki::file& fi){
 		}
 	} listener;
 
-	treeml::parse(fi, listener);
+	tml::parse(fi, listener);
 
 	return std::move(listener.cur_forest);
 }
 
-forest_ext treeml::read_ext(const std::string& str){
+forest_ext tml::read_ext(const std::string& str){
 	const papki::span_file fi(utki::make_span(reinterpret_cast<const uint8_t*>(str.data()), str.size()));
 
 	return read_ext(fi);
 }
 
-tree treeml::to_non_ext(const tree_ext& t){
+tree tml::to_non_ext(const tree_ext& t){
 	tree ret;
 
 	ret.value = t.value;
@@ -82,7 +82,7 @@ tree treeml::to_non_ext(const tree_ext& t){
 	return ret;
 }
 
-forest treeml::to_non_ext(const forest_ext& f){
+forest tml::to_non_ext(const forest_ext& f){
 	forest ret;
 
 	for(const auto& c : f){

@@ -35,10 +35,10 @@ SOFTWARE.
 #include <papki/span_file.hpp>
 #include <papki/vector_file.hpp>
 
-using namespace treeml;
+using namespace tml;
 
-forest treeml::read(const papki::file& fi){
-	class the_listener : public treeml::listener{
+forest tml::read(const papki::file& fi){
+	class the_listener : public tml::listener{
 		std::stack<forest> stack;
 
 	public:
@@ -66,12 +66,12 @@ forest treeml::read(const papki::file& fi){
 		}
 	} listener;
 
-	treeml::parse(fi, listener);
+	tml::parse(fi, listener);
 
 	return std::move(listener.cur_forest);
 }
 
-forest treeml::read(const std::string& str){
+forest tml::read(const std::string& str){
 	const papki::span_file fi(utki::make_span(reinterpret_cast<const uint8_t*>(str.data()), str.size()));
 
 	return read(fi);
@@ -148,7 +148,7 @@ void make_escaped_string(const char* str, utki::span<uint8_t> out){
 	}
 }
 
-void write_internal(const treeml::forest& roots, papki::file& fi, formatting fmt, unsigned indentation){
+void write_internal(const tml::forest& roots, papki::file& fi, formatting fmt, unsigned indentation){
     const std::array<uint8_t, 1> quote = {{'"'}};
 	const std::array<uint8_t, 1> lcurly = {{'{'}};
 	const std::array<uint8_t, 1> rcurly = {{'}'}};
@@ -266,7 +266,7 @@ void write_internal(const treeml::forest& roots, papki::file& fi, formatting fmt
 }
 }
 
-void treeml::write(const treeml::forest& wood, papki::file& fi, formatting fmt){
+void tml::write(const tml::forest& wood, papki::file& fi, formatting fmt){
     papki::file::guard file_guard(fi, papki::file::mode::create);
 
     write_internal(wood, fi, fmt, 0);
@@ -419,9 +419,9 @@ bool leaf::to_bool()const{
 	return this->string == "true";
 }
 
-std::string treeml::to_string(const forest& f){
+std::string tml::to_string(const forest& f){
 	papki::vector_file fi;
-	treeml::write(f, fi, treeml::formatting::minimal);
+	tml::write(f, fi, tml::formatting::minimal);
 	auto v = fi.reset_data();
 	return std::string(reinterpret_cast<char*>(v.data()), v.size());
 }
