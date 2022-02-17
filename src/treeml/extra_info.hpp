@@ -40,7 +40,7 @@ enum class flag{
 	 * Indicates that in the original text there was a space between this node and previous node.
 	 * Absence of space is possible in case of very first document's node or previous node had
 	 * curly braces or previous or this node is a quoted string.
-	 * For the very first node of the document this flag is laways false, since there is no previous node.
+	 * For the very first node of the document this flag is always false, since there is no previous node.
 	 * Same for the very first node in the children list (in curly braces).
 	 */
 	space,
@@ -61,6 +61,18 @@ enum class flag{
 	 * as C++ style syntax.
 	 */
 	raw_python_style,
+
+	/**
+	 * @brief The node is the first node on the line.
+	 * Indicates that in the original text the node was the first one on the line.
+	 */
+	new_line,
+
+	/**
+	 * @brief The node has children list.
+	 * Indicates that in the original text the node was specified with children list, either empty or not.
+	 */
+	curly_braces,
 
 	enum_size
 };
