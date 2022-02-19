@@ -42,6 +42,7 @@ enum class flag{
 	 * curly braces or previous or this node is a quoted string.
 	 * For the very first node of the document this flag is always false, since there is no previous node.
 	 * Same for the very first node in the children list (in curly braces).
+	 * The new line makes same effect as space, i.e. this flag will be set.
 	 */
 	space,
 
