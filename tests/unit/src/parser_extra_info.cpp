@@ -247,6 +247,10 @@ tst::set set1("parser_flags", [](tst::suite& suite){
 				"hi{}\"hello\"\n",
 				"hi{}R\"(hello)\"\n",
 				"hi{}\"\"\"hello\"\"\"\n",
+				"hi{\n bye hello}",
+				"hi{\n bye \"hello\"}",
+				"hi{\n bye R\"(hello)\"}",
+				"hi{\n bye \"\"\"hello\"\"\"}",
 			},
 			[](const auto& p){
 				tml::parser parser;
@@ -338,6 +342,18 @@ tst::set set1("parser_flags", [](tst::suite& suite){
 				"hi{}\n \"hello\"",
 				"hi{}\n R\"(hello)\"",
 				"hi{}\n \"\"\"hello\"\"\"",
+				"hi{\nhello}",
+				"hi{\n\"hello\"}",
+				"hi{\nR\"(hello)\"}",
+				"hi{\n\"\"\"hello\"\"\"}",
+				"hi{\n hello}",
+				"hi{\n \"hello\"}",
+				"hi{\n R\"(hello)\"}",
+				"hi{\n \"\"\"hello\"\"\"}",
+				"hi{bye\nhello}",
+				"hi{bye\n\"hello\"}",
+				"hi{bye\nR\"(hello)\"}",
+				"hi{bye\n\"\"\"hello\"\"\"}",
 			},
 			[](const auto& p){
 				tml::parser parser;
