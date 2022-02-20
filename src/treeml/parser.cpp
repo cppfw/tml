@@ -78,6 +78,7 @@ void parser::process_char_in_initial(char c, listener& listener){
 	ASSERT(this->cur_state == state::initial)
 	switch(c){
 		case '\n':
+			this->info.flags.set(tml::flag::first_on_line);
 		case ' ':
 		case '\t':
 		case '\r':
@@ -99,6 +100,7 @@ void parser::process_char_in_initial(char c, listener& listener){
 void parser::process_char_in_idle(char c, listener& listener){
 	switch(c){
 		case '\n':
+			this->info.flags.set(tml::flag::first_on_line);
 		case ' ':
 		case '\t':
 		case '\r':
@@ -117,7 +119,7 @@ void parser::process_char_in_idle(char c, listener& listener){
 		case '}':
 			listener.on_children_parse_finished(this->cur_loc);
 			--this->nesting_level;
-			this->cur_state = state::idle; // this is needed because some other states forward processing to 'process_char_in_idle()'
+			this->cur_state = state::idle; // this is needed because some other states forward processing to 'process_char_in_idle()' by explicitly calling it
 			this->info.flags.clear(flag::space);
 			break;
 		case '"':
@@ -147,6 +149,7 @@ void parser::process_char_in_string_parsed(char c, listener& listener){
 	ASSERT(this->cur_state == state::string_parsed)
 	switch (c) {
 		case '\n':
+			this->info.flags.set(tml::flag::first_on_line);
 		case ' ':
 		case '\r':
 		case '\t':
@@ -162,6 +165,7 @@ void parser::process_char_in_string_parsed(char c, listener& listener){
 			this->cur_state = state::initial;
 			++this->nesting_level;
 			this->info.flags.clear(tml::flag::space);
+			this->info.flags.clear(tml::flag::first_on_line);
 			break;
 		default:
 			this->cur_state = state::idle;
@@ -192,7 +196,11 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			ASSERT(this->buf.size() != 0)
 			this->handle_string_parsed(listener);
 			this->cur_state = state::string_parsed;
+
 			this->info.flags.set(tml::flag::space);
+			if(c == '\n'){
+				this->info.flags.set(tml::flag::first_on_line);
+			}
 			break;
 		case '\0':
 			ASSERT(this->buf.size() != 0)

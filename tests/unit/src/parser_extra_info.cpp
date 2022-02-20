@@ -4,8 +4,8 @@
 #include "../../../src/treeml/parser.hpp"
 
 namespace{
-tst::set set1("parser_flags", [](auto& suite){
-	suite.template add<std::string_view>(
+tst::set set1("parser_flags", [](tst::suite& suite){
+	suite.add<std::string_view>(
 			"flag_space_should_be_false",
 			{
 				"hello", // 0
@@ -62,7 +62,7 @@ tst::set set1("parser_flags", [](auto& suite){
 			}
 		);
 	
-	suite.template add<std::string_view>(
+	suite.add<std::string_view>(
 			"flag_space_should_be_true",
 			{
 				"pre hello",
@@ -128,7 +128,7 @@ tst::set set1("parser_flags", [](auto& suite){
 			}
 		);
 	
-	suite.template add<std::string_view>(
+	suite.add<std::string_view>(
 			"flag_quoted_should_be_false",
 			{
 				"hello",
@@ -167,7 +167,7 @@ tst::set set1("parser_flags", [](auto& suite){
 			}
 		);
 	
-	suite.template add<std::string_view>(
+	suite.add<std::string_view>(
 			"flag_quoted_should_be_true",
 			{
 				"\"hello\"",
@@ -208,7 +208,161 @@ tst::set set1("parser_flags", [](auto& suite){
 			}
 		);
 
-	suite.template add<std::string_view>(
+		suite.add<std::string_view>(
+			"flag_first_on_line_should_be_false",
+			{
+				"hi hello",
+				"hi \"hello\"",
+				"hi R\"(hello)\"",
+				"hi \"\"\"hello\"\"\"",
+				"\nhi hello",
+				"\nhi \"hello\"",
+				"\nhi R\"(hello)\"",
+				"\nhi \"\"\"hello\"\"\"",
+				"pre hello",
+				"pre \"hello\"",
+				"pre R\"(hello)\"",
+				"pre \"\"\"hello\"\"\"",
+				"pre hello\n",
+				"pre \"hello\"\n",
+				"\npre\"hello\"",
+				"\npre\"\"\"hello\"\"\"",
+				"qwe\n{bla bla}hello",
+				"qwe\n{bla bla}\"hello\"",
+				"qwe\n{bla bla}R\"(hello)\"",
+				"qwe\n{bla bla}\"\"\"hello\"\"\"",
+				"qwe\n{}hello",
+				"qwe\n{}\"hello\"",
+				"qwe\n{}R\"(hello)\"",
+				"qwe\n{}\"\"\"hello\"\"\"",
+				"qwe\n{} hello",
+				"qwe\n{} \"hello\"",
+				"qwe\n{} R\"(hello)\"",
+				"qwe\n{} \"\"\"hello\"\"\"",
+				"qwe\n{}\thello",
+				"qwe\n{}\t\"hello\"",
+				"qwe\n{}\tR\"(hello)\"",
+				"qwe\n{}\t\"\"\"hello\"\"\"",
+				"hi{}hello\n",
+				"hi{}\"hello\"\n",
+				"hi{}R\"(hello)\"\n",
+				"hi{}\"\"\"hello\"\"\"\n",
+			},
+			[](const auto& p){
+				tml::parser parser;
+
+				struct listener : public tml::listener{
+					bool string_parsed = false;
+					void on_string_parsed(std::string_view str, const tml::extra_info& info)override{
+						if(str == "hello"){
+							this->string_parsed = true;
+							tst::check(!info.flags.get(tml::flag::first_on_line), SL);
+						}
+					}
+
+					void on_children_parse_started(tml::location)override{}
+					void on_children_parse_finished(tml::location)override{}
+				} l;
+
+				parser.parse_data_chunk(p, l);
+				parser.end_of_data(l);
+
+				tst::check(l.string_parsed, SL);
+			}
+		);
+	
+	suite.add<std::string_view>(
+			"flag_first_on_line_should_be_true",
+			{
+				"hello",
+				"R\"(hello)\"",
+				"\"\"\"hello\"\"\"",
+				" R\"(hello)\"",
+				" \"\"\"hello\"\"\"",
+				"\thello",
+				"\tR\"(hello)\"",
+				"\t\"\"\"hello\"\"\"",
+				"\nhello",
+				"\n\"hello\"",
+				"\nR\"(hello)\"",
+				"\n\"\"\"hello\"\"\"",
+				"\n hello",
+				"\n \"hello\"",
+				"\n R\"(hello)\"",
+				"\n \"\"\"hello\"\"\"",
+				" hello post",
+				" \"hello\" \"post\"",
+				" R\"(hello)\" post",
+				" \"\"\"hello\"\"\" post",
+				"pre\nhello",
+				"pre\n\"hello\"",
+				"pre\nR\"(hello)\"",
+				"pre\n\"\"\"hello\"\"\"",
+				"pre\n hello",
+				"pre\n \"hello\"",
+				"pre\n R\"(hello)\"",
+				"pre\n \"\"\"hello\"\"\"",
+				"pre \nhello",
+				"pre \n\"hello\"",
+				"pre \nR\"(hello)\"",
+				"pre \n\"\"\"hello\"\"\"",
+				"pre\t\nhello",
+				"pre\t\n\"hello\"",
+				"pre\t\nR\"(hello)\"",
+				"pre\t\n\"\"\"hello\"\"\"",
+				"pre\t\n\thello",
+				"pre\t\n\t\"hello\"",
+				"pre\t\n\tR\"(hello)\"",
+				"pre\t\n\t\"\"\"hello\"\"\"",
+				"\"pre\"\nhello",
+				"\"pre\"\n hello",
+				"\"pre\"\n\"hello\"",
+				"\"pre\"\n \"hello\"",
+				"hi{}\nhello",
+				"hi{}\n\"hello\"",
+				"hi{}\nR\"(hello)\"",
+				"hi{}\n\"\"\"hello\"\"\"",
+				"hi{bye}\nhello",
+				"hi{bye}\n\"hello\"",
+				"hi{bye}\nR\"(hello)\"",
+				"hi{bye}\n\"\"\"hello\"\"\"",
+				"hi{} \nhello",
+				"hi{} \n\"hello\"",
+				"hi{} \nR\"(hello)\"",
+				"hi{} \n\"\"\"hello\"\"\"",
+				"hi{}\t\nhello",
+				"hi{}\t\n\"hello\"",
+				"hi{}\t\nR\"(hello)\"",
+				"hi{}\t\n\"\"\"hello\"\"\"",
+				"hi{}\n hello",
+				"hi{}\n \"hello\"",
+				"hi{}\n R\"(hello)\"",
+				"hi{}\n \"\"\"hello\"\"\"",
+			},
+			[](const auto& p){
+				tml::parser parser;
+
+				struct listener : public tml::listener{
+					bool string_parsed = false;
+					void on_string_parsed(std::string_view str, const tml::extra_info& info)override{
+						if(str == "hello"){
+							this->string_parsed = true;
+							tst::check(info.flags.get(tml::flag::first_on_line), SL);
+						}
+					}
+
+					void on_children_parse_started(tml::location)override{}
+					void on_children_parse_finished(tml::location)override{}
+				} l;
+
+				parser.parse_data_chunk(p, l);
+				parser.end_of_data(l);
+
+				tst::check(l.string_parsed, SL);
+			}
+		);
+
+	suite.add<std::string_view>(
 			"flag_cpp_raw_should_be_false",
 			{
 				"\"hello\"",
@@ -258,7 +412,7 @@ tst::set set1("parser_flags", [](auto& suite){
 			}
 		);
 	
-	suite.template add<std::string_view>(
+	suite.add<std::string_view>(
 			"flag_cpp_raw_should_be_true",
 			{
 				"R\"qwe(hello)qwe\"",
@@ -294,7 +448,7 @@ tst::set set1("parser_flags", [](auto& suite){
 			}
 		);
 	
-	suite.template add<std::string_view>(
+	suite.add<std::string_view>(
 			"raw_cpp_and_quoted_flags_should_be_false_for_r",
 			{
 				"R\"hello\"",
@@ -330,7 +484,7 @@ tst::set set1("parser_flags", [](auto& suite){
 			}
 		);
 	
-	suite.template add<std::string_view>(
+	suite.add<std::string_view>(
 			"space_flag_should_be_false_for_r",
 			{
 				"R\"hello\"",
@@ -369,7 +523,7 @@ tst::set set1("parser_flags", [](auto& suite){
 			}
 		);
 	
-	suite.template add<std::string_view>(
+	suite.add<std::string_view>(
 			"space_flag_should_be_true_for_cpp_raw_string",
 			{
 				"pre R\"hello\"",
@@ -408,8 +562,8 @@ tst::set set1("parser_flags", [](auto& suite){
 }
 
 namespace{
-tst::set set2("parser_location", [](auto& suite){
-	suite.template add<std::tuple<std::string_view, size_t, size_t>>(
+tst::set set2("parser_location", [](tst::suite& suite){
+	suite.add<std::tuple<std::string_view, size_t, size_t>>(
 			"location",
 			{
 				{"hello", 1, 1},

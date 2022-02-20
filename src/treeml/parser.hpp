@@ -131,7 +131,10 @@ class parser{
 
 	void next_line();
 
-	extra_info info;
+	extra_info info = {
+		{},
+		tml::flag::first_on_line
+	};
 
 	void set_string_start_pos();
 

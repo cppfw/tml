@@ -64,10 +64,10 @@ enum class flag{
 	raw_python_style,
 
 	/**
-	 * @brief The node is the first node on the line.
-	 * Indicates that in the original text the node was the first one on the line.
+	 * @brief The node is first on the line.
+	 * Indicates that in the original text this node is first on the line.
 	 */
-	new_line,
+	first_on_line,
 
 	/**
 	 * @brief The node has children list.
