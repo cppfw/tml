@@ -11,7 +11,7 @@
 
 inline void parser::error()
 {
-	std::cerr << "Syntax error\n";
+	throw std::invalid_argument("syntax error");
 }
 
 // $insert lex
