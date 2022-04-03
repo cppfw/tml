@@ -1,5 +1,7 @@
 include prorab.mk
 
+ifeq ($(os),linux)
+
 $(eval $(call prorab-config, ../config))
 
 this_name := print_tml
@@ -27,3 +29,5 @@ $(.RECIPEPREFIX)$(a)echo "#pragma once\n#include \"../src/parser.hpp\"" > $(d)ou
 
 endef
 $(eval $(this_rules))
+
+endif # linux
