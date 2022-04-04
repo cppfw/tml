@@ -4,12 +4,14 @@ ifeq ($(os),linux)
 
 $(eval $(call prorab-config, ../config))
 
-this_name := print_tml
+this_name := bnf_parser
 
-this_srcs := $(call prorab-src-dir, src)
+this_static_lib_only := true
+
+# this_srcs := $(call prorab-src-dir, src)
 this_srcs += out/parser.cpp
 
-$(eval $(prorab-build-app))
+$(eval $(prorab-build-lib))
 
 # The rule for generating bisonc++ parser code.
 # Note, that before invoking bisonc++ we remove the old generated files, because

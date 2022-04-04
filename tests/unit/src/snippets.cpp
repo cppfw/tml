@@ -6,7 +6,7 @@
 namespace{
 tst::set set("snippets", [](auto& suite){
     suite.template add<std::string>(
-            "snippet_is_reading_fails",
+            "snippet_reading_fails",
             {
                 R"(
                     def{

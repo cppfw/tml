@@ -9,6 +9,8 @@
 // $insert baseclass
 #include "../out/parserBase.hpp"
 
+#include "../../src/treeml/tree.hpp"
+
 // $insert namespace-open
 namespace bnf
 {
