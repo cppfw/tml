@@ -1,7 +1,7 @@
 #include <tst/set.hpp>
 #include <tst/check.hpp>
 
-#include "../../../src/treeml/tree_ext.hpp"
+#include <treeml/tree_ext.hpp>
 
 namespace{
 tst::set set("read_ext", [](auto& suite){

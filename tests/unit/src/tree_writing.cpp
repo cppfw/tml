@@ -6,7 +6,7 @@
 #include <papki/fs_file.hpp>
 #include <papki/vector_file.hpp>
 
-#include "../../../src/treeml/tree.hpp"
+#include <treeml/tree.hpp>
 
 namespace{
 const std::string data_dir = "tree_writing_data/";

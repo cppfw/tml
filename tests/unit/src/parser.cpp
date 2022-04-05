@@ -5,7 +5,7 @@
 
 #include <papki/fs_file.hpp>
 
-#include "../../../src/treeml/parser.hpp"
+#include <treeml/parser.hpp>
 
 namespace{
 enum E_Action{

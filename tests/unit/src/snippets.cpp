@@ -1,7 +1,9 @@
 #include <tst/set.hpp>
 #include <tst/check.hpp>
 
-#include "../../../src/treeml/tree.hpp"
+#include <treeml/tree.hpp>
+
+// this test suite is to test short treeml snippets
 
 namespace{
 tst::set set("snippets", [](auto& suite){

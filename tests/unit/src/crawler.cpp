@@ -1,7 +1,7 @@
 #include <tst/set.hpp>
 #include <tst/check.hpp>
 
-#include "../../../src/treeml/crawler.hpp"
+#include <treeml/crawler.hpp>
 
 namespace{
 const auto sample = R"qwertyuiop(

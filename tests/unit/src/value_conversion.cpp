@@ -1,8 +1,8 @@
 #include <tst/set.hpp>
 #include <tst/check.hpp>
 
-#include "../../../src/treeml/tree.hpp"
-#include "../../../src/treeml/tree_ext.hpp"
+#include <treeml/tree.hpp>
+#include <treeml/tree_ext.hpp>
 
 namespace{
 template <class T> struct sample_template{
