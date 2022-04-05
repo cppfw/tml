@@ -13,8 +13,51 @@ const std::string data_dir = "samples_data/";
 
 namespace{
 std::string print(const tml::forest& f){
-	// TODO:
-	return "";
+	struct printer{
+		std::stringstream ss;
+
+		unsigned indentation = 0;
+
+		void print(std::string_view sv){
+			if(this->indentation != 0){
+				for(unsigned i = 0; i != this->indentation; ++i){
+					ss << "-";
+				}
+				ss << " ";
+			}
+
+			// escape new lines and back slashes
+			for(auto c : sv){
+				switch(c){
+					case '\n':
+						ss << "\\n";
+						break;
+					case '\\':
+						ss << '\\';
+						break;
+					default:
+						ss << c;
+						break;
+				}
+			}
+
+			ss << std::endl;
+		}
+
+		void print(const tml::forest& f){
+			for(const auto& t : f){
+				this->print(t.value.to_string());
+
+				++this->indentation;
+				this->print(t.children);
+				--this->indentation;
+			}
+		}
+	} p;
+
+	p.print(f);
+
+	return p.ss.str();
 }
 }
 
