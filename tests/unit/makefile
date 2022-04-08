@@ -10,13 +10,14 @@ this_name := tests
 this_srcs := $(call prorab-src-dir, src)
 
 this_libtreeml := $(d)../../src/out/$(c)/libtreeml$(dot_so)
+this_libbnf-parser := $(d)../../bnf/out/$(c)/libbnf-parser.a
 
 this_cxxflags += -I ../../src
-this_ldlibs += $(this_libtreeml) -ltst -lutki -lpapki
+this_ldlibs += $(this_libtreeml) $(this_libbnf-parser) -ltst -lutki -lpapki
 
 $(eval $(prorab-build-app))
 
-$(eval $(call prorab-depend, $(prorab_this_name), $(this_libtreeml)))
+$(eval $(call prorab-depend, $(prorab_this_name), $(this_libtreeml) $(this_libbnf-parser)))
 
 this_test_cmd := $(prorab_this_name) --jobs=auto --junit-out=out/$(c)/junit.xml
 this_test_deps := $(prorab_this_name)

@@ -7,6 +7,8 @@
 
 #include <treeml/tree.hpp>
 
+#include "../../../bnf/src/parser.hpp"
+
 namespace{
 const std::string data_dir = "samples_data/";
 }
@@ -90,6 +92,7 @@ tst::set set("samples", [](tst::suite& suite){
 			// std::cout << in_file.path() << std::endl;
 
 			auto printed = print(tml::read(in_file));
+			auto printed_bnf = print(bnf::parser::read(in_file));
 
 			if(!cmp_file.exists()){
 				papki::file::guard file_guard(cmp_file, papki::file::mode::create);
@@ -113,6 +116,13 @@ tst::set set("samples", [](tst::suite& suite){
 				std::cout << "printed = " << std::endl;
 				std::cout << printed << std::endl;
 				tst::check(false, SL) << "parsing file '" << in_file.path() << "' is not as expected";
+			}
+
+			if(cmp != printed_bnf){
+				std::cout << "printed_bnf = " << std::endl;
+				std::cout << printed_bnf << std::endl;
+				// TODO: uncomment
+				// tst::check(false, SL) << "bnf parsing file '" << in_file.path() << "' is not as expected";
 			}
 		}
 	);

@@ -12,6 +12,15 @@
 namespace bnf
 {
 
+tml::forest parser::read(const papki::file& fi){
+	papki::file::guard file_guard(fi, papki::file::mode::read);
+
+	parser p(fi);
+	p.parse();
+
+	return std::move(p.forest);
+}
+
 inline void parser::error()
 {
     std::cerr << "Syntax error\n";
@@ -20,16 +29,17 @@ inline void parser::error()
 // $insert lex
 inline int parser::lex()
 {
-	char c;
+	std::array<uint8_t, 1> buf;
+	auto num_read = this->fi.read(buf);
 
-	std::cin.get(c);
+	std::cout << "read " << num_read << " bytes" << std::endl;
 
 	// check for EOF
-	if(!std::cin){
+	if(num_read == 0){
 		return 0;
 	}
 
-	return c;
+	return buf[0];
 }
 
 inline void parser::print()         

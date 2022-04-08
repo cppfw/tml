@@ -11,6 +11,9 @@
 
 %%
 
-exp :
-	'q'
+whitespace :
+	' ' | '\t' | '\n'
+	{
+		std::cout << "whitespace ";
+	}
 ;

@@ -26,9 +26,17 @@ namespace bnf
 
 class parser: public parserBase
 {
-        
-    public:
-        parser() = default;
+	const papki::file& fi;
+
+	tml::forest forest;
+
+	public:
+		static tml::forest read(const papki::file& fi);
+
+    private:
+        parser(const papki::file& fi) : fi(fi) {
+			utki::assert(fi.is_open(), SL);
+		}
         int parse();
 
     private:

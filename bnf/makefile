@@ -4,7 +4,7 @@ ifeq ($(os),linux)
 
 $(eval $(call prorab-config, ../config))
 
-this_name := bnf_parser
+this_name := bnf-parser
 
 this_static_lib_only := true
 
