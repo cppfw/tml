@@ -145,6 +145,10 @@ void parser::process_char_in_idle(char c, listener& listener){
 	}
 }
 
+void parser::set_string_parsed_state(){
+	this->cur_state = state::string_parsed;
+}
+
 void parser::process_char_in_string_parsed(char c, listener& listener){
 	ASSERT(this->cur_state == state::string_parsed)
 	switch (c) {
@@ -195,7 +199,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 		case '\t':
 			ASSERT(this->buf.size() != 0)
 			this->handle_string_parsed(listener);
-			this->cur_state = state::string_parsed;
+			this->set_string_parsed_state();
 
 			this->info.flags.set(tml::flag::space);
 			if(c == '\n'){
@@ -236,7 +240,7 @@ void parser::process_char_in_quoted_string(char c, listener& listener){
 	switch(c){
 		case '"':
 			this->handle_string_parsed(listener);
-			this->cur_state = state::string_parsed;
+			this->set_string_parsed_state();
 			break;
 		case '\\':
 			this->previous_state = this->cur_state;
@@ -357,7 +361,7 @@ void parser::process_char_in_comment_sequence(char c, listener& listener){
 		case ' ':
 			this->buf.push_back('/');
 			this->handle_string_parsed(listener);
-			this->cur_state = state::string_parsed;
+			this->set_string_parsed_state();
 			break;
 		default:
 			this->buf.push_back('/');
@@ -422,7 +426,7 @@ void parser::process_char_in_raw_cpp_string_opening_sequence(char c, listener& l
 			}else{
 				this->info.flags.set(tml::flag::quoted);
 				this->handle_string_parsed(listener);
-				this->cur_state = state::string_parsed;
+				this->set_string_parsed_state();
 			}
 			break;
 		case '(':
@@ -464,7 +468,7 @@ void parser::process_char_in_raw_cpp_string_closing_sequence(char c, listener& l
 			}else{
 				this->handle_string_parsed(listener);
 				this->sequence.clear();
-				this->cur_state = state::string_parsed;
+				this->set_string_parsed_state();
 			}
 			break;
 		default:
@@ -508,7 +512,7 @@ void parser::process_char_in_raw_python_string_opening_sequence(char c, listener
 				case 2:
 					// empty quoted string
 					this->handle_string_parsed(listener);
-					this->cur_state = state::string_parsed;
+					this->set_string_parsed_state();
 					this->process_char_in_string_parsed(c, listener);
 					break;
 			}
@@ -536,7 +540,7 @@ void parser::process_char_in_raw_python_string_closing_sequence(char c, listener
 			++this->sequence_index;
 			if(this->sequence_index == 3){
 				this->handle_string_parsed(listener);
-				this->cur_state = state::string_parsed;
+				this->set_string_parsed_state();
 			}
 			break;
 		default:

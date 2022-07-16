@@ -138,6 +138,7 @@ class parser{
 
 	void set_string_start_pos();
 
+	void set_string_parsed_state();
 public:
 	/**
 	 * @brief Constructor.
