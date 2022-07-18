@@ -333,22 +333,16 @@ void parser::process_char_in_comment_sequence(char c, listener& listener){
 	ASSERT(this->cur_state == state::comment_seqence)
 	switch(c){
 		case '/':
-			if(!this->buf.empty()){
-				this->handle_string_parsed(listener);
-			}
 			this->cur_state = state::single_line_comment;
 			break;
 		case '*':
-			if(!this->buf.empty()){
-				this->handle_string_parsed(listener);
-			}
 			this->cur_state = state::multiline_comment;
 			break;
 		case '{':
-			if(this->buf.empty()){
-				this->set_string_start_pos();
-				--this->info.location.offset;
-			}
+			ASSERT(this->buf.empty())
+			this->set_string_start_pos();
+			--this->info.location.offset;
+
 			this->buf.push_back('/');
 			this->handle_string_parsed(listener);
 			listener.on_children_parse_started(this->cur_loc);
@@ -359,11 +353,13 @@ void parser::process_char_in_comment_sequence(char c, listener& listener){
 		case '\r':
 		case '\t':
 		case ' ':
+			ASSERT(this->buf.empty())
 			this->buf.push_back('/');
 			this->handle_string_parsed(listener);
 			this->set_string_parsed_state();
 			break;
 		default:
+			ASSERT(this->buf.empty())
 			this->buf.push_back('/');
 			this->buf.push_back(c);
 			this->cur_state = state::unquoted_string;
