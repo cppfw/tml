@@ -211,42 +211,42 @@ tst::set set1("parser_flags", [](tst::suite& suite){
 		suite.add<std::string_view>(
 			"flag_first_on_line_should_be_false",
 			{
-				"hi hello",
+				"hi hello", // #0
 				"hi \"hello\"",
 				"hi R\"(hello)\"",
 				"hi \"\"\"hello\"\"\"",
 				"\nhi hello",
-				"\nhi \"hello\"",
+				"\nhi \"hello\"", // #5
 				"\nhi R\"(hello)\"",
 				"\nhi \"\"\"hello\"\"\"",
 				"pre hello",
 				"pre \"hello\"",
-				"pre R\"(hello)\"",
+				"pre R\"(hello)\"", // #10
 				"pre \"\"\"hello\"\"\"",
 				"pre hello\n",
 				"pre \"hello\"\n",
 				"\npre\"hello\"",
-				"\npre\"\"\"hello\"\"\"",
+				"\npre\"\"\"hello\"\"\"", // #15
 				"qwe\n{bla bla}hello",
 				"qwe\n{bla bla}\"hello\"",
 				"qwe\n{bla bla}R\"(hello)\"",
 				"qwe\n{bla bla}\"\"\"hello\"\"\"",
-				"qwe\n{}hello",
+				"qwe\n{}hello", // #20
 				"qwe\n{}\"hello\"",
 				"qwe\n{}R\"(hello)\"",
 				"qwe\n{}\"\"\"hello\"\"\"",
 				"qwe\n{} hello",
-				"qwe\n{} \"hello\"",
+				"qwe\n{} \"hello\"", // #25
 				"qwe\n{} R\"(hello)\"",
 				"qwe\n{} \"\"\"hello\"\"\"",
 				"qwe\n{}\thello",
 				"qwe\n{}\t\"hello\"",
-				"qwe\n{}\tR\"(hello)\"",
+				"qwe\n{}\tR\"(hello)\"", // #30
 				"qwe\n{}\t\"\"\"hello\"\"\"",
 				"hi{}hello\n",
 				"hi{}\"hello\"\n",
 				"hi{}R\"(hello)\"\n",
-				"hi{}\"\"\"hello\"\"\"\n",
+				"hi{}\"\"\"hello\"\"\"\n", // #35
 				"hi{\n bye hello}",
 				"hi{\n bye \"hello\"}",
 				"hi{\n bye R\"(hello)\"}",
