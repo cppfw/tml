@@ -123,8 +123,10 @@ void parser::process_char_in_idle(char c, listener& listener){
 			listener.on_children_parse_finished(this->cur_loc);
 			--this->nesting_level;
 			
-			// TODO: add comment
-			this->cur_state = state::idle; // this is needed because some other states forward processing to 'process_char_in_idle()' by explicitly calling it
+			// Some other states forward processing to 'process_char_in_idle()' by explicitly calling it,
+			// thus this function can be called even when parser is not in idle state.
+			// This is why here we set the state to idle.
+			this->cur_state = state::idle;
 
 			this->info.flags.clear(flag::space);
 			break;
