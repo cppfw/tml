@@ -175,7 +175,7 @@ void parser::process_char_in_string_parsed(char c, listener& listener){
 			this->cur_state = state::comment_seqence;
 			break;
 		case '{':
-			// TODO: set curly braces flag
+			this->string_parsed_info.flags.set(tml::flag::curly_braces);
 			this->handle_string_parsed(listener);
 			listener.on_children_parse_started(this->cur_loc);
 			this->cur_state = state::initial;
@@ -232,6 +232,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			break;
 		case '{':
 			ASSERT(this->buf.size() != 0)
+			this->info.flags.set(tml::flag::curly_braces);
 			this->set_string_parsed_state();
 			this->handle_string_parsed(listener);
 			this->cur_state = state::initial;

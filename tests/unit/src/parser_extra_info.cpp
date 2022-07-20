@@ -504,7 +504,7 @@ tst::set set1("parser_flags", [](tst::suite& suite){
 			"space_flag_should_be_false_for_r",
 			{
 				"R\"hello\"",
-				" R\"hello\"",
+				" R\"hello\"", // space flag is false because first on line
 				"\rR\"hello\"",
 				"\nR\"hello\"",
 				"\tR\"hello\"",
@@ -574,6 +574,81 @@ tst::set set1("parser_flags", [](tst::suite& suite){
 				tst::check(l.string_parsed, SL);
 			}
 		);
+
+	suite.add<std::string_view>(
+		"curly_braces_flag_should_be_true",
+		{
+			"hello {}",
+			"hello{}",
+			"hello\n{}",
+			"hello \n{}",
+			"hello \n {}",
+			"\"hello\"{}",
+			"\"hello\" {}",
+			" \"hello\"{}",
+			" \"hello\" {}",
+			"hi \"hello\"{}",
+			"hi \"hello\" {}"
+			"\"\"\"hello\"\"\"{}",
+			"\"\"\"hello\"\"\" {}",
+			"R\"(hello)\"{}",
+			"R\"(hello)\" {}",
+			
+		},
+		[](const auto& p){
+			tml::parser parser;
+
+				struct listener : public tml::listener{
+					bool string_parsed = false;
+					void on_string_parsed(std::string_view str, const tml::extra_info& info)override{
+						if(str == "hello"){
+							this->string_parsed = true;
+							tst::check(info.flags.get(tml::flag::curly_braces), SL);
+						}
+					}
+
+					void on_children_parse_started(tml::location)override{}
+					void on_children_parse_finished(tml::location)override{}
+				} l;
+
+				parser.parse_data_chunk(p, l);
+				parser.end_of_data(l);
+
+				tst::check(l.string_parsed, SL);
+		}
+	);
+
+	suite.add<std::string_view>(
+		"curly_braces_flag_should_be_false",
+		{
+			"hi{hey} hello hi{}",
+			"hi{hey}hello",
+			"\"hi\"{hey}hello",
+			"hi{hello}",
+			"hi\n{hello}",
+		},
+		[](const auto& p){
+			tml::parser parser;
+
+				struct listener : public tml::listener{
+					bool string_parsed = false;
+					void on_string_parsed(std::string_view str, const tml::extra_info& info)override{
+						if(str == "hello"){
+							this->string_parsed = true;
+							tst::check(!info.flags.get(tml::flag::curly_braces), SL);
+						}
+					}
+
+					void on_children_parse_started(tml::location)override{}
+					void on_children_parse_finished(tml::location)override{}
+				} l;
+
+				parser.parse_data_chunk(p, l);
+				parser.end_of_data(l);
+
+				tst::check(l.string_parsed, SL);
+		}
+	);
 });
 }
 

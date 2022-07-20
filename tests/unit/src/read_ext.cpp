@@ -36,7 +36,7 @@ tst::set set("read_ext", [](auto& suite){
 
 		auto& how = tml[2];
 		tst::check_eq(how.value.to_string(), std::string("how"), SL);
-		// tst::check(how.value.info.flags.get(tml::flag::curly_braces), SL);
+		tst::check(how.value.info.flags.get(tml::flag::curly_braces), SL);
 		tst::check(how.value.info.flags.get(tml::flag::first_on_line), SL);
 		tst::check(how.value.info.flags.get(tml::flag::space), SL);
 		tst::check(!how.value.info.flags.get(tml::flag::quoted), SL);
