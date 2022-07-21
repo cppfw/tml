@@ -37,7 +37,7 @@ namespace tml{
 enum class flag{
 	/**
 	 * @brief Space between previous node and this node.
-	 * Indicates that in the original text there was a whitespace between this node and previous node.
+	 * Indicates that in the original text there is a whitespace between this node and previous node.
 	 * Absence of whitespace is possible in case of very first document's node or previous node had
 	 * curly braces or previous or this node is a quoted string.
 	 * For the very first node of the document this flag is always false, since there is no previous node.
@@ -64,13 +64,14 @@ enum class flag{
 
 	/**
 	 * @brief The node is first on the line.
-	 * Indicates that in the original text this node is first on the line.
+	 * Indicates that in the original text this node is first on the line, i.e.
+	 * before the node on the line are only whitespace characters or nothing.
 	 */
 	first_on_line,
 
 	/**
 	 * @brief The node has children list.
-	 * Indicates that in the original text the node was specified with children list, either empty or not.
+	 * Indicates that in the original text the node is specified with children list, either empty or not.
 	 */
 	curly_braces,
 

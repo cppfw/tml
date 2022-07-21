@@ -16,6 +16,8 @@ tst::set set("read_ext", [](auto& suite){
 
 		auto& hello = tml[0];
 		tst::check_eq(hello.value.to_string(), std::string("hello"), SL);
+		tst::check(!hello.value.info.flags.get(tml::flag::curly_braces), SL);
+		tst::check(hello.value.info.flags.get(tml::flag::first_on_line), SL);
 		tst::check(!hello.value.info.flags.get(tml::flag::space), SL);
 		tst::check(!hello.value.info.flags.get(tml::flag::quoted), SL);
 		tst::check(!hello.value.info.flags.get(tml::flag::raw), SL);
@@ -24,6 +26,8 @@ tst::set set("read_ext", [](auto& suite){
 
 		auto& world = tml[1];
 		tst::check_eq(world.value.to_string(), std::string("world!"), SL);
+		tst::check(!world.value.info.flags.get(tml::flag::curly_braces), SL);
+		tst::check(!world.value.info.flags.get(tml::flag::first_on_line), SL);
 		tst::check(world.value.info.flags.get(tml::flag::quoted), SL);
 		tst::check(!world.value.info.flags.get(tml::flag::space), SL);
 		tst::check(!world.value.info.flags.get(tml::flag::raw), SL);
@@ -32,6 +36,8 @@ tst::set set("read_ext", [](auto& suite){
 
 		auto& how = tml[2];
 		tst::check_eq(how.value.to_string(), std::string("how"), SL);
+		tst::check(how.value.info.flags.get(tml::flag::curly_braces), SL);
+		tst::check(how.value.info.flags.get(tml::flag::first_on_line), SL);
 		tst::check(how.value.info.flags.get(tml::flag::space), SL);
 		tst::check(!how.value.info.flags.get(tml::flag::quoted), SL);
 		tst::check(!how.value.info.flags.get(tml::flag::raw), SL);
@@ -40,6 +46,12 @@ tst::set set("read_ext", [](auto& suite){
 
 		{
 			tst::check_eq(how.children.size(), size_t(4), SL);
+
+			auto& are = how.children[0];
+			tst::check(!are.value.info.flags.get(tml::flag::first_on_line), SL);
+
+			auto& you = how.children[1];
+			tst::check(!you.value.info.flags.get(tml::flag::first_on_line), SL);
 
 			auto& doing = how.children[2];
 			tst::check_eq(doing.value.to_string(), std::string("doing"), SL);
@@ -60,6 +72,7 @@ tst::set set("read_ext", [](auto& suite){
 
 		auto& im = tml[3];
 		tst::check_eq(im.value.to_string(), std::string("I'm"), SL);
+		tst::check(im.value.info.flags.get(tml::flag::first_on_line), SL);
 		tst::check(!im.value.info.flags.get(tml::flag::space), SL);
 		tst::check(!im.value.info.flags.get(tml::flag::quoted), SL);
 		tst::check(!im.value.info.flags.get(tml::flag::raw), SL);
@@ -68,6 +81,7 @@ tst::set set("read_ext", [](auto& suite){
 
 		auto& okay = tml[4];
 		tst::check_eq(okay.value.to_string(), std::string("okay"), SL);
+		tst::check(!okay.value.info.flags.get(tml::flag::first_on_line), SL);
 	});
 });
 }
