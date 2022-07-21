@@ -136,8 +136,12 @@ class parser{
 		tml::flag::first_on_line
 	};
 
+	// extra info saved for parsed string when moving to string_parsed state
+	extra_info string_parsed_info;
+
 	void set_string_start_pos();
 
+	void set_string_parsed_state();
 public:
 	/**
 	 * @brief Constructor.

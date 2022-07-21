@@ -211,42 +211,42 @@ tst::set set1("parser_flags", [](tst::suite& suite){
 		suite.add<std::string_view>(
 			"flag_first_on_line_should_be_false",
 			{
-				"hi hello",
+				"hi hello", // #0
 				"hi \"hello\"",
 				"hi R\"(hello)\"",
 				"hi \"\"\"hello\"\"\"",
 				"\nhi hello",
-				"\nhi \"hello\"",
+				"\nhi \"hello\"", // #5
 				"\nhi R\"(hello)\"",
 				"\nhi \"\"\"hello\"\"\"",
 				"pre hello",
 				"pre \"hello\"",
-				"pre R\"(hello)\"",
+				"pre R\"(hello)\"", // #10
 				"pre \"\"\"hello\"\"\"",
 				"pre hello\n",
 				"pre \"hello\"\n",
 				"\npre\"hello\"",
-				"\npre\"\"\"hello\"\"\"",
+				"\npre\"\"\"hello\"\"\"", // #15
 				"qwe\n{bla bla}hello",
 				"qwe\n{bla bla}\"hello\"",
 				"qwe\n{bla bla}R\"(hello)\"",
 				"qwe\n{bla bla}\"\"\"hello\"\"\"",
-				"qwe\n{}hello",
+				"qwe\n{}hello", // #20
 				"qwe\n{}\"hello\"",
 				"qwe\n{}R\"(hello)\"",
 				"qwe\n{}\"\"\"hello\"\"\"",
 				"qwe\n{} hello",
-				"qwe\n{} \"hello\"",
+				"qwe\n{} \"hello\"", // #25
 				"qwe\n{} R\"(hello)\"",
 				"qwe\n{} \"\"\"hello\"\"\"",
 				"qwe\n{}\thello",
 				"qwe\n{}\t\"hello\"",
-				"qwe\n{}\tR\"(hello)\"",
+				"qwe\n{}\tR\"(hello)\"", // #30
 				"qwe\n{}\t\"\"\"hello\"\"\"",
 				"hi{}hello\n",
 				"hi{}\"hello\"\n",
 				"hi{}R\"(hello)\"\n",
-				"hi{}\"\"\"hello\"\"\"\n",
+				"hi{}\"\"\"hello\"\"\"\n", // #35
 				"hi{\n bye hello}",
 				"hi{\n bye \"hello\"}",
 				"hi{\n bye R\"(hello)\"}",
@@ -504,7 +504,7 @@ tst::set set1("parser_flags", [](tst::suite& suite){
 			"space_flag_should_be_false_for_r",
 			{
 				"R\"hello\"",
-				" R\"hello\"",
+				" R\"hello\"", // space flag is false because first on line
 				"\rR\"hello\"",
 				"\nR\"hello\"",
 				"\tR\"hello\"",
@@ -574,6 +574,81 @@ tst::set set1("parser_flags", [](tst::suite& suite){
 				tst::check(l.string_parsed, SL);
 			}
 		);
+
+	suite.add<std::string_view>(
+		"curly_braces_flag_should_be_true",
+		{
+			"hello {}",
+			"hello{}",
+			"hello\n{}",
+			"hello \n{}",
+			"hello \n {}",
+			"\"hello\"{}",
+			"\"hello\" {}",
+			" \"hello\"{}",
+			" \"hello\" {}",
+			"hi \"hello\"{}",
+			"hi \"hello\" {}"
+			"\"\"\"hello\"\"\"{}",
+			"\"\"\"hello\"\"\" {}",
+			"R\"(hello)\"{}",
+			"R\"(hello)\" {}",
+			
+		},
+		[](const auto& p){
+			tml::parser parser;
+
+				struct listener : public tml::listener{
+					bool string_parsed = false;
+					void on_string_parsed(std::string_view str, const tml::extra_info& info)override{
+						if(str == "hello"){
+							this->string_parsed = true;
+							tst::check(info.flags.get(tml::flag::curly_braces), SL);
+						}
+					}
+
+					void on_children_parse_started(tml::location)override{}
+					void on_children_parse_finished(tml::location)override{}
+				} l;
+
+				parser.parse_data_chunk(p, l);
+				parser.end_of_data(l);
+
+				tst::check(l.string_parsed, SL);
+		}
+	);
+
+	suite.add<std::string_view>(
+		"curly_braces_flag_should_be_false",
+		{
+			"hi{hey} hello hi{}",
+			"hi{hey}hello",
+			"\"hi\"{hey}hello",
+			"hi{hello}",
+			"hi\n{hello}",
+		},
+		[](const auto& p){
+			tml::parser parser;
+
+				struct listener : public tml::listener{
+					bool string_parsed = false;
+					void on_string_parsed(std::string_view str, const tml::extra_info& info)override{
+						if(str == "hello"){
+							this->string_parsed = true;
+							tst::check(!info.flags.get(tml::flag::curly_braces), SL);
+						}
+					}
+
+					void on_children_parse_started(tml::location)override{}
+					void on_children_parse_finished(tml::location)override{}
+				} l;
+
+				parser.parse_data_chunk(p, l);
+				parser.end_of_data(l);
+
+				tst::check(l.string_parsed, SL);
+		}
+	);
 });
 }
 
