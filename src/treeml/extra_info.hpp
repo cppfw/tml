@@ -64,7 +64,8 @@ enum class flag{
 
 	/**
 	 * @brief The node is first on the line.
-	 * Indicates that in the original text this node is first on the line.
+	 * Indicates that in the original text this node is first on the line, i.e.
+	 * before the node on the line are only whitespace characters or nothing.
 	 */
 	first_on_line,
 

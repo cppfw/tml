@@ -251,6 +251,12 @@ tst::set set1("parser_flags", [](tst::suite& suite){
 				"hi{\n bye \"hello\"}",
 				"hi{\n bye R\"(hello)\"}",
 				"hi{\n bye \"\"\"hello\"\"\"}",
+				"hi\n{hello}",
+				"hi\n{ hello}",
+				"hi\n { hello}",
+				"hi\n{\thello}",
+				"hi\n\t{hello}",
+				"hi\n{\"hello\"}",
 			},
 			[](const auto& p){
 				tml::parser parser;
@@ -347,6 +353,7 @@ tst::set set1("parser_flags", [](tst::suite& suite){
 				"hi{\nR\"(hello)\"}",
 				"hi{\n\"\"\"hello\"\"\"}",
 				"hi{\n hello}",
+				"hi{\n\thello}",
 				"hi{\n \"hello\"}",
 				"hi{\n R\"(hello)\"}",
 				"hi{\n \"\"\"hello\"\"\"}",
@@ -463,7 +470,8 @@ tst::set set1("parser_flags", [](tst::suite& suite){
 				tst::check(l.string_parsed, SL);
 			}
 		);
-	
+
+	// test that failed C++ style raw string sequence works as expected
 	suite.add<std::string_view>(
 			"raw_cpp_and_quoted_flags_should_be_false_for_r",
 			{
