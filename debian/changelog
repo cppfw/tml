@@ -1,3 +1,9 @@
+libtreeml (0.2.8) unstable; urgency=medium
+
+  * build for ubuntu jammy
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 15 Nov 2022 22:53:29 +0200
+
 libtreeml (0.2.7) unstable; urgency=medium
 
   * implement curly braces extra info flag
