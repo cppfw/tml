@@ -12,6 +12,13 @@ tst::set set0("tree_ext", [](auto& suite){
         tst::check(l == str, SL);
     });
 
+    suite.add("compare_leaf_ext_to_string_view", [](){
+        std::string str = "hello world!";
+        tml::leaf_ext l{std::string(str)};
+        tst::check(l == str.c_str(), SL);
+        tst::check(l == std::string_view(str), SL);
+    });
+
     suite.add("compare_tree_ext_to_string", [](){
         std::string str = "hello world!";
         tml::tree_ext t{std::string(str)};

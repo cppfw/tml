@@ -79,6 +79,14 @@ public:
         return this->string != str;
     }
 
+    bool operator==(std::string_view str)const{
+        return this->string == str;
+    }
+
+    bool operator!=(std::string_view str)const{
+        return this->string != str;
+    }
+
     bool operator==(const leaf& l)const{
         return this->string == l.string;
     }
