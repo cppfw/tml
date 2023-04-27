@@ -32,6 +32,8 @@ SOFTWARE.
 #include <cinttypes>
 #include <cstring>
 
+#include <utki/string.hpp>
+
 #include <papki/span_file.hpp>
 #include <papki/vector_file.hpp>
 
@@ -276,98 +278,36 @@ leaf::leaf(bool value) :
 		string(value ? "true" : "false")
 {}
 
-namespace{
-int to_int(base conversion_base){
-	switch(conversion_base){
-		case base::bin:
-			return 2;
-		case base::oct:
-			return 8;
-		default:
-			[[fallthrough]];
-		case base::dec:
-			return 10;
-		case base::hex:
-			return 16;
-	}
-}
-}
-
-namespace{
-template <typename number_type>
-std::string to_string(number_type value, base conversion_base = base::dec){
-	std::array<char, 128> buf; // 128 chars is large enough to hold any built-in integral or floating point type
-	auto begin_ptr = buf.data();
-	auto end_ptr = buf.data() + buf.size();
-
-	if constexpr (std::is_unsigned_v<number_type>){
-		switch(conversion_base){
-			case base::bin:
-				buf[0] = '0';
-				buf[1] = 'b';
-				begin_ptr += 2;
-				break;
-			case base::oct:
-				buf[0] = '0';
-				++begin_ptr;
-				break;
-			case base::hex:
-				buf[0] = '0';
-				buf[1] = 'x';
-				begin_ptr += 2;
-				break;
-			default:
-				break;
-		}
-	}
-
-	auto res = std::to_chars(
-			begin_ptr,
-			end_ptr,
-			value,
-			to_int(conversion_base)
-		);
-
-	if(res.ec != std::errc()){
-		return std::string();
-	}
-
-	ASSERT(res.ptr <= end_ptr)
-
-	return std::string(buf.data(), res.ptr - buf.data());
-}
-}
-
 leaf::leaf(int value) :
-		string(::to_string(value))
+		string(utki::to_string(value))
 {}
 
-leaf::leaf(unsigned char value, base conversion_base) :
+leaf::leaf(unsigned char value, utki::integer_base conversion_base) :
 		leaf((unsigned short int)value, conversion_base)
 {}
 
-leaf::leaf(unsigned short int value, base conversion_base) :
+leaf::leaf(unsigned short int value, utki::integer_base conversion_base) :
 		leaf((unsigned int)value, conversion_base)
 {}
 
-leaf::leaf(unsigned int value, base conversion_base) :
-		string(::to_string(value, conversion_base))
+leaf::leaf(unsigned int value, utki::integer_base conversion_base) :
+		string(utki::to_string(value, conversion_base))
 {}
 
 leaf::leaf(signed long int value) :
-		string(::to_string(value))
+		string(utki::to_string(value))
 {}
 
-leaf::leaf(unsigned long int value, base conversion_base) :
-		string(::to_string(value, conversion_base))
+leaf::leaf(unsigned long int value, utki::integer_base conversion_base) :
+		string(utki::to_string(value, conversion_base))
 {}
 
 leaf::leaf(signed long long int value) :
-		string(::to_string(value))
+		string(utki::to_string(value))
 {}
 
-leaf::leaf(unsigned long long int value, base conversion_base) :
-		string(::to_string(value, conversion_base))
+leaf::leaf(unsigned long long int value, utki::integer_base conversion_base) :
+		string(utki::to_string(value, conversion_base))
 {}
 
 leaf::leaf(float value) :

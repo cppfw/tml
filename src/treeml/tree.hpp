@@ -36,13 +36,6 @@ SOFTWARE.
 //TODO: doxygen
 namespace tml{
 
-enum class base{
-    bin,
-    oct,
-    dec,
-    hex
-};
-
 class leaf{
     std::string string;
 public:
@@ -117,17 +110,17 @@ public:
 
     explicit leaf(bool value);
 
-    explicit leaf(unsigned char value, base conversion_base = base::dec);
-    explicit leaf(unsigned short int value, base conversion_base = base::dec);
+    explicit leaf(unsigned char value, utki::integer_base conversion_base = utki::integer_base::dec);
+    explicit leaf(unsigned short int value, utki::integer_base conversion_base = utki::integer_base::dec);
 
     explicit leaf(signed int value);
-    explicit leaf(unsigned int value, base conversion_base = base::dec);
+    explicit leaf(unsigned int value, utki::integer_base conversion_base = utki::integer_base::dec);
 
     explicit leaf(signed long int value);
-    explicit leaf(unsigned long int value, base conversion_base = base::dec);
+    explicit leaf(unsigned long int value, utki::integer_base conversion_base = utki::integer_base::dec);
 
     explicit leaf(signed long long int value);
-    explicit leaf(unsigned long long int value, base conversion_base = base::dec);
+    explicit leaf(unsigned long long int value, utki::integer_base conversion_base = utki::integer_base::dec);
 
     explicit leaf(float value);
     explicit leaf(double value);
