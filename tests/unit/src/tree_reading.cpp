@@ -6,7 +6,7 @@
 #include "../../../src/treeml/tree.hpp"
 
 namespace{
-tst::set set("tree_reading", [](tst::suite& suite){
+const tst::set set("tree_reading", [](tst::suite& suite){
 	suite.add("read", [](){
 		papki::fs_file fi("tree_reading_data/test.tml");
 

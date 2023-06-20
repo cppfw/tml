@@ -4,7 +4,7 @@
 #include "../../../src/treeml/tree_ext.hpp"
 
 namespace{
-tst::set set("read_ext", [](auto& suite){
+const tst::set set("read_ext", [](auto& suite){
 	suite.add("correct_extra_info_is_provided", [](){
 		const auto tml = tml::read_ext(R"qwertyuiop(
 			hello"world!"

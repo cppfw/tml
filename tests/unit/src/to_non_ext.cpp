@@ -4,7 +4,7 @@
 #include "../../../src/treeml/tree_ext.hpp"
 
 namespace{
-tst::set set0("to_non_ext", [](auto& suite){
+const tst::set set("to_non_ext", [](auto& suite){
     suite.template add<std::string>(
             "tree_to_non_ext",
             {

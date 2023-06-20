@@ -68,7 +68,15 @@ public:
 	 */
 	virtual void on_children_parse_finished(location loc) = 0;
 
-	virtual ~listener() noexcept {}
+	listener() = default;
+
+	listener(const listener&) = default;
+	listener& operator=(const listener&) = default;
+
+	listener(listener&&) = default;
+	listener& operator=(listener&&) = default;
+
+	virtual ~listener() = default;
 };
 
 /**
@@ -82,10 +90,10 @@ class parser
 
 	// used for raw string open/close sequences, unicode sequences etc.
 	std::string sequence;
-	size_t sequence_index;
+	size_t sequence_index = 0;
 
-	// This variable is used for tracking current nesting level to make checks for detecting malformed treeml document
-	unsigned nesting_level;
+	// this variable is used for tracking current nesting level to make checks for detecting malformed treeml document
+	unsigned nesting_level = 0;
 
 	enum class state {
 		initial, // state before parsing the first node
@@ -104,9 +112,9 @@ class parser
 		raw_python_string_opening_sequence,
 		raw_python_string_closing_sequence,
 		raw_python_string,
-	} cur_state;
+	} cur_state = state::initial;
 
-	state previous_state;
+	state previous_state = state::idle;
 
 	void handle_string_parsed(tml::listener& listener);
 
@@ -167,6 +175,7 @@ public:
 
 	void parse_data_chunk(utki::span<const uint8_t> chunk, listener& listener)
 	{
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 		this->parse_data_chunk(utki::make_span(reinterpret_cast<const char*>(chunk.data()), chunk.size()), listener);
 	}
 

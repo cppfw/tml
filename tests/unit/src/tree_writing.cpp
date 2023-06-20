@@ -36,7 +36,7 @@ std::function<void(const std::string&)> make_test_proc(){
 }
 
 namespace{
-tst::set set("tree_writing", [](tst::suite& suite){
+const tst::set set("tree_writing", [](tst::suite& suite){
 	std::vector<std::string> files;
 
 	{

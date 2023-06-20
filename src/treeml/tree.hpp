@@ -41,9 +41,12 @@ class leaf
 
 public:
 	leaf() = default;
+
 	leaf(const leaf&) = default;
-	leaf(leaf&&) = default;
 	leaf& operator=(const leaf&) = default;
+
+	leaf(leaf&&) = default;
+	leaf& operator=(leaf&&) = default;
 
 	leaf(const char* str) :
 		string(str)
@@ -56,6 +59,8 @@ public:
 	leaf(std::string&& str) :
 		string(std::move(str))
 	{}
+
+	~leaf() = default;
 
 	bool operator==(const char* str) const
 	{
@@ -190,8 +195,8 @@ public:
 	}
 };
 
-typedef utki::tree<leaf> tree;
-typedef tree::container_type forest;
+using tree = utki::tree<leaf>;
+using forest = tree::container_type;
 
 forest read(const papki::file& fi);
 forest read(const std::string& str);

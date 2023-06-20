@@ -5,10 +5,10 @@
 #include "../../../src/treeml/tree_ext.hpp"
 
 namespace{
-template <class T> struct sample_template{
+template <class value_type> struct sample_template{
 	tml::leaf leaf;
 	std::string expected_string;
-	T expected_value;
+	value_type expected_value;
 };
 
 template <class test_type> test_type to_test_type(const tml::leaf& l);
@@ -117,7 +117,7 @@ void test_uint(tst::suite& suite, const std::string& test_name){
 }
 
 namespace{
-tst::set set0("value_conversion", [](tst::suite& suite){
+const tst::set set("value_conversion", [](tst::suite& suite){
 	suite.add<sample_template<bool>>(
 			"convert_to_bool",
 			{

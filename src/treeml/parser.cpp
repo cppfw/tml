@@ -31,6 +31,7 @@ SOFTWARE.
 #include <sstream>
 
 #include <utki/debug.hpp>
+#include <utki/string.hpp>
 #include <utki/unicode.hpp>
 
 #ifdef DEBUG
@@ -51,27 +52,25 @@ void parser::next_line()
 
 void parser::handle_string_parsed(listener& listener)
 {
-	auto data = this->buf.data();
-	auto size = this->buf.size();
+	auto span = utki::make_span(this->buf);
+
 	if (this->string_parsed_info.flags.get(flag::raw)) {
-		if (size >= 2 && data[0] == '\r' && data[1] == '\n') {
-			data += 2;
-			size -= 2;
-		} else if (size >= 1 && data[0] == '\n') {
-			++data;
-			--size;
+		if (span.size() >= 2 && span[0] == '\r' && span[1] == '\n') {
+			span = span.subspan(2);
+		} else if (span.size() >= 1 && span[0] == '\n') {
+			span = span.subspan(1);
 		}
 
-		if (size >= 1 && data[size - 1] == '\n') {
-			--size;
+		if (span.size() >= 1 && span.back() == '\n') {
+			span = span.subspan(0, span.size() - 1);
 		}
 
-		if (size >= 1 && data[size - 1] == '\r') {
-			--size;
+		if (span.size() >= 1 && span.back() == '\r') {
+			span = span.subspan(0, span.size() - 1);
 		}
 	}
 
-	listener.on_string_parsed(std::string_view(data, size), this->string_parsed_info);
+	listener.on_string_parsed(utki::make_string_view(span), this->string_parsed_info);
 	this->buf.clear();
 }
 
@@ -285,17 +284,20 @@ void parser::process_char_in_quoted_string(char c, listener& listener)
 
 void parser::process_char_in_escape_sequence(char c, listener& listener)
 {
+	constexpr auto short_unicode_sequence_length = 4;
+	constexpr auto long_unicode_sequence_length = 8;
+
 	ASSERT(this->cur_state == state::escape_sequence)
 	switch (c) {
 		case 'u':
 			this->cur_state = state::unicode_sequence;
 			this->sequence_index = 0;
-			this->sequence.resize(4);
+			this->sequence.resize(short_unicode_sequence_length);
 			return;
 		case 'U':
 			this->cur_state = state::unicode_sequence;
 			this->sequence_index = 0;
-			this->sequence.resize(8);
+			this->sequence.resize(long_unicode_sequence_length);
 			return;
 		case 'n':
 			this->buf.push_back('\n');
@@ -340,7 +342,8 @@ void parser::process_char_in_unicode_sequence(char c, listener& listener)
 
 	if (this->sequence_index == this->sequence.size()) {
 		uint32_t value = 0;
-		auto res = std::from_chars(this->sequence.data(), this->sequence.data() + this->sequence.size(), value, 16);
+		auto span = utki::make_span(this->sequence);
+		auto res = std::from_chars(span.data(), span.end_pointer(), value, utki::to_int(utki::integer_base::hex));
 		if (res.ec == std::errc::invalid_argument) {
 			std::stringstream ss;
 			ss << "malformed document: could not parse hexadecimal number of unicode escape sequence at line: "
@@ -691,15 +694,20 @@ void tml::parse(const papki::file& fi, listener& listener)
 
 	tml::parser parser;
 
-	std::array<uint8_t, file_read_chunk_size> buf; // 2kb read buffer.
+	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
+	std::array<uint8_t, file_read_chunk_size> buf;
 
-	size_t bytesRead;
+	// size_t num_bytes_read;
 
-	do {
-		bytesRead = fi.read(utki::make_span(buf));
+	for (;;) {
+		size_t num_bytes_read = fi.read(utki::make_span(buf));
 
-		parser.parse_data_chunk(utki::make_span(&*buf.begin(), bytesRead), listener);
-	} while (bytesRead == buf.size());
+		parser.parse_data_chunk(utki::make_span(buf.data(), num_bytes_read), listener);
+
+		if (num_bytes_read != buf.size()) {
+			break;
+		}
+	}
 
 	parser.end_of_data(listener);
 }

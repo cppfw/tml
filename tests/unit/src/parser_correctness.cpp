@@ -4,7 +4,7 @@
 #include "../../../src/treeml/tree.hpp"
 
 namespace{
-tst::set set1("parser_correctness", [](tst::suite& suite){
+const tst::set set("parser_correctness", [](tst::suite& suite){
 	suite.add<std::pair<const char*, const char*>>(
 			"single_slash_is_parsed_as_node",
 			// the test checks that 5th element is as expected

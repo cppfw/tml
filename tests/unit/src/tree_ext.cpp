@@ -4,7 +4,7 @@
 #include "../../../src/treeml/tree_ext.hpp"
 
 namespace{
-tst::set set0("tree_ext", [](auto& suite){
+const tst::set set("tree_ext", [](auto& suite){
     suite.add("compare_leaf_ext_to_string", [](){
         std::string str = "hello world!";
         tml::leaf_ext l{std::string(str)};

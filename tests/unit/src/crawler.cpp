@@ -20,14 +20,14 @@ b8 {b8_1 b8_2{b8_2_1} }
 )qwertyuiop";
 
 const auto const_roots = tml::read(sample);
-auto roots = tml::read(sample);
+const auto roots = tml::read(sample);
 }
 
 namespace{
 struct predicate_str{
 	std::string s;
 
-	predicate_str(const std::string& s) : s(s){}
+	predicate_str(std::string s) : s(std::move(s)){}
 
 	bool operator()(const utki::tree<tml::leaf>& l){
 		return l.value == s;
@@ -36,7 +36,7 @@ struct predicate_str{
 }
 
 namespace{
-tst::set set0("crawler", [](auto& suite){
+const tst::set set("crawler", [](auto& suite){
 	suite.add("non_const_crawler", [](){
 		auto& b6_1_1 = tml::crawler(roots).to("b5").next().in().to_if(predicate_str("b6_1")).in().to("b6_1_1").get().value;
 		tst::check_eq(b6_1_1, tml::leaf("b6_1_1"), SL);

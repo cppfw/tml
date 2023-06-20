@@ -1,0 +1,4 @@
+Checks: |
+  -cppcoreguidelines-avoid-magic-numbers,
+  -modernize-raw-string-literal
+InheritParentConfig: true

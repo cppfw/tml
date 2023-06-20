@@ -64,8 +64,8 @@ public:
 	{}
 };
 
-typedef utki::tree<leaf_ext> tree_ext;
-typedef tree_ext::container_type forest_ext;
+using tree_ext = utki::tree<leaf_ext>;
+using forest_ext = tree_ext::container_type;
 
 forest_ext read_ext(const papki::file& fi);
 forest_ext read_ext(const std::string& str);

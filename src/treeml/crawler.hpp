@@ -46,6 +46,7 @@ public:
 	}
 
 	crawler(const forest& b) :
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
 		crawler(const_cast<forest&>(b))
 	{}
 
@@ -65,6 +66,7 @@ public:
 
 	const crawler& to(const std::string& str) const
 	{
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
 		return const_cast<crawler*>(this)->to(str);
 	}
 
@@ -81,6 +83,7 @@ public:
 	template <class predicate_type>
 	const crawler& to_if(predicate_type p) const
 	{
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
 		return const_cast<crawler*>(this)->to_if(p);
 	}
 
@@ -88,6 +91,7 @@ public:
 
 	const crawler& next() const
 	{
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
 		return const_cast<crawler*>(this)->next();
 	}
 
@@ -95,10 +99,11 @@ public:
 
 	const crawler in() const
 	{
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
 		return const_cast<crawler*>(this)->in();
 	}
 };
 
-typedef const crawler const_crawler;
+using const_crawler = const crawler;
 
 } // namespace tml

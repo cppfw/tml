@@ -75,6 +75,7 @@ forest_ext tml::read_ext(const papki::file& fi)
 
 forest_ext tml::read_ext(const std::string& str)
 {
+	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
 	const papki::span_file fi(utki::make_span(reinterpret_cast<const uint8_t*>(str.data()), str.size()));
 
 	return read_ext(fi);
@@ -84,7 +85,7 @@ tree tml::to_non_ext(const tree_ext& t)
 {
 	tree ret;
 
-	ret.value = t.value;
+	ret.value = static_cast<const leaf&>(t.value);
 	ret.children = to_non_ext(t.children);
 
 	return ret;

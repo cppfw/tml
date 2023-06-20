@@ -4,7 +4,7 @@
 #include "../../../src/treeml/tree.hpp"
 
 namespace{
-tst::set set("snippets", [](auto& suite){
+const tst::set set("snippets", [](auto& suite){
     suite.template add<std::string>(
             "snippet_is_reading_fails",
             {

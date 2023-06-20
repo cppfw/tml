@@ -4,7 +4,7 @@
 #include "../../../src/treeml/parser.hpp"
 
 namespace{
-tst::set set1("parser_flags", [](tst::suite& suite){
+const tst::set set("parser_flags", [](tst::suite& suite){
 	suite.add<std::string_view>(
 			"flag_space_should_be_false",
 			{
@@ -596,7 +596,7 @@ tst::set set1("parser_flags", [](tst::suite& suite){
 			" \"hello\"{}",
 			" \"hello\" {}",
 			"hi \"hello\"{}",
-			"hi \"hello\" {}"
+			"hi \"hello\" {}",
 			"\"\"\"hello\"\"\"{}",
 			"\"\"\"hello\"\"\" {}",
 			"R\"(hello)\"{}",
@@ -661,7 +661,7 @@ tst::set set1("parser_flags", [](tst::suite& suite){
 }
 
 namespace{
-tst::set set2("parser_location", [](tst::suite& suite){
+const tst::set set2("parser_location", [](tst::suite& suite){
 	suite.add<std::tuple<std::string_view, size_t, size_t>>(
 			"location",
 			{

@@ -34,7 +34,7 @@ crawler crawler::in()
 	if (this->get().children.size() == 0) {
 		throw std::logic_error("crawler::in() failed, node has no children");
 	}
-	return crawler(this->get().children);
+	return {this->get().children};
 }
 
 crawler& crawler::next()
