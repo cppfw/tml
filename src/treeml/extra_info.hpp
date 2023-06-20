@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2012-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,13 +28,13 @@ SOFTWARE.
 
 #include <utki/flags.hpp>
 
-namespace tml{
+namespace tml {
 
 /**
  * @brief Additional information flags.
  * These are the flags indicating additional formatting information of the parsed treeml node.
  */
-enum class flag{
+enum class flag {
 	/**
 	 * @brief Space between previous node and this node.
 	 * Indicates that in the original text there is a whitespace between this node and previous node.
@@ -78,14 +78,14 @@ enum class flag{
 	enum_size
 };
 
-struct location{
+struct location {
 	size_t line;
 	size_t offset;
 };
 
-struct extra_info{
+struct extra_info {
 	tml::location location;
 	utki::flags<tml::flag> flags;
 };
 
-}
+} // namespace tml

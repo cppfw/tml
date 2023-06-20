@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2012-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,40 +26,41 @@ SOFTWARE.
 
 #pragma once
 
-#include "tree.hpp"
 #include "extra_info.hpp"
+#include "tree.hpp"
 
-namespace tml{
+namespace tml {
 
-class leaf_ext : public leaf{
+class leaf_ext : public leaf
+{
 public:
 	extra_info info;
 
 	leaf_ext(const char* str) :
-			leaf(str)
+		leaf(str)
 	{}
 
 	leaf_ext(const std::string& str) :
-			leaf(str)
+		leaf(str)
 	{}
 
 	leaf_ext(std::string&& str) :
-			leaf(std::move(str))
+		leaf(std::move(str))
 	{}
 
 	leaf_ext(const char* str, const extra_info& info) :
-			leaf(str),
-			info(info)
+		leaf(str),
+		info(info)
 	{}
 
 	leaf_ext(const std::string& str, const extra_info& info) :
-			leaf(str),
-			info(info)
+		leaf(str),
+		info(info)
 	{}
 
 	leaf_ext(std::string&& str, const extra_info& info) :
-			leaf(std::move(str)),
-			info(info)
+		leaf(std::move(str)),
+		info(info)
 	{}
 };
 
@@ -72,4 +73,4 @@ forest_ext read_ext(const std::string& str);
 tree to_non_ext(const tree_ext& t);
 forest to_non_ext(const forest_ext& f);
 
-}
+} // namespace tml

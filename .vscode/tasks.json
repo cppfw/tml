@@ -75,6 +75,13 @@
             "command": "make clean-all",
             "problemMatcher": [],
             "group": "build"
+        },
+        {
+            "label": "format",
+            "type": "shell",
+            "command": "make apply-format",
+            "problemMatcher": [],
+            "group": "build"
         }
     ]
 }

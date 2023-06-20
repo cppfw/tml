@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2012-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,37 +27,43 @@ SOFTWARE.
 #include "tree_ext.hpp"
 
 #include <stack>
+
 #include <papki/span_file.hpp>
 
 #include "parser.hpp"
 
 using namespace tml;
 
-forest_ext tml::read_ext(const papki::file& fi){
-	class the_listener : public tml::listener{
+forest_ext tml::read_ext(const papki::file& fi)
+{
+	class the_listener : public tml::listener
+	{
 		std::stack<forest_ext> stack;
 
 	public:
 		forest_ext cur_forest;
 
-		void on_children_parse_started(location loc)override{
+		void on_children_parse_started(location loc) override
+		{
 			this->stack.push(std::move(this->cur_forest));
-            ASSERT(this->cur_forest.size() == 0)
+			ASSERT(this->cur_forest.size() == 0)
 		}
 
-        void on_children_parse_finished(location loc)override{
-            if(this->stack.size() == 0){
+		void on_children_parse_finished(location loc) override
+		{
+			if (this->stack.size() == 0) {
 				std::stringstream ss;
 				ss << "malformed treeml: unopened curly brace encountered at ";
 				ss << loc.line << ":" << loc.offset;
 				throw std::invalid_argument(ss.str());
 			}
-            this->stack.top().back().children = std::move(this->cur_forest);
-            this->cur_forest = std::move(this->stack.top());
-            this->stack.pop();
+			this->stack.top().back().children = std::move(this->cur_forest);
+			this->cur_forest = std::move(this->stack.top());
+			this->stack.pop();
 		}
 
-		void on_string_parsed(std::string_view str, const extra_info& info)override{
+		void on_string_parsed(std::string_view str, const extra_info& info) override
+		{
 			this->cur_forest.emplace_back(leaf_ext(std::string(str.data(), str.size()), info));
 		}
 	} listener;
@@ -67,13 +73,15 @@ forest_ext tml::read_ext(const papki::file& fi){
 	return std::move(listener.cur_forest);
 }
 
-forest_ext tml::read_ext(const std::string& str){
+forest_ext tml::read_ext(const std::string& str)
+{
 	const papki::span_file fi(utki::make_span(reinterpret_cast<const uint8_t*>(str.data()), str.size()));
 
 	return read_ext(fi);
 }
 
-tree tml::to_non_ext(const tree_ext& t){
+tree tml::to_non_ext(const tree_ext& t)
+{
 	tree ret;
 
 	ret.value = t.value;
@@ -82,10 +90,11 @@ tree tml::to_non_ext(const tree_ext& t){
 	return ret;
 }
 
-forest tml::to_non_ext(const forest_ext& f){
+forest tml::to_non_ext(const forest_ext& f)
+{
 	forest ret;
 
-	for(const auto& c : f){
+	for (const auto& c : f) {
 		ret.push_back(to_non_ext(c));
 	}
 

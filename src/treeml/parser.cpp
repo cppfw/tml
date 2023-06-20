@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2012-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,9 +26,9 @@ SOFTWARE.
 
 #include "parser.hpp"
 
-#include <sstream>
-#include <cstring>
 #include <charconv>
+#include <cstring>
+#include <sstream>
 
 #include <utki/debug.hpp>
 #include <utki/unicode.hpp>
@@ -39,32 +39,34 @@ SOFTWARE.
 
 using namespace tml;
 
-namespace{
+namespace {
 const size_t file_read_chunk_size = 0x4ff;
-}
+} // namespace
 
-void parser::next_line(){
+void parser::next_line()
+{
 	++this->cur_loc.line;
 	this->cur_loc.offset = 0;
 }
 
-void parser::handle_string_parsed(listener& listener){
+void parser::handle_string_parsed(listener& listener)
+{
 	auto data = this->buf.data();
 	auto size = this->buf.size();
-	if(this->string_parsed_info.flags.get(flag::raw)){
-		if(size >= 2 && data[0] == '\r' && data[1] == '\n'){
+	if (this->string_parsed_info.flags.get(flag::raw)) {
+		if (size >= 2 && data[0] == '\r' && data[1] == '\n') {
 			data += 2;
 			size -= 2;
-		}else if(size >= 1 && data[0] == '\n'){
+		} else if (size >= 1 && data[0] == '\n') {
 			++data;
 			--size;
 		}
 
-		if(size >= 1 && data[size - 1] == '\n'){
+		if (size >= 1 && data[size - 1] == '\n') {
 			--size;
 		}
 
-		if(size >= 1 && data[size - 1] == '\r'){
+		if (size >= 1 && data[size - 1] == '\r') {
 			--size;
 		}
 	}
@@ -73,13 +75,15 @@ void parser::handle_string_parsed(listener& listener){
 	this->buf.clear();
 }
 
-void parser::set_string_start_pos(){
+void parser::set_string_start_pos()
+{
 	this->info.location = this->cur_loc;
 }
 
-void parser::process_char_in_initial(char c, listener& listener){
+void parser::process_char_in_initial(char c, listener& listener)
+{
 	ASSERT(this->cur_state == state::initial)
-	switch(c){
+	switch (c) {
 		case '\n':
 			this->info.flags.set(tml::flag::first_on_line);
 		case ' ':
@@ -100,8 +104,9 @@ void parser::process_char_in_initial(char c, listener& listener){
 	}
 }
 
-void parser::process_char_in_idle(char c, listener& listener){
-	switch(c){
+void parser::process_char_in_idle(char c, listener& listener)
+{
+	switch (c) {
 		case '\n':
 			this->info.flags.set(tml::flag::first_on_line);
 		case ' ':
@@ -116,13 +121,13 @@ void parser::process_char_in_idle(char c, listener& listener){
 			{
 				std::stringstream ss;
 				ss << "Malformed treeml document fed. Unexpected { at line: " << this->cur_loc.line;
-				throw std::invalid_argument(ss.str()); 
+				throw std::invalid_argument(ss.str());
 			}
 			break;
 		case '}':
 			listener.on_children_parse_finished(this->cur_loc);
 			--this->nesting_level;
-			
+
 			// Some other states forward processing to 'process_char_in_idle()' by explicitly calling it,
 			// thus this function can be called even when parser is not in idle state.
 			// This is why here we set the state to idle.
@@ -153,13 +158,15 @@ void parser::process_char_in_idle(char c, listener& listener){
 	}
 }
 
-void parser::set_string_parsed_state(){
+void parser::set_string_parsed_state()
+{
 	this->string_parsed_info = this->info;
 	this->info.flags.clear();
 	this->cur_state = state::string_parsed;
 }
 
-void parser::process_char_in_string_parsed(char c, listener& listener){
+void parser::process_char_in_string_parsed(char c, listener& listener)
+{
 	ASSERT(this->cur_state == state::string_parsed)
 	switch (c) {
 		case '\n':
@@ -191,15 +198,16 @@ void parser::process_char_in_string_parsed(char c, listener& listener){
 	}
 }
 
-void parser::process_char_in_unquoted_string(char c, listener& listener){
+void parser::process_char_in_unquoted_string(char c, listener& listener)
+{
 	ASSERT(this->cur_state == state::unquoted_string)
-	switch(c){
+	switch (c) {
 		case '"':
 			ASSERT(this->buf.size() != 0)
-			if(this->buf.size() == 1 && this->buf.back() == 'R'){
+			if (this->buf.size() == 1 && this->buf.back() == 'R') {
 				this->buf.clear();
 				this->cur_state = state::raw_cpp_string_opening_sequence;
-			}else{
+			} else {
 				this->set_string_parsed_state();
 				this->handle_string_parsed(listener);
 				this->cur_state = state::raw_python_string_opening_sequence;
@@ -216,7 +224,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 			this->set_string_parsed_state();
 
 			this->info.flags.set(tml::flag::space);
-			if(c == '\n'){
+			if (c == '\n') {
 				this->info.flags.set(tml::flag::first_on_line);
 			}
 			break;
@@ -253,9 +261,10 @@ void parser::process_char_in_unquoted_string(char c, listener& listener){
 	}
 }
 
-void parser::process_char_in_quoted_string(char c, listener& listener){
+void parser::process_char_in_quoted_string(char c, listener& listener)
+{
 	ASSERT(this->cur_state == state::quoted_string)
-	switch(c){
+	switch (c) {
 		case '"':
 			// this->handle_string_parsed(listener);
 			this->set_string_parsed_state();
@@ -274,9 +283,10 @@ void parser::process_char_in_quoted_string(char c, listener& listener){
 	}
 }
 
-void parser::process_char_in_escape_sequence(char c, listener& listener){
+void parser::process_char_in_escape_sequence(char c, listener& listener)
+{
 	ASSERT(this->cur_state == state::escape_sequence)
-	switch(c){
+	switch (c) {
 		case 'u':
 			this->cur_state = state::unicode_sequence;
 			this->sequence_index = 0;
@@ -295,7 +305,7 @@ void parser::process_char_in_escape_sequence(char c, listener& listener){
 			break;
 		case '\n':
 			this->buf.push_back('\\');
-			if(this->previous_state == state::unquoted_string){
+			if (this->previous_state == state::unquoted_string) {
 				this->cur_state = state::unquoted_string;
 				this->process_char_in_unquoted_string('\n', listener);
 				return;
@@ -308,7 +318,7 @@ void parser::process_char_in_escape_sequence(char c, listener& listener){
 		case ' ':
 		case '{':
 		case '}':
-			if(this->previous_state == state::quoted_string){
+			if (this->previous_state == state::quoted_string) {
 				this->buf.push_back('\\');
 			}
 			this->buf.push_back(c);
@@ -321,35 +331,38 @@ void parser::process_char_in_escape_sequence(char c, listener& listener){
 	this->cur_state = this->previous_state;
 }
 
-void parser::process_char_in_unicode_sequence(char c, listener& listener){
+void parser::process_char_in_unicode_sequence(char c, listener& listener)
+{
 	ASSERT(this->cur_state == state::unicode_sequence)
 
 	this->sequence[this->sequence_index] = c;
 	++this->sequence_index;
 
-	if(this->sequence_index == this->sequence.size()){
+	if (this->sequence_index == this->sequence.size()) {
 		uint32_t value = 0;
 		auto res = std::from_chars(this->sequence.data(), this->sequence.data() + this->sequence.size(), value, 16);
-		if(res.ec == std::errc::invalid_argument){
+		if (res.ec == std::errc::invalid_argument) {
 			std::stringstream ss;
-			ss << "malformed document: could not parse hexadecimal number of unicode escape sequence at line: " << this->cur_loc.line;
+			ss << "malformed document: could not parse hexadecimal number of unicode escape sequence at line: "
+			   << this->cur_loc.line;
 			throw std::invalid_argument(ss.str());
 		}
 
 		auto bytes = utki::to_utf8(char32_t(value));
 
-		for(auto i = bytes.begin(); *i != '\0' && i != bytes.end(); ++i){
+		for (auto i = bytes.begin(); *i != '\0' && i != bytes.end(); ++i) {
 			this->buf.push_back(*i);
 		}
-		
+
 		this->cur_state = this->previous_state;
 		this->sequence.clear();
 	}
 }
 
-void parser::process_char_in_comment_sequence(char c, listener& listener){
+void parser::process_char_in_comment_sequence(char c, listener& listener)
+{
 	ASSERT(this->cur_state == state::comment_seqence)
-	switch(c){
+	switch (c) {
 		case '/':
 			this->cur_state = state::single_line_comment;
 			break;
@@ -358,7 +371,9 @@ void parser::process_char_in_comment_sequence(char c, listener& listener){
 			break;
 		case '{':
 			this->handle_string_parsed(listener);
-			ASSERT(this->buf.empty(), [this](auto&o){o<< "this->buf = " << utki::make_string(this->buf);})
+			ASSERT(this->buf.empty(), [this](auto& o) {
+				o << "this->buf = " << utki::make_string(this->buf);
+			})
 			this->set_string_start_pos();
 			--this->info.location.offset;
 
@@ -373,16 +388,18 @@ void parser::process_char_in_comment_sequence(char c, listener& listener){
 		case '\r':
 		case '\t':
 		case ' ':
-			if(!this->buf.empty()){
+			if (!this->buf.empty()) {
 				this->handle_string_parsed(listener);
 			}
-			ASSERT(this->buf.empty(), [this](auto&o){o<< "this->buf = " << utki::make_string(this->buf);})
+			ASSERT(this->buf.empty(), [this](auto& o) {
+				o << "this->buf = " << utki::make_string(this->buf);
+			})
 			this->buf.push_back('/');
 			// this->handle_string_parsed(listener);
 			this->set_string_parsed_state();
 			break;
 		default:
-			if(!this->buf.empty()){
+			if (!this->buf.empty()) {
 				this->handle_string_parsed(listener);
 			}
 			ASSERT(this->buf.empty())
@@ -393,10 +410,11 @@ void parser::process_char_in_comment_sequence(char c, listener& listener){
 	}
 }
 
-void parser::process_char_in_single_line_comment(char c, listener& listener){
+void parser::process_char_in_single_line_comment(char c, listener& listener)
+{
 	ASSERT(this->cur_state == state::single_line_comment)
 	this->info.flags.set(tml::flag::space);
-	switch(c){
+	switch (c) {
 		case '\0':
 			this->cur_state = this->previous_state;
 			this->process_char('\0', listener);
@@ -409,16 +427,17 @@ void parser::process_char_in_single_line_comment(char c, listener& listener){
 	}
 }
 
-void parser::process_char_in_multiline_comment(char c, listener& listener){
+void parser::process_char_in_multiline_comment(char c, listener& listener)
+{
 	ASSERT(this->cur_state == state::multiline_comment)
-	switch(c){
+	switch (c) {
 		case '*':
 			ASSERT(this->sequence.empty())
 			// ASSERT(this->buf.size() == 0)
 			this->sequence.push_back('*');
 			break;
 		case '/':
-			if(this->sequence.size() != 0){
+			if (this->sequence.size() != 0) {
 				ASSERT(this->sequence.size() == 1)
 				ASSERT(this->sequence.back() == '*')
 				this->sequence.clear();
@@ -431,9 +450,10 @@ void parser::process_char_in_multiline_comment(char c, listener& listener){
 	}
 }
 
-void parser::process_char_in_raw_cpp_string_opening_sequence(char c, listener& listener){
+void parser::process_char_in_raw_cpp_string_opening_sequence(char c, listener& listener)
+{
 	ASSERT(this->cur_state == state::raw_cpp_string_opening_sequence)
-	switch(c){
+	switch (c) {
 		case '"':
 			// not a C++ style raw string, report 'R' string and a quoted string
 			{
@@ -443,10 +463,10 @@ void parser::process_char_in_raw_cpp_string_opening_sequence(char c, listener& l
 			}
 			++this->info.location.offset;
 
-			if(this->buf.empty()){
+			if (this->buf.empty()) {
 				this->cur_state = state::raw_python_string_opening_sequence;
 				this->sequence_index = 2;
-			}else{
+			} else {
 				this->info.flags.set(tml::flag::quoted);
 				// this->handle_string_parsed(listener);
 				this->set_string_parsed_state();
@@ -464,9 +484,10 @@ void parser::process_char_in_raw_cpp_string_opening_sequence(char c, listener& l
 	}
 }
 
-void parser::process_char_in_raw_cpp_string(char c, listener& listener){
+void parser::process_char_in_raw_cpp_string(char c, listener& listener)
+{
 	ASSERT(this->cur_state == state::raw_cpp_string)
-	switch(c){
+	switch (c) {
 		case ')':
 			this->sequence_index = 0;
 			this->cur_state = state::raw_cpp_string_closing_sequence;
@@ -477,18 +498,19 @@ void parser::process_char_in_raw_cpp_string(char c, listener& listener){
 	}
 }
 
-void parser::process_char_in_raw_cpp_string_closing_sequence(char c, listener& listener){
+void parser::process_char_in_raw_cpp_string_closing_sequence(char c, listener& listener)
+{
 	ASSERT(this->cur_state == state::raw_cpp_string_closing_sequence)
-	switch(c){
+	switch (c) {
 		case '"':
 			ASSERT(this->sequence_index <= this->sequence.size())
-			if(this->sequence_index != this->sequence.size()){
+			if (this->sequence_index != this->sequence.size()) {
 				this->buf.push_back(')');
-				for(size_t i = 0; i != this->sequence_index; ++i){
+				for (size_t i = 0; i != this->sequence_index; ++i) {
 					this->buf.push_back(this->sequence[i]);
 				}
 				this->cur_state = state::raw_cpp_string;
-			}else{
+			} else {
 				this->sequence.clear();
 				// this->handle_string_parsed(listener);
 				this->set_string_parsed_state();
@@ -496,28 +518,27 @@ void parser::process_char_in_raw_cpp_string_closing_sequence(char c, listener& l
 			break;
 		default:
 			ASSERT(this->sequence_index <= this->sequence.size())
-			if(this->sequence_index == this->sequence.size()
-					|| c != this->sequence[this->sequence_index])
-			{
+			if (this->sequence_index == this->sequence.size() || c != this->sequence[this->sequence_index]) {
 				this->buf.push_back(')');
-				for(size_t i = 0; i != this->sequence_index; ++i){
+				for (size_t i = 0; i != this->sequence_index; ++i) {
 					this->buf.push_back(this->sequence[i]);
 				}
 				this->cur_state = state::raw_cpp_string;
-			}else{
+			} else {
 				++this->sequence_index;
 			}
 			break;
 	}
 }
 
-void parser::process_char_in_raw_python_string_opening_sequence(char c, listener& listener){
+void parser::process_char_in_raw_python_string_opening_sequence(char c, listener& listener)
+{
 	ASSERT(this->cur_state == state::raw_python_string_opening_sequence)
 	ASSERT(this->buf.empty())
-	switch(c){
+	switch (c) {
 		case '"':
 			++this->sequence_index;
-			if(this->sequence_index == 3){
+			if (this->sequence_index == 3) {
 				this->cur_state = state::raw_python_string;
 				this->info.flags.set(flag::raw);
 				this->info.flags.set(flag::raw_python_style);
@@ -525,7 +546,7 @@ void parser::process_char_in_raw_python_string_opening_sequence(char c, listener
 			break;
 		default:
 			this->info.flags.set(flag::quoted);
-			switch(this->sequence_index){
+			switch (this->sequence_index) {
 				default:
 					ASSERT(false)
 				case 1:
@@ -543,9 +564,10 @@ void parser::process_char_in_raw_python_string_opening_sequence(char c, listener
 	}
 }
 
-void parser::process_char_in_raw_python_string(char c, listener& listener){
+void parser::process_char_in_raw_python_string(char c, listener& listener)
+{
 	ASSERT(this->cur_state == state::raw_python_string)
-	switch(c){
+	switch (c) {
 		case '"':
 			this->cur_state = state::raw_python_string_closing_sequence;
 			this->sequence_index = 1;
@@ -556,12 +578,13 @@ void parser::process_char_in_raw_python_string(char c, listener& listener){
 	}
 }
 
-void parser::process_char_in_raw_python_string_closing_sequence(char c, listener& listener){
+void parser::process_char_in_raw_python_string_closing_sequence(char c, listener& listener)
+{
 	ASSERT(this->cur_state == state::raw_python_string_closing_sequence)
-	switch(c){
+	switch (c) {
 		case '"':
 			++this->sequence_index;
-			if(this->sequence_index == 3){
+			if (this->sequence_index == 3) {
 				// this->handle_string_parsed(listener);
 				this->set_string_parsed_state();
 			}
@@ -574,8 +597,9 @@ void parser::process_char_in_raw_python_string_closing_sequence(char c, listener
 	}
 }
 
-void parser::process_char(char c, listener& listener){
-	switch(this->cur_state){
+void parser::process_char(char c, listener& listener)
+{
+	switch (this->cur_state) {
 		case state::initial:
 			this->process_char_in_initial(c, listener);
 			break;
@@ -625,14 +649,17 @@ void parser::process_char(char c, listener& listener){
 			this->process_char_in_raw_python_string_closing_sequence(c, listener);
 			break;
 		default:
-			ASSERT(false, [&](auto&o){o << "this->cur_state = " << unsigned(this->cur_state);})
+			ASSERT(false, [&](auto& o) {
+				o << "this->cur_state = " << unsigned(this->cur_state);
+			})
 			break;
 	}
 }
 
-void parser::parse_data_chunk(utki::span<const char> chunk, listener& listener){
-	for(auto c : chunk){
-		if(c == '\n'){
+void parser::parse_data_chunk(utki::span<const char> chunk, listener& listener)
+{
+	for (auto c : chunk) {
+		if (c == '\n') {
 			this->next_line();
 		}
 		this->process_char(c, listener);
@@ -640,21 +667,26 @@ void parser::parse_data_chunk(utki::span<const char> chunk, listener& listener){
 	}
 }
 
-void parser::end_of_data(listener& listener){
+void parser::end_of_data(listener& listener)
+{
 	this->process_char('\0', listener);
 
-	if(this->nesting_level != 0){
-		throw std::invalid_argument("Malformed treeml document fed. Document end reached while parsing children block.");
+	if (this->nesting_level != 0) {
+		throw std::invalid_argument("Malformed treeml document fed. Document end reached while parsing children block."
+		);
 	}
 
-	if(this->cur_state != state::idle){
-		throw std::invalid_argument("Malformed treeml document fed. After parsing all the data, the parser remained in the middle of some parsing task.");
+	if (this->cur_state != state::idle) {
+		throw std::invalid_argument(
+			"Malformed treeml document fed. After parsing all the data, the parser remained in the middle of some parsing task."
+		);
 	}
 
 	this->reset();
 }
 
-void tml::parse(const papki::file& fi, listener& listener){
+void tml::parse(const papki::file& fi, listener& listener)
+{
 	papki::file::guard file_guard(fi);
 
 	tml::parser parser;
@@ -663,16 +695,17 @@ void tml::parse(const papki::file& fi, listener& listener){
 
 	size_t bytesRead;
 
-	do{
+	do {
 		bytesRead = fi.read(utki::make_span(buf));
 
 		parser.parse_data_chunk(utki::make_span(&*buf.begin(), bytesRead), listener);
-	}while(bytesRead == buf.size());
+	} while (bytesRead == buf.size());
 
 	parser.end_of_data(listener);
 }
 
-void parser::reset(){
+void parser::reset()
+{
 	this->buf.clear();
 	this->nesting_level = 0;
 	this->cur_state = state::initial;

@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2021 Ivan Gagis <igagis@gmail.com>
+Copyright (c) 2012-2023 Ivan Gagis <igagis@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,9 +28,8 @@ SOFTWARE.
 
 #include <string_view>
 
-#include <utki/span.hpp>
-
 #include <papki/file.hpp>
+#include <utki/span.hpp>
 
 #include "extra_info.hpp"
 
@@ -39,36 +38,37 @@ SOFTWARE.
  * hierarchies. The only kind of objects present in treeml are strings.
  * Objects (which are strings) can have arbitrary number of child objects.
  */
-namespace tml{
+namespace tml {
 
 /**
  * @brief Listener interface for treeml parser.
  * During the treeml document parsing the Parser notifies this listener object
  * about parsed tokens.
  */
-class listener{
+class listener
+{
 public:
 	/**
 	 * @brief A string token has been parsed.
 	 * This method is called by Parser when String token has been parsed.
-     * @param str - parsed string.
+	 * @param str - parsed string.
 	 * @param info - extra information, like line:offset position in original text file.
-     */
+	 */
 	virtual void on_string_parsed(std::string_view str, const extra_info& info) = 0;
 
 	/**
 	 * @brief Children list parsing started.
 	 * This method is called by Parser when '{' token has been parsed.
-     */
+	 */
 	virtual void on_children_parse_started(location loc) = 0;
 
 	/**
 	 * @brief Children list parsing finished.
 	 * This method is called by Parser when '}' token has been parsed.
-     */
+	 */
 	virtual void on_children_parse_finished(location loc) = 0;
 
-	virtual ~listener()noexcept{}
+	virtual ~listener() noexcept {}
 };
 
 /**
@@ -76,7 +76,8 @@ public:
  * This is a class of treeml parser. It is used for event-based parsing of treeml
  * documents.
  */
-class parser{
+class parser
+{
 	std::vector<char> buf; // buffer for current string being parsed
 
 	// used for raw string open/close sequences, unicode sequences etc.
@@ -86,7 +87,7 @@ class parser{
 	// This variable is used for tracking current nesting level to make checks for detecting malformed treeml document
 	unsigned nesting_level;
 
-	enum class state{
+	enum class state {
 		initial, // state before parsing the first node
 		idle,
 		string_parsed,
@@ -131,10 +132,7 @@ class parser{
 
 	void next_line();
 
-	extra_info info = {
-		{},
-		tml::flag::first_on_line
-	};
+	extra_info info = {{}, tml::flag::first_on_line};
 
 	// extra info saved for parsed string when moving to string_parsed state
 	extra_info string_parsed_info;
@@ -142,45 +140,43 @@ class parser{
 	void set_string_start_pos();
 
 	void set_string_parsed_state();
+
 public:
 	/**
 	 * @brief Constructor.
 	 * Creates an initially reset Parser object.
-     */
-	parser(){
+	 */
+	parser()
+	{
 		this->reset();
 	}
 
 	/**
 	 * @brief Reset parser.
 	 * Resets the parser to initial state, discarding all the temporary parsed data and state.
-     */
+	 */
 	void reset();
 
 	/**
 	 * @brief Parse chunk of treeml data.
 	 * Use this method to feed the treeml data to the parser.
-     * @param chunk - data chunk to parse.
-     * @param listener - listener object which will receive notifications about parsed tokens.
-     */
+	 * @param chunk - data chunk to parse.
+	 * @param listener - listener object which will receive notifications about parsed tokens.
+	 */
 	void parse_data_chunk(utki::span<const char> chunk, listener& listener);
 
-	void parse_data_chunk(utki::span<const uint8_t> chunk, listener& listener){
-		this->parse_data_chunk(
-				utki::make_span(
-						reinterpret_cast<const char*>(chunk.data()),
-						chunk.size()
-					),
-				listener
-			);
+	void parse_data_chunk(utki::span<const uint8_t> chunk, listener& listener)
+	{
+		this->parse_data_chunk(utki::make_span(reinterpret_cast<const char*>(chunk.data()), chunk.size()), listener);
 	}
 
 	/**
 	 * @brief Finalize parsing.
 	 * Call this method to finalize parsing after all the available treeml data has been fed to the parser.
-	 * This will tell parser that there will be no more data and the temporary stored data should be interpreted as it is.
-     * @param listener - listener object which will receive notifications about parsed tokens.
-     */
+	 * This will tell parser that there will be no more data and the temporary stored data should be interpreted as it
+	 * is.
+	 * @param listener - listener object which will receive notifications about parsed tokens.
+	 */
 	void end_of_data(listener& listener);
 };
 
@@ -192,4 +188,4 @@ public:
  */
 void parse(const papki::file& fi, listener& listener);
 
-}
+} // namespace tml
