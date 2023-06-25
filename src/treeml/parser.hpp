@@ -27,6 +27,7 @@ SOFTWARE.
 #pragma once
 
 #include <string_view>
+#include <vector>
 
 #include <papki/file.hpp>
 #include <utki/span.hpp>
