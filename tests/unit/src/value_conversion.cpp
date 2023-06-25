@@ -5,6 +5,7 @@
 #include "../../../src/treeml/tree_ext.hpp"
 
 namespace{
+// NOLINTNEXTLINE(bugprone-exception-escape)
 template <class value_type> struct sample_template{
 	tml::leaf leaf;
 	std::string expected_string;

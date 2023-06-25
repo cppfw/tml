@@ -353,6 +353,7 @@ void parser::process_char_in_unicode_sequence(char c, listener& listener)
 
 		auto bytes = utki::to_utf8(char32_t(value));
 
+		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg)
 		for (auto b : bytes) {
 			if (b == '\0') {
 				break;
