@@ -19,6 +19,12 @@ jobs:
       linux_distro: debian
       linux_release: bullseye
     steps:
+      - name: add llvm repo (for clang-format)
+        uses: myci-actions/add-deb-repo@master
+        with:
+          repo: deb https://apt.llvm.org/${{ matrix.codename }} llvm-toolchain-${{ matrix.codename }} main
+          repo-name: llvm
+          keys-asc: https://apt.llvm.org/llvm-snapshot.gpg.key
       - name: add cppfw deb repo
         uses: myci-actions/add-deb-repo@master
         with:
@@ -26,12 +32,6 @@ jobs:
           repo-name: cppfw
           keys-asc: https://gagis.hopto.org/repo/cppfw/pubkey.gpg
           install: myci locales git
-      - name: add llvm repo (for clang-format)
-        uses: myci-actions/add-deb-repo@master
-        with:
-          repo: deb http://apt.llvm.org/${{ env.linux_release }} llvm-toolchain-${{ env.linux_release }} main
-          repo-name: llvm
-          keys-asc: https://apt.llvm.org/llvm-snapshot.gpg.key
       - name: install ci tools
         run: |
           apt --quiet install --assume-yes devscripts equivs lcov python3-pip
@@ -82,6 +82,12 @@ jobs:
     container: ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
     name: sanitizer - ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
     steps:
+      - name: add llvm repo (for clang-format)
+        uses: myci-actions/add-deb-repo@master
+        with:
+          repo: deb https://apt.llvm.org/${{ matrix.codename }} llvm-toolchain-${{ matrix.codename }} main
+          repo-name: llvm
+          keys-asc: https://apt.llvm.org/llvm-snapshot.gpg.key
       - name: add cppfw deb repo
         uses: myci-actions/add-deb-repo@master
         with:
@@ -122,6 +128,12 @@ jobs:
     container: ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
     name: linux - ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
     steps:
+      - name: add llvm repo (for clang-format)
+        uses: myci-actions/add-deb-repo@master
+        with:
+          repo: deb https://apt.llvm.org/${{ matrix.codename }} llvm-toolchain-${{ matrix.codename }} main
+          repo-name: llvm
+          keys-asc: https://apt.llvm.org/llvm-snapshot.gpg.key
       - name: add cppfw deb repo
         uses: myci-actions/add-deb-repo@master
         with:
@@ -164,6 +176,21 @@ jobs:
   macosx:
     runs-on: macos-latest
     steps:
+    - name: workaround python2 and python3 issue when upgrading python
+      run : |
+        rm -rf /usr/local/bin/2to3*
+        rm -rf /usr/local/bin/idle3*
+        rm -rf /usr/local/bin/pydoc3*
+        rm -rf /usr/local/bin/python3
+        rm -rf /usr/local/bin/python3-config
+        rm -rf /usr/local/bin/python3*
+        rm -rf /usr/local/bin/python3*-config
+    - name: install clang-tidy and clang-format
+      run: |
+        brew install llvm
+        ln -s "$(brew --prefix llvm)/bin/clang-format" "/usr/local/bin/clang-format"
+        ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
+        ln -s "$(brew --prefix llvm)/bin/clang-apply-replacements" "/usr/local/bin/clang-apply-replacements"
     - name: git clone
       uses: myci-actions/checkout@master
     - name: add cppfw tap
@@ -196,6 +223,21 @@ jobs:
   ios:
     runs-on: macos-latest
     steps:
+    - name: workaround python2 and python3 issue when upgrading python
+      run : |
+        rm -rf /usr/local/bin/2to3*
+        rm -rf /usr/local/bin/idle3*
+        rm -rf /usr/local/bin/pydoc3*
+        rm -rf /usr/local/bin/python3
+        rm -rf /usr/local/bin/python3-config
+        rm -rf /usr/local/bin/python3*
+        rm -rf /usr/local/bin/python3*-config
+    - name: install clang-tidy and clang-format
+      run: |
+        brew install llvm
+        ln -s "$(brew --prefix llvm)/bin/clang-format" "/usr/local/bin/clang-format"
+        ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
+        ln -s "$(brew --prefix llvm)/bin/clang-apply-replacements" "/usr/local/bin/clang-apply-replacements"
     - name: add cppfw tap
       run: |
         brew tap cppfw/tap

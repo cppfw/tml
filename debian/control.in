@@ -9,6 +9,7 @@ Build-Depends:
 		prorab,
 		prorab-extra,
 		clang-tidy,
+		clang-format,
 		libutki-dev,
 		libpapki-dev,
 		libclargs-dev,
