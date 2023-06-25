@@ -62,12 +62,12 @@ prepare() {
 
 build() {
 	cd "$rootDir"
-	make
+	CXX=clang++ make
 }
 
 check() {
 	cd "$rootDir"
-	make test
+	CXX=clang++ make test
 }
 
 package() {

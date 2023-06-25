@@ -353,8 +353,11 @@ void parser::process_char_in_unicode_sequence(char c, listener& listener)
 
 		auto bytes = utki::to_utf8(char32_t(value));
 
-		for (auto i = bytes.begin(); *i != '\0' && i != bytes.end(); ++i) {
-			this->buf.push_back(*i);
+		for (auto b : bytes) {
+			if (b == '\0') {
+				break;
+			}
+			this->buf.push_back(b);
 		}
 
 		this->cur_state = this->previous_state;

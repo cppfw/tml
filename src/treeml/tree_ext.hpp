@@ -31,6 +31,7 @@ SOFTWARE.
 
 namespace tml {
 
+// NOLINTNEXTLINE(bugprone-exception-escape)
 class leaf_ext : public leaf
 {
 public:
@@ -40,11 +41,7 @@ public:
 		leaf(str)
 	{}
 
-	leaf_ext(const std::string& str) :
-		leaf(str)
-	{}
-
-	leaf_ext(std::string&& str) :
+	leaf_ext(std::string str) :
 		leaf(std::move(str))
 	{}
 

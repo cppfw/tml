@@ -40,11 +40,13 @@ class leaf
 	std::string string;
 
 public:
+	// NOLINTNEXTLINE(bugprone-exception-escape)
 	leaf() = default;
 
 	leaf(const leaf&) = default;
 	leaf& operator=(const leaf&) = default;
 
+	// NOLINTNEXTLINE(bugprone-exception-escape)
 	leaf(leaf&&) = default;
 	leaf& operator=(leaf&&) = default;
 
@@ -52,11 +54,7 @@ public:
 		string(str)
 	{}
 
-	leaf(const std::string& str) :
-		string(str)
-	{}
-
-	leaf(std::string&& str) :
+	leaf(std::string str) :
 		string(std::move(str))
 	{}
 
