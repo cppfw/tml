@@ -41,7 +41,7 @@ SOFTWARE.
 using namespace tml;
 
 namespace {
-const size_t file_read_chunk_size = 0x4ff;
+constexpr size_t file_read_chunk_size = 0x4ff;
 } // namespace
 
 void parser::next_line()

@@ -86,7 +86,8 @@ public:
  */
 class parser
 {
-	std::vector<char> buf; // buffer for current string being parsed
+	// buffer for current string being parsed
+	std::vector<char> buf;
 
 	// used for raw string open/close sequences, unicode sequences etc.
 	std::string sequence;
