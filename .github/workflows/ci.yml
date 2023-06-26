@@ -90,6 +90,7 @@ jobs:
           repo: deb https://apt.llvm.org/${{ matrix.codename }} llvm-toolchain-${{ matrix.codename }} main
           repo-name: llvm
           keys-asc: https://apt.llvm.org/llvm-snapshot.gpg.key
+          install: clang
       - name: add cppfw deb repo
         uses: myci-actions/add-deb-repo@master
         with:
