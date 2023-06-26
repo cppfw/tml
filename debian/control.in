@@ -27,6 +27,12 @@ Suggests: libtreeml-doc
 Description: tree markup language C++ library.
  treeml is a simple markup language.
 
+Package: libtreeml$(soname)-dbgsrc
+Section: debug
+Architecture: any
+Depends: libtreeml$(soname)-dbgsym (= ${binary:Version}), ${misc:Depends}
+Description: debugging sources for libtreeml$(soname) package.
+
 Package: libtreeml$(soname)
 Section: libs
 Architecture: any
