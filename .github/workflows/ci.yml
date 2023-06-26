@@ -9,7 +9,6 @@ env:
   MYCI_NEXUS_PASSWORD: ${{ secrets.MYCI_NEXUS_PASSWORD }}
   MYCI_GIT_USERNAME: igagis
   MYCI_GIT_PASSWORD: ${{ secrets.MYCI_GIT_ACCESS_TOKEN }}
-  CXX: clang++
 jobs:
 ##### coverage #####
   coverage:
@@ -83,6 +82,8 @@ jobs:
     runs-on: ${{ (matrix.labels == '' && 'ubuntu-latest') || matrix.labels }}
     container: ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
     name: sanitizer - ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
+    env:
+      CXX: clang++
     steps:
       - name: add llvm repo (for clang-format)
         uses: myci-actions/add-deb-repo@master
