@@ -82,8 +82,6 @@ jobs:
     runs-on: ${{ (matrix.labels == '' && 'ubuntu-latest') || matrix.labels }}
     container: ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
     name: sanitizer - ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
-    env:
-      CXX: clang++
     steps:
       - name: add llvm repo (for clang-format)
         uses: myci-actions/add-deb-repo@master
