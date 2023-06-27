@@ -20,7 +20,7 @@ Standards-Version: 3.9.2
 Package: libtreeml-dev
 Section: libdevel
 Architecture: any
-Depends: libtreeml$(soname) (= ${binary:Version}), libtreeml$(soname)-dbg (= ${binary:Version}), ${misc:Depends},
+Depends: libtreeml$(soname) (= ${binary:Version}), ${misc:Depends},
 		libutki-dev,
 		libpapki-dev
 Suggests: libtreeml-doc
@@ -39,12 +39,6 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: tree markup language C++ library.
  treeml is a simple markup language.
-
-Package: libtreeml$(soname)-dbg
-Section: debug
-Architecture: any
-Depends: libtreeml$(soname) (= ${binary:Version}), ${misc:Depends}
-Description: debugging symbols for libtreeml$(soname) package.
 
 Package: libtreeml-doc
 Section: doc
