@@ -79,8 +79,7 @@ forest tml::read(const papki::file& fi)
 
 forest tml::read(const std::string& str)
 {
-	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-	const papki::span_file fi(utki::make_span(reinterpret_cast<const uint8_t*>(str.data()), str.size()));
+	const papki::span_file fi(to_uint8_t(utki::make_span(str)));
 
 	return read(fi);
 }

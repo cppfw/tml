@@ -177,8 +177,7 @@ public:
 
 	void parse_data_chunk(utki::span<const uint8_t> chunk, listener& listener)
 	{
-		// NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-		this->parse_data_chunk(utki::make_span(reinterpret_cast<const char*>(chunk.data()), chunk.size()), listener);
+		this->parse_data_chunk(to_char(chunk), listener);
 	}
 
 	/**
