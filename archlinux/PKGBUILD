@@ -44,15 +44,15 @@ prepare() {
 build() {
 	cd "$rootDir"
 	# TODO: turn on lint when arch adopts more modern clang-tidy
-	make lint=off
+	CXX=clang++ make lint=off
 }
 
 check() {
 	cd "$rootDir"
-	make test
+	CXX=clang++ make test
 }
 
 package() {
 	cd "$rootDir"
-	make DESTDIR="$pkgdir" PREFIX=/usr install
+	CXX=clang++ make DESTDIR="$pkgdir" PREFIX=/usr install
 }
