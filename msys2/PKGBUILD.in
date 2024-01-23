@@ -62,15 +62,15 @@ prepare() {
 
 build() {
 	cd "$rootDir"
-	CXX=clang++ make
+	make
 }
 
 check() {
 	cd "$rootDir"
-	CXX=clang++ make test
+	make test
 }
 
 package() {
 	cd "$rootDir"
-	CXX=clang++ make DESTDIR="$pkgdir" PREFIX="$dirPrefix" install
+	make DESTDIR="$pkgdir" PREFIX="$dirPrefix" install
 }
