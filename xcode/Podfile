@@ -5,6 +5,6 @@ project 'treeml/treeml.xcodeproj'
 platform :ios, '13.0'
 
 target "treeml" do
-	pod 'utki', '>= 1.1.124'
+	pod 'utki', '>= 1.1.224'
 	pod 'papki', '>= 1.0.93'
 end
