@@ -112,7 +112,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='v142_Debug_MT|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -146,7 +146,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='v142_Release_MT|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -177,7 +177,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='v142_Debug_MT|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -211,7 +211,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='v142_Release_MT|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -684,9 +684,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\tests\unit\src\crawler.cpp" />
     <ClCompile Include="..\..\tests\unit\src\parser.cpp" />
     <ClCompile Include="..\..\tests\unit\src\parser_correctness.cpp" />
@@ -698,26 +695,29 @@
     <ClCompile Include="..\..\tests\unit\src\tree_writing.cpp" />
     <ClCompile Include="..\..\tests\unit\src\value_conversion.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\libtst.0.1.13\build\native\libtst.targets" Condition="Exists('..\packages\libtst.0.1.13\build\native\libtst.targets')" />
-    <Import Project="..\packages\libutki.1.1.138\build\native\libutki.targets" Condition="Exists('..\packages\libutki.1.1.138\build\native\libutki.targets')" />
-    <Import Project="..\packages\libclargs.0.2.24\build\native\libclargs.targets" Condition="Exists('..\packages\libclargs.0.2.24\build\native\libclargs.targets')" />
-    <Import Project="..\packages\libopros.1.0.51\build\native\libopros.targets" Condition="Exists('..\packages\libopros.1.0.51\build\native\libopros.targets')" />
-    <Import Project="..\packages\libnitki.1.0.45\build\native\libnitki.targets" Condition="Exists('..\packages\libnitki.1.0.45\build\native\libnitki.targets')" />
-    <Import Project="..\packages\zlib_static.1.2.11.9\build\native\zlib_static.targets" Condition="Exists('..\packages\zlib_static.1.2.11.9\build\native\zlib_static.targets')" />
-    <Import Project="..\packages\libpapki.1.0.96\build\native\libpapki.targets" Condition="Exists('..\packages\libpapki.1.0.96\build\native\libpapki.targets')" />
+    <Import Project="..\packages\libutki.1.1.228\build\native\libutki.targets" Condition="Exists('..\packages\libutki.1.1.228\build\native\libutki.targets')" />
+    <Import Project="..\packages\libclargs.0.2.55\build\native\libclargs.targets" Condition="Exists('..\packages\libclargs.0.2.55\build\native\libclargs.targets')" />
+    <Import Project="..\packages\libopros.1.0.91\build\native\libopros.targets" Condition="Exists('..\packages\libopros.1.0.91\build\native\libopros.targets')" />
+    <Import Project="..\packages\libnitki.1.0.81\build\native\libnitki.targets" Condition="Exists('..\packages\libnitki.1.0.81\build\native\libnitki.targets')" />
+    <Import Project="..\packages\libtst.0.3.36\build\native\libtst.targets" Condition="Exists('..\packages\libtst.0.3.36\build\native\libtst.targets')" />
+    <Import Project="..\packages\zlib_static.1.2.11.12\build\native\zlib_static.targets" Condition="Exists('..\packages\zlib_static.1.2.11.12\build\native\zlib_static.targets')" />
+    <Import Project="..\packages\libpapki.1.0.134\build\native\libpapki.targets" Condition="Exists('..\packages\libpapki.1.0.134\build\native\libpapki.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\libtst.0.1.13\build\native\libtst.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libtst.0.1.13\build\native\libtst.targets'))" />
-    <Error Condition="!Exists('..\packages\libutki.1.1.138\build\native\libutki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libutki.1.1.138\build\native\libutki.targets'))" />
-    <Error Condition="!Exists('..\packages\libclargs.0.2.24\build\native\libclargs.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libclargs.0.2.24\build\native\libclargs.targets'))" />
-    <Error Condition="!Exists('..\packages\libopros.1.0.51\build\native\libopros.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libopros.1.0.51\build\native\libopros.targets'))" />
-    <Error Condition="!Exists('..\packages\libnitki.1.0.45\build\native\libnitki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libnitki.1.0.45\build\native\libnitki.targets'))" />
-    <Error Condition="!Exists('..\packages\zlib_static.1.2.11.9\build\native\zlib_static.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib_static.1.2.11.9\build\native\zlib_static.targets'))" />
-    <Error Condition="!Exists('..\packages\libpapki.1.0.96\build\native\libpapki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libpapki.1.0.96\build\native\libpapki.targets'))" />
+    <Error Condition="!Exists('..\packages\libutki.1.1.228\build\native\libutki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libutki.1.1.228\build\native\libutki.targets'))" />
+    <Error Condition="!Exists('..\packages\libclargs.0.2.55\build\native\libclargs.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libclargs.0.2.55\build\native\libclargs.targets'))" />
+    <Error Condition="!Exists('..\packages\libopros.1.0.91\build\native\libopros.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libopros.1.0.91\build\native\libopros.targets'))" />
+    <Error Condition="!Exists('..\packages\libnitki.1.0.81\build\native\libnitki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libnitki.1.0.81\build\native\libnitki.targets'))" />
+    <Error Condition="!Exists('..\packages\libtst.0.3.36\build\native\libtst.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libtst.0.3.36\build\native\libtst.targets'))" />
+    <Error Condition="!Exists('..\packages\zlib_static.1.2.11.12\build\native\zlib_static.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib_static.1.2.11.12\build\native\zlib_static.targets'))" />
+    <Error Condition="!Exists('..\packages\libpapki.1.0.134\build\native\libpapki.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libpapki.1.0.134\build\native\libpapki.targets'))" />
   </Target>
 </Project>

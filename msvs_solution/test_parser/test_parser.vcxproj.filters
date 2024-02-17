@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\tests\unit\src\crawler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -48,5 +45,8 @@
     <ClCompile Include="..\..\tests\unit\src\value_conversion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
