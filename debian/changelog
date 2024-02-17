@@ -1,3 +1,9 @@
+libtreeml (0.2.13) unstable; urgency=medium
+
+  * msvs: v143 configs
+
+ -- Ivan Gagis <igagis@gmail.com>  Sat, 17 Feb 2024 23:28:03 +0200
+
 libtreeml (0.2.12) unstable; urgency=medium
 
   * fix lint issues
