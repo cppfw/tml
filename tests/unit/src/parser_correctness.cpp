@@ -147,8 +147,8 @@ const tst::set set("parser_correctness", [](tst::suite& suite){
 				{"hello\\tworld", {{"hello\tworld"}}},
 				{"\\\"hello\\\" \\{world\\}", {{"\"hello\""}, {"{world}"}}},
 				{"hello {\\\"world}", {{"hello", {{"\"world"}} }} },
-				{"hello\\u0bf5", {{"hello\u0bf5"}} },
-				{"hello\\U00026218", {{"hello\U00026218"}} },
+				{"hello\\u0bf5", {{u8"hello\u0bf5"}} },
+				{"hello\\U00026218", {{u8"hello\U00026218"}} },
 
 				// quoted string escape sequences
 				{"\"hello\\ world\"", {{"hello\\ world"}}},
@@ -157,8 +157,8 @@ const tst::set set("parser_correctness", [](tst::suite& suite){
 				{"\"hello\\tworld\"", {{"hello\tworld"}}},
 				{"hello {\"\\\"world\"}", {{"hello", {{"\"world"}} }} },
 				{"\"\\\"hello\\\"\" \"\\{world\\}\"", {{"\"hello\""}, {"\\{world\\}"}}},
-				{"\"hello\\u0bf5\"", {{"hello\u0bf5"}} },
-				{"\"hello\\U00026218\"", {{"hello\U00026218"}} },
+				{"\"hello\\u0bf5\"", {{u8"hello\u0bf5"}} },
+				{"\"hello\\U00026218\"", {{u8"hello\U00026218"}} },
 			},
 			[](auto& p){
 				auto r = tml::read(p.first);
