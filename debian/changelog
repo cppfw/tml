@@ -1,3 +1,9 @@
+libtreeml (0.2.14) unstable; urgency=medium
+
+  * bookworm
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 25 Feb 2024 00:20:18 +0200
+
 libtreeml (0.2.13) unstable; urgency=medium
 
   * msvs: v143 configs
