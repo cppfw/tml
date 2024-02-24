@@ -4,6 +4,9 @@
 #include "../../../src/treeml/tree.hpp"
 #include "../../../src/treeml/tree_ext.hpp"
 
+using namespace std::string_view_literals;
+using namespace std::string_literals;
+
 namespace{
 // NOLINTNEXTLINE(bugprone-exception-escape)
 template <class value_type> struct sample_template{
@@ -126,8 +129,8 @@ const tst::set set("value_conversion", [](tst::suite& suite){
 				{tml::leaf(false), "false", false},
 				{tml::leaf(""), "", false},
 				{tml::leaf("werqwe"), "werqwe", false},
-				{tml::leaf("false"), "false", false},
-				{tml::leaf("true"), "true", true}
+				{tml::leaf("false"s), "false", false},
+				{tml::leaf("true"sv), "true", true}
 			},
 			[](auto& p){
 				auto value = p.leaf.to_bool();

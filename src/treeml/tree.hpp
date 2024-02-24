@@ -58,6 +58,10 @@ public:
 		string(std::move(str))
 	{}
 
+	leaf(std::string_view str) :
+		string(str)
+	{}
+
 	~leaf() = default;
 
 	bool operator==(const char* str) const
