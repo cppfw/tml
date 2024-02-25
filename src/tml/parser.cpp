@@ -679,8 +679,7 @@ void parser::end_of_data(listener& listener)
 	this->process_char('\0', listener);
 
 	if (this->nesting_level != 0) {
-		throw std::invalid_argument("Malformed tml document fed. Document end reached while parsing children block."
-		);
+		throw std::invalid_argument("Malformed tml document fed. Document end reached while parsing children block.");
 	}
 
 	if (this->cur_state != state::idle) {
