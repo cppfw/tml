@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name         = "treeml"
+  s.name         = "tml"
   s.version      = "$(version)"
   s.summary      = "C++ tree markup language library."
   s.homepage     = "https://github.com/cppfw/#{s.name}"

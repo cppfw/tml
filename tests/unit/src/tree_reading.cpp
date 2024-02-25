@@ -3,7 +3,7 @@
 
 #include <papki/fs_file.hpp>
 
-#include "../../../src/treeml/tree.hpp"
+#include "../../../src/tml/tree.hpp"
 
 namespace{
 const tst::set set("tree_reading", [](tst::suite& suite){

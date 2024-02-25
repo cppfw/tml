@@ -1,7 +1,7 @@
-class Libtreeml < Formula
-  desc "C++ cross-platform treeml parser library."
-  homepage "https://github.com/cppfw/treeml"
-  url "https://github.com/cppfw/treeml/archive/$(version).tar.gz"
+class Libtml < Formula
+  desc "C++ cross-platform tml parser library."
+  homepage "https://github.com/cppfw/tml"
+  url "https://github.com/cppfw/tml/archive/$(version).tar.gz"
   sha256 "$(sha256)"
 
   depends_on "prorab" => :build

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
 
-<language name="treeml" section="Markup" version="1.0" kateversion="2.4" extensions="*.tml" mimetype="application/treeml" author="Ivan Gagis (igagis@gmail.com)" license="MIT">
+<language name="tml" section="Markup" version="1.0" kateversion="2.4" extensions="*.tml" mimetype="application/tml" author="Ivan Gagis (igagis@gmail.com)" license="MIT">
   <general>
     <comments>
       <comment name="singleLine" start="//"/>
@@ -107,4 +107,3 @@
 <!--
 // kate: space-indent on; indent-width 2; replace-tabs on;
 -->
-

@@ -15,7 +15,7 @@ b) The items which should be highlighted with their own configurable font style
 
    6. Strings representing a number: decimal and hexadecimal. Examples: 123.3, 32.4e-32, 0xffaa45
 
-c) Editor should recognize treeml files by '*.tml' file extension. The files should appear having a specific icon in the File nvigator. It is ok to use some dummy icon for that.
+c) Editor should recognize tml files by '*.tml' file extension. The files should appear having a specific icon in the File nvigator. It is ok to use some dummy icon for that.
 
 d) Deliveries include:
 

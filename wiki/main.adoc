@@ -2,10 +2,10 @@
 
 == Specification
 
-link:spec.adoc[treeml specification]
+link:spec.adoc[tml specification]
 
 == Installation
-:package_name: treeml
+:package_name: tml
 
 . Setup your OS-preferred package system repo following link:https://github.com/cppfw/wiki/blob/master/enable_repo/enable_repo.adoc[this manual]
 . Install package

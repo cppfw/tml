@@ -32,7 +32,7 @@ namespace tml {
 
 /**
  * @brief Additional information flags.
- * These are the flags indicating additional formatting information of the parsed treeml node.
+ * These are the flags indicating additional formatting information of the parsed tml node.
  */
 enum class flag {
 	/**

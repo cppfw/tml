@@ -1,6 +1,6 @@
 # Maintainer: Ivan Gagis <igagis@gmail.com>
 
-pkgname=treeml
+pkgname=tml
 pkgver=$PACKAGE_VERSION
 pkgrel=1
 arch=('x86_64' 'armv7h' 'aarch64')

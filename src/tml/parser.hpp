@@ -35,15 +35,15 @@ SOFTWARE.
 #include "extra_info.hpp"
 
 /**
- * treeml is a very simple markup language. It is used to describe object
- * hierarchies. The only kind of objects present in treeml are strings.
+ * tml is a very simple markup language. It is used to describe object
+ * hierarchies. The only kind of objects present in tml are strings.
  * Objects (which are strings) can have arbitrary number of child objects.
  */
 namespace tml {
 
 /**
- * @brief Listener interface for treeml parser.
- * During the treeml document parsing the Parser notifies this listener object
+ * @brief Listener interface for tml parser.
+ * During the tml document parsing the Parser notifies this listener object
  * about parsed tokens.
  */
 class listener
@@ -81,8 +81,8 @@ public:
 };
 
 /**
- * @brief treeml parser.
- * This is a class of treeml parser. It is used for event-based parsing of treeml
+ * @brief tml parser.
+ * This is a class of tml parser. It is used for event-based parsing of tml
  * documents.
  */
 class parser
@@ -94,7 +94,7 @@ class parser
 	std::string sequence;
 	size_t sequence_index = 0;
 
-	// this variable is used for tracking current nesting level to make checks for detecting malformed treeml document
+	// this variable is used for tracking current nesting level to make checks for detecting malformed tml document
 	unsigned nesting_level = 0;
 
 	enum class state {
@@ -168,8 +168,8 @@ public:
 	void reset();
 
 	/**
-	 * @brief Parse chunk of treeml data.
-	 * Use this method to feed the treeml data to the parser.
+	 * @brief Parse chunk of tml data.
+	 * Use this method to feed the tml data to the parser.
 	 * @param chunk - data chunk to parse.
 	 * @param listener - listener object which will receive notifications about parsed tokens.
 	 */
@@ -182,7 +182,7 @@ public:
 
 	/**
 	 * @brief Finalize parsing.
-	 * Call this method to finalize parsing after all the available treeml data has been fed to the parser.
+	 * Call this method to finalize parsing after all the available tml data has been fed to the parser.
 	 * This will tell parser that there will be no more data and the temporary stored data should be interpreted as it
 	 * is.
 	 * @param listener - listener object which will receive notifications about parsed tokens.
@@ -191,8 +191,8 @@ public:
 };
 
 /**
- * @brief Parse treeml document provided by given file interface.
- * Use this function to parse the treeml document from file.
+ * @brief Parse tml document provided by given file interface.
+ * Use this function to parse the tml document from file.
  * @param fi - file interface to use for getting the data to parse.
  * @param listener - listener object which will receive notifications about parsed tokens.
  */

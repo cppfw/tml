@@ -1,7 +1,7 @@
 #include <tst/set.hpp>
 #include <tst/check.hpp>
 
-#include "../../../src/treeml/tree_ext.hpp"
+#include "../../../src/tml/tree_ext.hpp"
 
 namespace{
 const tst::set set("to_non_ext", [](auto& suite){

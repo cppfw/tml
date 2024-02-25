@@ -53,7 +53,7 @@ forest_ext tml::read_ext(const papki::file& fi)
 		{
 			if (this->stack.size() == 0) {
 				std::stringstream ss;
-				ss << "malformed treeml: unopened curly brace encountered at ";
+				ss << "malformed tml: unopened curly brace encountered at ";
 				ss << loc.line << ":" << loc.offset;
 				throw std::invalid_argument(ss.str());
 			}

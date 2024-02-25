@@ -1,10 +1,10 @@
 source 'https://github.com/cppfw/cocoapods-repo.git'
 
-project 'treeml/treeml.xcodeproj'
+project 'tml/tml.xcodeproj'
 
 platform :ios, '13.0'
 
-target "treeml" do
+target "tml" do
 	pod 'utki', '>= 1.1.224'
 	pod 'papki', '>= 1.0.93'
 end

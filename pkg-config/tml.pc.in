@@ -1,9 +1,9 @@
-Name: treeml   # human-readable name
+Name: tml   # human-readable name
 Description: tree markup language C++ library
 Version: $(version)
-URL: http://github.com/cppfw/treeml
+URL: http://github.com/cppfw/tml
 Requires:
 Conflicts:
-Libs: -ltreeml
+Libs: -ltml
 Libs.private:
 Cflags:

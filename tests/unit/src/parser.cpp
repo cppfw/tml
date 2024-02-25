@@ -5,7 +5,7 @@
 
 #include <papki/fs_file.hpp>
 
-#include "../../../src/treeml/parser.hpp"
+#include "../../../src/tml/parser.hpp"
 
 namespace{
 enum action_enum{

@@ -17,7 +17,7 @@ else
 	exit 1
 fi
 
-packageName=treeml
+packageName=tml
 
 pkgname="${pkgPrefix}${packageName}"
 pkgver=$(version)

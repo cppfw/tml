@@ -1,7 +1,7 @@
 usr/include
 usr/lib/pkgconfig
-usr/lib/libtreeml.so
-usr/lib/libtreeml.a
+usr/lib/libtml.so
+usr/lib/libtml.a
 usr/share/kde4
 usr/share/katepart5
 usr/share/gtksourceview-3.0

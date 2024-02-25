@@ -2,6 +2,6 @@ include prorab.mk
 include prorab-doxygen.mk
 
 this_out_dir := out
-this_name := treeml
+this_name := tml
 
 $(eval $(prorab-build-doxygen))

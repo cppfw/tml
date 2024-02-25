@@ -1,7 +1,7 @@
 #include <tst/set.hpp>
 #include <tst/check.hpp>
 
-#include "../../../src/treeml/parser.hpp"
+#include "../../../src/tml/parser.hpp"
 
 namespace{
 const tst::set set("parser_flags", [](tst::suite& suite){

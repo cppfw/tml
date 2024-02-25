@@ -5,7 +5,7 @@ include prorab-install-dbgsrc.mk
 
 $(eval $(call prorab-config, ../config))
 
-this_name := treeml
+this_name := tml
 
 this_soname := $(shell cat $(d)soname.txt)
 

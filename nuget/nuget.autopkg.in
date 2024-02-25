@@ -13,18 +13,18 @@ configurations {
 
 nuget{
 	nuspec{
-		id = libtreeml;
+		id = libtml;
 		version : $(version);
-		title: C++ treeml parser library;
+		title: C++ tml parser library;
 		authors: {Ivan Gagis};
 		owners: {Ivan Gagis};
-		licenseUrl: "https://raw.githubusercontent.com/cppfw/treeml/master/LICENSE";
-		projectUrl: "https://github.com/cppfw/treeml";
-		iconUrl: "https://github.com/cppfw/treeml/blob/master/logo.svg";
+		licenseUrl: "https://raw.githubusercontent.com/cppfw/tml/master/LICENSE";
+		projectUrl: "https://github.com/cppfw/tml";
+		iconUrl: "https://github.com/cppfw/tml/blob/master/logo.svg";
 		requireLicenseAcceptance:false;
-		summary: C++ treeml parser library;
+		summary: C++ tml parser library;
 
-		description: @"C++ treeml parser library";
+		description: @"C++ tml parser library";
 		releaseNotes: "Initial release";
 		copyright: Copyright 2020 Ivan Gagis;
 		tags: { native};
@@ -38,86 +38,86 @@ nuget{
 	files {
 		// this is needed to put headers in the base folder
 		nestedInclude: {
-			#destination = ${d_include}treeml;
-			"..\src\treeml\**\*.hpp"
+			#destination = ${d_include}tml;
+			"..\src\tml\**\*.hpp"
 		};
 
 		// ======== v140 ========
 /*
 		[x86,v140,release] {
-			lib: ..\msvs_solution\v140_Release\treeml.lib;
+			lib: ..\msvs_solution\v140_Release\tml.lib;
 		}
 
 		[x86,v140,debug] {
-			lib: ..\msvs_solution\v140_Debug\treeml.lib;
+			lib: ..\msvs_solution\v140_Debug\tml.lib;
 		}
 
 		[x64,v140,release] {
-			lib: ..\msvs_solution\x64\v140_Release\treeml.lib;
+			lib: ..\msvs_solution\x64\v140_Release\tml.lib;
 		}
 
 		[x64,v140,debug] {
-			lib: ..\msvs_solution\x64\v140_Debug\treeml.lib;
+			lib: ..\msvs_solution\x64\v140_Debug\tml.lib;
 		}
 */
 		// ======== v141 ========
 /*
 		[x86,v141,release] {
-			lib: ..\msvs_solution\v141_Release\treeml.lib;
+			lib: ..\msvs_solution\v141_Release\tml.lib;
 		}
 
 		[x86,v141,debug] {
-			lib: ..\msvs_solution\v141_Debug\treeml.lib;
+			lib: ..\msvs_solution\v141_Debug\tml.lib;
 		}
 
 		[x64,v141,release] {
-			lib: ..\msvs_solution\x64\v141_Release\treeml.lib;
+			lib: ..\msvs_solution\x64\v141_Release\tml.lib;
 		}
 
 		[x64,v141,debug] {
-			lib: ..\msvs_solution\x64\v141_Debug\treeml.lib;
+			lib: ..\msvs_solution\x64\v141_Debug\tml.lib;
 		}
 */
 		// ======== v142 ========
 
 		[x86,v142,release,MultiThreaded] {
-			lib: ..\msvs_solution\v142_Release_MT\treeml.lib;
+			lib: ..\msvs_solution\v142_Release_MT\tml.lib;
 		}
 		[x86,v142,debug,MultiThreadedDebug] {
-			lib: ..\msvs_solution\v142_Debug_MT\treeml.lib;
+			lib: ..\msvs_solution\v142_Debug_MT\tml.lib;
 		}
 		[x64,v142,release,MultiThreaded] {
-			lib: ..\msvs_solution\x64\v142_Release_MT\treeml.lib;
+			lib: ..\msvs_solution\x64\v142_Release_MT\tml.lib;
 		}
 		[x64,v142,debug,MultiThreadedDebug] {
-			lib: ..\msvs_solution\x64\v142_Debug_MT\treeml.lib;
+			lib: ..\msvs_solution\x64\v142_Debug_MT\tml.lib;
 		}
 		[x86,v142,release,MultiThreadedDLL] {
-			lib: ..\msvs_solution\v142_Release_MD\treeml.lib;
+			lib: ..\msvs_solution\v142_Release_MD\tml.lib;
 		}
 		[x86,v142,debug,MultiThreadedDebugDLL] {
-			lib: ..\msvs_solution\v142_Debug_MD\treeml.lib;
+			lib: ..\msvs_solution\v142_Debug_MD\tml.lib;
 		}
 		[x64,v142,release,MultiThreadedDLL] {
-			lib: ..\msvs_solution\x64\v142_Release_MD\treeml.lib;
+			lib: ..\msvs_solution\x64\v142_Release_MD\tml.lib;
 		}
 		[x64,v142,debug,MultiThreadedDebugDLL] {
-			lib: ..\msvs_solution\x64\v142_Debug_MD\treeml.lib;
+			lib: ..\msvs_solution\x64\v142_Debug_MD\tml.lib;
 		}
 
 		// ======== v143 ========
 
 		[x86,v143,release,MultiThreadedDLL] {
-			lib: ..\msvs_solution\v143_Release_MD\treeml.lib;
+			lib: ..\msvs_solution\v143_Release_MD\tml.lib;
 		}
 		[x86,v143,debug,MultiThreadedDebugDLL] {
-			lib: ..\msvs_solution\v143_Debug_MD\treeml.lib;
+			lib: ..\msvs_solution\v143_Debug_MD\tml.lib;
 		}
 		[x64,v143,release,MultiThreadedDLL] {
-			lib: ..\msvs_solution\x64\v143_Release_MD\treeml.lib;
+			lib: ..\msvs_solution\x64\v143_Release_MD\tml.lib;
 		}
 		[x64,v143,debug,MultiThreadedDebugDLL] {
-			lib: ..\msvs_solution\x64\v143_Debug_MD\treeml.lib;
+			lib: ..\msvs_solution\x64\v143_Debug_MD\tml.lib;
 		}
 	}
 }

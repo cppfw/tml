@@ -1,8 +1,8 @@
 #include <tst/set.hpp>
 #include <tst/check.hpp>
 
-#include "../../../src/treeml/tree.hpp"
-#include "../../../src/treeml/tree_ext.hpp"
+#include "../../../src/tml/tree.hpp"
+#include "../../../src/tml/tree_ext.hpp"
 
 using namespace std::string_view_literals;
 using namespace std::string_literals;

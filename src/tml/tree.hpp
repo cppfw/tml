@@ -230,6 +230,3 @@ inline std::ostream& operator<<(std::ostream& o, const tree& t)
 }
 
 } // namespace tml
-
-// TODO: remove?
-namespace treeml = tml;

@@ -1,7 +1,7 @@
 #include <tst/set.hpp>
 #include <tst/check.hpp>
 
-#include "../../../src/treeml/tree.hpp"
+#include "../../../src/tml/tree.hpp"
 
 namespace{
 const tst::set set("parser_correctness", [](tst::suite& suite){

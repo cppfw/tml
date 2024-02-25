@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<language id="treeml" name="treeml" version="2.0" _section="Other">
+<language id="tml" name="tml" version="2.0" _section="Other">
 	<metadata>
 		<property name="globs">*.tml</property>
 		<property name="line-comment-start">//</property>
@@ -89,7 +89,7 @@
 			</include>
 		</context>
 
-		<context id="treeml" class="no-spell-check">
+		<context id="tml" class="no-spell-check">
 			<include>
 				<context ref="Comment"/>
 				<context ref="MultilineComment"/>

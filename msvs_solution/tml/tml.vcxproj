@@ -85,7 +85,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{84761611-0B45-430F-8819-8975B521FE9A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>treeml</RootNamespace>
+    <RootNamespace>tml</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -745,10 +745,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\treeml\crawler.cpp" />
-    <ClCompile Include="..\..\src\treeml\parser.cpp" />
-    <ClCompile Include="..\..\src\treeml\tree.cpp" />
-    <ClCompile Include="..\..\src\treeml\tree_ext.cpp" />
+    <ClCompile Include="..\..\src\tml\crawler.cpp" />
+    <ClCompile Include="..\..\src\tml\parser.cpp" />
+    <ClCompile Include="..\..\src\tml\tree.cpp" />
+    <ClCompile Include="..\..\src\tml\tree_ext.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

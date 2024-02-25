@@ -18,16 +18,16 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\treeml\parser.cpp">
+    <ClCompile Include="..\..\src\tml\parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\treeml\tree.cpp">
+    <ClCompile Include="..\..\src\tml\tree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\treeml\crawler.cpp">
+    <ClCompile Include="..\..\src\tml\crawler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\treeml\tree_ext.cpp">
+    <ClCompile Include="..\..\src\tml\tree_ext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
