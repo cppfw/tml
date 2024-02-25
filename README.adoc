@@ -1,4 +1,4 @@
-:name: treeml
+:name: tml
 
 = {name}
 
@@ -6,6 +6,7 @@
 | link:https://github.com/cppfw/{name}/releases[image:https://img.shields.io/github/tag/cppfw/{name}.svg[releases]] | link:https://github.com/cppfw/{name}/actions[image:https://github.com/cppfw/{name}/workflows/ci/badge.svg[ci status]]
 |====
 
+Tree markup language.
 A lightweight markup language C++ library.
 
 The idea is that the document is just a tree of strings. Each string can have a number of children strings or no children at all, an so on.
