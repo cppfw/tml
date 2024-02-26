@@ -24,7 +24,7 @@ const tst::set set("parser_correctness", [](tst::suite& suite){
 
 				tst::check_ge(r.size(), size_t(5), SL);
 
-				tst::check_eq(r[5].value.to_string(), std::string(p.second), SL);
+				tst::check_eq(r[5].value.string, std::string(p.second), SL);
 			}
 		);
 	
@@ -66,8 +66,8 @@ const tst::set set("parser_correctness", [](tst::suite& suite){
 				auto in = tml::read(p);
 				
 				tst::check_eq(in.size(), size_t(2), SL);
-				tst::check_eq(in[0].value.to_string(), std::string("first"), SL);
-				tst::check_eq(in[1].value.to_string(), std::string("second"), SL);
+				tst::check_eq(in[0].value.string, std::string("first"), SL);
+				tst::check_eq(in[1].value.string, std::string("second"), SL);
 			}
 		);
 	
@@ -75,7 +75,7 @@ const tst::set set("parser_correctness", [](tst::suite& suite){
 		auto r = tml::read("\"\"\"hello\"\"\"");
 		tst::check_eq(r.size(), size_t(1), SL);
 		tst::check_eq(r.front().children.size(), size_t(0), SL);
-		tst::check_eq(r.front().value.to_string(), std::string("hello"), SL);
+		tst::check_eq(r.front().value.string, std::string("hello"), SL);
 	});
 
 	suite.add<std::pair<std::string, tml::forest>>(

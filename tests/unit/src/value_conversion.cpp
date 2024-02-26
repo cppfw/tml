@@ -58,7 +58,7 @@ void test_int(tst::suite& suite, const std::string& test_name){
 			},
 			[](auto& p){
 				auto value = to_test_type<test_type>(p.leaf);
-				tst::check_eq(p.leaf.to_string(), p.expected_string, SL);
+				tst::check_eq(p.leaf.string, p.expected_string, SL);
 				tst::check_eq(value, p.expected_value, SL);
 			}
 		);
@@ -112,9 +112,9 @@ void test_uint(tst::suite& suite, const std::string& test_name){
 			[](auto& p){
 				auto value = to_test_type<test_type>(p.leaf);
 				if(p.expected_string.length() != 0){
-					tst::check_eq(p.leaf.to_string(), p.expected_string, SL);
+					tst::check_eq(p.leaf.string, p.expected_string, SL);
 				}
-				tst::check_eq(value, p.expected_value, SL) << " to_string() = " << p.leaf.to_string();
+				tst::check_eq(value, p.expected_value, SL) << " string = " << p.leaf.string;
 			}
 		);
 }
@@ -134,7 +134,7 @@ const tst::set set("value_conversion", [](tst::suite& suite){
 			},
 			[](auto& p){
 				auto value = p.leaf.to_bool();
-				tst::check_eq(p.leaf.to_string(), p.expected_string, SL);
+				tst::check_eq(p.leaf.string, p.expected_string, SL);
 				tst::check_eq(value, p.expected_value, SL);
 			}
 		);
@@ -182,7 +182,7 @@ const tst::set set("value_conversion", [](tst::suite& suite){
 			},
 			[](auto& p){
 				tml::leaf l(p);
-				tst::check_eq(l.to_long_double(), p, SL) << "l.to_string() = " << l.to_string();
+				tst::check_eq(l.to_long_double(), p, SL) << "l.string = " << l.string;
 			}
 		);
 	
@@ -215,7 +215,7 @@ const tst::set set("value_conversion", [](tst::suite& suite){
 
 		tml::leaf_ext l{std::string(str)};
 
-		tst::check_eq(l.to_string(), str, SL);
+		tst::check_eq(l.string, str, SL);
 	});
 });
 }

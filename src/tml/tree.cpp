@@ -184,21 +184,21 @@ void write_internal(const tml::forest& roots, papki::file& fi, formatting fmt, u
 
 		// write node value
 
-		//		TRACE(<< "writing node: " << n.value.c_str() << std::endl)
+		//		TRACE(<< "writing node: " << n.value.string.c_str() << std::endl)
 
 		unsigned num_escapes = 0;
 		size_t length = 0;
-		bool unqouted = can_string_be_unquoted(n.value.c_str(), length, num_escapes);
+		bool unqouted = can_string_be_unquoted(n.value.string.c_str(), length, num_escapes);
 
 		if (!unqouted) {
 			fi.write(utki::make_span(quote));
 
 			if (num_escapes == 0) {
-				fi.write(utki::make_span(n.value.c_str(), length));
+				fi.write(utki::make_span(n.value.string.c_str(), length));
 			} else {
 				std::vector<uint8_t> buf(length + num_escapes);
 
-				make_escaped_string(n.value.c_str(), utki::make_span(buf));
+				make_escaped_string(n.value.string.c_str(), utki::make_span(buf));
 
 				fi.write(utki::make_span(buf));
 			}
@@ -225,8 +225,8 @@ void write_internal(const tml::forest& roots, papki::file& fi, formatting fmt, u
 				}
 			} else {
 				ASSERT(num_escapes == 0)
-				fi.write(utki::make_span(n.value.c_str(), length));
-				ASSERT(n.value.to_string().length() != 0)
+				fi.write(utki::make_span(n.value.string.c_str(), length));
+				ASSERT(n.value.length() != 0)
 				if (n.children.size() == 0 && length == 1 && n.value[0] == 'R') {
 					fi.write(utki::make_span(space));
 				}

@@ -19,12 +19,12 @@ const tst::set set("tree_reading", [](tst::suite& suite){
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "test string", SL) << i->value.to_string();
+		tst::check(i->value == "test string", SL) << i->value.string;
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "anot/her string", SL) << i->value.to_string();
+		tst::check(i->value == "anot/her string", SL) << i->value.string;
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
@@ -49,29 +49,29 @@ const tst::set set("tree_reading", [](tst::suite& suite){
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "string_interrupted//tro", SL) << i->value.to_string();
+		tst::check(i->value == "string_interrupted//tro", SL) << i->value.string;
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "_by_comment", SL) << i->value.to_string();
+		tst::check(i->value == "_by_comment", SL) << i->value.string;
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "string_broken/*tro", SL) << i->value.to_string();
+		tst::check(i->value == "string_broken/*tro", SL) << i->value.string;
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "*/_by_comment", SL) << i->value.to_string();
+		tst::check(i->value == "*/_by_comment", SL) << i->value.string;
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "", SL);
 		tst::check(i->value.length() == 0, SL);
-		tst::check(i->children.size() == 0, SL) << i->children.front().value.to_string();
+		tst::check(i->children.size() == 0, SL) << i->children.front().value.string;
 
 		++i;
 		tst::check(i != roots.end(), SL);

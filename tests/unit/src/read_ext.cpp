@@ -15,7 +15,7 @@ const tst::set set("read_ext", [](auto& suite){
 		tst::check_eq(tml.size(), size_t(5), SL);
 
 		auto& hello = tml[0];
-		tst::check_eq(hello.value.to_string(), std::string("hello"), SL);
+		tst::check_eq(hello.value.string, std::string("hello"), SL);
 		tst::check(!hello.value.info.flags.get(tml::flag::curly_braces), SL);
 		tst::check(hello.value.info.flags.get(tml::flag::first_on_line), SL);
 		tst::check(!hello.value.info.flags.get(tml::flag::space), SL);
@@ -25,7 +25,7 @@ const tst::set set("read_ext", [](auto& suite){
 		tst::check_eq(hello.value.info.location.offset, size_t(4), SL);
 
 		auto& world = tml[1];
-		tst::check_eq(world.value.to_string(), std::string("world!"), SL);
+		tst::check_eq(world.value.string, std::string("world!"), SL);
 		tst::check(!world.value.info.flags.get(tml::flag::curly_braces), SL);
 		tst::check(!world.value.info.flags.get(tml::flag::first_on_line), SL);
 		tst::check(world.value.info.flags.get(tml::flag::quoted), SL);
@@ -35,7 +35,7 @@ const tst::set set("read_ext", [](auto& suite){
 		tst::check_eq(world.value.info.location.offset, size_t(9), SL);
 
 		auto& how = tml[2];
-		tst::check_eq(how.value.to_string(), std::string("how"), SL);
+		tst::check_eq(how.value.string, std::string("how"), SL);
 		tst::check(how.value.info.flags.get(tml::flag::curly_braces), SL);
 		tst::check(how.value.info.flags.get(tml::flag::first_on_line), SL);
 		tst::check(how.value.info.flags.get(tml::flag::space), SL);
@@ -54,7 +54,7 @@ const tst::set set("read_ext", [](auto& suite){
 			tst::check(!you.value.info.flags.get(tml::flag::first_on_line), SL);
 
 			auto& doing = how.children[2];
-			tst::check_eq(doing.value.to_string(), std::string("doing"), SL);
+			tst::check_eq(doing.value.string, std::string("doing"), SL);
 			tst::check(doing.value.info.flags.get(tml::flag::space), SL);
 			tst::check(doing.value.info.flags.get(tml::flag::quoted), SL);
 			tst::check(!doing.value.info.flags.get(tml::flag::raw), SL);
@@ -62,7 +62,7 @@ const tst::set set("read_ext", [](auto& suite){
 			tst::check_eq(doing.value.info.location.offset, size_t(17), SL);
 
 			auto& qm = how.children[3];
-			tst::check_eq(qm.value.to_string(), std::string("?"), SL);
+			tst::check_eq(qm.value.string, std::string("?"), SL);
 			tst::check(!qm.value.info.flags.get(tml::flag::space), SL);
 			tst::check(!qm.value.info.flags.get(tml::flag::quoted), SL);
 			tst::check(!qm.value.info.flags.get(tml::flag::raw), SL);
@@ -71,7 +71,7 @@ const tst::set set("read_ext", [](auto& suite){
 		}
 
 		auto& im = tml[3];
-		tst::check_eq(im.value.to_string(), std::string("I'm"), SL);
+		tst::check_eq(im.value.string, std::string("I'm"), SL);
 		tst::check(im.value.info.flags.get(tml::flag::first_on_line), SL);
 		tst::check(!im.value.info.flags.get(tml::flag::space), SL);
 		tst::check(!im.value.info.flags.get(tml::flag::quoted), SL);
@@ -80,7 +80,7 @@ const tst::set set("read_ext", [](auto& suite){
 		tst::check_eq(im.value.info.location.offset, size_t(5), SL);
 
 		auto& okay = tml[4];
-		tst::check_eq(okay.value.to_string(), std::string("okay"), SL);
+		tst::check_eq(okay.value.string, std::string("okay"), SL);
 		tst::check(!okay.value.info.flags.get(tml::flag::first_on_line), SL);
 	});
 });

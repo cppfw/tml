@@ -37,9 +37,9 @@ namespace tml {
 
 class leaf
 {
+public:
 	std::string string;
 
-public:
 	// NOLINTNEXTLINE(bugprone-exception-escape)
 	leaf() = default;
 
@@ -104,6 +104,7 @@ public:
 		return this->string != l.string;
 	}
 
+	[[deprecated("use public field string")]]
 	const char* c_str() const noexcept
 	{
 		return this->string.c_str();
@@ -124,6 +125,7 @@ public:
 		return this->string[i];
 	}
 
+	[[deprecated("use public field string")]]
 	const std::string& to_string() const noexcept
 	{
 		return this->string;
@@ -192,7 +194,7 @@ public:
 
 	friend std::ostream& operator<<(std::ostream& o, const leaf& l)
 	{
-		o << l.to_string();
+		o << l.string;
 		return o;
 	}
 };
