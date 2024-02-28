@@ -29,7 +29,7 @@ Description: tree markup language C++ library.
 
 Package: libtml$(soname)-dbgsrc
 Section: debug
-Architecture: any
+Architecture: all
 Depends: libtml$(soname)-dbgsym (= ${binary:Version}), ${misc:Depends}
 Description: debugging sources for libtml$(soname) package.
 
