@@ -16,7 +16,7 @@ this_ldlibs += -lpapki -lutki
 $(eval $(prorab-build-lib))
 
 this_license_file := ../LICENSE
-this_src_dir := .
+this_src_dir := $(this_name)
 $(eval $(prorab-license))
 
 $(eval $(prorab-clang-format))
