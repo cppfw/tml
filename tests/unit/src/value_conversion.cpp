@@ -125,12 +125,13 @@ const tst::set set("value_conversion", [](tst::suite& suite){
 	suite.add<sample_template<bool>>(
 			"convert_to_bool",
 			{
+				// NOLINTNEXTLINE(modernize-use-designated-initializers, "needs C++20, but we use C++17")
 				{tml::leaf(true), "true", true},
-				{tml::leaf(false), "false", false},
-				{tml::leaf(""), "", false},
-				{tml::leaf("werqwe"), "werqwe", false},
-				{tml::leaf("false"s), "false", false},
-				{tml::leaf("true"sv), "true", true}
+				{tml::leaf(false), "false", false}, // NOLINT(modernize-use-designated-initializers)
+				{tml::leaf(""), "", false}, // NOLINT(modernize-use-designated-initializers)
+				{tml::leaf("werqwe"), "werqwe", false}, // NOLINT(modernize-use-designated-initializers)
+				{tml::leaf("false"s), "false", false}, // NOLINT(modernize-use-designated-initializers)
+				{tml::leaf("true"sv), "true", true} // NOLINT(modernize-use-designated-initializers)
 			},
 			[](auto& p){
 				auto value = p.leaf.to_bool();

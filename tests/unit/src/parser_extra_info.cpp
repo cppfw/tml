@@ -693,6 +693,7 @@ const tst::set set2("parser_location", [](tst::suite& suite){
 
 				struct listener : public tml::listener{
 					bool string_parsed = false;
+					// NOLINTNEXTLINE(modernize-use-designated-initializers, "needs C++20, but we use C++17")
 					tml::extra_info info = {{0, 0}};
 					void on_string_parsed(std::string_view str, const tml::extra_info& info)override{
 						if(str == "hello"){

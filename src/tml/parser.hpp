@@ -138,10 +138,12 @@ class parser
 	void process_char_in_raw_python_string(char c, tml::listener& listener);
 	void process_char_in_raw_python_string_closing_sequence(char c, tml::listener& listener);
 
+	// NOLINTNEXTLINE(modernize-use-designated-initializers, "needs C++20, but we use C++17")
 	location cur_loc = {1, 1}; // offset starts with 1
 
 	void next_line();
 
+	// NOLINTNEXTLINE(modernize-use-designated-initializers, "needs C++20, but we use C++17")
 	extra_info info = {{}, tml::flag::first_on_line};
 
 	// extra info saved for parsed string when moving to string_parsed state
