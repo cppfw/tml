@@ -1,4 +1,4 @@
-Kwapply plugin: 'com.android.library'
+apply plugin: 'com.android.library'
 apply plugin: 'com.ydq.android.gradle.native-aar.export' // must go after android gradle plugin
 apply plugin: 'com.ydq.android.gradle.native-aar.import' // must go after android gradle plugin
 
@@ -25,11 +25,11 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        debug {}
+        release {}
     }
 
     // Encapsulates your external native build configurations.
