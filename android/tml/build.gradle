@@ -1,4 +1,4 @@
-apply plugin: 'com.android.library'
+Kwapply plugin: 'com.android.library'
 apply plugin: 'com.ydq.android.gradle.native-aar.export' // must go after android gradle plugin
 apply plugin: 'com.ydq.android.gradle.native-aar.import' // must go after android gradle plugin
 
