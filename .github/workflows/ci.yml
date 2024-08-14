@@ -13,11 +13,11 @@ jobs:
 ##### coverage #####
   coverage:
     runs-on: ubuntu-latest
-    container: debian:bullseye
+    container: debian:bookworm
     name: coverage - measure
     env:
       linux_distro: debian
-      linux_release: bullseye
+      linux_release: bookworm
     steps:
       - name: add llvm repo (for clang-format)
         uses: myci-actions/add-deb-repo@master
@@ -32,13 +32,7 @@ jobs:
           repo: deb https://gagis.hopto.org/repo/cppfw/${{ env.linux_distro }} ${{ env.linux_release }} main
           repo-name: cppfw
           keys-asc: https://gagis.hopto.org/repo/cppfw/pubkey.gpg
-          install: myci locales git
-      - name: install ci tools
-        run: |
-          apt --quiet install --assume-yes devscripts equivs lcov python3-pip
-
-          # install gcovr >5.2
-          pip install git+https://github.com/gcovr/gcovr.git
+          install: myci locales git pipx
       - name: git clone
         uses: myci-actions/checkout@master
       - name: prepare debian package
@@ -55,7 +49,7 @@ jobs:
       - name: test
         run: make config=gcov test
       - name: generate coverage report
-        run: gcovr --gcov-ignore-parse-errors --exclude-throw-branches --filter src/ --cobertura > cobertura.xml
+        run: pipx run gcovr --gcov-ignore-parse-errors --exclude-throw-branches --filter src/ --cobertura > cobertura.xml
       - name: upload coverage report to artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -131,6 +125,7 @@ jobs:
           - {os: debian, codename: bookworm, image_owner: arm64v8/, labels: [arm64,docker]}
           - {os: ubuntu, codename: focal, image_owner: }
           - {os: ubuntu, codename: jammy, image_owner: }
+          - {os: ubuntu, codename: noble, image_owner: }
           # - {os: raspbian, codename: buster, image_owner: igagis/, labels: [arm,docker]}
           - {os: raspbian, codename: bullseye, image_owner: igagis/, labels: [arm,docker]}
           - {os: raspbian, codename: bookworm, image_owner: igagis/, labels: [arm,docker]}
