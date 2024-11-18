@@ -18,9 +18,9 @@ nuget{
 		title: C++ tml parser library;
 		authors: {Ivan Gagis};
 		owners: {Ivan Gagis};
-		licenseUrl: "https://raw.githubusercontent.com/cppfw/tml/master/LICENSE";
+		licenseUrl: "https://raw.githubusercontent.com/cppfw/tml/main/LICENSE";
 		projectUrl: "https://github.com/cppfw/tml";
-		iconUrl: "https://github.com/cppfw/tml/blob/master/logo.svg";
+		iconUrl: "https://github.com/cppfw/tml/blob/main/logo.svg";
 		requireLicenseAcceptance:false;
 		summary: C++ tml parser library;
 
@@ -79,7 +79,7 @@ nuget{
 		}
 */
 		// ======== v142 ========
-
+/*
 		[x86,v142,release,MultiThreaded] {
 			lib: ..\msvs_solution\v142_Release_MT\tml.lib;
 		}
@@ -104,7 +104,7 @@ nuget{
 		[x64,v142,debug,MultiThreadedDebugDLL] {
 			lib: ..\msvs_solution\x64\v142_Debug_MD\tml.lib;
 		}
-
+*/
 		// ======== v143 ========
 
 		[x86,v143,release,MultiThreadedDLL] {
