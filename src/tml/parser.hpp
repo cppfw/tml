@@ -91,7 +91,7 @@ class parser
 	std::vector<char> buf;
 
 	// used for raw string open/close sequences, unicode sequences etc.
-	std::string sequence;
+	std::string sequence; // TODO: why is it string? Use vector?
 	size_t sequence_index = 0;
 
 	// this variable is used for tracking current nesting level to make checks for detecting malformed tml document

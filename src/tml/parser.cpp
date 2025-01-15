@@ -480,7 +480,7 @@ void parser::process_char_in_raw_cpp_string_opening_sequence(char c, listener& l
 			}
 			break;
 		case '(':
-			this->sequence.assign(&*this->buf.begin(), this->buf.size());
+			this->sequence.assign(this->buf.data(), this->buf.size());
 			this->buf.clear();
 			this->cur_state = state::raw_cpp_string;
 			this->info.flags.set(flag::raw);
