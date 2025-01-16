@@ -56,11 +56,13 @@ enum class flag {
 	raw,
 
 	/**
-	 * @brief The node was specified as Python style raw string.
+	 * @brief The node was specified as quotes raw string.
+	 * The quotes style raw string is the one which has 3 or more double quotes as its opening
+	 * and closing sequence.
 	 * In case this flag is not set for the raw string, then it is specified
 	 * as C++ style syntax.
 	 */
-	raw_python_style,
+	raw_quotes_style,
 
 	/**
 	 * @brief The node is first on the line.

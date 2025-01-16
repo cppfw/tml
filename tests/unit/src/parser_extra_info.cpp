@@ -456,7 +456,7 @@ const tst::set set("parser_flags", [](tst::suite& suite){
 						if(str == "hello"){
 							this->string_parsed = true;
 							tst::check(info.flags.get(tml::flag::raw), SL);
-							tst::check(!info.flags.get(tml::flag::raw_python_style), SL);
+							tst::check(!info.flags.get(tml::flag::raw_quotes_style), SL);
 						}
 					}
 

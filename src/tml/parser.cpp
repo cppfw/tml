@@ -136,7 +136,7 @@ void parser::process_char_in_idle(char c, listener& listener)
 			break;
 		case '"':
 			this->set_string_start_pos();
-			this->cur_state = state::raw_python_string_opening_sequence;
+			this->cur_state = state::raw_quotes_string_opening_sequence;
 			this->sequence_index = 1;
 			break;
 		case '/':
@@ -209,7 +209,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener)
 			} else {
 				this->set_string_parsed_state();
 				this->handle_string_parsed(listener);
-				this->cur_state = state::raw_python_string_opening_sequence;
+				this->cur_state = state::raw_quotes_string_opening_sequence;
 				this->sequence_index = 1;
 				this->set_string_start_pos();
 			}
@@ -471,7 +471,7 @@ void parser::process_char_in_raw_cpp_string_opening_sequence(char c, listener& l
 			++this->info.location.offset;
 
 			if (this->buf.empty()) {
-				this->cur_state = state::raw_python_string_opening_sequence;
+				this->cur_state = state::raw_quotes_string_opening_sequence;
 				this->sequence_index = 2;
 			} else {
 				this->info.flags.set(tml::flag::quoted);
@@ -538,17 +538,17 @@ void parser::process_char_in_raw_cpp_string_closing_sequence(char c, listener& l
 	}
 }
 
-void parser::process_char_in_raw_python_string_opening_sequence(char c, listener& listener)
+void parser::process_char_in_raw_quotes_string_opening_sequence(char c, listener& listener)
 {
-	ASSERT(this->cur_state == state::raw_python_string_opening_sequence)
+	ASSERT(this->cur_state == state::raw_quotes_string_opening_sequence)
 	ASSERT(this->buf.empty())
 	switch (c) {
 		case '"':
 			++this->sequence_index;
 			if (this->sequence_index == 3) {
-				this->cur_state = state::raw_python_string;
+				this->cur_state = state::raw_quotes_string;
 				this->info.flags.set(flag::raw);
-				this->info.flags.set(flag::raw_python_style);
+				this->info.flags.set(flag::raw_quotes_style);
 			}
 			break;
 		default:
@@ -571,12 +571,12 @@ void parser::process_char_in_raw_python_string_opening_sequence(char c, listener
 	}
 }
 
-void parser::process_char_in_raw_python_string(char c, listener& listener)
+void parser::process_char_in_raw_quotes_string(char c, listener& listener)
 {
-	ASSERT(this->cur_state == state::raw_python_string)
+	ASSERT(this->cur_state == state::raw_quotes_string)
 	switch (c) {
 		case '"':
-			this->cur_state = state::raw_python_string_closing_sequence;
+			this->cur_state = state::raw_quotes_string_closing_sequence;
 			this->sequence_index = 1;
 			break;
 		default:
@@ -585,9 +585,9 @@ void parser::process_char_in_raw_python_string(char c, listener& listener)
 	}
 }
 
-void parser::process_char_in_raw_python_string_closing_sequence(char c, listener& listener)
+void parser::process_char_in_raw_quotes_string_closing_sequence(char c, listener& listener)
 {
-	ASSERT(this->cur_state == state::raw_python_string_closing_sequence)
+	ASSERT(this->cur_state == state::raw_quotes_string_closing_sequence)
 	switch (c) {
 		case '"':
 			++this->sequence_index;
@@ -599,7 +599,7 @@ void parser::process_char_in_raw_python_string_closing_sequence(char c, listener
 		default:
 			this->buf.insert(this->buf.end(), this->sequence_index, '"');
 			this->buf.push_back(c);
-			this->cur_state = state::raw_python_string;
+			this->cur_state = state::raw_quotes_string;
 			break;
 	}
 }
@@ -646,14 +646,14 @@ void parser::process_char(char c, listener& listener)
 		case state::raw_cpp_string_closing_sequence:
 			this->process_char_in_raw_cpp_string_closing_sequence(c, listener);
 			break;
-		case state::raw_python_string_opening_sequence:
-			this->process_char_in_raw_python_string_opening_sequence(c, listener);
+		case state::raw_quotes_string_opening_sequence:
+			this->process_char_in_raw_quotes_string_opening_sequence(c, listener);
 			break;
-		case state::raw_python_string:
-			this->process_char_in_raw_python_string(c, listener);
+		case state::raw_quotes_string:
+			this->process_char_in_raw_quotes_string(c, listener);
 			break;
-		case state::raw_python_string_closing_sequence:
-			this->process_char_in_raw_python_string_closing_sequence(c, listener);
+		case state::raw_quotes_string_closing_sequence:
+			this->process_char_in_raw_quotes_string_closing_sequence(c, listener);
 			break;
 		default:
 			ASSERT(false, [&](auto& o) {

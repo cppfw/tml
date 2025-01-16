@@ -3,7 +3,7 @@
 tml markup language's purpose is to describe tree of text strings. The language syntax is very simple and intentionally kept minimalistic.
 Here are the syntax rules:
 
-. The only type of language element is a string of text. Strings can be unquoted, quoted, C++-style raw trings, Python-style raw strings.
+. The only type of language element is a string of text. Strings can be unquoted, quoted, C++-style raw trings, Quotes-style raw strings.
   - Unquoted string is a string which does not contain any of the following characters:
 	* space (except when it is preceeded by `\`, see escape sequences below)
 	* tabulation
@@ -31,8 +31,8 @@ Here are the syntax rules:
 	* 4 hex digit unicode value `\uXXXX`
 	* 8 hex digit unicode value `\UXXXXXXXX`
   - C++-style raw string: `R"<sequence>(The {cpp} raw string)<sequence>"`
-  - Python-style raw string: `"""The Python raw string"""`
-  - If any raw string, C++ or Python-style, starts or ends with a new line character, then this first leading new line character and/or last trailing new line character is not a part of the document (ignored by parser).
+  - Quotes-style raw string: `"""The Quotes raw string"""`
+  - If any raw string, C++ or Quotes-style, starts or ends with a new line character, then this first leading new line character and/or last trailing new line character is not a part of the document (ignored by parser).
 . String can have arbitrary number of child strings. Those are optionally listed in the curly brackets following the string. If string does not have any children then the curly brackets can be omitted.
 . Parts of a document can be commented. C++ commenting rules apply.
   - single-line comment is opened by a sequence of two forward slashes `//` and is closed by the end of the line.
@@ -82,7 +82,7 @@ string_four"string five"
 		// C++-style raw string
 		R"qwerty(raw string content " """ { } \ / )qwerty"
 		
-		// python-style raw string
+		// quotes-style raw string
 		"""bla bla {} "" and "quoted" bla bla"""
 
 		// the leading and ending new line is ignored in raw strings:

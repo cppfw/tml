@@ -39,7 +39,7 @@ string_without_spaces
 		// C++-style raw string
 		R"qwerty(raw string content " """ { } \ / )qwerty"
 		
-		// python-style raw string
+		// quotes-style raw string
 		"""bla bla {} "" and "quoted" bla bla"""
 	}
 }

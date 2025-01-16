@@ -71,7 +71,7 @@ const tst::set set("parser_correctness", [](tst::suite& suite){
 			}
 		);
 	
-	suite.add("only_python_style_raw_string_in_the_document", [](){
+	suite.add("only_quotes_style_raw_string_in_the_document", [](){
 		auto r = tml::read("\"\"\"hello\"\"\"");
 		tst::check_eq(r.size(), size_t(1), SL);
 		tst::check_eq(r.front().children.size(), size_t(0), SL);
@@ -81,7 +81,7 @@ const tst::set set("parser_correctness", [](tst::suite& suite){
 	suite.add<std::pair<std::string, tml::forest>>(
 			"parsed_tree_is_as_expected",
 			{
-				// python-style raw strings
+				// quotes-style raw strings
 				{"\"\"\"hello\"\"\"", {{"hello"}}}, // 0
 				{" \"\"\"hello\"\"\"", {{"hello"}}},
 				{"\n\"\"\"hello\"\"\" ", {{"hello"}}},
@@ -99,7 +99,7 @@ const tst::set set("parser_correctness", [](tst::suite& suite){
 				{"\"\"\"he\"\"llo\"\"\"", {{"he\"\"llo"}}},	// #14
 
 				// if new line goes as very first or very last char of the raw string, then it is ignored.
-				// python-style raw strings
+				// quotes-style raw strings
 				{"\"\" \"\"\"\nhello\"\"\"\"\" ", {{""}, {"hello"}, {""}}}, // 15
 				{"\"\" \"\"\"hello\n\"\"\"\"\" ", {{""}, {"hello"}, {""}}},
 				{"\"\" \"\"\"h\nello\n\"\"\"\"\" ", {{""}, {"h\nello"}, {""}}},
