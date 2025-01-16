@@ -472,7 +472,7 @@ void parser::process_char_in_raw_cpp_string_opening_sequence(char c, listener& l
 
 			if (this->buf.empty()) {
 				this->cur_state = state::raw_quotes_string_opening_sequence;
-				this->sequence_index = 2;
+				this->sequence_index = 2; // it is a second double quote in a row
 			} else {
 				this->info.flags.set(tml::flag::quoted);
 				// this->handle_string_parsed(listener);
