@@ -1,3 +1,9 @@
+libtml (0.2.23) unstable; urgency=medium
+
+  * update
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 26 Mar 2025 01:13:36 +0200
+
 libtml (0.2.22) unstable; urgency=medium
 
   * conan: wasm
