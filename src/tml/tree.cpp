@@ -273,9 +273,16 @@ void write_internal(const tml::forest& roots, papki::file& fi, formatting fmt, u
 }
 } // namespace
 
-void tml::write(const tml::forest& wood, papki::file& fi, formatting fmt)
+void tml::write(
+	const tml::forest& wood, //
+	papki::file& fi,
+	formatting fmt
+)
 {
-	papki::file::guard file_guard(fi, papki::file::mode::create);
+	papki::file::guard file_guard(
+		fi, //
+		papki::mode::create
+	);
 
 	write_internal(wood, fi, fmt, 0);
 }
