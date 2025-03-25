@@ -40,7 +40,6 @@ android {
             path "CMakeLists.txt"
         }
     }
-    namespace 'cppfw.github.io.tml'
 }
 
 repositories {
@@ -66,5 +65,4 @@ task copy_aar(type: Copy) {
 
 afterEvaluate {
     copy_aar.dependsOn(assembleRelease)
-    copy_aar.dependsOn(bundleStaticLibRelease)
 }
