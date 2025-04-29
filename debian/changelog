@@ -1,3 +1,9 @@
+libtml (0.2.26) unstable; urgency=medium
+
+  * vcpkg: fix deploy path
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 29 Apr 2025 13:49:39 +0300
+
 libtml (0.2.25) unstable; urgency=medium
 
   * vcpkg: update
