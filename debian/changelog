@@ -1,3 +1,9 @@
+libtml (0.2.24) unstable; urgency=medium
+
+  * vcpkg
+
+ -- Ivan Gagis <igagis@gmail.com>  Tue, 29 Apr 2025 11:05:04 +0300
+
 libtml (0.2.23) unstable; urgency=medium
 
   * update
