@@ -1,7 +1,7 @@
 {
     "name": "tml",
     "version": "$(version)",
-    "homepage": "https://github.com/cppfw/rasterimage",
+    "homepage": "https://github.com/cppfw/tml",
     "description": "tree markup language (tml) parsing library in C++",
     "license": "MIT",
     "dependencies": [
