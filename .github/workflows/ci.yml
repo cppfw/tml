@@ -507,8 +507,8 @@ jobs:
         include:
           - {os: debian, codename: bookworm, image_owner: }
           # - {os: debian, codename: bookworm, image_owner: i386/, labels: [i386,docker]}
-          - {os: debian, codename: bookworm, image_owner: arm32v7/, labels: [ubuntu-24.04-arm]}
-          - {os: debian, codename: bookworm, image_owner: arm64v8/, labels: [ubuntu-24.04-arm]}
+          # - {os: debian, codename: bookworm, image_owner: arm32v7/, labels: [ubuntu-24.04-arm]}
+          # - {os: debian, codename: bookworm, image_owner: arm64v8/, labels: [ubuntu-24.04-arm]}
     runs-on: ${{ (matrix.labels == '' && 'ubuntu-latest') || matrix.labels }}
     container: ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
     name: conan - linux | ${{ matrix.image_owner }}
@@ -645,7 +645,7 @@ jobs:
         run: |
           conan remote add cppfw $MYCI_CONAN_REMOTE
           # NOTE: specifying empty test folder to skip the test stage
-          conan create conan --profile:build default --profile:host emscripten/conan.profile --build=missing --user $MYCI_CONAN_USER --channel main --version $PACKAGE_VERSION --test-folder ""
+          conan create build/conan --profile:build default --profile:host build/emscripten/conan.profile --build=missing --user $MYCI_CONAN_USER --channel main --version $PACKAGE_VERSION --test-folder ""
       - name: deploy conan package
         run: |
           conan remote login --password $MYCI_CONAN_PASSWORD cppfw $MYCI_CONAN_USER
