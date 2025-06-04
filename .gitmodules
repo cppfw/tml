@@ -1,3 +1,4 @@
 [submodule "tool-configs"]
 	path = tool-configs
 	url = ../tool-configs
+	branch = main
