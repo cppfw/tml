@@ -5,18 +5,20 @@ include prorab-install-dbgsrc.mk
 
 $(eval $(call prorab-config, ../config))
 
-this_name := tml
+this_src_dir := tml
+
+this_name := $(this_src_dir)$(this_dbg)
 
 this_soname := $(shell cat $(d)soname.txt)
 
-this_srcs += $(call prorab-src-dir, .)
+this_srcs += $(call prorab-src-dir, $(this_src_dir))
 
-this_ldlibs += -lpapki -lutki
+this_ldlibs += -l papki$(this_dbg)
+this_ldlibs += -l utki$(this_dbg)
 
 $(eval $(prorab-build-lib))
 
 this_license_file := ../LICENSE
-this_src_dir := $(this_name)
 $(eval $(prorab-license))
 
 $(eval $(prorab-clang-format))
