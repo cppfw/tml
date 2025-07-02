@@ -8,7 +8,7 @@
 #include "../../../src/tml/parser.hpp"
 
 namespace{
-enum action_enum{
+enum class action_enum{
 	children_start,
 	children_end,
 	string_item
@@ -20,14 +20,14 @@ class test_listener : public tml::listener{
 	void on_children_parse_finished(tml::location)override{
 		// TRACE(<< "}" << std::endl)
 		tst::check(this->actions.size() > 0, SL);
-		tst::check(this->actions.front().first == children_end, SL) << "first = " << this->actions.front().first << " second = " << this->actions.front().second;
+		tst::check(this->actions.front().first == action_enum::children_end, SL) << "first = " << unsigned(this->actions.front().first) << " second = " << this->actions.front().second;
 		this->actions.pop_front();
 	}
 
 	void on_children_parse_started(tml::location)override{
 		// TRACE(<< "{" << std::endl)
 		tst::check(this->actions.size() > 0, SL);
-		tst::check(this->actions.front().first == children_start, SL) << "first = " << this->actions.front().first << " second = " << this->actions.front().second;
+		tst::check(this->actions.front().first == action_enum::children_start, SL) << "first = " << unsigned(this->actions.front().first) << " second = " << this->actions.front().second;
 		this->actions.pop_front();
 	}
 
@@ -38,13 +38,13 @@ class test_listener : public tml::listener{
 		// 	o << " line = " << info.location.line << '\n';
 		// });
 		tst::check(this->actions.size() > 0, SL);
-		tst::check(this->actions.front().first == string_item, [&](auto&o){
-				o << "first = " << this->actions.front().first;
+		tst::check(this->actions.front().first == action_enum::string_item, [&](auto&o){
+				o << "first = " << unsigned(this->actions.front().first);
 				o << " second = " << this->actions.front().second;
 				o << " line = " << info.location.line;
 			}, SL);
 		tst::check(this->actions.front().second == str, [&](auto&o){
-				o << "first = " << this->actions.front().first;
+				o << "first = " << unsigned(this->actions.front().first);
 				o << " second = " << this->actions.front().second;
 				o << " str = " << str;
 			}, SL);
@@ -71,64 +71,64 @@ const tst::set set("parser", [](auto& suite){
 	suite.add("parse", [](){
 		test_listener l;
 
-		l.actions.emplace_back(string_item, "test string");
-		l.actions.emplace_back(string_item, "another string");
-		l.actions.emplace_back(string_item, "unquotedString");
+		l.actions.emplace_back(action_enum::string_item, "test string");
+		l.actions.emplace_back(action_enum::string_item, "another string");
+		l.actions.emplace_back(action_enum::string_item, "unquotedString");
 
-		l.actions.emplace_back(string_item, "string with empty children list");
-		l.actions.emplace_back(children_start, "");
-		l.actions.emplace_back(children_end, "");
+		l.actions.emplace_back(action_enum::string_item, "string with empty children list");
+		l.actions.emplace_back(action_enum::children_start, "");
+		l.actions.emplace_back(action_enum::children_end, "");
 
-		l.actions.emplace_back(string_item, "unquoted_string_with_empty_children_list");
-		l.actions.emplace_back(children_start, "");
-		l.actions.emplace_back(children_end, "");
+		l.actions.emplace_back(action_enum::string_item, "unquoted_string_with_empty_children_list");
+		l.actions.emplace_back(action_enum::children_start, "");
+		l.actions.emplace_back(action_enum::children_end, "");
 
-		l.actions.emplace_back(string_item, "");
-		l.actions.emplace_back(children_start, "");
-		l.actions.emplace_back(children_end, "");
+		l.actions.emplace_back(action_enum::string_item, "");
+		l.actions.emplace_back(action_enum::children_start, "");
+		l.actions.emplace_back(action_enum::children_end, "");
 
-		l.actions.emplace_back(string_item, "");
-		l.actions.emplace_back(children_start, "");
+		l.actions.emplace_back(action_enum::string_item, "");
+		l.actions.emplace_back(action_enum::children_start, "");
 
-		l.actions.emplace_back(string_item, "");
-		l.actions.emplace_back(children_start, "");
-		l.actions.emplace_back(children_end, "");
+		l.actions.emplace_back(action_enum::string_item, "");
+		l.actions.emplace_back(action_enum::children_start, "");
+		l.actions.emplace_back(action_enum::children_end, "");
 
-		l.actions.emplace_back(string_item, "");
-		l.actions.emplace_back(children_start, "");
-		l.actions.emplace_back(children_end, "");
+		l.actions.emplace_back(action_enum::string_item, "");
+		l.actions.emplace_back(action_enum::children_start, "");
+		l.actions.emplace_back(action_enum::children_end, "");
 
-		l.actions.emplace_back(children_end, "");
+		l.actions.emplace_back(action_enum::children_end, "");
 
-		l.actions.emplace_back(string_item, "");
-		l.actions.emplace_back(children_start, "");
+		l.actions.emplace_back(action_enum::string_item, "");
+		l.actions.emplace_back(action_enum::children_start, "");
 
-		l.actions.emplace_back(string_item, "child string");
+		l.actions.emplace_back(action_enum::string_item, "child string");
 
-		l.actions.emplace_back(string_item, "aaa");
-		l.actions.emplace_back(children_start, "");
-		l.actions.emplace_back(children_end, "");
+		l.actions.emplace_back(action_enum::string_item, "aaa");
+		l.actions.emplace_back(action_enum::children_start, "");
+		l.actions.emplace_back(action_enum::children_end, "");
 
-		l.actions.emplace_back(string_item, "bbb");
+		l.actions.emplace_back(action_enum::string_item, "bbb");
 
-		l.actions.emplace_back(string_item, "ccc");
-		l.actions.emplace_back(children_start, "");
-		l.actions.emplace_back(string_item, "ddd");
-		l.actions.emplace_back(children_end, "");
+		l.actions.emplace_back(action_enum::string_item, "ccc");
+		l.actions.emplace_back(action_enum::children_start, "");
+		l.actions.emplace_back(action_enum::string_item, "ddd");
+		l.actions.emplace_back(action_enum::children_end, "");
 
-		l.actions.emplace_back(children_end, "");
+		l.actions.emplace_back(action_enum::children_end, "");
 
-		l.actions.emplace_back(string_item, "Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Doublequotes\" {}{}{}{}");
+		l.actions.emplace_back(action_enum::string_item, "Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Doublequotes\" {}{}{}{}");
 
-		l.actions.emplace_back(string_item, "quoted string with trailing slash /");
+		l.actions.emplace_back(action_enum::string_item, "quoted string with trailing slash /");
 
-		l.actions.emplace_back(string_item, "fff ggg");
+		l.actions.emplace_back(action_enum::string_item, "fff ggg");
 
-		l.actions.emplace_back(string_item, "tralala tro lo lo\ntre lele");
+		l.actions.emplace_back(action_enum::string_item, "tralala tro lo lo\ntre lele");
 
-		l.actions.emplace_back(string_item, "-1213.33");
+		l.actions.emplace_back(action_enum::string_item, "-1213.33");
 
-		l.actions.emplace_back(string_item, "UnquotedStringAtTheVeryEndOfTheFile");
+		l.actions.emplace_back(action_enum::string_item, "UnquotedStringAtTheVeryEndOfTheFile");
 
 		papki::fs_file fi("parser_data/test.tml");
 
