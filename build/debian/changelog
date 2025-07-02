@@ -1,3 +1,9 @@
+libtml (0.2.30) unstable; urgency=medium
+
+  * add debian dbg package
+
+ -- Ivan Gagis <igagis@gmail.com>  Wed, 02 Jul 2025 17:09:11 +0300
+
 libtml (0.2.29) unstable; urgency=medium
 
   * vcpkg: config transient deps
