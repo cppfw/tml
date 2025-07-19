@@ -85,24 +85,20 @@ forest tml::read(const std::string& str)
 }
 
 namespace {
-bool can_string_be_unquoted(const char* s, size_t& out_length, unsigned& out_num_escapes)
+bool can_string_be_unquoted(std::string_view str, size_t& out_length, unsigned& out_num_escapes)
 {
-	//	TRACE(<< "CanStringBeUnquoted(): enter" << std::endl)
-
 	out_num_escapes = 0;
 	out_length = 0;
 
-	if (s == nullptr) {
-		// empty string can be unquoted when it has children, so return true.
-		return true;
+	if (str.empty()) {
+		// empty string cannot be unquoted
+		return false;
 	}
 
 	bool ret = true;
 
-	// NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-	for (; *s != '\0'; ++s, ++out_length) {
-		//		TRACE(<< "CanStringBeUnquoted(): c = " << (*c) << std::endl)
-		switch (*s) {
+	for (const auto c : str) {
+		switch (c) {
 			case '\t':
 			case '\n':
 			case '\\':
@@ -116,47 +112,51 @@ bool can_string_be_unquoted(const char* s, size_t& out_length, unsigned& out_num
 			default:
 				break;
 		}
+		++out_length;
 	}
 	return ret;
 }
 
-void make_escaped_string(const char* str, utki::span<uint8_t> out)
+void make_escaped_string(
+	std::string_view str, //
+	utki::span<uint8_t> out
+)
 {
 	auto p = out.begin();
-	// NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-	for (const char* c = str; *c != 0; ++c) {
+
+	for (const auto& c : str) {
 		ASSERT(p != out.end())
 
-		switch (*c) {
+		switch (c) {
 			case '\t':
 				*p = '\\';
-				++p;
+				p = std::next(p);
 				ASSERT(p != out.end())
 				*p = 't';
 				break;
 			case '\n':
 				*p = '\\';
-				++p;
+				p = std::next(p);
 				ASSERT(p != out.end())
 				*p = 'n';
 				break;
 			case '\\':
 				*p = '\\';
-				++p;
+				p = std::next(p);
 				ASSERT(p != out.end())
 				*p = '\\';
 				break;
 			case '"':
 				*p = '\\';
-				++p;
+				p = std::next(p);
 				ASSERT(p != out.end())
 				*p = '"';
 				break;
 			default:
-				*p = *c;
+				*p = c;
 				break;
 		}
-		++p;
+		p = std::next(p);
 	}
 }
 
@@ -188,7 +188,11 @@ void write_internal(const tml::forest& roots, papki::file& fi, formatting fmt, u
 
 		unsigned num_escapes = 0;
 		size_t length = 0;
-		bool unqouted = can_string_be_unquoted(n.value.string.c_str(), length, num_escapes);
+		bool unqouted = can_string_be_unquoted(
+			n.value.string, //
+			length,
+			num_escapes
+		);
 
 		if (!unqouted) {
 			fi.write(utki::make_span(quote));
@@ -198,7 +202,10 @@ void write_internal(const tml::forest& roots, papki::file& fi, formatting fmt, u
 			} else {
 				std::vector<uint8_t> buf(length + num_escapes);
 
-				make_escaped_string(n.value.string.c_str(), utki::make_span(buf));
+				make_escaped_string(
+					n.value.string, //
+					utki::make_span(buf)
+				);
 
 				fi.write(utki::make_span(buf));
 			}
