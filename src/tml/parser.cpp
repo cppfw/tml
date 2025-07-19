@@ -343,7 +343,13 @@ void parser::process_char_in_unicode_sequence(char c, listener& listener)
 	if (this->sequence_index == this->sequence.size()) {
 		uint32_t value = 0;
 		auto span = utki::make_span(this->sequence);
-		auto res = std::from_chars(span.data(), span.end_pointer(), value, utki::to_int(utki::integer_base::hex));
+		auto res = std::from_chars(
+			span.data(), //
+			utki::end_pointer(span),
+			value,
+			utki::to_int(utki::integer_base::hex)
+		);
+
 		if (res.ec == std::errc::invalid_argument) {
 			std::stringstream ss;
 			ss << "malformed document: could not parse hexadecimal number of unicode escape sequence at line: "

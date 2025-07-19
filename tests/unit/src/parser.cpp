@@ -18,14 +18,12 @@ enum class action_enum{
 namespace{
 class test_listener : public tml::listener{
 	void on_children_parse_finished(tml::location)override{
-		// TRACE(<< "}" << std::endl)
 		tst::check(this->actions.size() > 0, SL);
 		tst::check(this->actions.front().first == action_enum::children_end, SL) << "first = " << unsigned(this->actions.front().first) << " second = " << this->actions.front().second;
 		this->actions.pop_front();
 	}
 
 	void on_children_parse_started(tml::location)override{
-		// TRACE(<< "{" << std::endl)
 		tst::check(this->actions.size() > 0, SL);
 		tst::check(this->actions.front().first == action_enum::children_start, SL) << "first = " << unsigned(this->actions.front().first) << " second = " << this->actions.front().second;
 		this->actions.pop_front();
