@@ -22,13 +22,13 @@ jobs:
       linux_distro: debian
       linux_release: bookworm
     steps:
-      - name: add llvm repo (for clang-format)
-        uses: myci-actions/add-deb-repo@main
-        with:
-          repo: deb https://apt.llvm.org/${{ env.linux_release }} llvm-toolchain-${{ env.linux_release }} main
-          repo-name: llvm
-          keys-asc: https://apt.llvm.org/llvm-snapshot.gpg.key
-          install: clang
+      # - name: add llvm repo (for clang-format)
+      #   uses: myci-actions/add-deb-repo@main
+      #   with:
+      #     repo: deb https://apt.llvm.org/${{ env.linux_release }} llvm-toolchain-${{ env.linux_release }} main
+      #     repo-name: llvm
+      #     keys-asc: https://apt.llvm.org/llvm-snapshot.gpg.key
+      #     install: clang
       - name: add cppfw deb repo
         uses: myci-actions/add-deb-repo@main
         with:
@@ -97,13 +97,13 @@ jobs:
     env:
       CXX: clang++
     steps:
-      - name: add llvm repo (for clang-format)
-        uses: myci-actions/add-deb-repo@main
-        with:
-          repo: deb https://apt.llvm.org/${{ matrix.codename }} llvm-toolchain-${{ matrix.codename }} main
-          repo-name: llvm
-          keys-asc: https://apt.llvm.org/llvm-snapshot.gpg.key
-          install: clang
+      # - name: add llvm repo (for clang-format)
+      #   uses: myci-actions/add-deb-repo@main
+      #   with:
+      #     repo: deb https://apt.llvm.org/${{ matrix.codename }} llvm-toolchain-${{ matrix.codename }} main
+      #     repo-name: llvm
+      #     keys-asc: https://apt.llvm.org/llvm-snapshot.gpg.key
+      #     install: clang
       - name: add cppfw deb repo
         uses: myci-actions/add-deb-repo@main
         with:
@@ -155,13 +155,13 @@ jobs:
         run: |
           # configure timezone to avoid 'tzdata' package to require user interaction during installation (needed for ubuntu:focal)
           TZ=Europe/Helsinki ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-      - name: add llvm repo (for clang-format)
-        uses: myci-actions/add-deb-repo@main
-        with:
-          repo: deb https://apt.llvm.org/${{ matrix.codename }} llvm-toolchain-${{ matrix.codename }} main
-          repo-name: llvm
-          keys-asc: https://apt.llvm.org/llvm-snapshot.gpg.key
-          install: clang
+      # - name: add llvm repo (for clang-format)
+      #   uses: myci-actions/add-deb-repo@main
+      #   with:
+      #     repo: deb https://apt.llvm.org/${{ matrix.codename }} llvm-toolchain-${{ matrix.codename }} main
+      #     repo-name: llvm
+      #     keys-asc: https://apt.llvm.org/llvm-snapshot.gpg.key
+      #     install: clang
       - name: add cppfw deb repo
         uses: myci-actions/add-deb-repo@main
         with:
@@ -569,13 +569,13 @@ jobs:
     container: ${{ matrix.image_owner }}${{ matrix.os }}:${{ matrix.codename }}
     name: conan - linux | ${{ matrix.image_owner }}
     steps:
-      - name: add llvm repo (for clang-format)
-        uses: myci-actions/add-deb-repo@main
-        with:
-          repo: deb http://apt.llvm.org/${{ matrix.codename }} llvm-toolchain-${{ matrix.codename }} main
-          repo-name: llvm
-          keys-asc: https://apt.llvm.org/llvm-snapshot.gpg.key
-          install: clang-format clang-tidy
+      # - name: add llvm repo (for clang-format)
+      #   uses: myci-actions/add-deb-repo@main
+      #   with:
+      #     repo: deb http://apt.llvm.org/${{ matrix.codename }} llvm-toolchain-${{ matrix.codename }} main
+      #     repo-name: llvm
+      #     keys-asc: https://apt.llvm.org/llvm-snapshot.gpg.key
+      #     install: clang-format clang-tidy
       - name: add cppfw deb repo
         uses: myci-actions/add-deb-repo@main
         with:
