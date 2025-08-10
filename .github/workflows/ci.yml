@@ -110,7 +110,7 @@ jobs:
           repo: deb https://gagis.hopto.org/repo/cppfw/${{ matrix.os }} ${{ matrix.codename }} main
           repo-name: cppfw
           keys-asc: https://gagis.hopto.org/repo/cppfw/pubkey.gpg
-          install: myci git clang+++
+          install: myci git clang
       - name: install ci tools
         run: |
           apt install --assume-yes devscripts equivs
