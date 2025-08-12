@@ -203,14 +203,18 @@ using tree = utki::tree<leaf>;
 using forest = tree::container_type;
 
 forest read(const papki::file& fi);
-forest read(const std::string& str);
+forest read(std::string_view str);
 
 enum class formatting {
 	normal,
 	minimal
 };
 
-void write(const forest& wood, papki::file& fi, formatting fmt = formatting::normal);
+void write(
+	const forest& wood, //
+	papki::file& fi,
+	formatting fmt = formatting::normal
+);
 
 std::string to_string(const forest& f);
 

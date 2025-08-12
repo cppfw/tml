@@ -77,7 +77,7 @@ forest tml::read(const papki::file& fi)
 	return std::move(listener.cur_forest);
 }
 
-forest tml::read(const std::string& str)
+forest tml::read(std::string_view str)
 {
 	const papki::span_file fi(to_uint8_t(utki::make_span(str)));
 
