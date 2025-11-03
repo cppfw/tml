@@ -1,3 +1,9 @@
+libtml (0.2.33) unstable; urgency=medium
+
+  * debian: fix dbgsrc path
+
+ -- Ivan Gagis <igagis@gmail.com>  Mon, 03 Nov 2025 14:31:20 +0200
+
 libtml (0.2.32) unstable; urgency=medium
 
   * use string_view
