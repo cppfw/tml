@@ -697,9 +697,9 @@ void parser::end_of_data(listener& listener)
 	this->reset();
 }
 
-void tml::parse(const papki::file& fi, listener& listener)
+void tml::parse(const fsif::file& fi, listener& listener)
 {
-	papki::file::guard file_guard(fi);
+	fsif::file::guard file_guard(fi);
 
 	tml::parser parser;
 

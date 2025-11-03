@@ -10,7 +10,7 @@ url="http://github.com/cppfw/${pkgname}"
 license=('MIT')
 groups=()
 
-depends=("utki" "papki")
+depends=("utki" "fsif")
 
 makedepends=(
 	'myci'

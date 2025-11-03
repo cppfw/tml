@@ -64,7 +64,7 @@ public:
 using tree_ext = utki::tree<leaf_ext>;
 using forest_ext = tree_ext::container_type;
 
-forest_ext read_ext(const papki::file& fi);
+forest_ext read_ext(const fsif::file& fi);
 forest_ext read_ext(const std::string& str);
 
 tree to_non_ext(const tree_ext& t);

@@ -3,7 +3,7 @@
 
 #include <deque>
 
-#include <papki/fs_file.hpp>
+#include <fsif/native_file.hpp>
 
 #include "../../../src/tml/parser.hpp"
 
@@ -128,7 +128,7 @@ const tst::set set("parser", [](auto& suite){
 
 		l.actions.emplace_back(action_enum::string_item, "UnquotedStringAtTheVeryEndOfTheFile");
 
-		papki::fs_file fi("parser_data/test.tml");
+		fsif::native_file fi("parser_data/test.tml");
 
 		tml::parse(fi, l);
 

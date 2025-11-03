@@ -50,7 +50,7 @@ repositories {
 }
 dependencies {
     implementation 'io.github.cppfw:utki:+'
-    implementation 'io.github.cppfw:papki:+'
+    implementation 'io.github.cppfw:fsif:+'
 }
 
 // copy and rename release AAR to unified name

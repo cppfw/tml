@@ -28,7 +28,7 @@ SOFTWARE.
 
 #include <string>
 
-#include <papki/file.hpp>
+#include <fsif/file.hpp>
 #include <utki/string.hpp>
 #include <utki/tree.hpp>
 
@@ -202,7 +202,7 @@ public:
 using tree = utki::tree<leaf>;
 using forest = tree::container_type;
 
-forest read(const papki::file& fi);
+forest read(const fsif::file& fi);
 forest read(std::string_view str);
 
 enum class formatting {
@@ -212,7 +212,7 @@ enum class formatting {
 
 void write(
 	const forest& wood, //
-	papki::file& fi,
+	fsif::file& fi,
 	formatting fmt = formatting::normal
 );
 

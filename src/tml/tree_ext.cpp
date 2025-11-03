@@ -28,13 +28,13 @@ SOFTWARE.
 
 #include <stack>
 
-#include <papki/span_file.hpp>
+#include <fsif/span_file.hpp>
 
 #include "parser.hpp"
 
 using namespace tml;
 
-forest_ext tml::read_ext(const papki::file& fi)
+forest_ext tml::read_ext(const fsif::file& fi)
 {
 	class the_listener : public tml::listener
 	{
@@ -75,7 +75,7 @@ forest_ext tml::read_ext(const papki::file& fi)
 
 forest_ext tml::read_ext(const std::string& str)
 {
-	const papki::span_file fi(to_uint8_t(utki::make_span(str)));
+	const fsif::span_file fi(to_uint8_t(utki::make_span(str)));
 
 	return read_ext(fi);
 }

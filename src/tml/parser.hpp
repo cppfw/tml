@@ -29,7 +29,7 @@ SOFTWARE.
 #include <string_view>
 #include <vector>
 
-#include <papki/file.hpp>
+#include <fsif/file.hpp>
 #include <utki/span.hpp>
 
 #include "extra_info.hpp"
@@ -199,6 +199,6 @@ public:
  * @param fi - file interface to use for getting the data to parse.
  * @param listener - listener object which will receive notifications about parsed tokens.
  */
-void parse(const papki::file& fi, listener& listener);
+void parse(const fsif::file& fi, listener& listener);
 
 } // namespace tml

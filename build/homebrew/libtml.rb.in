@@ -7,7 +7,7 @@ class Libtml < Formula
   depends_on "prorab" => :build
   depends_on "libclargs" => :build
   depends_on "libtst" => :build
-  depends_on "libpapki"
+  depends_on "libfsif"
   depends_on "libutki"
 
   # use gmake here because otherwise homebrew uses default Mac's make which is of too old version 3.81

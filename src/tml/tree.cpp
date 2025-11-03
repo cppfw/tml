@@ -30,15 +30,15 @@ SOFTWARE.
 #include <cstring>
 #include <stack>
 
-#include <papki/span_file.hpp>
-#include <papki/vector_file.hpp>
+#include <fsif/span_file.hpp>
+#include <fsif/vector_file.hpp>
 #include <utki/string.hpp>
 
 #include "parser.hpp"
 
 using namespace tml;
 
-forest tml::read(const papki::file& fi)
+forest tml::read(const fsif::file& fi)
 {
 	class the_listener : public tml::listener
 	{
@@ -79,7 +79,7 @@ forest tml::read(const papki::file& fi)
 
 forest tml::read(std::string_view str)
 {
-	const papki::span_file fi(to_uint8_t(utki::make_span(str)));
+	const fsif::span_file fi(to_uint8_t(utki::make_span(str)));
 
 	return read(fi);
 }
@@ -160,7 +160,7 @@ void make_escaped_string(
 	}
 }
 
-void write_internal(const tml::forest& roots, papki::file& fi, formatting fmt, unsigned indentation)
+void write_internal(const tml::forest& roots, fsif::file& fi, formatting fmt, unsigned indentation)
 {
 	const std::array<uint8_t, 1> quote = {{'"'}};
 	const std::array<uint8_t, 1> lcurly = {{'{'}};
@@ -282,13 +282,13 @@ void write_internal(const tml::forest& roots, papki::file& fi, formatting fmt, u
 
 void tml::write(
 	const tml::forest& wood, //
-	papki::file& fi,
+	fsif::file& fi,
 	formatting fmt
 )
 {
-	papki::file::guard file_guard(
+	fsif::file::guard file_guard(
 		fi, //
-		papki::mode::create
+		fsif::mode::create
 	);
 
 	write_internal(wood, fi, fmt, 0);
@@ -389,7 +389,7 @@ bool leaf::to_bool() const
 
 std::string tml::to_string(const forest& f)
 {
-	papki::vector_file fi;
+	fsif::vector_file fi;
 	tml::write(f, fi, tml::formatting::minimal);
 	auto v = fi.reset_data();
 	return utki::make_string(v);

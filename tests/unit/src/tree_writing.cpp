@@ -3,8 +3,8 @@
 
 #include <regex>
 
-#include <papki/fs_file.hpp>
-#include <papki/vector_file.hpp>
+#include <fsif/native_file.hpp>
+#include <fsif/vector_file.hpp>
 
 #include "../../../src/tml/tree.hpp"
 
@@ -16,17 +16,17 @@ namespace{
 template <bool formatted>
 std::function<void(const std::string&)> make_test_proc(){
 	return [](const std::string& p){
-		papki::fs_file fi(data_dir + p);
+		fsif::native_file fi(data_dir + p);
 
 		auto roots = tml::read(fi);
 
-		papki::vector_file outfi;
+		fsif::vector_file outfi;
 
 		tml::write(roots, outfi, formatted ? tml::formatting::normal : tml::formatting::minimal);
 
 		auto data = outfi.reset_data();
 
-		papki::fs_file expected_fi(fi.path() + "." + (formatted ? "" : "un") + "formatted");
+		fsif::native_file expected_fi(fi.path() + "." + (formatted ? "" : "un") + "formatted");
 
 		auto expected_data = expected_fi.load();
 
@@ -41,7 +41,7 @@ const tst::set set("tree_writing", [](tst::suite& suite){
 
 	{
 		const std::regex tml_regex("^.*\\.tml$");
-		auto all_files = papki::fs_file(data_dir).list_dir();
+		auto all_files = fsif::native_file(data_dir).list_dir();
 
 		std::copy_if(
 				all_files.begin(),
