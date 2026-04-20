@@ -260,12 +260,11 @@ void parser::process_char_in_unquoted_string(char c, listener& listener)
 	}
 }
 
-void parser::process_char_in_quoted_string(char c, listener& listener)
+void parser::process_char_in_quoted_string(char c, listener&)
 {
 	ASSERT(this->cur_state == state::quoted_string)
 	switch (c) {
 		case '"':
-			// this->handle_string_parsed(listener);
 			this->set_string_parsed_state();
 			break;
 		case '\\':
@@ -287,7 +286,7 @@ void parser::process_char_in_escape_sequence(char c, listener& listener)
 	constexpr auto short_unicode_sequence_length = 4;
 	constexpr auto long_unicode_sequence_length = 8;
 
-	ASSERT(this->cur_state == state::escape_sequence)
+	utki::assert(this->cur_state == state::escape_sequence, SL);
 	switch (c) {
 		case 'u':
 			this->cur_state = state::unicode_sequence;
