@@ -47,10 +47,10 @@ forest tml::read(const fsif::file& fi)
 	public:
 		forest cur_forest;
 
-		void on_children_parse_started(location loc) override
+		void on_children_parse_started(location) override
 		{
 			this->stack.push(std::move(this->cur_forest));
-			ASSERT(this->cur_forest.size() == 0)
+			utki::assert(this->cur_forest.size() == 0, SL);
 		}
 
 		void on_children_parse_finished(location loc) override
@@ -66,9 +66,9 @@ forest tml::read(const fsif::file& fi)
 			this->stack.pop();
 		}
 
-		void on_string_parsed(std::string_view str, const extra_info& info) override
+		void on_string_parsed(std::string_view str, const extra_info&) override
 		{
-			this->cur_forest.emplace_back(std::string(str.data(), str.size()));
+			this->cur_forest.emplace_back(str);
 		}
 	} listener;
 
