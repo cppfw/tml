@@ -43,10 +43,10 @@ forest_ext tml::read_ext(const fsif::file& fi)
 	public:
 		forest_ext cur_forest;
 
-		void on_children_parse_started(location loc) override
+		void on_children_parse_started(location /* loc */) override
 		{
 			this->stack.push(std::move(this->cur_forest));
-			ASSERT(this->cur_forest.size() == 0)
+			utki::assert(this->cur_forest.size() == 0, SL);
 		}
 
 		void on_children_parse_finished(location loc) override
