@@ -152,6 +152,7 @@ public:
 	bool to_bool() const;
 
 	template <typename number_type>
+	// NOLINTNEXTLINE(modernize-use-constraints, "use enable_if instead of C++20 requires clause to keep the header C++17-compliant")
 	std::enable_if_t<std::is_arithmetic_v<number_type>, number_type> to() const
 	{
 		return utki::string_parser(this->string).read_number<number_type>();
