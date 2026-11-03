@@ -1,21 +1,21 @@
-#include <tst/set.hpp>
-#include <tst/check.hpp>
-
 #include <regex>
 
 #include <fsif/native_file.hpp>
 #include <fsif/vector_file.hpp>
+#include <tst/check.hpp>
+#include <tst/set.hpp>
 
 #include "../../../src/tml/tree.hpp"
 
-namespace{
+namespace {
 const std::string data_dir = "res/tree_writing_data/";
-}
+} // namespace
 
-namespace{
+namespace {
 template <bool formatted>
-std::function<void(const std::string&)> make_test_proc(){
-	return [](const std::string& p){
+std::function<void(const std::string&)> make_test_proc()
+{
+	return [](const std::string& p) {
 		fsif::native_file fi(data_dir + p);
 
 		auto roots = tml::read(fi);
@@ -33,36 +33,23 @@ std::function<void(const std::string&)> make_test_proc(){
 		tst::check(data == expected_data, SL);
 	};
 }
-}
+} // namespace
 
-namespace{
-const tst::set set("tree_writing", [](tst::suite& suite){
+namespace {
+const tst::set set("tree_writing", [](tst::suite& suite) {
 	std::vector<std::string> files;
 
 	{
 		const std::regex tml_regex("^.*\\.tml$");
 		auto all_files = fsif::native_file(data_dir).list_dir();
 
-		std::copy_if(
-				all_files.begin(),
-				all_files.end(),
-				std::back_inserter(files),
-				[&tml_regex](auto& f){
-					return std::regex_match(f, tml_regex);
-				}
-			);
+		std::copy_if(all_files.begin(), all_files.end(), std::back_inserter(files), [&tml_regex](auto& f) {
+			return std::regex_match(f, tml_regex);
+		});
 	}
 
-	suite.add<std::string>(
-		"write_unformatted",
-		decltype(files)(files),
-		make_test_proc<false>()
-	);
+	suite.add<std::string>("write_unformatted", decltype(files)(files), make_test_proc<false>());
 
-	suite.add<std::string>(
-		"write_formatted",
-		decltype(files)(files),
-		make_test_proc<true>()
-	);
+	suite.add<std::string>("write_formatted", decltype(files)(files), make_test_proc<true>());
 });
-}
+} // namespace

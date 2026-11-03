@@ -1,11 +1,11 @@
-#include <tst/set.hpp>
 #include <tst/check.hpp>
+#include <tst/set.hpp>
 
 #include "../../../src/tml/tree_ext.hpp"
 
-namespace{
-const tst::set set("read_ext", [](auto& suite){
-	suite.add("correct_extra_info_is_provided", [](){
+namespace {
+const tst::set set("read_ext", [](auto& suite) {
+	suite.add("correct_extra_info_is_provided", []() {
 		const auto tml = tml::read_ext(R"qwertyuiop(
 			hello"world!"
 			how {are you "doing"?
@@ -84,4 +84,4 @@ const tst::set set("read_ext", [](auto& suite){
 		tst::check(!okay.value.info.flags.get(tml::flag::first_on_line), SL);
 	});
 });
-}
+} // namespace

@@ -1,51 +1,64 @@
-#include <tst/set.hpp>
-#include <tst/check.hpp>
+#include "../../../src/tml/parser.hpp"
 
 #include <deque>
 
 #include <fsif/native_file.hpp>
+#include <tst/check.hpp>
+#include <tst/set.hpp>
 
-#include "../../../src/tml/parser.hpp"
-
-namespace{
-enum class action_enum{
+namespace {
+enum class action_enum {
 	children_start,
 	children_end,
 	string_item
 };
-}
+} // namespace
 
-namespace{
-class test_listener : public tml::listener{
-	void on_children_parse_finished(tml::location)override{
+namespace {
+class test_listener : public tml::listener
+{
+	void on_children_parse_finished(tml::location) override
+	{
 		tst::check(this->actions.size() > 0, SL);
-		tst::check(this->actions.front().first == action_enum::children_end, SL) << "first = " << unsigned(this->actions.front().first) << " second = " << this->actions.front().second;
+		tst::check(this->actions.front().first == action_enum::children_end, SL)
+			<< "first = " << unsigned(this->actions.front().first) << " second = " << this->actions.front().second;
 		this->actions.pop_front();
 	}
 
-	void on_children_parse_started(tml::location)override{
+	void on_children_parse_started(tml::location) override
+	{
 		tst::check(this->actions.size() > 0, SL);
-		tst::check(this->actions.front().first == action_enum::children_start, SL) << "first = " << unsigned(this->actions.front().first) << " second = " << this->actions.front().second;
+		tst::check(this->actions.front().first == action_enum::children_start, SL)
+			<< "first = " << unsigned(this->actions.front().first) << " second = " << this->actions.front().second;
 		this->actions.pop_front();
 	}
 
-	void on_string_parsed(std::string_view s, const tml::extra_info& info)override{
+	void on_string_parsed(std::string_view s, const tml::extra_info& info) override
+	{
 		std::string str(s);
 		// utki::log([&](auto&o){
 		// 	o << "str = " << str;
 		// 	o << " line = " << info.location.line << '\n';
 		// });
 		tst::check(this->actions.size() > 0, SL);
-		tst::check(this->actions.front().first == action_enum::string_item, [&](auto&o){
+		tst::check(
+			this->actions.front().first == action_enum::string_item,
+			[&](auto& o) {
 				o << "first = " << unsigned(this->actions.front().first);
 				o << " second = " << this->actions.front().second;
 				o << " line = " << info.location.line;
-			}, SL);
-		tst::check(this->actions.front().second == str, [&](auto&o){
+			},
+			SL
+		);
+		tst::check(
+			this->actions.front().second == str,
+			[&](auto& o) {
 				o << "first = " << unsigned(this->actions.front().first);
 				o << " second = " << this->actions.front().second;
 				o << " str = " << str;
-			}, SL);
+			},
+			SL
+		);
 		this->actions.pop_front();
 	}
 
@@ -60,13 +73,13 @@ public:
 
 	~test_listener() override = default;
 
-	std::deque<std::pair<action_enum, std::string> > actions;
+	std::deque<std::pair<action_enum, std::string>> actions;
 };
-}
+} // namespace
 
-namespace{
-const tst::set set("parser", [](auto& suite){
-	suite.add("parse", [](){
+namespace {
+const tst::set set("parser", [](auto& suite) {
+	suite.add("parse", []() {
 		test_listener l;
 
 		l.actions.emplace_back(action_enum::string_item, "test string");
@@ -116,7 +129,10 @@ const tst::set set("parser", [](auto& suite){
 
 		l.actions.emplace_back(action_enum::children_end, "");
 
-		l.actions.emplace_back(action_enum::string_item, "Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Doublequotes\" {}{}{}{}");
+		l.actions.emplace_back(
+			action_enum::string_item,
+			"Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Doublequotes\" {}{}{}{}"
+		);
 
 		l.actions.emplace_back(action_enum::string_item, "quoted string with trailing slash /");
 
@@ -135,4 +151,4 @@ const tst::set set("parser", [](auto& suite){
 		tst::check(l.actions.size() == 0, SL);
 	});
 });
-}
+} // namespace

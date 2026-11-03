@@ -1,9 +1,9 @@
-#include <tst/set.hpp>
-#include <tst/check.hpp>
-
 #include "../../../src/tml/crawler.hpp"
 
-namespace{
+#include <tst/check.hpp>
+#include <tst/set.hpp>
+
+namespace {
 const auto sample = R"qwertyuiop(
 b1 b2
 b3{ b3_1 b3_2 }
@@ -21,79 +21,92 @@ b8 {b8_1 b8_2{b8_2_1} }
 
 const auto const_roots = tml::read(sample);
 const auto roots = tml::read(sample);
-}
+} // namespace
 
-namespace{
-struct predicate_str{
+namespace {
+struct predicate_str {
 	std::string s;
 
-	predicate_str(std::string s) : s(std::move(s)){}
+	predicate_str(std::string s) :
+		s(std::move(s))
+	{}
 
-	bool operator()(const utki::tree<tml::leaf>& l){
+	bool operator()(const utki::tree<tml::leaf>& l)
+	{
 		return l.value == s;
 	}
 };
-}
+} // namespace
 
-namespace{
-const tst::set set("crawler", [](auto& suite){
-	suite.add("non_const_crawler", [](){
-		auto& b6_1_1 = tml::crawler(roots).to("b5").next().in().to_if(predicate_str("b6_1")).in().to("b6_1_1").get().value;
+namespace {
+const tst::set set("crawler", [](auto& suite) {
+	suite.add("non_const_crawler", []() {
+		auto& b6_1_1 =
+			tml::crawler(roots).to("b5").next().in().to_if(predicate_str("b6_1")).in().to("b6_1_1").get().value;
 		tst::check_eq(b6_1_1, tml::leaf("b6_1_1"), SL);
 	});
 
-	suite.add("const_crawler_from_non_const_roots", [](){
-		auto& b6_1_1 = tml::const_crawler(roots).to("b5").next().in().to_if(predicate_str("b6_1")).in().to("b6_1_1").get().value;
+	suite.add("const_crawler_from_non_const_roots", []() {
+		auto& b6_1_1 =
+			tml::const_crawler(roots).to("b5").next().in().to_if(predicate_str("b6_1")).in().to("b6_1_1").get().value;
 		tst::check_eq(b6_1_1, tml::leaf("b6_1_1"), SL);
 	});
 
-	suite.add("const_crawler_from_const_roots", [](){
-		auto& b6_1_1 = tml::const_crawler(const_roots).to("b5").next().in().to_if(predicate_str("b6_1")).in().to("b6_1_1").get().value;
+	suite.add("const_crawler_from_const_roots", []() {
+		auto& b6_1_1 = tml::const_crawler(const_roots)
+						   .to("b5")
+						   .next()
+						   .in()
+						   .to_if(predicate_str("b6_1"))
+						   .in()
+						   .to("b6_1_1")
+						   .get()
+						   .value;
 		tst::check_eq(b6_1_1, tml::leaf("b6_1_1"), SL);
 	});
 
-	suite.add("function_to_should_fail", [](){
+	suite.add("function_to_should_fail", []() {
 		bool thrown = false;
-		try{
+		try {
 			tml::crawler(roots).to("b-1");
 			tst::check(false, SL);
-		}catch(std::runtime_error&){
+		} catch (std::runtime_error&) {
 			thrown = true;
 		}
 		tst::check(thrown, SL);
 	});
 
-	suite.add("function_to_if_should_fail", [](){
+	suite.add("function_to_if_should_fail", []() {
 		bool thrown = false;
-		try{
+		try {
 			tml::crawler(roots).to_if(predicate_str("b6-1"));
 			tst::check(false, SL);
-		}catch(std::runtime_error&){
+		} catch (std::runtime_error&) {
 			thrown = true;
 		}
 		tst::check(thrown, SL);
 	});
 
-	suite.add("function_in_should_fail", [](){
+	suite.add("function_in_should_fail", []() {
 		bool thrown = false;
-		try{
+		try {
 			tml::crawler(roots).to("b6").in().to("b6_1").in().to("b6_1_1").in();
 			tst::check(false, SL);
-		}catch(std::logic_error&){
+		} catch (std::logic_error&) {
 			thrown = true;
 		}
 		tst::check(thrown, SL);
 	});
 
-	suite.add("function_next_should_fail", [](){
+	suite.add("function_next_should_fail", []() {
 		bool thrown = false;
-		try{
+		try {
 			tml::crawler(roots).to("b6").in().to("b6_1").next();
 			tst::check(false, SL);
-		}catch(std::logic_error&){
+		} catch (std::logic_error&) {
 			thrown = true;
 		}
 		tst::check(thrown, SL);
 	});
 });
-}
+} // namespace

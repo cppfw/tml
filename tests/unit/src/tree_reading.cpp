@@ -1,13 +1,12 @@
-#include <tst/set.hpp>
-#include <tst/check.hpp>
-
 #include <fsif/native_file.hpp>
+#include <tst/check.hpp>
+#include <tst/set.hpp>
 
 #include "../../../src/tml/tree.hpp"
 
-namespace{
-const tst::set set("tree_reading", [](tst::suite& suite){
-	suite.add("read", [](){
+namespace {
+const tst::set set("tree_reading", [](tst::suite& suite) {
+	suite.add("read", []() {
 		fsif::native_file fi("res/tree_reading_data/test.tml");
 
 		auto roots = tml::read(fi);
@@ -193,4 +192,4 @@ const tst::set set("tree_reading", [](tst::suite& suite){
 		}
 	});
 });
-}
+} // namespace
