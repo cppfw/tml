@@ -13,7 +13,11 @@
         "packages": [
           "myci",
           "utki",
-          "fsif"
+          "fsif",
+          "opros",
+          "nitki",
+          "clargs",
+          "tst"
         ]
       }
     ],
