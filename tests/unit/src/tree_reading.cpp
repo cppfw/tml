@@ -8,7 +8,7 @@
 namespace{
 const tst::set set("tree_reading", [](tst::suite& suite){
 	suite.add("read", [](){
-		fsif::native_file fi("tree_reading_data/test.tml");
+		fsif::native_file fi("res/tree_reading_data/test.tml");
 
 		auto roots = tml::read(fi);
 

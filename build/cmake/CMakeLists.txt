@@ -25,3 +25,8 @@ myci_declare_library(${name}
         utki
         fsif
 )
+
+# ==============
+# = unit tests =
+
+include(unit_tests.cmake)

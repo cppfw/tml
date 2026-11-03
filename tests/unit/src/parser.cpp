@@ -128,7 +128,7 @@ const tst::set set("parser", [](auto& suite){
 
 		l.actions.emplace_back(action_enum::string_item, "UnquotedStringAtTheVeryEndOfTheFile");
 
-		fsif::native_file fi("parser_data/test.tml");
+		fsif::native_file fi("res/parser_data/test.tml");
 
 		tml::parse(fi, l);
 

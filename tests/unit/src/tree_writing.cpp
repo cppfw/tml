@@ -9,7 +9,7 @@
 #include "../../../src/tml/tree.hpp"
 
 namespace{
-const std::string data_dir = "tree_writing_data/";
+const std::string data_dir = "res/tree_writing_data/";
 }
 
 namespace{
