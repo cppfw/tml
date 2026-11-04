@@ -516,7 +516,7 @@ jobs:
       continue-on-error: true
       run: |
         cd build/vcpkg/test/exe\library-tests
-        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite','tree_ext','--test','find_tree_from_forest_by_string' -NoNewWindow -PassThru
+        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite=tree_ext','--test=find_tree_from_forest_by_string' -NoNewWindow -PassThru
         try { Wait-Process -Id $p.Id -Timeout 90; exit $p.ExitCode }
         catch { Write-Host 'DIAG TIMEOUT: test hung, killing the process'; Stop-Process -Id $p.Id -Force; exit 1 }
     # single test with file I/O, run on the main thread (no runner thread involved)
@@ -524,7 +524,7 @@ jobs:
       continue-on-error: true
       run: |
         cd build/vcpkg/test/exe\library-tests
-        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite','parser','--test','parse' -NoNewWindow -PassThru
+        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite=parser','--test=parse' -NoNewWindow -PassThru
         try { Wait-Process -Id $p.Id -Timeout 90; exit $p.ExitCode }
         catch { Write-Host 'DIAG TIMEOUT: test hung, killing the process'; Stop-Process -Id $p.Id -Force; exit 1 }
     # suite with a single test with file I/O, run via the runner thread (no --test, so runner is used)
@@ -532,14 +532,14 @@ jobs:
       continue-on-error: true
       run: |
         cd build/vcpkg/test/exe\library-tests
-        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite','parser' -NoNewWindow -PassThru
+        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite=parser' -NoNewWindow -PassThru
         try { Wait-Process -Id $p.Id -Timeout 90; exit $p.ExitCode }
         catch { Write-Host 'DIAG TIMEOUT: test hung, killing the process'; Stop-Process -Id $p.Id -Force; exit 1 }
     # full suite with per-test output to identify the hanging test
     - name: diag - full suite with per-test output
       run: |
         cd build/vcpkg/test/exe\library-tests
-        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--about-to-run','--print-passed' -NoNewWindow -PassThru
+        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--about-to-run','--passed' -NoNewWindow -PassThru
         try { Wait-Process -Id $p.Id -Timeout 120; exit $p.ExitCode }
         catch { Write-Host 'DIAG TIMEOUT: test hung, killing the process'; Stop-Process -Id $p.Id -Force; exit 1 }
     - name: upload vcpkg logs to artifacts
