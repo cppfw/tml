@@ -1,6 +1,7 @@
 #include <fsif/native_file.hpp>
 #include <tst/check.hpp>
 #include <tst/set.hpp>
+#include <utki/debug.hpp>
 
 #include "../../../src/tml/tree.hpp"
 
@@ -70,7 +71,15 @@ const tst::set set("tree_reading", [](tst::suite& suite) {
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "", SL);
 		tst::check(i->value.length() == 0, SL);
-		tst::check(i->children.size() == 0, SL) << i->children.front().value.string;
+		tst::check(
+			i->children.size() == 0,
+			[&i](auto& o) {
+				// if the check has failed, then the children list is not empty
+				utki::assert(!i->children.empty(), SL);
+				o << i->children.front().value.string;
+			},
+			SL
+		);
 
 		++i;
 		tst::check(i != roots.end(), SL);
