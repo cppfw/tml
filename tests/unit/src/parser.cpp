@@ -20,16 +20,28 @@ class test_listener : public tml::listener
 	void on_children_parse_finished(tml::location) override
 	{
 		tst::check(this->actions.size() > 0, SL);
-		tst::check(this->actions.front().first == action_enum::children_end, SL)
-			<< "first = " << unsigned(this->actions.front().first) << " second = " << this->actions.front().second;
+		tst::check(
+			this->actions.front().first == action_enum::children_end,
+			[&](auto& o) {
+				o << "first = " << unsigned(this->actions.front().first)
+				  << " second = " << this->actions.front().second;
+			},
+			SL
+		);
 		this->actions.pop_front();
 	}
 
 	void on_children_parse_started(tml::location) override
 	{
 		tst::check(this->actions.size() > 0, SL);
-		tst::check(this->actions.front().first == action_enum::children_start, SL)
-			<< "first = " << unsigned(this->actions.front().first) << " second = " << this->actions.front().second;
+		tst::check(
+			this->actions.front().first == action_enum::children_start,
+			[&](auto& o) {
+				o << "first = " << unsigned(this->actions.front().first)
+				  << " second = " << this->actions.front().second;
+			},
+			SL
+		);
 		this->actions.pop_front();
 	}
 

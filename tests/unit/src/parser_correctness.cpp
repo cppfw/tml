@@ -189,7 +189,13 @@ const tst::set set("parser_correctness", [](tst::suite& suite) {
 			bool thrown = false;
 			try {
 				tml::read(std::string(p));
-				tst::check(false, SL) << "exception is unexpectedly not thrown";
+				tst::check(
+					false,
+					[&](auto& o) {
+						o << "exception is unexpectedly not thrown";
+					},
+					SL
+				);
 			} catch (const std::invalid_argument&) {
 				thrown = true;
 			}

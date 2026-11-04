@@ -126,7 +126,14 @@ void test_uint(tst::suite& suite, const std::string& test_name)
 			if (p.expected_string.length() != 0) {
 				tst::check_eq(p.leaf.string, p.expected_string, SL);
 			}
-			tst::check_eq(value, p.expected_value, SL) << " string = " << p.leaf.string;
+			tst::check_eq(
+				value,
+				p.expected_value,
+				[&](auto& o) {
+					o << " string = " << p.leaf.string;
+				},
+				SL
+			);
 		}
 	);
 }
@@ -172,7 +179,14 @@ const tst::set set("value_conversion", [](tst::suite& suite) {
 		{3.140000000000000000095409791179, 13.0l, -0.0l, 0.0l},
 		[](auto& p) {
 			tml::leaf l(p);
-			tst::check_eq(l.to_long_double(), p, SL) << "l.string = " << l.string;
+			tst::check_eq(
+				l.to_long_double(),
+				p,
+				[&](auto& o) {
+					o << "l.string = " << l.string;
+				},
+				SL
+			);
 		}
 	);
 

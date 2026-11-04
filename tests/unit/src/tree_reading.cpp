@@ -19,12 +19,24 @@ const tst::set set("tree_reading", [](tst::suite& suite) {
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "test string", SL) << i->value.string;
+		tst::check(
+			i->value == "test string",
+			[&](auto& o) {
+				o << i->value.string;
+			},
+			SL
+		);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "anot/her string", SL) << i->value.string;
+		tst::check(
+			i->value == "anot/her string",
+			[&](auto& o) {
+				o << i->value.string;
+			},
+			SL
+		);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
@@ -49,22 +61,46 @@ const tst::set set("tree_reading", [](tst::suite& suite) {
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "string_interrupted//tro", SL) << i->value.string;
+		tst::check(
+			i->value == "string_interrupted//tro",
+			[&](auto& o) {
+				o << i->value.string;
+			},
+			SL
+		);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "_by_comment", SL) << i->value.string;
+		tst::check(
+			i->value == "_by_comment",
+			[&](auto& o) {
+				o << i->value.string;
+			},
+			SL
+		);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "string_broken/*tro", SL) << i->value.string;
+		tst::check(
+			i->value == "string_broken/*tro",
+			[&](auto& o) {
+				o << i->value.string;
+			},
+			SL
+		);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "*/_by_comment", SL) << i->value.string;
+		tst::check(
+			i->value == "*/_by_comment",
+			[&](auto& o) {
+				o << i->value.string;
+			},
+			SL
+		);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
@@ -107,7 +143,13 @@ const tst::set set("tree_reading", [](tst::suite& suite) {
 		++i;
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "", SL);
-		tst::check(i->children.size() == 5, SL) << i->children.size();
+		tst::check(
+			i->children.size() == 5,
+			[&](auto& o) {
+				o << i->children.size();
+			},
+			SL
+		);
 		{
 			auto& b = i->children;
 
