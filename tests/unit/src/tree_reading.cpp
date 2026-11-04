@@ -1,26 +1,15 @@
-#include <iostream>
-
 #include <fsif/native_file.hpp>
 #include <tst/check.hpp>
 #include <tst/set.hpp>
-
-// TEMPORARY: diagnostic markers for Windows CI freeze investigation
-#define DIAG_MARK(msg) \
-	do { \
-		std::cerr << "DIAG: " << msg << std::endl; \
-	} while (0)
 
 #include "../../../src/tml/tree.hpp"
 
 namespace {
 const tst::set set("tree_reading", [](tst::suite& suite) {
 	suite.add("read", []() {
-		DIAG_MARK("test start");
 		fsif::native_file fi("res/tree_reading_data/test.tml");
-		DIAG_MARK("file object created");
 
 		auto roots = tml::read(fi);
-		DIAG_MARK("parsed, roots.size() = " << roots.size());
 
 		auto i = roots.begin();
 
@@ -28,74 +17,70 @@ const tst::set set("tree_reading", [](tst::suite& suite) {
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "test string", SL) << i->value.string;
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "anot/her string", SL) << i->value.string;
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "unqu/otedString", SL);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "one\ntwo three\tfour", SL);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "string with empty children list", SL);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "unquoted_string_with_empty_children_list", SL);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "string_interrupted//tro", SL) << i->value.string;
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "_by_comment", SL) << i->value.string;
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "string_broken/*tro", SL) << i->value.string;
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "*/_by_comment", SL) << i->value.string;
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "", SL);
 		tst::check(i->value.length() == 0, SL);
-		tst::check(i->children.size() == 0, SL) << i->children.front().value.string;
+		tst::check(
+			i->children.size() == 0,
+			[&i](auto& o) {
+				if (!i->children.empty()) {
+					o << i->children.front().value.string;
+				}
+			},
+			SL
+		);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "", SL);
 		tst::check(i->value.length() == 0, SL);
@@ -119,7 +104,6 @@ const tst::set set("tree_reading", [](tst::suite& suite) {
 		}
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "", SL);
 		tst::check(i->children.size() == 5, SL) << i->children.size();
@@ -134,19 +118,16 @@ const tst::set set("tree_reading", [](tst::suite& suite) {
 			tst::check(i->value == "child string", SL);
 
 			++i;
-		DIAG_MARK("root ++i");
 			tst::check(i != b.end(), SL);
 			tst::check(i->value == "aaa", SL);
 			tst::check(i->children.size() == 0, SL);
 
 			++i;
-		DIAG_MARK("root ++i");
 			tst::check(i != b.end(), SL);
 			tst::check(i->value == "bbb", SL);
 			tst::check(i->children.size() == 0, SL);
 
 			++i;
-		DIAG_MARK("root ++i");
 			tst::check(i != b.end(), SL);
 			tst::check(i->value == "ccc", SL);
 			{
@@ -157,54 +138,45 @@ const tst::set set("tree_reading", [](tst::suite& suite) {
 			}
 
 			++i;
-		DIAG_MARK("root ++i");
 			tst::check(i != b.end(), SL);
 			tst::check(i->value == "", SL);
 			tst::check(i->children.size() == 0, SL);
 
 			++i;
-		DIAG_MARK("root ++i");
 			tst::check(i == b.end(), SL);
 		}
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Doublequotes\" {}{}{}{}", SL);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "quoted string with trailing slash /", SL);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "fff ggg", SL);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "tralala tro lo lo\ntre lele", SL);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "-1213.33", SL);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i != roots.end(), SL);
 		tst::check(i->value == "UnquotedStringAtTheVeryEndOfTheFile", SL);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
-		DIAG_MARK("root ++i");
 		tst::check(i == roots.end(), SL);
 
 		{
