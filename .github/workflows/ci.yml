@@ -535,6 +535,102 @@ jobs:
         $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite=parser' -NoNewWindow -PassThru
         try { Wait-Process -Id $p.Id -Timeout 90; exit $p.ExitCode }
         catch { Write-Host 'DIAG TIMEOUT: test hung, killing the process'; Stop-Process -Id $p.Id -Force; exit 1 }
+    # suite 'tree_ext' via the runner thread
+    - name: diag - suite tree_ext (runner)
+      continue-on-error: true
+      run: |
+        cd build/vcpkg/test/exe\library-tests
+        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite=tree_ext' -NoNewWindow -PassThru
+        try { Wait-Process -Id $p.Id -Timeout 45; exit $p.ExitCode }
+        catch { Write-Host 'DIAG TIMEOUT: test hung, killing the process'; Stop-Process -Id $p.Id -Force; exit 1 }
+    # suite 'to_non_ext' via the runner thread
+    - name: diag - suite to_non_ext (runner)
+      continue-on-error: true
+      run: |
+        cd build/vcpkg/test/exe\library-tests
+        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite=to_non_ext' -NoNewWindow -PassThru
+        try { Wait-Process -Id $p.Id -Timeout 45; exit $p.ExitCode }
+        catch { Write-Host 'DIAG TIMEOUT: test hung, killing the process'; Stop-Process -Id $p.Id -Force; exit 1 }
+    # suite 'snippets' via the runner thread
+    - name: diag - suite snippets (runner)
+      continue-on-error: true
+      run: |
+        cd build/vcpkg/test/exe\library-tests
+        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite=snippets' -NoNewWindow -PassThru
+        try { Wait-Process -Id $p.Id -Timeout 45; exit $p.ExitCode }
+        catch { Write-Host 'DIAG TIMEOUT: test hung, killing the process'; Stop-Process -Id $p.Id -Force; exit 1 }
+    # suite 'read_ext' via the runner thread
+    - name: diag - suite read_ext (runner)
+      continue-on-error: true
+      run: |
+        cd build/vcpkg/test/exe\library-tests
+        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite=read_ext' -NoNewWindow -PassThru
+        try { Wait-Process -Id $p.Id -Timeout 45; exit $p.ExitCode }
+        catch { Write-Host 'DIAG TIMEOUT: test hung, killing the process'; Stop-Process -Id $p.Id -Force; exit 1 }
+    # suite 'parser_flags' via the runner thread
+    - name: diag - suite parser_flags (runner)
+      continue-on-error: true
+      run: |
+        cd build/vcpkg/test/exe\library-tests
+        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite=parser_flags' -NoNewWindow -PassThru
+        try { Wait-Process -Id $p.Id -Timeout 45; exit $p.ExitCode }
+        catch { Write-Host 'DIAG TIMEOUT: test hung, killing the process'; Stop-Process -Id $p.Id -Force; exit 1 }
+    # suite 'parser_correctness' via the runner thread
+    - name: diag - suite parser_correctness (runner)
+      continue-on-error: true
+      run: |
+        cd build/vcpkg/test/exe\library-tests
+        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite=parser_correctness' -NoNewWindow -PassThru
+        try { Wait-Process -Id $p.Id -Timeout 45; exit $p.ExitCode }
+        catch { Write-Host 'DIAG TIMEOUT: test hung, killing the process'; Stop-Process -Id $p.Id -Force; exit 1 }
+    # suite 'parser' via the runner thread
+    - name: diag - suite parser (runner)
+      continue-on-error: true
+      run: |
+        cd build/vcpkg/test/exe\library-tests
+        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite=parser' -NoNewWindow -PassThru
+        try { Wait-Process -Id $p.Id -Timeout 45; exit $p.ExitCode }
+        catch { Write-Host 'DIAG TIMEOUT: test hung, killing the process'; Stop-Process -Id $p.Id -Force; exit 1 }
+    # suite 'value_conversion' via the runner thread
+    - name: diag - suite value_conversion (runner)
+      continue-on-error: true
+      run: |
+        cd build/vcpkg/test/exe\library-tests
+        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite=value_conversion' -NoNewWindow -PassThru
+        try { Wait-Process -Id $p.Id -Timeout 45; exit $p.ExitCode }
+        catch { Write-Host 'DIAG TIMEOUT: test hung, killing the process'; Stop-Process -Id $p.Id -Force; exit 1 }
+    # suite 'tree_writing' via the runner thread
+    - name: diag - suite tree_writing (runner)
+      continue-on-error: true
+      run: |
+        cd build/vcpkg/test/exe\library-tests
+        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite=tree_writing' -NoNewWindow -PassThru
+        try { Wait-Process -Id $p.Id -Timeout 45; exit $p.ExitCode }
+        catch { Write-Host 'DIAG TIMEOUT: test hung, killing the process'; Stop-Process -Id $p.Id -Force; exit 1 }
+    # suite 'tree_reading' via the runner thread
+    - name: diag - suite tree_reading (runner)
+      continue-on-error: true
+      run: |
+        cd build/vcpkg/test/exe\library-tests
+        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite=tree_reading' -NoNewWindow -PassThru
+        try { Wait-Process -Id $p.Id -Timeout 45; exit $p.ExitCode }
+        catch { Write-Host 'DIAG TIMEOUT: test hung, killing the process'; Stop-Process -Id $p.Id -Force; exit 1 }
+    # suite 'parser_location' via the runner thread
+    - name: diag - suite parser_location (runner)
+      continue-on-error: true
+      run: |
+        cd build/vcpkg/test/exe\library-tests
+        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite=parser_location' -NoNewWindow -PassThru
+        try { Wait-Process -Id $p.Id -Timeout 45; exit $p.ExitCode }
+        catch { Write-Host 'DIAG TIMEOUT: test hung, killing the process'; Stop-Process -Id $p.Id -Force; exit 1 }
+    # suite 'crawler' via the runner thread
+    - name: diag - suite crawler (runner)
+      continue-on-error: true
+      run: |
+        cd build/vcpkg/test/exe\library-tests
+        $p = Start-Process -FilePath '.\Debug\library-tests.exe' -ArgumentList '--suite=crawler' -NoNewWindow -PassThru
+        try { Wait-Process -Id $p.Id -Timeout 45; exit $p.ExitCode }
+        catch { Write-Host 'DIAG TIMEOUT: test hung, killing the process'; Stop-Process -Id $p.Id -Force; exit 1 }
     # full suite with per-test output to identify the hanging test
     - name: diag - full suite with per-test output
       run: |
