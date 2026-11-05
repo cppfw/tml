@@ -1,3 +1,9 @@
+libtml (0.2.34) unstable; urgency=medium
+
+  * update
+
+ -- Ivan Gagis <igagis@gmail.com>  Thu, 05 Nov 2026 18:36:59 +0200
+
 libtml (0.2.33) unstable; urgency=medium
 
   * debian: fix dbgsrc path
