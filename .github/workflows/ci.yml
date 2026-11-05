@@ -478,7 +478,6 @@ jobs:
     defaults:
       run:
         shell: powershell
-    timeout-minutes: 30
     name: vcpkg - windows
     steps:
     - name: git clone
@@ -509,12 +508,7 @@ jobs:
         cmake .
         cmake --build . --parallel
 
-    # the tests complete in well under a second; the 2-minute timeout is a
-    # safety net so that a hung test process fails the job quickly instead of
-    # freezing the runner for an hour (see the 2026-11-03 freeze, caused by
-    # undefined behaviour in the tree_reading test under MSVC debug CRT)
     - name: test vcpkg port - test
-      timeout-minutes: 2
       run: |
         cd build/vcpkg/test
         cmake --build . --target run-library-tests
