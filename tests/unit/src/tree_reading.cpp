@@ -1,4 +1,4 @@
-#include <ranges>
+#include <algorithm>
 
 #include <fsif/native_file.hpp>
 #include <tst/check.hpp>
@@ -226,8 +226,9 @@ const tst::set set("tree_reading", [](tst::suite& suite) {
 
 		{
 			std::string str("test string");
-			auto i = std::ranges::find_if(
-				roots, //
+			auto i = std::find_if(
+				roots.begin(), //
+				roots.end(), //
 				[&str](const auto& t) {
 					return t == str;
 				}
@@ -238,8 +239,9 @@ const tst::set set("tree_reading", [](tst::suite& suite) {
 		{
 			std::string str("unqu/otedString");
 			const auto& const_roots = roots;
-			auto i = std::ranges::find_if(
-				const_roots, //
+			auto i = std::find_if(
+				const_roots.begin(), //
+				const_roots.end(), //
 				[&str](const auto& t) {
 					return t == str;
 				}

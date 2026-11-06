@@ -1,6 +1,6 @@
 #include "../../../src/tml/tree_ext.hpp"
 
-#include <ranges>
+#include <algorithm>
 
 #include <tst/check.hpp>
 #include <tst/set.hpp>
@@ -37,8 +37,9 @@ const tst::set set("tree_ext", [](auto& suite) {
 			{"I'm fine"},
 		};
 
-		auto i = std::ranges::find_if(
-			f, //
+		auto i = std::find_if(
+			f.begin(), //
+			f.end(), //
 			[&str](const auto& t) {
 				return t == str;
 			}
