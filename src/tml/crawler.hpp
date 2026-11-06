@@ -77,7 +77,7 @@ public:
 		if (this->i != this->b.end()) {
 			return *this;
 		}
-		throw std::runtime_error("crawler::to_if() failed, reached end of node list");
+		throw std::invalid_argument("crawler::to_if() failed, reached end of node list");
 	}
 
 	template <class predicate_type>

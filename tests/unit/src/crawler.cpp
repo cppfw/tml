@@ -70,7 +70,7 @@ const tst::set set("crawler", [](auto& suite) {
 		try {
 			tml::crawler(roots).to("b-1");
 			tst::check(false, SL);
-		} catch (std::runtime_error&) {
+		} catch (std::invalid_argument&) {
 			thrown = true;
 		}
 		tst::check(thrown, SL);
@@ -81,7 +81,7 @@ const tst::set set("crawler", [](auto& suite) {
 		try {
 			tml::crawler(roots).to_if(predicate_str("b6-1"));
 			tst::check(false, SL);
-		} catch (std::runtime_error&) {
+		} catch (std::invalid_argument&) {
 			thrown = true;
 		}
 		tst::check(thrown, SL);
@@ -92,7 +92,7 @@ const tst::set set("crawler", [](auto& suite) {
 		try {
 			tml::crawler(roots).to("b6").in().to("b6_1").in().to("b6_1_1").in();
 			tst::check(false, SL);
-		} catch (std::logic_error&) {
+		} catch (std::invalid_argument&) {
 			thrown = true;
 		}
 		tst::check(thrown, SL);
@@ -103,7 +103,7 @@ const tst::set set("crawler", [](auto& suite) {
 		try {
 			tml::crawler(roots).to("b6").in().to("b6_1").next();
 			tst::check(false, SL);
-		} catch (std::logic_error&) {
+		} catch (std::invalid_argument&) {
 			thrown = true;
 		}
 		tst::check(thrown, SL);

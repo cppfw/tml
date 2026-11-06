@@ -1,3 +1,5 @@
+#include <ranges>
+
 #include <fsif/native_file.hpp>
 #include <tst/check.hpp>
 #include <tst/set.hpp>
@@ -224,14 +226,24 @@ const tst::set set("tree_reading", [](tst::suite& suite) {
 
 		{
 			std::string str("test string");
-			auto i = std::find(roots.begin(), roots.end(), str);
+			auto i = std::ranges::find_if(
+				roots, //
+				[&str](const auto& t) {
+					return t == str;
+				}
+			);
 			tst::check(i != roots.end(), SL);
 			tst::check(i->value == str, SL);
 		}
 		{
 			std::string str("unqu/otedString");
 			const auto& const_roots = roots;
-			auto i = std::find(const_roots.begin(), const_roots.end(), str);
+			auto i = std::ranges::find_if(
+				const_roots, //
+				[&str](const auto& t) {
+					return t == str;
+				}
+			);
 			tst::check(i != const_roots.end(), SL);
 			tst::check(i->value == str, SL);
 		}

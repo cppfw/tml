@@ -43,9 +43,13 @@ const tst::set set("tree_writing", [](tst::suite& suite) {
 		const std::regex tml_regex("^.*\\.tml$");
 		auto all_files = fsif::native_file(data_dir).list_dir();
 
-		std::copy_if(all_files.begin(), all_files.end(), std::back_inserter(files), [&tml_regex](auto& f) {
-			return std::regex_match(f, tml_regex);
-		});
+		// Note: std::ranges::copy_if() is not used here, because libstdc++ 14
+		// has a non-standard argument order of its range overload.
+		for (const auto& f : all_files) {
+			if (std::regex_match(f, tml_regex)) {
+				files.push_back(f);
+			}
+		}
 	}
 
 	suite.add<std::string>("write_unformatted", decltype(files)(files), make_test_proc<false>());
