@@ -226,6 +226,7 @@ const tst::set set("tree_reading", [](tst::suite& suite) {
 
 		{
 			std::string str("test string");
+			// NOLINTNEXTLINE(modernize-use-ranges, "C++17 compatibility is required")
 			auto i = std::find_if(
 				roots.begin(), //
 				roots.end(), //
@@ -239,6 +240,7 @@ const tst::set set("tree_reading", [](tst::suite& suite) {
 		{
 			std::string str("unqu/otedString");
 			const auto& const_roots = roots;
+			// NOLINTNEXTLINE(modernize-use-ranges, "C++17 compatibility is required")
 			auto i = std::find_if(
 				const_roots.begin(), //
 				const_roots.end(), //
