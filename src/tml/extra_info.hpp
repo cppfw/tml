@@ -51,18 +51,11 @@ enum class flag {
 	quoted,
 
 	/**
-	 * @brief The node was specified as raw string.
+	 * @brief The node was specified as a raw string.
+	 * The raw string is the one which has 3 or more consecutive double quotes as its
+	 * opening and closing sequence.
 	 */
 	raw,
-
-	/**
-	 * @brief The node was specified as quotes raw string.
-	 * The quotes style raw string is the one which has 3 or more double quotes as its opening
-	 * and closing sequence.
-	 * In case this flag is not set for the raw string, then it is specified
-	 * as C++ style syntax.
-	 */
-	raw_quotes_style,
 
 	/**
 	 * @brief The node is first on the line.

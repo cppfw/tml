@@ -95,6 +95,10 @@ class parser
 	// current index into the sequence string
 	size_t sequence_index = 0;
 
+	// for raw strings: the number of consecutive quotes forming the
+	// opening/closing delimiter (N in """...""" for N >= 3)
+	size_t raw_string_delimiter_length = 0;
+
 	// this variable is used for tracking current nesting level to make checks for detecting malformed tml document
 	unsigned nesting_level = 0;
 
@@ -107,9 +111,6 @@ class parser
 		unicode_sequence,
 		unquoted_string,
 		single_line_comment,
-		raw_cpp_string_opening_sequence,
-		raw_cpp_string_closing_sequence,
-		raw_cpp_string,
 		raw_quotes_string_opening_sequence,
 		raw_quotes_string_closing_sequence,
 		raw_quotes_string,
@@ -128,9 +129,6 @@ class parser
 	void process_char_in_escape_sequence(char c, tml::listener& listener);
 	void process_char_in_unicode_sequence(char c, tml::listener& listener);
 	void process_char_in_single_line_comment(char c, tml::listener& listener);
-	void process_char_in_raw_cpp_string_opening_sequence(char c, tml::listener& listener);
-	void process_char_in_raw_cpp_string(char c, tml::listener& listener);
-	void process_char_in_raw_cpp_string_closing_sequence(char c, tml::listener& listener);
 	void process_char_in_raw_quotes_string_opening_sequence(char c, tml::listener& listener);
 	void process_char_in_raw_quotes_string(char c, tml::listener& listener);
 	void process_char_in_raw_quotes_string_closing_sequence(char c, tml::listener& listener);

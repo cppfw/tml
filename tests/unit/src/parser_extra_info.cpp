@@ -19,9 +19,9 @@ const tst::set set("parser_flags", [](tst::suite& suite) {
 			" pre {child}hello",
 			" pre {child }hello",
 			"pre{child1 child2}hello post", // 10
-			"R\"qwe(raw string)qwe\"hello",
-			"R\"qwe(hello)qwe\"",
-			"pre {}R\"qwe(hello)qwe\"",
+			"\"\"\"raw string\"\"\"hello",
+			"\"\"\"hello\"\"\"",
+			"pre {}\"\"\"hello\"\"\"",
 			"pre{hello child2}",
 			"pre{ hello child2}", // 15
 			"\"\"{hello child2}",
@@ -84,12 +84,12 @@ const tst::set set("parser_flags", [](tst::suite& suite) {
 			"pre{child1 child2} hello post",
 			"pre{child1 child2}\nhello post",
 			"pre{child1 child2}\thello post",
-			"R\"qwe(raw string)qwe\" hello",
-			"R\"qwe(raw string)qwe\"\nhello",
-			"R\"qwe(raw string)qwe\"\thello",
-			"pre R\"qwe(hello)qwe\"",
-			"pre\nR\"qwe(hello)qwe\"",
-			"pre\tR\"qwe(hello)qwe\"",
+			"\"\"\"raw string\"\"\" hello",
+			"\"\"\"raw string\"\"\"\nhello",
+			"\"\"\"raw string\"\"\"\thello",
+			"pre \"\"\"hello\"\"\"",
+			"pre\n\"\"\"hello\"\"\"",
+			"pre\t\"\"\"hello\"\"\"",
 			"pre{pre hello child2}",
 			"pre{pre\nhello child2}",
 			"pre{pre\thello child2}",
@@ -143,8 +143,8 @@ const tst::set set("parser_flags", [](tst::suite& suite) {
 			"\"pre\" hello",
 			"\"pre\"\thello",
 			"\"pre\"\nhello",
-			"R\"qwe(hello)qwe\"",
-			" R\"qwe(hello)qwe\"post",
+			"\"\"\"hello\"\"\"",
+			" \"\"\"hello\"\"\"post",
 		},
 		[](const auto& p) {
 			tml::parser parser;
@@ -217,15 +217,15 @@ const tst::set set("parser_flags", [](tst::suite& suite) {
 		{
 			"hi hello", // #0
 			"hi \"hello\"",
-			"hi R\"(hello)\"",
+			"hi \"\"\"hello\"\"\"",
 			"hi \"\"\"hello\"\"\"",
 			"\nhi hello",
 			"\nhi \"hello\"", // #5
-			"\nhi R\"(hello)\"",
+			"\nhi \"\"\"hello\"\"\"",
 			"\nhi \"\"\"hello\"\"\"",
 			"pre hello",
 			"pre \"hello\"",
-			"pre R\"(hello)\"", // #10
+			"pre \"\"\"hello\"\"\"", // #10
 			"pre \"\"\"hello\"\"\"",
 			"pre hello\n",
 			"pre \"hello\"\n",
@@ -233,27 +233,27 @@ const tst::set set("parser_flags", [](tst::suite& suite) {
 			"\npre\"\"\"hello\"\"\"", // #15
 			"qwe\n{bla bla}hello",
 			"qwe\n{bla bla}\"hello\"",
-			"qwe\n{bla bla}R\"(hello)\"",
+			"qwe\n{bla bla}\"\"\"hello\"\"\"",
 			"qwe\n{bla bla}\"\"\"hello\"\"\"",
 			"qwe\n{}hello", // #20
 			"qwe\n{}\"hello\"",
-			"qwe\n{}R\"(hello)\"",
+			"qwe\n{}\"\"\"hello\"\"\"",
 			"qwe\n{}\"\"\"hello\"\"\"",
 			"qwe\n{} hello",
 			"qwe\n{} \"hello\"", // #25
-			"qwe\n{} R\"(hello)\"",
+			"qwe\n{} \"\"\"hello\"\"\"",
 			"qwe\n{} \"\"\"hello\"\"\"",
 			"qwe\n{}\thello",
 			"qwe\n{}\t\"hello\"",
-			"qwe\n{}\tR\"(hello)\"", // #30
+			"qwe\n{}\t\"\"\"hello\"\"\"", // #30
 			"qwe\n{}\t\"\"\"hello\"\"\"",
 			"hi{}hello\n",
 			"hi{}\"hello\"\n",
-			"hi{}R\"(hello)\"\n",
+			"hi{}\"\"\"hello\"\"\"\n",
 			"hi{}\"\"\"hello\"\"\"\n", // #35
 			"hi{\n bye hello}",
 			"hi{\n bye \"hello\"}",
-			"hi{\n bye R\"(hello)\"}",
+			"hi{\n bye \"\"\"hello\"\"\"}",
 			"hi{\n bye \"\"\"hello\"\"\"}",
 			"hi\n{hello}",
 			"hi\n{ hello}",
@@ -290,44 +290,44 @@ const tst::set set("parser_flags", [](tst::suite& suite) {
 		"flag_first_on_line_should_be_true",
 		{
 			"hello",
-			"R\"(hello)\"",
 			"\"\"\"hello\"\"\"",
-			" R\"(hello)\"",
+			"\"\"\"hello\"\"\"",
+			" \"\"\"hello\"\"\"",
 			" \"\"\"hello\"\"\"",
 			"\thello",
-			"\tR\"(hello)\"",
+			"\t\"\"\"hello\"\"\"",
 			"\t\"\"\"hello\"\"\"",
 			"\nhello",
 			"\n\"hello\"",
-			"\nR\"(hello)\"",
+			"\n\"\"\"hello\"\"\"",
 			"\n\"\"\"hello\"\"\"",
 			"\n hello",
 			"\n \"hello\"",
-			"\n R\"(hello)\"",
+			"\n \"\"\"hello\"\"\"",
 			"\n \"\"\"hello\"\"\"",
 			" hello post",
 			" \"hello\" \"post\"",
-			" R\"(hello)\" post",
+			" \"\"\"hello\"\"\" post",
 			" \"\"\"hello\"\"\" post",
 			"pre\nhello",
 			"pre\n\"hello\"",
-			"pre\nR\"(hello)\"",
+			"pre\n\"\"\"hello\"\"\"",
 			"pre\n\"\"\"hello\"\"\"",
 			"pre\n hello",
 			"pre\n \"hello\"",
-			"pre\n R\"(hello)\"",
+			"pre\n \"\"\"hello\"\"\"",
 			"pre\n \"\"\"hello\"\"\"",
 			"pre \nhello",
 			"pre \n\"hello\"",
-			"pre \nR\"(hello)\"",
+			"pre \n\"\"\"hello\"\"\"",
 			"pre \n\"\"\"hello\"\"\"",
 			"pre\t\nhello",
 			"pre\t\n\"hello\"",
-			"pre\t\nR\"(hello)\"",
+			"pre\t\n\"\"\"hello\"\"\"",
 			"pre\t\n\"\"\"hello\"\"\"",
 			"pre\t\n\thello",
 			"pre\t\n\t\"hello\"",
-			"pre\t\n\tR\"(hello)\"",
+			"pre\t\n\t\"\"\"hello\"\"\"",
 			"pre\t\n\t\"\"\"hello\"\"\"",
 			"\"pre\"\nhello",
 			"\"pre\"\n hello",
@@ -335,36 +335,36 @@ const tst::set set("parser_flags", [](tst::suite& suite) {
 			"\"pre\"\n \"hello\"",
 			"hi{}\nhello",
 			"hi{}\n\"hello\"",
-			"hi{}\nR\"(hello)\"",
+			"hi{}\n\"\"\"hello\"\"\"",
 			"hi{}\n\"\"\"hello\"\"\"",
 			"hi{bye}\nhello",
 			"hi{bye}\n\"hello\"",
-			"hi{bye}\nR\"(hello)\"",
+			"hi{bye}\n\"\"\"hello\"\"\"",
 			"hi{bye}\n\"\"\"hello\"\"\"",
 			"hi{} \nhello",
 			"hi{} \n\"hello\"",
-			"hi{} \nR\"(hello)\"",
+			"hi{} \n\"\"\"hello\"\"\"",
 			"hi{} \n\"\"\"hello\"\"\"",
 			"hi{}\t\nhello",
 			"hi{}\t\n\"hello\"",
-			"hi{}\t\nR\"(hello)\"",
+			"hi{}\t\n\"\"\"hello\"\"\"",
 			"hi{}\t\n\"\"\"hello\"\"\"",
 			"hi{}\n hello",
 			"hi{}\n \"hello\"",
-			"hi{}\n R\"(hello)\"",
+			"hi{}\n \"\"\"hello\"\"\"",
 			"hi{}\n \"\"\"hello\"\"\"",
 			"hi{\nhello}",
 			"hi{\n\"hello\"}",
-			"hi{\nR\"(hello)\"}",
+			"hi{\n\"\"\"hello\"\"\"}",
 			"hi{\n\"\"\"hello\"\"\"}",
 			"hi{\n hello}",
 			"hi{\n\thello}",
 			"hi{\n \"hello\"}",
-			"hi{\n R\"(hello)\"}",
+			"hi{\n \"\"\"hello\"\"\"}",
 			"hi{\n \"\"\"hello\"\"\"}",
 			"hi{bye\nhello}",
 			"hi{bye\n\"hello\"}",
-			"hi{bye\nR\"(hello)\"}",
+			"hi{bye\n\"\"\"hello\"\"\"}",
 			"hi{bye\n\"\"\"hello\"\"\"}",
 		},
 		[](const auto& p) {
@@ -392,7 +392,7 @@ const tst::set set("parser_flags", [](tst::suite& suite) {
 	);
 
 	suite.add<std::string_view>(
-		"flag_cpp_raw_should_be_false",
+		"flag_raw_should_be_false",
 		{
 			"\"hello\"",
 			"hello",
@@ -443,16 +443,16 @@ const tst::set set("parser_flags", [](tst::suite& suite) {
 	);
 
 	suite.add<std::string_view>(
-		"flag_cpp_raw_should_be_true",
+		"flag_raw_should_be_true",
 		{
-			"R\"qwe(hello)qwe\"",
-			" R\"qwe(hello)qwe\"",
-			"R\"qwe(hello)qwe\" ",
-			" R\"qwe(hello)qwe\" ",
-			"pre R\"qwe(hello)qwe\" ",
-			"pre R\"qwe(hello)qwe\" post",
-			"pre\nR\"qwe(hello)qwe\"\npost",
-			"pre\tR\"qwe(hello)qwe\"\tpost",
+			"\"\"\"hello\"\"\"",
+			" \"\"\"hello\"\"\"",
+			"\"\"\"hello\"\"\" ",
+			" \"\"\"hello\"\"\" ",
+			"pre \"\"\"hello\"\"\" ",
+			"pre \"\"\"hello\"\"\" post",
+			"pre\n\"\"\"hello\"\"\"\npost",
+			"pre\t\"\"\"hello\"\"\"\tpost",
 		},
 		[](const auto& p) {
 			tml::parser parser;
@@ -464,7 +464,6 @@ const tst::set set("parser_flags", [](tst::suite& suite) {
 					if (str == "hello") {
 						this->string_parsed = true;
 						tst::check(info.flags.get(tml::flag::raw), SL);
-						tst::check(!info.flags.get(tml::flag::raw_quotes_style), SL);
 					}
 				}
 
@@ -479,9 +478,9 @@ const tst::set set("parser_flags", [](tst::suite& suite) {
 		}
 	);
 
-	// test that failed C++ style raw string sequence works as expected
+	// test that a single `R` followed by a quoted string works as expected
 	suite.add<std::string_view>(
-		"raw_cpp_and_quoted_flags_should_be_false_for_r",
+		"failed_raw_sequence_flags_should_be_false_for_r",
 		{
 			"R\"hello\"",
 			" R\"hello\"",
@@ -558,7 +557,7 @@ const tst::set set("parser_flags", [](tst::suite& suite) {
 	);
 
 	suite.add<std::string_view>(
-		"space_flag_should_be_true_for_cpp_raw_string",
+		"space_flag_should_be_true_for_r",
 		{
 			"pre R\"hello\"",
 			"pre R\"hello\" ",
@@ -610,8 +609,8 @@ const tst::set set("parser_flags", [](tst::suite& suite) {
 			"hi \"hello\" {}",
 			"\"\"\"hello\"\"\"{}",
 			"\"\"\"hello\"\"\" {}",
-			"R\"(hello)\"{}",
-			"R\"(hello)\" {}",
+			"\"\"\"hello\"\"\"{}",
+			"\"\"\"hello\"\"\" {}",
 
 		},
 		[](const auto& p) {
@@ -678,28 +677,28 @@ const tst::set set2("parser_location", [](tst::suite& suite) {
 	suite.add<std::tuple<std::string_view, size_t, size_t>>(
 		"location",
 		{
-			{																		 "hello", 1,  1},
-			{																		" hello", 1,  2},
-			{																	   "\nhello", 2,  1},
-			{																	 "\n  hello", 2,  3},
-			{												 "bla bla{child} bla{}\n  hello", 2,  3},
-			{							  "bla bla{child} \"bla\n bla\" bla bla{child}hello", 2, 21},
-			{																	 "\"hello\"", 1,  1},
-			{																	" \"hello\"", 1,  2},
-			{																   "\n\"hello\"", 2,  1},
-			{																 "\n  \"hello\"", 2,  3},
-			{															 "\n   pre\"hello\"", 2,  7},
-			{															"\n   pre \"hello\"", 2,  8},
-			{											 "bla bla{child} bla{}\n  \"hello\"", 2,  3},
-			{				  "bla bla{child} \"bla\n bla\" bla bla{child}\"hello\" bla bla", 2, 21},
-			{															"R\"qwe(hello)qwe\"", 1,  1},
-			{														   " R\"qwe(hello)qwe\"", 1,  2},
-			{														  "\nR\"qwe(hello)qwe\"", 2,  1},
-			{														"\n  R\"qwe(hello)qwe\"", 2,  3},
-			{									"bla bla{child} bla{}\n  R\"qwe(hello)qwe\"", 2,  3},
-			{         "bla bla{child} \"bla\n bla\" bla bla{child}R\"qwe(hello)qwe\" bla bla", 2, 21},
-			{"bla bla{child} R\"qwe(bla\n bla)qwe\" bla bla{child}R\"qwe(hello)qwe\" bla bla", 2, 25},
-			{																   " R\"hello\"", 1,  3},
+			{																		"hello", 1,  1},
+			{																	   " hello", 1,  2},
+			{																	  "\nhello", 2,  1},
+			{																	"\n  hello", 2,  3},
+			{												"bla bla{child} bla{}\n  hello", 2,  3},
+			{							 "bla bla{child} \"bla\n bla\" bla bla{child}hello", 2, 21},
+			{																	"\"hello\"", 1,  1},
+			{																   " \"hello\"", 1,  2},
+			{																  "\n\"hello\"", 2,  1},
+			{																"\n  \"hello\"", 2,  3},
+			{															"\n   pre\"hello\"", 2,  7},
+			{														   "\n   pre \"hello\"", 2,  8},
+			{											"bla bla{child} bla{}\n  \"hello\"", 2,  3},
+			{				 "bla bla{child} \"bla\n bla\" bla bla{child}\"hello\" bla bla", 2, 21},
+			{															"\"\"\"hello\"\"\"", 1,  1},
+			{														   " \"\"\"hello\"\"\"", 1,  2},
+			{														  "\n\"\"\"hello\"\"\"", 2,  1},
+			{														"\n  \"\"\"hello\"\"\"", 2,  3},
+			{									"bla bla{child} bla{}\n  \"\"\"hello\"\"\"", 2,  3},
+			{         "bla bla{child} \"bla\n bla\" bla bla{child}\"\"\"hello\"\"\" bla bla", 2, 21},
+			{"bla bla{child} R\"qwe(bla\n bla)qwe\" bla bla{child}\"\"\"hello\"\"\" bla bla", 2, 25},
+			{																  " R\"hello\"", 1,  3},
     },
 		[](const auto& p) {
 			tml::parser parser;

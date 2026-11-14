@@ -52,25 +52,9 @@ void parser::next_line()
 
 void parser::handle_string_parsed(listener& listener)
 {
-	auto span = utki::make_span(this->buf);
-
-	if (this->string_parsed_info.flags.get(flag::raw)) {
-		if (span.size() >= 2 && span[0] == '\r' && span[1] == '\n') {
-			span = span.subspan(2);
-		} else if (span.size() >= 1 && span[0] == '\n') {
-			span = span.subspan(1);
-		}
-
-		if (span.size() >= 1 && span.back() == '\n') {
-			span = span.subspan(0, span.size() - 1);
-		}
-
-		if (span.size() >= 1 && span.back() == '\r') {
-			span = span.subspan(0, span.size() - 1);
-		}
-	}
-
-	listener.on_string_parsed(utki::make_string_view(span), this->string_parsed_info);
+	// string values (quoted and raw alike) are byte-exact: no leading/trailing
+	// newline stripping is performed
+	listener.on_string_parsed(utki::make_string_view(this->buf), this->string_parsed_info);
 	this->buf.clear();
 }
 
@@ -203,16 +187,11 @@ void parser::process_char_in_unquoted_string(char c, listener& listener)
 	switch (c) {
 		case '"':
 			ASSERT(this->buf.size() != 0)
-			if (this->buf.size() == 1 && this->buf.back() == 'R') {
-				this->buf.clear();
-				this->cur_state = state::raw_cpp_string_opening_sequence;
-			} else {
-				this->set_string_parsed_state();
-				this->handle_string_parsed(listener);
-				this->cur_state = state::raw_quotes_string_opening_sequence;
-				this->sequence_index = 1;
-				this->set_string_start_pos();
-			}
+			this->set_string_parsed_state();
+			this->handle_string_parsed(listener);
+			this->cur_state = state::raw_quotes_string_opening_sequence;
+			this->sequence_index = 1;
+			this->set_string_start_pos();
 			break;
 		case '\n':
 		case ' ':
@@ -394,114 +373,39 @@ void parser::process_char_in_single_line_comment(char c, listener& listener)
 	}
 }
 
-void parser::process_char_in_raw_cpp_string_opening_sequence(char c, listener& listener)
-{
-	ASSERT(this->cur_state == state::raw_cpp_string_opening_sequence)
-	switch (c) {
-		case '"':
-			// not a C++ style raw string, report 'R' string and a quoted string
-			{
-				char r = 'R';
-				listener.on_string_parsed(std::string_view(&r, 1), this->info);
-				this->info.flags.clear(tml::flag::space);
-			}
-			++this->info.location.offset;
-
-			if (this->buf.empty()) {
-				this->cur_state = state::raw_quotes_string_opening_sequence;
-				this->sequence_index = 2; // it is a second double quote in a row
-			} else {
-				this->info.flags.set(tml::flag::quoted);
-				// this->handle_string_parsed(listener);
-				this->set_string_parsed_state();
-			}
-			break;
-		case '(':
-			this->sequence.assign(this->buf.data(), this->buf.size());
-			this->buf.clear();
-			this->cur_state = state::raw_cpp_string;
-			this->info.flags.set(flag::raw);
-			break;
-		default:
-			this->buf.push_back(c);
-			break;
-	}
-}
-
-void parser::process_char_in_raw_cpp_string(char c, listener& listener)
-{
-	ASSERT(this->cur_state == state::raw_cpp_string)
-	switch (c) {
-		case ')':
-			this->sequence_index = 0;
-			this->cur_state = state::raw_cpp_string_closing_sequence;
-			break;
-		default:
-			this->buf.push_back(c);
-			break;
-	}
-}
-
-void parser::process_char_in_raw_cpp_string_closing_sequence(char c, listener& listener)
-{
-	ASSERT(this->cur_state == state::raw_cpp_string_closing_sequence)
-	switch (c) {
-		case '"':
-			ASSERT(this->sequence_index <= this->sequence.size())
-			if (this->sequence_index != this->sequence.size()) {
-				this->buf.push_back(')');
-				for (size_t i = 0; i != this->sequence_index; ++i) {
-					this->buf.push_back(this->sequence[i]);
-				}
-				this->cur_state = state::raw_cpp_string;
-			} else {
-				this->sequence.clear();
-				// this->handle_string_parsed(listener);
-				this->set_string_parsed_state();
-			}
-			break;
-		default:
-			ASSERT(this->sequence_index <= this->sequence.size())
-			if (this->sequence_index == this->sequence.size() || c != this->sequence[this->sequence_index]) {
-				this->buf.push_back(')');
-				for (size_t i = 0; i != this->sequence_index; ++i) {
-					this->buf.push_back(this->sequence[i]);
-				}
-				this->cur_state = state::raw_cpp_string;
-			} else {
-				++this->sequence_index;
-			}
-			break;
-	}
-}
-
 void parser::process_char_in_raw_quotes_string_opening_sequence(char c, listener& listener)
 {
-	ASSERT(this->cur_state == state::raw_quotes_string_opening_sequence)
-	ASSERT(this->buf.empty())
+	utki::assert(this->cur_state == state::raw_quotes_string_opening_sequence, SL);
+	utki::assert(this->buf.empty(), SL);
 	switch (c) {
 		case '"':
+			// keep counting the maximal run of consecutive quotes; the token type
+			// (quoted / empty / raw) is decided when the run is terminated by a non-quote char
 			++this->sequence_index;
-			if (this->sequence_index == 3) {
-				this->cur_state = state::raw_quotes_string;
-				this->info.flags.set(flag::raw);
-				this->info.flags.set(flag::raw_quotes_style);
-			}
 			break;
 		default:
-			this->info.flags.set(flag::quoted);
 			switch (this->sequence_index) {
-				default:
-					ASSERT(false)
 				case 1:
+					// a single quote: a quoted string
+					this->info.flags.set(flag::quoted);
 					this->cur_state = state::quoted_string;
 					this->process_char_in_quoted_string(c, listener);
 					break;
 				case 2:
-					// empty quoted string
-					// this->handle_string_parsed(listener);
+					// two quotes: an empty quoted string
+					this->info.flags.set(flag::quoted);
 					this->set_string_parsed_state();
 					this->process_char_in_string_parsed(c, listener);
+					break;
+				default:
+					// N >= 3 consecutive quotes: a raw string with an N-quote delimiter
+					this->raw_string_delimiter_length = this->sequence_index;
+					this->sequence_index = 0;
+					this->cur_state = state::raw_quotes_string;
+					this->info.flags.set(flag::raw);
+					if (c != '\0') {
+						this->buf.push_back(c);
+					}
 					break;
 			}
 			break;
@@ -510,7 +414,7 @@ void parser::process_char_in_raw_quotes_string_opening_sequence(char c, listener
 
 void parser::process_char_in_raw_quotes_string(char c, listener& listener)
 {
-	ASSERT(this->cur_state == state::raw_quotes_string)
+	utki::assert(this->cur_state == state::raw_quotes_string, SL);
 	switch (c) {
 		case '"':
 			this->cur_state = state::raw_quotes_string_closing_sequence;
@@ -524,19 +428,34 @@ void parser::process_char_in_raw_quotes_string(char c, listener& listener)
 
 void parser::process_char_in_raw_quotes_string_closing_sequence(char c, listener& listener)
 {
-	ASSERT(this->cur_state == state::raw_quotes_string_closing_sequence)
+	utki::assert(this->cur_state == state::raw_quotes_string_closing_sequence, SL);
 	switch (c) {
 		case '"':
+			// count the run of consecutive quotes; it is either the closing delimiter
+			// (exactly N quotes), part of the content (fewer than N), or malformed (more than N)
 			++this->sequence_index;
-			if (this->sequence_index == 3) {
-				// this->handle_string_parsed(listener);
-				this->set_string_parsed_state();
-			}
 			break;
 		default:
-			this->buf.insert(this->buf.end(), this->sequence_index, '"');
-			this->buf.push_back(c);
-			this->cur_state = state::raw_quotes_string;
+			if (this->sequence_index > this->raw_string_delimiter_length) {
+				throw std::invalid_argument(utki::cat(
+					"Malformed tml document fed. A run of more than ",
+					this->raw_string_delimiter_length,
+					" consecutive quotes in a raw string at line: ",
+					this->cur_loc.line
+				));
+			}
+			if (this->sequence_index == this->raw_string_delimiter_length) {
+				// a run of exactly N quotes: the raw string is closed
+				this->set_string_parsed_state();
+				this->process_char_in_string_parsed(c, listener);
+			} else {
+				// a run of fewer than N quotes: they are part of the raw string content
+				this->buf.insert(this->buf.end(), this->sequence_index, '"');
+				if (c != '\0') {
+					this->buf.push_back(c);
+				}
+				this->cur_state = state::raw_quotes_string;
+			}
 			break;
 	}
 }
@@ -567,15 +486,6 @@ void parser::process_char(char c, listener& listener)
 			break;
 		case state::single_line_comment:
 			this->process_char_in_single_line_comment(c, listener);
-			break;
-		case state::raw_cpp_string_opening_sequence:
-			this->process_char_in_raw_cpp_string_opening_sequence(c, listener);
-			break;
-		case state::raw_cpp_string:
-			this->process_char_in_raw_cpp_string(c, listener);
-			break;
-		case state::raw_cpp_string_closing_sequence:
-			this->process_char_in_raw_cpp_string_closing_sequence(c, listener);
 			break;
 		case state::raw_quotes_string_opening_sequence:
 			this->process_char_in_raw_quotes_string_opening_sequence(c, listener);

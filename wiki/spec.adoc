@@ -3,7 +3,7 @@
 tml markup language's purpose is to describe tree of text strings. The language syntax is very simple and intentionally kept minimalistic.
 Here are the syntax rules:
 
-. The only type of language element is a string of text. Strings can be unquoted, quoted, C++-style raw trings, Quotes-style raw strings.
+. The only type of language element is a string of text. Strings can be unquoted, quoted, or raw.
   - Unquoted string is a string which does not contain any of the following characters:
 	* space (except when it is preceeded by `\`, see escape sequences below)
 	* tabulation
@@ -30,9 +30,7 @@ Here are the syntax rules:
     * `\t` - tabulation
 	* 4 hex digit unicode value `\uXXXX`
 	* 8 hex digit unicode value `\UXXXXXXXX`
-  - C++-style raw string: `R"<sequence>(The {cpp} raw string)<sequence>"`
-  - Quotes-style raw string: `"""The Quotes raw string"""`
-  - If any raw string, C++ or Quotes-style, starts or ends with a new line character, then this first leading new line character and/or last trailing new line character is not a part of the document (ignored by parser).
+  - Raw string: a raw string is opened by a sequence of at least three consecutive double quotes and closed by the same number of consecutive double quotes. The number of quotes in the opening sequence determines the number of quotes required in the closing sequence. Any sequence of fewer than that number of consecutive quotes inside the raw string is literal content; a sequence of more than that number is a syntax error. The raw string's value is byte-exact: it is exactly the bytes between the opening and closing quote sequences, with no leading or trailing new line characters stripped.
 . String can have arbitrary number of child strings. Those are optionally listed in the curly brackets following the string. If string does not have any children then the curly brackets can be omitted.
 . Parts of a document can be commented with `#` line comments.
   - a comment is opened by a number sign `#` and is closed by the end of the line. There are no multi-line comments; to comment out a block of lines, prefix each line with `#`.
@@ -76,32 +74,22 @@ string_four"string five"
 
 		"Escape sequences inside single double quotes: \" \n \t \\ \/"
 
-		# C++-style raw string
-		R"qwerty(raw string content " """ { } \ / )qwerty"
-		
-		# quotes-style raw string
+		# raw string: the value is byte-exact (nothing is stripped)
+		"""raw string content " """ { } \ / """
 		"""bla bla {} "" and "quoted" bla bla"""
 
-		# the leading and ending new line is ignored in raw strings:
+		# a raw string's value is exactly the bytes between the delimiters:
 """
 multiline
 verbatim text
 block
 """
 		# is the same as
-		"""multiline
-verbatim text
-block"""
+		"""\nmultiline\nverbatim text\nblock\n"""
 
-		# in order to make the new line at the beginning/ending of
-		# the raw string to be part of the document, just add an extra one(s):
-"""
-
-verbatim text block which has a
-single new line at its beginning
-and at its ending
-
-"""
+		# a longer opening sequence allows the content to contain the
+		# shorter quote sequences:
+"""""it has "" quotes"""""
 
 	}
 }

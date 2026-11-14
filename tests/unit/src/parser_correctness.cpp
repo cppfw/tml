@@ -102,7 +102,7 @@ const tst::set set("parser_correctness", [](tst::suite& suite) {
 	suite.add<std::pair<std::string, tml::forest>>(
 		"parsed_tree_is_as_expected",
 		{
-			// quotes-style raw strings
+			// quotes-style raw strings: N-quote delimiters (N >= 3), values are byte-exact
 			{								  "\"\"\"hello\"\"\"",{{"hello"}}																   }, // 0
 			{								 " \"\"\"hello\"\"\"",                       {{"hello"}}},
 			{							   "\n\"\"\"hello\"\"\" ",                       {{"hello"}}},
@@ -115,38 +115,28 @@ const tst::set set("parser_correctness", [](tst::suite& suite) {
 			{						  "\"pre\"\"\"\"hello\"\"\" ",              {{"pre"}, {"hello"}}},
 			{						 "\"pre\" \"\"\"hello\"\"\" ",              {{"pre"}, {"hello"}}}, // 10
 			{							"\"\" \"\"\"hello\"\"\" ",                 {{""}, {"hello"}}},
-			{						"\"\" \"\"\"hello\"\"\"\"\" ",           {{""}, {"hello"}, {""}}},
-			{							   "\"\"\"hello\" \"\"\"",                    {{"hello\" "}}},
-			{							  "\"\"\"he\"\"llo\"\"\"",                   {{"he\"\"llo"}}}, // #14
+			{								 "\"\"\"hello \"\"\"",                      {{"hello "}}},
+			{							  "\"\"\"he\"\"llo\"\"\"",                   {{"he\"\"llo"}}},
+			{						   "\"\"\"hello\nworld\"\"\"",                {{"hello\nworld"}}}, // 15
 
-			// if new line goes as very first or very last char of the raw string, then it is ignored.
-			// quotes-style raw strings
-			{					  "\"\" \"\"\"\nhello\"\"\"\"\" ",           {{""}, {"hello"}, {""}}}, // 15
-			{					  "\"\" \"\"\"hello\n\"\"\"\"\" ",           {{""}, {"hello"}, {""}}},
-			{					"\"\" \"\"\"h\nello\n\"\"\"\"\" ",         {{""}, {"h\nello"}, {""}}},
-			{					"\"\" \"\"\"\nhello\n\"\"\"\"\" ",           {{""}, {"hello"}, {""}}},
-			{					"\"\" \"\"\"hello\n\n\"\"\"\"\" ",         {{""}, {"hello\n"}, {""}}},
-			{					"\"\" \"\"\"\n\nhello\"\"\"\"\" ",         {{""}, {"\nhello"}, {""}}}, // 20
-			{							  "\"\"\"\r\nhello\"\"\"",                       {{"hello"}}},
-			{							  "\"\"\"hello\r\n\"\"\"",                       {{"hello"}}},
-			{						  "\"\"\"\r\nhello\r\n\"\"\"",                       {{"hello"}}},
+			// raw string values are byte-exact: a leading/trailing newline is NOT stripped
+			{								"\"\"\"\nhello\"\"\"",                     {{"\nhello"}}},
+			{								"\"\"\"hello\n\"\"\"",                     {{"hello\n"}}},
+			{							  "\"\"\"h\nello\n\"\"\"",                   {{"h\nello\n"}}},
+			{							  "\"\"\"\nhello\n\"\"\"",                   {{"\nhello\n"}}},
+			{								  "\"\"\" \n\t\"\"\"",                       {{" \n\t"}}}, // 20
+			{							  "\"\"\"\r\nhello\"\"\"",                   {{"\r\nhello"}}},
+			{							  "\"\"\"hello\r\n\"\"\"",                   {{"hello\r\n"}}},
 			{							 "\"\"\"\r \nhello\"\"\"",                  {{"\r \nhello"}}},
-			{							 "\"\"\"hello\r \n\"\"\"",                    {{"hello\r "}}}, // 25
-			{				  "\"\"\"\r\n\r\nhello\r\n\r\n\"\"\"",               {{"\r\nhello\r\n"}}}, // #26
+			{							 "\"\"\"hello\r \n\"\"\"",                  {{"hello\r \n"}}},
+			{				  "\"\"\"\r\n\r\nhello\r\n\r\n\"\"\"",       {{"\r\n\r\nhello\r\n\r\n"}}}, // 25
 
-			// cpp-style raw strings
-			{						   "\"\" R\"(\nhello)\"\"\" ",           {{""}, {"hello"}, {""}}},
-			{						   "\"\" R\"(hello\n)\"\"\" ",           {{""}, {"hello"}, {""}}},
-			{						 "\"\" R\"(h\nello\n)\"\"\" ",         {{""}, {"h\nello"}, {""}}},
-			{						 "\"\" R\"(\nhello\n)\"\"\" ",           {{""}, {"hello"}, {""}}}, // 30
-			{						 "\"\" R\"(hello\n\n)\"\"\" ",         {{""}, {"hello\n"}, {""}}},
-			{						 "\"\" R\"(\n\nhello)\"\"\" ",         {{""}, {"\nhello"}, {""}}},
-			{								   "R\"(\r\nhello)\"",                       {{"hello"}}},
-			{								   "R\"(hello\r\n)\"",                       {{"hello"}}},
-			{							   "R\"(\r\nhello\r\n)\"",                       {{"hello"}}}, // 35
-			{								  "R\"(\r \nhello)\"",                  {{"\r \nhello"}}},
-			{								  "R\"(hello\r \n)\"",                    {{"hello\r "}}},
-			{					   "R\"(\r\n\r\nhello\r\n\r\n)\"",               {{"\r\nhello\r\n"}}}, // #38
+			// a raw string opened with a longer (5-quote) delimiter may hold a run of 3 quotes in its content
+			{					   "\"\"\"\"\"a\"\"\"b\"\"\"\"\"",                    {{"a\"\"\"b"}}},
+			{							"\"\"\"\"\"abc\"\"\"\"\"",                         {{"abc"}}},
+			{								   "\"\"\"a\"b\"\"\"",                        {{"a\"b"}}},
+			{								 "\"\"\"a\"\"b\"\"\"",                      {{"a\"\"b"}}},
+			{				"\"\"\"hello\"\"\" \"\"\"world\"\"\"",            {{"hello"}, {"world"}}}, // 30
 
 			// / and // are ordinary characters in unquoted strings (URLs, slashes)
 			{											"hello//",                     {{"hello//"}}},
@@ -197,7 +187,16 @@ const tst::set set("parser_correctness", [](tst::suite& suite) {
 
 	suite.add<std::string_view>(
 		"malformed_document_should_throw_exception",
-		{"{}", "{", "}", " {qw}", "asdf{{}}", "afd{}{}"},
+		{"{}",
+		 "{",
+		 "}",
+		 " {qw}",
+		 "asdf{{}}",
+		 "afd{}{}",
+		 // raw strings: a run of more than N consecutive quotes is malformed
+		 "\"\"\"abc\"\"\"\"",
+		 "\"\"\"\"\"abc\"\"\"",
+		 "\"\"\"\"\"\""},
 		[](const auto& p) {
 			bool thrown = false;
 			try {
