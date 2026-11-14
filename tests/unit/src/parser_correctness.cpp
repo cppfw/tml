@@ -168,6 +168,7 @@ const tst::set set("parser_correctness", [](tst::suite& suite) {
 			{								  "hello {\\\"world}",        {{"hello", {{"\"world"}}}}},
 			{									   "hello\\u0bf5",                 {{"hello\u0bf5"}}},
 			{								   "hello\\U00026218",             {{"hello\U00026218"}}},
+			{								    "hello\\rworld",  {{"hello\rworld"}}},  // \r escape is recognised in unquoted strings
 
 			// quoted string escape sequences
 			{								  "\"hello\\ world\"",               {{"hello\\ world"}}},
@@ -178,6 +179,11 @@ const tst::set set("parser_correctness", [](tst::suite& suite) {
 			{				  "\"\\\"hello\\\"\" \"\\{world\\}\"",  {{"\"hello\""}, {"\\{world\\}"}}},
 			{								   "\"hello\\u0bf5\"",                 {{"hello\u0bf5"}}},
 			{							   "\"hello\\U00026218\"",             {{"hello\U00026218"}}},
+			{								    "\"hello\\rworld\"",  {{"hello\rworld"}}},  // \r escape is recognised in quoted strings
+			{								    "\"hello\nworld\"",  {{"hello\nworld"}}},  // byte-exact: a literal new line typed between the quotes is kept
+			{								    "\"hello\tworld\"",  {{"hello\tworld"}}},  // byte-exact: a literal tab typed between the quotes is kept
+			{								    "\"hello\rworld\"",  {{"hello\rworld"}}},  // byte-exact: a literal carriage return typed between the quotes is kept
+			{								    "\"hello\r\nworld\"",  {{"hello\r\nworld"}}},  // byte-exact: a literal CRLF typed between the quotes is kept
     },
 		[](auto& p) {
 			auto r = tml::read(p.first);
@@ -196,7 +202,13 @@ const tst::set set("parser_correctness", [](tst::suite& suite) {
 		 // raw strings: a run of more than N consecutive quotes is malformed
 		 "\"\"\"abc\"\"\"\"",
 		 "\"\"\"\"\"abc\"\"\"",
-		 "\"\"\"\"\"\""},
+		 "\"\"\"\"\"\"",
+
+		 // unicode escape sequences must be fully consumed (all 4/8 hex digits valid), otherwise malformed
+		 "\\u12G4"  // a non-hex digit before the end is malformed,
+		 "\\U000000G1"  // long unicode escape with a trailing non-hex digit is malformed,
+		 "\"\\u12 4\""  // a trailing space inside the sequence is malformed,
+		},
 		[](const auto& p) {
 			bool thrown = false;
 			try {

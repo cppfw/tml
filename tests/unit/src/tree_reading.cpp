@@ -203,12 +203,13 @@ const tst::set set("tree_reading", [](tst::suite& suite) {
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "fff ggg", SL);
+		// quoted strings are byte-exact: literal new line / tab are kept
+		tst::check(i->value == "fff \nggg", SL);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;
 		tst::check(i != roots.end(), SL);
-		tst::check(i->value == "tralala tro lo lo\ntre lele", SL);
+		tst::check(i->value == "tralala \ntro lo\t lo\n\n\ttre lele", SL);
 		tst::check(i->children.size() == 0, SL);
 
 		++i;

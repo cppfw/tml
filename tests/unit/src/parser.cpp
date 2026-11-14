@@ -148,9 +148,10 @@ const tst::set set("parser", [](auto& suite) {
 
 		l.actions.emplace_back(action_enum::string_item, "quoted string with trailing slash /");
 
-		l.actions.emplace_back(action_enum::string_item, "fff ggg");
+		// quoted strings are byte-exact: literal new line / tab are kept
+		l.actions.emplace_back(action_enum::string_item, "fff \nggg");
 
-		l.actions.emplace_back(action_enum::string_item, "tralala tro lo lo\ntre lele");
+		l.actions.emplace_back(action_enum::string_item, "tralala \ntro lo\t lo\n\n\ttre lele");
 
 		l.actions.emplace_back(action_enum::string_item, "-1213.33");
 

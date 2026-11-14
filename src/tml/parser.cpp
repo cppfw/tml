@@ -256,11 +256,9 @@ void parser::process_char_in_quoted_string(char c, listener&)
 			this->previous_state = this->cur_state;
 			this->cur_state = state::escape_sequence;
 			break;
-		case '\n':
-		case '\r':
-		case '\t':
-			break;
 		default:
+			// byte-exact: a literal new line / tab / carriage return typed
+			// between the quotes is kept verbatim as part of the string value
 			this->buf.push_back(c);
 			break;
 	}
@@ -288,6 +286,9 @@ void parser::process_char_in_escape_sequence(char c, listener& listener)
 			break;
 		case 't':
 			this->buf.push_back('\t');
+			break;
+		case 'r':
+			this->buf.push_back('\r');
 			break;
 		case '\n':
 			this->buf.push_back('\\');
@@ -334,11 +335,13 @@ void parser::process_char_in_unicode_sequence(char c, listener& listener)
 			utki::to_int(utki::integer_base::hex)
 		);
 
-		if (res.ec == std::errc::invalid_argument) {
-			std::stringstream ss;
-			ss << "malformed document: could not parse hexadecimal number of unicode escape sequence at line: "
-			   << this->cur_loc.line;
-			throw std::invalid_argument(ss.str());
+		// require that the entire sequence was consumed, otherwise a trailing
+		// non-hex character would be silently dropped (e.g. \u12G4)
+		if (res.ec == std::errc::invalid_argument || res.ptr != utki::end_pointer(span)) {
+			throw std::invalid_argument(utki::cat(
+				"malformed document: could not parse hexadecimal number of unicode escape sequence at line: ",
+				this->cur_loc.line
+			));
 		}
 
 		auto bytes = utki::to_utf8(char32_t(value));

@@ -17,17 +17,18 @@ Here are the syntax rules:
 	* backslash `\\`
 	* double quote `\"`
 	* curly braces `\{` and `\}`
+	* `\n` - new line
+	* `\t` - tabulation
+	* `\r` - carriage return
 	* 4 hex digit unicode value `\uXXXX`
 	* 8 hex digit unicode value `\UXXXXXXXX`
-  - Quoted string is a string which is enclosed in double quotes. The following characters of the quoted string are not part of the document (ignored by parser):
-    * tabulation
-	* new line
-	* carriage return
+  - Quoted string is a string which is enclosed in double quotes. The quoted string's value is byte-exact: it is exactly the characters between the double quotes, with escape sequences still processed. A literal new line / tab / carriage return typed between the quotes is kept verbatim as part of the value.
   - Quoted string can contain the following escape sequences:
     * `\n` - new line
     * `\"` - double quote
     * `\\` - back slash
     * `\t` - tabulation
+    * `\r` - carriage return
 	* 4 hex digit unicode value `\uXXXX`
 	* 8 hex digit unicode value `\UXXXXXXXX`
   - Raw string: a raw string is opened by a sequence of at least three consecutive double quotes and closed by the same number of consecutive double quotes. The number of quotes in the opening sequence determines the number of quotes required in the closing sequence. Any sequence of fewer than that number of consecutive quotes inside the raw string is literal content; a sequence of more than that number is a syntax error. The raw string's value is byte-exact: it is exactly the bytes between the opening and closing quote sequences, with no leading or trailing new line characters stripped.
@@ -37,6 +38,7 @@ Here are the syntax rules:
   - `#` starts a comment unconditionally in the token stream: it is recognized whether or not it is preceded by whitespace. This means `/` (and `//`) is just an ordinary character, so URLs (e.g. `http://website.com/some/path`) can be unquoted strings without any special handling.
   - A `#` that occurs inside a quoted (`"…"`) or raw string is not a comment; it is literal string content.
   - Because `#` is recognized unconditionally outside strings, a value that contains `#` (e.g. a URL fragment such as `http://x.com/page#section`) must be written as a quoted string; otherwise the `#` and the rest of the line would be treated as a comment.
+. A NUL byte (`\0`) in the input acts as the parser's end-of-data marker: it terminates the current value. Real `.tml` files do not contain NUL bytes; this is a defined edge behavior rather than expected input.
 
 = Example
 
