@@ -30,28 +30,26 @@ Chi""Cld {Another{One{} and{false}}} {swd{true}}
 
 =efwe{}
 
-/*
-multiline comment
-//tralivali
-*/
+#
+# multiline comment
+# //tralivali
+#
 
-string_interrupted//tro lo lo
+string_interrupted#tro lo lo
 by_comment
-
-string_broken/*tro lo lo*/by_comment{}
 
 {}
 {{}{}}
 
-	// /* 
+	# /* 
 
-// /* 
-// 
-// */
+# /* 
+# 
+# */
 
-/* tgtg
-/* /* 
-/* /* */
+# tgtg
+# /* 
+# /* 
 
 	""{
 		"child string"
@@ -60,7 +58,7 @@ string_broken/*tro lo lo*/by_comment{}
 
 		bbb
 
-		//comment trololo
+		#comment trololo
 
 		ccc{
 			"ddd"
@@ -68,15 +66,15 @@ string_broken/*tro lo lo*/by_comment{}
 {}
 	}
 
-//comment blah blah
+#comment blah blah
 
-//Escape sequences
+#Escape sequences
 "Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Doublequotes\" {}{}{}{}"
 
 
 "quoted string with trailing slash /"
 
-//multiline string
+#multiline string
 "fff 
 ggg"
 
@@ -84,7 +82,7 @@ ggg"
 tro lo	 lo\n
 	tre lele"
 
-//number
+#number
 -1213.33
 
 UnquotedStringAtTheVeryEndOfTheFile

@@ -106,9 +106,7 @@ class parser
 		escape_sequence,
 		unicode_sequence,
 		unquoted_string,
-		comment_seqence,
 		single_line_comment,
-		multiline_comment,
 		raw_cpp_string_opening_sequence,
 		raw_cpp_string_closing_sequence,
 		raw_cpp_string,
@@ -129,9 +127,7 @@ class parser
 	void process_char_in_quoted_string(char c, tml::listener& listener);
 	void process_char_in_escape_sequence(char c, tml::listener& listener);
 	void process_char_in_unicode_sequence(char c, tml::listener& listener);
-	void process_char_in_comment_sequence(char c, tml::listener& listener);
 	void process_char_in_single_line_comment(char c, tml::listener& listener);
-	void process_char_in_multiline_comment(char c, tml::listener& listener);
 	void process_char_in_raw_cpp_string_opening_sequence(char c, tml::listener& listener);
 	void process_char_in_raw_cpp_string(char c, tml::listener& listener);
 	void process_char_in_raw_cpp_string_closing_sequence(char c, tml::listener& listener);

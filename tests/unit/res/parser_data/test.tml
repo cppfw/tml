@@ -2,47 +2,47 @@
 
 "string with empty children list"{}unquoted_string_with_empty_children_list{}
 
-/*
-multiline comment
-//tralivali
-*/
+#
+# multiline comment
+# //tralivali
+#
 
 ""{}
 ""{""{}""{}}
 
-	// /* 
+	# /* 
 
-// /* 
-// 
-// */
+# /* 
+# 
+# */
 
-/* tgtg
-/* /* 
-/* /* */
+# tgtg
+# /* 
+# /* 
 
 	""{
 		"child string"
 
-		"aaa"/**/{}
+		"aaa"{}#comment
 
 		bbb
 
-		//comment trololo
+		#comment trololo
 
-		ccc //some comment
+		ccc #some comment
 		{
 			"ddd"
 		}
 	}
 
-//comment blah blah
+#comment blah blah
 
-//Escape sequences
+#Escape sequences
 "Tab\t Backslash\\ Slash/ Doubleslash// Newline\n Doublequotes\" {}{}{}{}"
 
 "quoted string with trailing slash /"
 
-//multiline string
+#multiline string
 "fff 
 ggg"
 
@@ -50,7 +50,7 @@ ggg"
 tro lo	 lo\n
 	tre lele"
 
-//number
+#number
 -1213.33
 
 UnquotedStringAtTheVeryEndOfTheFile

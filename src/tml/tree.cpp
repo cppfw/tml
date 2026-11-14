@@ -107,6 +107,7 @@ bool can_string_be_unquoted(std::string_view str, size_t& out_length, unsigned& 
 			case '{':
 			case '}':
 			case ' ':
+			case '#':
 				ret = false;
 				break;
 			default:

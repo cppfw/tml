@@ -9,15 +9,15 @@ const tst::set set("parser_correctness", [](tst::suite& suite) {
 		"single_slash_is_parsed_as_node",
 		// the test checks that 5th element is as expected
 		{
-			{         "a b c d e f g",  "f"},
-			{         "a b c d e / g",  "/"},
-			{        "a b c d e /\rg",  "/"},
-			{        "a b c d e /\tg",  "/"},
-			{        "a b c d e /\ng",  "/"},
-			{        "a b c d e / /g",  "/"},
-			{        "a b c d e /f g", "/f"},
-			{      "a b c d e /{z} g",  "/"},
-			{"a b c d e //{z} g\nf g",  "f"},
+			{        "a b c d e f g",  "f"},
+			{        "a b c d e / g",  "/"},
+			{       "a b c d e /\rg",  "/"},
+			{       "a b c d e /\tg",  "/"},
+			{       "a b c d e /\ng",  "/"},
+			{       "a b c d e / /g",  "/"},
+			{       "a b c d e /f g", "/f"},
+			{     "a b c d e /{z} g",  "/"},
+			{"a b c d e #{z} g\nf g",  "f"},
     },
 		[](auto& p) {
 			auto r = tml::read(p.first);
@@ -31,49 +31,55 @@ const tst::set set("parser_correctness", [](tst::suite& suite) {
 	suite.add<std::string>(
 		"comment_in_the_beginning_is_ignored",
 		{
-			"// bla bla"
+			"# bla bla"
 			"\n"
-			"/* bla bla bla"
+			"# bla bla bla"
 			"\n"
-			"bla bla */ first"
-			"\n"
-			"second",
-
-			"\n"
-			"// bla bla"
-			"\n"
-			"/* bla bla bla"
-			"\n"
-			"bla bla */ first"
+			"first"
 			"\n"
 			"second",
 
 			"\n"
-			" // bla bla"
+			"# bla bla"
 			"\n"
-			"/* bla bla bla"
+			"# bla bla bla"
 			"\n"
-			"bla bla */ first"
-			"\n"
-			"second",
-
-			"/* bla bla bla"
-			"\n"
-			"bla bla */ first"
+			"first"
 			"\n"
 			"second",
 
 			"\n"
-			"/* bla bla bla"
+			" # bla bla"
 			"\n"
-			"bla bla */ first"
+			"# bla bla bla"
+			"\n"
+			"first"
+			"\n"
+			"second",
+
+			"# bla bla bla"
+			"\n"
+			"# bla bla"
+			"\n"
+			"first"
 			"\n"
 			"second",
 
 			"\n"
-			" /* bla bla bla"
+			"# bla bla bla"
 			"\n"
-			"bla bla */ first"
+			"# bla bla"
+			"\n"
+			"first"
+			"\n"
+			"second",
+
+			"\n"
+			" # bla bla bla"
+			"\n"
+			"# bla bla"
+			"\n"
+			"first"
 			"\n"
 			"second",
 		},
@@ -142,7 +148,7 @@ const tst::set set("parser_correctness", [](tst::suite& suite) {
 			{								  "R\"(hello\r \n)\"",                    {{"hello\r "}}},
 			{					   "R\"(\r\n\r\nhello\r\n\r\n)\"",               {{"\r\nhello\r\n"}}}, // #38
 
-			// unquoted string terminated by comment
+			// / and // are ordinary characters in unquoted strings (URLs, slashes)
 			{											"hello//",                     {{"hello//"}}},
 			{										  "hello//\n",                     {{"hello//"}}}, // 40
 			{									 "hello//bla bla",         {{"hello//bla"}, {"bla"}}},
@@ -151,6 +157,13 @@ const tst::set set("parser_correctness", [](tst::suite& suite) {
 			{								   "hello/*bla bla*/",       {{"hello/*bla"}, {"bla*/"}}},
 			{"url = http://my-site.com/path/index.html (homepage)",
 			 {{"url"}, {"="}, {"http://my-site.com/path/index.html"}, {"(homepage)"}}                }, // 45
+
+			// # line comments: unconditional, run to end of line, / is data
+			{							 "# a whole line comment",                                {}},
+			{							  "a # inline comment\nb",                    {{"a"}, {"b"}}},
+			{				 "a# inline comment without space\nb",                    {{"a"}, {"b"}}},
+			{											"abc#def",						 {{"abc"}}}, // bare # in an unquoted value starts a comment
+			{											"\"a#b\"",						 {{"a#b"}}}, // # inside a quoted string is data
 
 			// parsing empty document
 			{												   "",								{}},

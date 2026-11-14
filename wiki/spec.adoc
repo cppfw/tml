@@ -34,11 +34,11 @@ Here are the syntax rules:
   - Quotes-style raw string: `"""The Quotes raw string"""`
   - If any raw string, C++ or Quotes-style, starts or ends with a new line character, then this first leading new line character and/or last trailing new line character is not a part of the document (ignored by parser).
 . String can have arbitrary number of child strings. Those are optionally listed in the curly brackets following the string. If string does not have any children then the curly brackets can be omitted.
-. Parts of a document can be commented. C++ commenting rules apply.
-  - single-line comment is opened by a sequence of two forward slashes `//` and is closed by the end of the line.
-  - A multi-line comment is opened by forward slash and asterisk sequence `/\*` and is closed by asterisk and forward slash sequence `*/`.
-  - Comment's opening sequence, for both, single and multi-line comments, should be preceeded by whitespace or be at the beginning of the line. Otherwise it is not recognized as comment opening sequence. This is in order to make possible URLs (e.g. `http://website.com/*`) to be unquoted strings.
-  - Comments are not regarded inside quoted and raw strings.
+. Parts of a document can be commented with `#` line comments.
+  - a comment is opened by a number sign `#` and is closed by the end of the line. There are no multi-line comments; to comment out a block of lines, prefix each line with `#`.
+  - `#` starts a comment unconditionally in the token stream: it is recognized whether or not it is preceded by whitespace. This means `/` (and `//`) is just an ordinary character, so URLs (e.g. `http://website.com/some/path`) can be unquoted strings without any special handling.
+  - A `#` that occurs inside a quoted (`"…"`) or raw string is not a comment; it is literal string content.
+  - Because `#` is recognized unconditionally outside strings, a value that contains `#` (e.g. a URL fragment such as `http://x.com/page#section`) must be written as a quoted string; otherwise the `#` and the rest of the line would be treated as a comment.
 
 = Example
 
@@ -55,49 +55,46 @@ string_four"string five"
 		SubChild1
 		"Subchild two"
 
-		// properties can be expressed as string with just one child (property's value)
+		# properties can be expressed as string with just one child (property's value)
 		Property1 {Value1}
 		"Property two" {"Value 2"}
 
-		// comment
+		# comment
 
-		/* multi line
-		   comment */
+		# multi line
+		   # comment
 
-		// comment opening sequence should have preceding whitespace
-		// or be at the beginning of the line.
-		// the following line does not make any comments
+		# # is recognized unconditionally; / is an ordinary character, so
+		# this URL below needs no quoting:
+		#
 		http://website.com/some/url/*
 
-// comment at the beginning of the line
+# comment at the beginning of the line
 
-/*
- * multiline
- * comment at the
- * beginning of the line
- */
+# comment at the
+# beginning of the line
 
 		"Escape sequences inside single double quotes: \" \n \t \\ \/"
 
-		// C++-style raw string
+		# C++-style raw string
 		R"qwerty(raw string content " """ { } \ / )qwerty"
 		
-		// quotes-style raw string
+		# quotes-style raw string
 		"""bla bla {} "" and "quoted" bla bla"""
 
-		// the leading and ending new line is ignored in raw strings:
+		# the leading and ending new line is ignored in raw strings:
 """
 multiline
 verbatim text
 block
 """
-		// is the same as
+		# is the same as
 		"""multiline
 verbatim text
 block"""
 
-		// in order to make the new line at the beginning/ending of
-		// the raw string to be part of the document, just add an extra one(s):
+		# in order to make the new line at the beginning/ending of
+		# the raw string to be part of the document, just add an extra one(s):
 """
 
 verbatim text block which has a

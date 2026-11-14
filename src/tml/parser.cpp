@@ -89,10 +89,10 @@ void parser::process_char_in_initial(char c, listener& listener)
 		case '\t':
 		case '\r':
 			break;
-		case '/':
+		case '#':
 			this->set_string_start_pos();
 			this->previous_state = state::initial;
-			this->cur_state = state::comment_seqence;
+			this->cur_state = state::single_line_comment;
 			break;
 		case '\0':
 			this->cur_state = state::idle; // parser should remain in idle state after data end
@@ -139,10 +139,10 @@ void parser::process_char_in_idle(char c, listener& listener)
 			this->cur_state = state::raw_quotes_string_opening_sequence;
 			this->sequence_index = 1;
 			break;
-		case '/':
+		case '#':
 			this->set_string_start_pos();
 			this->previous_state = state::idle;
-			this->cur_state = state::comment_seqence;
+			this->cur_state = state::single_line_comment;
 			break;
 		case '\\':
 			this->set_string_start_pos();
@@ -175,10 +175,10 @@ void parser::process_char_in_string_parsed(char c, listener& listener)
 		case '\t':
 			this->info.flags.set(tml::flag::space);
 			break;
-		case '/':
+		case '#':
 			this->set_string_start_pos();
 			this->previous_state = state::string_parsed;
-			this->cur_state = state::comment_seqence;
+			this->cur_state = state::single_line_comment;
 			break;
 		case '{':
 			this->string_parsed_info.flags.set(tml::flag::curly_braces);
@@ -253,6 +253,12 @@ void parser::process_char_in_unquoted_string(char c, listener& listener)
 			this->cur_state = state::idle;
 			listener.on_children_parse_finished(this->cur_loc);
 			--this->nesting_level;
+			break;
+		case '#':
+			utki::assert(this->buf.size() != 0, SL);
+			this->set_string_parsed_state();
+			this->previous_state = state::string_parsed;
+			this->cur_state = state::single_line_comment;
 			break;
 		default:
 			this->buf.push_back(c);
@@ -371,57 +377,6 @@ void parser::process_char_in_unicode_sequence(char c, listener& listener)
 	}
 }
 
-void parser::process_char_in_comment_sequence(char c, listener& listener)
-{
-	ASSERT(this->cur_state == state::comment_seqence)
-	switch (c) {
-		case '/':
-			this->cur_state = state::single_line_comment;
-			break;
-		case '*':
-			this->cur_state = state::multiline_comment;
-			break;
-		case '{':
-			this->handle_string_parsed(listener);
-			ASSERT(this->buf.empty(), [this](auto& o) {
-				o << "this->buf = " << utki::make_string(this->buf);
-			})
-			this->set_string_start_pos();
-			--this->info.location.offset;
-
-			this->buf.push_back('/');
-			this->set_string_parsed_state();
-			this->handle_string_parsed(listener);
-			listener.on_children_parse_started(this->cur_loc);
-			++this->nesting_level;
-			this->cur_state = state::initial;
-			break;
-		case '\n':
-		case '\r':
-		case '\t':
-		case ' ':
-			if (!this->buf.empty()) {
-				this->handle_string_parsed(listener);
-			}
-			ASSERT(this->buf.empty(), [this](auto& o) {
-				o << "this->buf = " << utki::make_string(this->buf);
-			})
-			this->buf.push_back('/');
-			// this->handle_string_parsed(listener);
-			this->set_string_parsed_state();
-			break;
-		default:
-			if (!this->buf.empty()) {
-				this->handle_string_parsed(listener);
-			}
-			ASSERT(this->buf.empty())
-			this->buf.push_back('/');
-			this->buf.push_back(c);
-			this->cur_state = state::unquoted_string;
-			break;
-	}
-}
-
 void parser::process_char_in_single_line_comment(char c, listener& listener)
 {
 	ASSERT(this->cur_state == state::single_line_comment)
@@ -435,29 +390,6 @@ void parser::process_char_in_single_line_comment(char c, listener& listener)
 			this->cur_state = this->previous_state;
 			break;
 		default:
-			break;
-	}
-}
-
-void parser::process_char_in_multiline_comment(char c, listener& listener)
-{
-	ASSERT(this->cur_state == state::multiline_comment)
-	switch (c) {
-		case '*':
-			ASSERT(this->sequence.empty())
-			// ASSERT(this->buf.size() == 0)
-			this->sequence.push_back('*');
-			break;
-		case '/':
-			if (this->sequence.size() != 0) {
-				ASSERT(this->sequence.size() == 1)
-				ASSERT(this->sequence.back() == '*')
-				this->sequence.clear();
-				this->cur_state = this->previous_state;
-			}
-			break;
-		default:
-			this->sequence.clear();
 			break;
 	}
 }
@@ -633,14 +565,8 @@ void parser::process_char(char c, listener& listener)
 		case state::unicode_sequence:
 			this->process_char_in_unicode_sequence(c, listener);
 			break;
-		case state::comment_seqence:
-			this->process_char_in_comment_sequence(c, listener);
-			break;
 		case state::single_line_comment:
 			this->process_char_in_single_line_comment(c, listener);
-			break;
-		case state::multiline_comment:
-			this->process_char_in_multiline_comment(c, listener);
 			break;
 		case state::raw_cpp_string_opening_sequence:
 			this->process_char_in_raw_cpp_string_opening_sequence(c, listener);
