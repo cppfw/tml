@@ -172,6 +172,7 @@ const tst::set set("parser_correctness", [](tst::suite& suite) {
 
 			// quoted string escape sequences
 			{								  "\"hello\\ world\"",               {{"hello\\ world"}}},
+
 			{								 "\"hello\\\nworld\"",                {{"hello\\world"}}}, // in quoted strings the new line is ignored
 			{								  "\"hello\\nworld\"",                {{"hello\nworld"}}},
 			{								  "\"hello\\tworld\"",                {{"hello\tworld"}}},

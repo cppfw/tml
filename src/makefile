@@ -24,3 +24,5 @@ $(eval $(prorab-license))
 $(eval $(prorab-clang-format))
 
 $(eval $(prorab-install-dbgsrc))
+
+# review: add $(eval $(prorab-clear-this-vars)) and after that add the tml-bnf library, in bnf_conformance tests add makefile similar to one in unit tests, use this_no_install := true for tml-bnf

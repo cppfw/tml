@@ -118,6 +118,10 @@ class parser
 
 	state previous_state = state::idle;
 
+	// set to true when a NUL byte (\0) is encountered in the input; a NUL byte
+	// terminates the document (parsing stops and any remaining input is ignored)
+	bool null_terminator_encountered_ = false;
+
 	void handle_string_parsed(tml::listener& listener);
 
 	void process_char(char c, tml::listener& listener);
@@ -185,6 +189,24 @@ public:
 	 * @param listener - listener object which will receive notifications about parsed tokens.
 	 */
 	void end_of_data(listener& listener);
+
+	/**
+	 * @brief Terminate parsing due to a NUL byte in the input.
+	 * A NUL byte (\0) terminates the document: the current value (if any and
+	 * complete) is emitted and an incomplete value is discarded. Unlike
+	 * end_of_data this does not throw for an incomplete value.
+	 * @param listener - listener object which will receive notifications about parsed tokens.
+	 */
+	void terminate_document(listener& listener);
+
+	/**
+	 * @brief Returns true if a NUL byte was encountered in the input (which
+	 * terminates the document).
+	 */
+	bool data_ended() const noexcept
+	{
+		return this->null_terminator_encountered_;
+	}
 };
 
 /**

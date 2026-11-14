@@ -2,7 +2,7 @@
 
 == Specification
 
-link:spec.adoc[tml specification]
+link:../doc/spec.md[tml specification]
 
 == Installation
 :package_name: tml

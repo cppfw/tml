@@ -27,6 +27,11 @@ myci_declare_library(${name}
 )
 
 # ==============
+# = tml-bnf    =
+
+include(bnf.cmake)
+
+# ==============
 # = unit tests =
 
 include(unit_tests.cmake)

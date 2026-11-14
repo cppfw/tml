@@ -207,7 +207,6 @@ void parser::process_char_in_unquoted_string(char c, listener& listener)
 			}
 			break;
 		case '\0': // end of data
-			ASSERT(this->buf.size() != 0)
 			this->set_string_parsed_state();
 			this->handle_string_parsed(listener);
 			this->cur_state = state::idle;
@@ -510,6 +509,12 @@ void parser::process_char(char c, listener& listener)
 void parser::parse_data_chunk(utki::span<const char> chunk, listener& listener)
 {
 	for (auto c : chunk) {
+		if (c == '\0') {
+			// A NUL byte terminates the document: stop parsing and ignore any
+			// remaining input.
+			this->null_terminator_encountered_ = true;
+			break;
+		}
 		if (c == '\n') {
 			this->next_line();
 		}
@@ -551,12 +556,27 @@ void tml::parse(const fsif::file& fi, listener& listener)
 
 		parser.parse_data_chunk(utki::make_span(buf.data(), num_bytes_read), listener);
 
-		if (num_bytes_read != buf.size()) {
+		if (num_bytes_read != buf.size() || parser.data_ended()) {
 			break;
 		}
 	}
 
-	parser.end_of_data(listener);
+	if (parser.data_ended()) {
+		parser.terminate_document(listener);
+	} else {
+		parser.end_of_data(listener);
+	}
+}
+
+void parser::terminate_document(listener& listener)
+{
+	// A NUL byte terminates the document: emit the current value (if any and
+	// complete) and discard an incomplete value. Unlike end_of_data this does
+	// not throw for an incomplete value (the NUL byte is a soft EOF marker).
+	if (this->cur_state == state::string_parsed || this->cur_state == state::unquoted_string) {
+		this->handle_string_parsed(listener);
+	}
+	this->reset();
 }
 
 void parser::reset()
@@ -564,4 +584,5 @@ void parser::reset()
 	this->buf.clear();
 	this->nesting_level = 0;
 	this->cur_state = state::initial;
+	this->null_terminator_encountered_ = false;
 }
