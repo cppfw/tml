@@ -171,6 +171,33 @@ abc\0def    →  one value: "abc"  (the "def" is ignored)
 
 Real `.tml` files do not contain NUL bytes; this is a defined edge behavior.
 
+## Extended information
+
+In addition to the parsed value and child structure, the parser can record
+**extended information** (also called *extra info*) for each node. This is
+metadata about the node's appearance in the source text, used for round-tripping
+(writing the document back with the original formatting preserved).
+
+Each node has:
+
+- **Location**: the 1-based line number and 0-based column offset where the
+  node starts in the source.
+- **Flags**:
+
+| Flag | Meaning |
+|---|---|
+| `space` | There is whitespace between this node and the previous sibling. Always false for the first node in a document or the first child in a brace group. |
+| `quoted` | The node was written as a quoted string (e.g. `"hello"`). Mutually exclusive with `raw`. |
+| `raw` | The node was written as a raw string (e.g. `"""hello"""`). Mutually exclusive with `quoted`. |
+| `first_on_line` | The node is at the beginning of the line (only whitespace before it on that line). |
+| `curly_braces` | The node has a children list in the source (e.g. `hello{...}`), even if the list is empty. |
+
+These flags are not part of the language syntax — they are implementation
+metadata that the parser extracts while reading. The BNF conformance parser
+does not track them; only the reference parser does. Applications may use
+this metadata to control logic, for example a text editor can use `first_on_line`
+and `space` to preserve indentation when reformatting a document.
+
 ## Full example
 
 ```
