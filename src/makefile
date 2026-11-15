@@ -32,7 +32,7 @@ $(eval $(prorab-clear-this-vars))
 $(eval $(call prorab-config, ../config))
 
 this_no_install := true
-this_soname :=
+this_soname := tml-bnf
 
 this_src_dir := bnf
 
