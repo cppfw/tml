@@ -1,3 +1,9 @@
+libtml (0.3.0) UNRELEASED; urgency=medium
+
+  * polish language syntax
+
+ -- Ivan Gagis <igagis@gmail.com>  Sun, 15 Nov 2026 20:50:38 +0200
+
 libtml (0.2.34) unstable; urgency=medium
 
   * update
