@@ -1,9 +1,13 @@
 include prorab.mk
 include prorab-test.mk
 
+# only build if bison >= 3 is available
+ifeq ($(shell bison --version 2>/dev/null | head -1 | grep -c "3\."),1)
+
 $(eval $(call prorab-config, ../../config))
 
 this_no_install := true
+this_lint_cmd :=
 
 this_name := bnf-conformance
 
@@ -27,3 +31,5 @@ this_test_ld_path := ../../src/out/$(c)
 $(eval $(prorab-test))
 
 $(eval $(call prorab-include, ../../src/makefile))
+
+endif  # bison available
