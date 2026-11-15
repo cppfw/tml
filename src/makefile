@@ -42,6 +42,10 @@ this_name := tml-bnf$(this_dbg)
 
 this_srcs += $(call prorab-src-dir, $(this_src_dir))
 
+# so that #include <tml/tree.hpp> in the bison-generated file resolves
+# to the local source (same as CMake's PUBLIC_INCLUDE_DIRECTORIES src/)
+this_cxxflags += -I .
+
 this_ldlibs += $(d)out/$(c)/libtml$(this_dbg)$(dot_so)
 this_ldlibs += -l fsif$(this_dbg)
 this_ldlibs += -l utki$(this_dbg)

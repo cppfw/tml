@@ -25,7 +25,7 @@
 
 %code requires {
 	#include <string>
-	#include "../../../tml/tree.hpp"
+	#include <tml/tree.hpp>
 	namespace tml_bnf {
 		class tml_bnf_grammar;
 	}
