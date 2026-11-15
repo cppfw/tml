@@ -27,8 +27,8 @@ $(eval $(prorab-install-dbgsrc))
 
 # =====================================
 # === tml-bnf (bison-based parser) ===
-# only build if bison is available (not needed for conan/emscripten)
-ifneq ($(shell command -v bison 2>/dev/null),)
+# only build if bison >= 3 is available (not needed for conan/emscripten/macos)
+ifeq ($(shell bison --version 2>/dev/null | head -1 | grep -c "3\."),1)
 
 $(eval $(prorab-clear-this-vars))
 
