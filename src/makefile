@@ -32,6 +32,8 @@ $(eval $(prorab-clear-this-vars))
 $(eval $(call prorab-config, ../config))
 
 this_no_install := true
+
+# review: the so name should be same as for tml
 this_soname := tml-bnf
 
 this_src_dir := bnf
@@ -40,8 +42,10 @@ this_name := tml-bnf$(this_dbg)
 
 this_srcs += $(call prorab-src-dir, $(this_src_dir))
 
+# review: why is this needed?
 this_cxxflags += -I .
 
+# review the -l tml would lint to tml in system lib location but we just built the tml, need to link directly to the .so from out/$(c)/libtml$(dot_so), check how it is done in other libs
 this_ldlibs += -l tml$(this_dbg)
 this_ldlibs += -l fsif$(this_dbg)
 this_ldlibs += -l utki$(this_dbg)
@@ -59,6 +63,9 @@ define this__rules
 $(.RECIPEPREFIX)$(a)echo generate $$@
 $(.RECIPEPREFIX)$(a)mkdir -p $$(dir $$@)
 $(.RECIPEPREFIX)$(a)bison -o $$@ --defines=$(tml_bnf_hh) $$<
+
+	# tml_bnf.hh is a byproduct of the bison command above
+	$(tml_bnf_hh): $(tml_bnf_cc)
 
 	$(d)bnf/tml_bnf.cpp: $(tml_bnf_hh)
 	$(d)bnf/tml_bnf_grammar.cpp: $(tml_bnf_hh)
