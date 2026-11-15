@@ -70,4 +70,12 @@ forest_ext read_ext(const std::string& str);
 tree to_non_ext(const tree_ext& t);
 forest to_non_ext(const forest_ext& f);
 
+void write(
+	const forest_ext& wood, //
+	fsif::file& fi,
+	formatting fmt = formatting::normal
+);
+
+std::string to_string(const forest_ext& f);
+
 } // namespace tml

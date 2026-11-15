@@ -29,6 +29,8 @@ SOFTWARE.
 #include <stack>
 
 #include <fsif/span_file.hpp>
+#include <fsif/vector_file.hpp>
+#include <utki/string.hpp>
 
 #include "parser.hpp"
 
@@ -99,4 +101,175 @@ forest tml::to_non_ext(const forest_ext& f)
 	}
 
 	return ret;
+}
+
+namespace {
+
+void make_escaped_string_ext(
+	std::string_view str, //
+	utki::span<uint8_t> out
+)
+{
+	auto p = out.begin();
+
+	for (const auto& c : str) {
+		ASSERT(p != out.end())
+
+		switch (c) {
+			case '\t':
+				*p = '\\';
+				p = std::next(p);
+				ASSERT(p != out.end())
+				*p = 't';
+				break;
+			case '\n':
+				*p = '\\';
+				p = std::next(p);
+				ASSERT(p != out.end())
+				*p = 'n';
+				break;
+			case '\\':
+				*p = '\\';
+				p = std::next(p);
+				ASSERT(p != out.end())
+				*p = '\\';
+				break;
+			case '"':
+				*p = '\\';
+				p = std::next(p);
+				ASSERT(p != out.end())
+				*p = '"';
+				break;
+			default:
+				*p = c;
+				break;
+		}
+		p = std::next(p);
+	}
+}
+
+void write_ext_internal(
+	const forest_ext& roots, //
+	fsif::file& fi,
+	formatting fmt,
+	unsigned indentation
+)
+{
+	const std::array<uint8_t, 1> quote = {{'"'}};
+	const std::array<uint8_t, 1> lcurly = {{'{'}};
+	const std::array<uint8_t, 1> rcurly = {{'}'}};
+	const std::array<uint8_t, 1> space = {{' '}};
+	const std::array<uint8_t, 1> tab = {{'\t'}};
+	const std::array<uint8_t, 1> new_line = {{'\n'}};
+	const std::array<uint8_t, 3> raw_quote = {
+		{'"', '"', '"'}
+	};
+
+	bool first = true;
+
+	for (const auto& n : roots) {
+		const auto& info = n.value.info;
+
+		if (fmt == formatting::normal) {
+			// indent
+			for (unsigned i = 0; i != indentation; ++i) {
+				fi.write(utki::make_span(tab));
+			}
+		} else {
+			// minimal: use space flag to decide whether to write a space
+			if (!first && info.flags.get(tml::flag::space)) {
+				fi.write(utki::make_span(space));
+			}
+		}
+
+		// write node value
+		if (info.flags.get(tml::flag::raw)) {
+			// write as raw string
+			fi.write(utki::make_span(raw_quote));
+			fi.write(utki::make_span(n.value.string.c_str(), n.value.string.size()));
+			fi.write(utki::make_span(raw_quote));
+		} else if (info.flags.get(tml::flag::quoted)) {
+			// write as quoted string
+			const auto& str = n.value.string;
+			unsigned num_escapes = 0;
+			for (const auto c : str) {
+				if (c == '\t' || c == '\n' || c == '\\' || c == '"') {
+					++num_escapes;
+				}
+			}
+
+			fi.write(utki::make_span(quote));
+			if (num_escapes == 0) {
+				fi.write(utki::make_span(str.c_str(), str.size()));
+			} else {
+				std::vector<uint8_t> buf(str.size() + num_escapes);
+				make_escaped_string_ext(
+					str, //
+					utki::make_span(buf)
+				);
+				fi.write(utki::make_span(buf));
+			}
+			fi.write(utki::make_span(quote));
+		} else {
+			// unquoted: write as-is (the value was originally unquoted)
+			fi.write(utki::make_span(n.value.string.c_str(), n.value.string.size()));
+		}
+
+		first = false;
+
+		// write children
+		const bool has_children = (n.children.size() != 0);
+		const bool write_braces = has_children || info.flags.get(tml::flag::curly_braces);
+
+		if (!write_braces) {
+			if (fmt == formatting::normal) {
+				fi.write(utki::make_span(new_line));
+			}
+			continue;
+		}
+
+		if (fmt != formatting::normal) {
+			fi.write(utki::make_span(lcurly));
+			write_ext_internal(n.children, fi, fmt, 0);
+			fi.write(utki::make_span(rcurly));
+		} else {
+			fi.write(utki::make_span(lcurly));
+
+			if (n.children.size() == 1 && n.children[0].children.size() == 0) {
+				write_ext_internal(n.children, fi, formatting::minimal, 0);
+			} else {
+				fi.write(utki::make_span(new_line));
+				write_ext_internal(n.children, fi, fmt, indentation + 1);
+				for (unsigned i = 0; i != indentation; ++i) {
+					fi.write(utki::make_span(tab));
+				}
+			}
+			fi.write(utki::make_span(rcurly));
+			fi.write(utki::make_span(new_line));
+		}
+	}
+}
+
+} // namespace
+
+void tml::write(
+	const forest_ext& wood, //
+	fsif::file& fi,
+	formatting fmt
+)
+{
+	fsif::file::guard file_guard(
+		fi, //
+		fsif::mode::create
+	);
+
+	write_ext_internal(wood, fi, fmt, 0);
+}
+
+std::string tml::to_string(const forest_ext& f)
+{
+	fsif::vector_file fi;
+	tml::write(f, fi, tml::formatting::minimal);
+	auto v = fi.reset_data();
+	return utki::make_string(v);
 }
