@@ -7,6 +7,7 @@
 #include <tml/tree.hpp>
 #include <tst/check.hpp>
 #include <tst/set.hpp>
+#include <utki/debug.hpp>
 
 namespace {
 
@@ -245,8 +246,10 @@ const tst::set set (
 				if (mismatches != 0) {
 					std::cerr << report;
 				}
-				std::cerr << "bnf conformance: " << total << " cases, " << mismatches
-				          << " mismatch, " << both_reject << " both-reject\n";
+				utki::log_debug ([total, mismatches, both_reject] (auto& o) {
+					o << "bnf conformance: " << total << " cases, " << mismatches
+					    << " mismatch, " << both_reject << " both-reject\n";
+				});
 				tst::check (
 					mismatches == 0,
 					[report, mismatches, total] (auto& o) {
