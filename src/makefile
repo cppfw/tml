@@ -27,8 +27,6 @@ $(eval $(prorab-install-dbgsrc))
 
 # =====================================
 # === tml-bnf (bison-based parser) ===
-# only build if bison is available
-ifneq ($(shell command -v bison 2>/dev/null),)
 
 $(eval $(prorab-clear-this-vars))
 
@@ -43,10 +41,6 @@ this_src_dir := bnf
 this_name := tml-bnf$(this_dbg)
 
 this_srcs += $(call prorab-src-dir, $(this_src_dir))
-
-# needed so that #include "tml/tree.hpp" resolves to the local source
-# rather than the system-installed header in /usr/include
-this_cxxflags += -I .
 
 this_ldlibs += $(d)out/$(c)/libtml$(this_dbg)$(dot_so)
 this_ldlibs += -l fsif$(this_dbg)
@@ -77,5 +71,3 @@ endef
 $(eval $(this__rules))
 
 $(eval $(prorab-build-lib))
-
-endif  # bison available

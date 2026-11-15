@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "tml/tree.hpp"
+#include "../tml/tree.hpp"
 
 #include "tml_bnf_lexer.hpp"
 

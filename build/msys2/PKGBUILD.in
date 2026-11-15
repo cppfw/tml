@@ -36,6 +36,7 @@ makedepends=(
 	'prorab'
 	'prorab-extra'
 	'doxygen'
+	'bison'
 	"${pkgPrefix}clang-tools-extra"
 	"${pkgPrefix}clargs"
 	"${pkgPrefix}tst"

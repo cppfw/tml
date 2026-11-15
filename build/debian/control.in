@@ -13,7 +13,8 @@ Build-Depends:
 	libutki-dev,
 	libfsif-dev,
 	libclargs-dev,
-	libtst-dev
+	libtst-dev,
+	bison
 Build-Depends-Indep: doxygen
 Standards-Version: 3.9.2
 
