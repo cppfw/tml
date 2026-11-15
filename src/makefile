@@ -27,6 +27,9 @@ $(eval $(prorab-install-dbgsrc))
 
 # =====================================
 # === tml-bnf (bison-based parser) ===
+# only build if bison is available
+ifneq ($(shell command -v bison 2>/dev/null),)
+
 $(eval $(prorab-clear-this-vars))
 
 $(eval $(call prorab-config, ../config))
@@ -74,3 +77,5 @@ endef
 $(eval $(this__rules))
 
 $(eval $(prorab-build-lib))
+
+endif  # bison available
