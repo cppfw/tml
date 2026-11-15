@@ -27,12 +27,15 @@ $(eval $(prorab-install-dbgsrc))
 
 # =====================================
 # === tml-bnf (bison-based parser) ===
+# only build if bison is available (not needed for conan/emscripten)
+ifneq ($(shell command -v bison 2>/dev/null),)
 
 $(eval $(prorab-clear-this-vars))
 
 $(eval $(call prorab-config, ../config))
 
 this_no_install := true
+this_lint_cmd := 
 
 this_soname := $(shell cat $(d)soname.txt)
 
@@ -75,3 +78,5 @@ endef
 $(eval $(this__rules))
 
 $(eval $(prorab-build-lib))
+
+endif  # bison available
