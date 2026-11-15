@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.4.1)
 set(name tml)
 project(${name})
 
-file(GLOB_RECURSE srcs "../../../src/*.cpp")
+file(GLOB_RECURSE srcs "../../../src/tml/*.cpp")
 
 include (${ANDROID_GRADLE_NATIVE_BUNDLE_PLUGIN_MK})
 

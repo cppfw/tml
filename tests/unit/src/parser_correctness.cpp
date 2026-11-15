@@ -206,6 +206,7 @@ const tst::set set("parser_correctness", [](tst::suite& suite) {
 		 "\"\"\"\"\"\"",
 
 		 // unicode escape sequences must be fully consumed (all 4/8 hex digits valid), otherwise malformed
+		 // NOLINTNEXTLINE(bugprone-suspicious-missing-comma, "intentional non-hex digit in unicode escape")
 		 "\\u12G4"  // a non-hex digit before the end is malformed,
 		 "\\U000000G1"  // long unicode escape with a trailing non-hex digit is malformed,
 		 "\"\\u12 4\""  // a trailing space inside the sequence is malformed,
