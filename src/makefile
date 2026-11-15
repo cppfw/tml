@@ -61,6 +61,7 @@ this__bnf_hh := $(this__bnf_bin_dir)/tml_bnf.hh
 this_srcs += $(this__bnf_cc)
 this_cxxflags += -I bnf
 this_cxxflags += -I $(this__bnf_bin_dir)
+this_cxxflags += -Wno-unused-but-set-variable  # bison-generated code
 
 define this__rules
 	$(d)$(this__bnf_cc): $(d)bnf/tml.y
