@@ -59,6 +59,10 @@ define this__rules
 $(.RECIPEPREFIX)$(a)echo generate $$@
 $(.RECIPEPREFIX)$(a)mkdir -p $$(dir $$@)
 $(.RECIPEPREFIX)$(a)bison -o $$@ --defines=$(tml_bnf_hh) $$<
+
+	$(d)bnf/tml_bnf.cpp: $(tml_bnf_hh)
+	$(d)bnf/tml_bnf_grammar.cpp: $(tml_bnf_hh)
+	$(d)bnf/tml_bnf_lexer.cpp: $(tml_bnf_hh)
 endef
 $(eval $(this__rules))
 
