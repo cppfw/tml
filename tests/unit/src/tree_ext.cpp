@@ -133,11 +133,7 @@ const tst::set set("tree_ext", [](auto& suite) {
 		tml::write(f, fi, tml::formatting::normal);
 		auto data = fi.reset_data();
 
-		tst::check_eq(
-			utki::make_string(data),
-			std::string("hello{world}\n"),
-			SL
-		);
+		tst::check_eq(utki::make_string(data), std::string("hello{world}\n"), SL);
 	});
 
 	suite.add("write_ext_to_string", []() {

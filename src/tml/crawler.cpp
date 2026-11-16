@@ -30,7 +30,7 @@ using namespace tml;
 
 crawler crawler::in()
 {
-	ASSERT(this->i != this->b.end())
+	utki::assert(this->i != this->b.end(), SL);
 	if (this->get().children.size() == 0) {
 		throw std::invalid_argument("crawler::in() failed, node has no children");
 	}
@@ -39,7 +39,7 @@ crawler crawler::in()
 
 crawler& crawler::next()
 {
-	ASSERT(this->i != this->b.end())
+	utki::assert(this->i != this->b.end(), SL);
 	++this->i;
 	if (this->i == this->b.end()) {
 		throw std::invalid_argument("crawler::next() failed, reached end of node list");

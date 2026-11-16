@@ -113,31 +113,31 @@ void make_escaped_string_ext(
 	auto p = out.begin();
 
 	for (const auto& c : str) {
-		ASSERT(p != out.end())
+		utki::assert(p != out.end(), SL);
 
 		switch (c) {
 			case '\t':
 				*p = '\\';
 				p = std::next(p);
-				ASSERT(p != out.end())
+				utki::assert(p != out.end(), SL);
 				*p = 't';
 				break;
 			case '\n':
 				*p = '\\';
 				p = std::next(p);
-				ASSERT(p != out.end())
+				utki::assert(p != out.end(), SL);
 				*p = 'n';
 				break;
 			case '\\':
 				*p = '\\';
 				p = std::next(p);
-				ASSERT(p != out.end())
+				utki::assert(p != out.end(), SL);
 				*p = '\\';
 				break;
 			case '"':
 				*p = '\\';
 				p = std::next(p);
-				ASSERT(p != out.end())
+				utki::assert(p != out.end(), SL);
 				*p = '"';
 				break;
 			default:

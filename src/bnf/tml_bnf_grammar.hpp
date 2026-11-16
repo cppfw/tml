@@ -12,15 +12,16 @@
 // The generated header is only available when building with CMake (it is
 // produced by a custom command), so guard its inclusion for standalone
 // header tests.
-#if __has_include ("tml_bnf.hh")
-#include "tml_bnf.hh"
+#if __has_include("tml_bnf.hh")
+#	include "tml_bnf.hh"
 
 namespace tml_bnf {
 
 // The parser driver. It runs the hand-written lexer over the input, feeds the
 // resulting tokens to the bison-generated parser, and produces a tml::forest.
 // It inherits from the bison-generated parser (yy::tml_bnf_parser).
-class tml_bnf_grammar : public yy::tml_bnf_parser {
+class tml_bnf_grammar : public yy::tml_bnf_parser
+{
 public:
 	// Bring the base class's parse() (no arguments) into scope, so that it is
 	// not hidden by the parse(std::string_view) overload below.
@@ -28,14 +29,15 @@ public:
 
 	// Parse the input and return the resulting forest.
 	// Throws std::invalid_argument on a lexical or structural error.
-	tml::forest parse (std::string_view input);
+	tml::forest parse(std::string_view input);
 
 	// Accessors used by the free yylex() (see tml_bnf_grammar.cpp).
-	const std::vector<lex_token>& tokens () const noexcept
+	const std::vector<lex_token>& tokens() const noexcept
 	{
-		return this->lexer_.tokens ();
+		return this->lexer_.tokens();
 	}
-	std::size_t& token_index () noexcept
+
+	std::size_t& token_index() noexcept
 	{
 		return this->token_index_;
 	}
@@ -49,6 +51,6 @@ private:
 	std::size_t token_index_ = 0;
 };
 
-}  // namespace tml_bnf
+} // namespace tml_bnf
 
-#endif  // __has_include ("tml_bnf.hh")
+#endif // __has_include ("tml_bnf.hh")

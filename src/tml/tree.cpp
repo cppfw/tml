@@ -126,31 +126,31 @@ void make_escaped_string(
 	auto p = out.begin();
 
 	for (const auto& c : str) {
-		ASSERT(p != out.end())
+		utki::assert(p != out.end(), SL);
 
 		switch (c) {
 			case '\t':
 				*p = '\\';
 				p = std::next(p);
-				ASSERT(p != out.end())
+				utki::assert(p != out.end(), SL);
 				*p = 't';
 				break;
 			case '\n':
 				*p = '\\';
 				p = std::next(p);
-				ASSERT(p != out.end())
+				utki::assert(p != out.end(), SL);
 				*p = 'n';
 				break;
 			case '\\':
 				*p = '\\';
 				p = std::next(p);
-				ASSERT(p != out.end())
+				utki::assert(p != out.end(), SL);
 				*p = '\\';
 				break;
 			case '"':
 				*p = '\\';
 				p = std::next(p);
-				ASSERT(p != out.end())
+				utki::assert(p != out.end(), SL);
 				*p = '"';
 				break;
 			default:
@@ -232,9 +232,9 @@ void write_internal(const tml::forest& roots, fsif::file& fi, formatting fmt, un
 					fi.write(utki::make_span(quote));
 				}
 			} else {
-				ASSERT(num_escapes == 0)
+				utki::assert(num_escapes == 0, SL);
 				fi.write(utki::make_span(n.value.string.c_str(), length));
-				ASSERT(n.value.length() != 0)
+				utki::assert(n.value.length() != 0, SL);
 				if (n.children.size() == 0 && length == 1 && n.value[0] == 'R') {
 					fi.write(utki::make_span(space));
 				}

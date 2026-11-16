@@ -65,7 +65,7 @@ void parser::set_string_start_pos()
 
 void parser::process_char_in_initial(char c, listener& listener)
 {
-	ASSERT(this->cur_state == state::initial)
+	utki::assert(this->cur_state == state::initial, SL);
 	switch (c) {
 		case '\n':
 			this->info.flags.set(tml::flag::first_on_line);
@@ -100,7 +100,7 @@ void parser::process_char_in_idle(char c, listener& listener)
 		case '\0':
 			break;
 		case '{':
-			ASSERT(this->buf.empty())
+			utki::assert(this->buf.empty(), SL);
 			{
 				std::stringstream ss;
 				ss << "Malformed tml document fed. Unexpected { at line: " << this->cur_loc.line;
@@ -150,7 +150,7 @@ void parser::set_string_parsed_state()
 
 void parser::process_char_in_string_parsed(char c, listener& listener)
 {
-	ASSERT(this->cur_state == state::string_parsed)
+	utki::assert(this->cur_state == state::string_parsed, SL);
 	switch (c) {
 		case '\n':
 			this->info.flags.set(tml::flag::first_on_line);
@@ -183,10 +183,10 @@ void parser::process_char_in_string_parsed(char c, listener& listener)
 
 void parser::process_char_in_unquoted_string(char c, listener& listener)
 {
-	ASSERT(this->cur_state == state::unquoted_string)
+	utki::assert(this->cur_state == state::unquoted_string, SL);
 	switch (c) {
 		case '"':
-			ASSERT(this->buf.size() != 0)
+			utki::assert(this->buf.size() != 0, SL);
 			this->set_string_parsed_state();
 			this->handle_string_parsed(listener);
 			this->cur_state = state::raw_quotes_string_opening_sequence;
@@ -197,7 +197,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener)
 		case ' ':
 		case '\r':
 		case '\t':
-			ASSERT(this->buf.size() != 0)
+			utki::assert(this->buf.size() != 0, SL);
 			// this->handle_string_parsed(listener);
 			this->set_string_parsed_state();
 
@@ -216,7 +216,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener)
 			this->cur_state = state::escape_sequence;
 			break;
 		case '{':
-			ASSERT(this->buf.size() != 0)
+			utki::assert(this->buf.size() != 0, SL);
 			this->info.flags.set(tml::flag::curly_braces);
 			this->set_string_parsed_state();
 			this->handle_string_parsed(listener);
@@ -225,7 +225,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener)
 			++this->nesting_level;
 			break;
 		case '}':
-			ASSERT(this->buf.size() != 0)
+			utki::assert(this->buf.size() != 0, SL);
 			this->set_string_parsed_state();
 			this->handle_string_parsed(listener);
 			this->cur_state = state::idle;
@@ -246,7 +246,7 @@ void parser::process_char_in_unquoted_string(char c, listener& listener)
 
 void parser::process_char_in_quoted_string(char c, listener&)
 {
-	ASSERT(this->cur_state == state::quoted_string)
+	utki::assert(this->cur_state == state::quoted_string, SL);
 	switch (c) {
 		case '"':
 			this->set_string_parsed_state();
@@ -319,7 +319,7 @@ void parser::process_char_in_escape_sequence(char c, listener& listener)
 
 void parser::process_char_in_unicode_sequence(char c, listener& listener)
 {
-	ASSERT(this->cur_state == state::unicode_sequence)
+	utki::assert(this->cur_state == state::unicode_sequence, SL);
 
 	this->sequence[this->sequence_index] = c;
 	++this->sequence_index;
@@ -360,7 +360,7 @@ void parser::process_char_in_unicode_sequence(char c, listener& listener)
 
 void parser::process_char_in_single_line_comment(char c, listener& listener)
 {
-	ASSERT(this->cur_state == state::single_line_comment)
+	utki::assert(this->cur_state == state::single_line_comment, SL);
 	this->info.flags.set(tml::flag::space);
 	switch (c) {
 		case '\0':
@@ -499,9 +499,13 @@ void parser::process_char(char c, listener& listener)
 			this->process_char_in_raw_quotes_string_closing_sequence(c, listener);
 			break;
 		default:
-			ASSERT(false, [&](auto& o) {
-				o << "this->cur_state = " << unsigned(this->cur_state);
-			})
+			utki::assert(
+				false,
+				[&](auto& o) {
+					o << "this->cur_state = " << unsigned(this->cur_state);
+				},
+				SL
+			);
 			break;
 	}
 }

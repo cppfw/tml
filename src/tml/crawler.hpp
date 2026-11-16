@@ -52,13 +52,13 @@ public:
 
 	tree& get() noexcept
 	{
-		ASSERT(this->i != this->b.end())
+		utki::assert(this->i != this->b.end(), SL);
 		return *this->i;
 	}
 
 	const tree& get() const noexcept
 	{
-		ASSERT(this->i != this->b.end())
+		utki::assert(this->i != this->b.end(), SL);
 		return *this->i;
 	}
 

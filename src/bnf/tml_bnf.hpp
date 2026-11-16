@@ -10,6 +10,6 @@ namespace tml_bnf {
 // the resulting forest. This parser is an independent, spec-driven re-implementation
 // of the tml syntax; it is used to cross-check the reference parser in libtml.
 // Throws std::invalid_argument on a lexical or structural error.
-tml::forest parse (std::string_view input);
+tml::forest parse(std::string_view input);
 
-}  // namespace tml_bnf
+} // namespace tml_bnf

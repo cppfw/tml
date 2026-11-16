@@ -4,10 +4,10 @@
 
 namespace tml_bnf {
 
-tml::forest parse (std::string_view input)
+tml::forest parse(std::string_view input)
 {
 	tml_bnf_grammar grammar;
-	return grammar.parse (input);
+	return grammar.parse(input);
 }
 
-}  // namespace tml_bnf
+} // namespace tml_bnf
