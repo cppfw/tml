@@ -1,0 +1,26 @@
+# writer representation selection
+
+# raw is chosen when it is shorter than quoted
+"x\"a\"\"b\"\"cx"
+"x\\\\\\\"\\\\\\\"y"
+"q\"\"q\"\"\"q\"\"\"\"q"
+
+# quoted is chosen when it is shorter than raw
+"a b"
+
+# tie (15 vs 15): quoted is chosen
+"x\"a\"b\\\"cx"
+
+# values starting / ending with a quote cannot be raw: only quoted
+"\"abc"
+"abc\""
+"\"\""
+
+# carriage return: quoted (5) is shorter than raw (9)
+"a\rb"
+
+# empty string
+""
+
+# unquoted node with children
+child{value}

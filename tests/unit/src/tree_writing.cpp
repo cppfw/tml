@@ -31,6 +31,16 @@ std::function<void(const std::string&)> make_test_proc()
 		auto expected_data = expected_fi.load();
 
 		tst::check(data == expected_data, SL);
+
+		// the etalon must parse back to the same forest
+		const auto etalon_roots = tml::read(
+			std::string_view(
+				reinterpret_cast<const char*>(expected_data.data()), //
+				expected_data.size()
+			)
+		);
+
+		tst::check_eq(roots, etalon_roots, SL);
 	};
 }
 } // namespace

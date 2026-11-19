@@ -26,9 +26,11 @@ SOFTWARE.
 
 #include "tree.hpp"
 
+#include <algorithm>
 #include <cinttypes>
 #include <cstring>
 #include <stack>
+#include <tuple>
 
 #include <fsif/span_file.hpp>
 #include <fsif/vector_file.hpp>
@@ -85,37 +87,83 @@ forest tml::read(std::string_view str)
 }
 
 namespace {
-bool can_string_be_unquoted(std::string_view str, size_t& out_length, unsigned& out_num_escapes)
+enum class tml_representation {
+	unquoted,
+	quoted,
+	raw
+};
+
+// select the shortest textual presentation of the string in a single pass,
+// returning {representation, raw_delimiter_length}:
+// - representation: unquoted, if no escapes are needed at all
+//   (non-empty, no whitespace, no " { } #, no characters that require
+//   escaping in a quoted string); otherwise whichever is shorter: a raw
+//   string written with the minimal opening sequence, or a quoted string
+// - raw_delimiter_length: the length of the raw string opening sequence to
+//   use if representation is raw, 0 otherwise
+std::tuple<tml_representation, size_t> get_best_tml_representation(std::string_view str)
 {
-	out_num_escapes = 0;
-	out_length = 0;
+	// the minimum number of quotes that make a string raw: a single quote
+	// opens a quoted string, two quotes form an empty string, three or more
+	// quotes open a raw string
+	constexpr size_t min_raw_string_delimeter_length = 3;
 
-	if (str.empty()) {
-		// empty string cannot be unquoted
-		return false;
-	}
-
-	bool ret = true;
+	bool unquoted = !str.empty();
+	size_t num_escapes = 0;
+	size_t max_num_quotes_in_a_row = 0;
+	size_t num_quotes_in_a_row = 0;
 
 	for (const auto c : str) {
+		if (c == '"') {
+			++num_quotes_in_a_row;
+			if (num_quotes_in_a_row > max_num_quotes_in_a_row) {
+				max_num_quotes_in_a_row = num_quotes_in_a_row;
+			}
+		} else {
+			num_quotes_in_a_row = 0;
+		}
+
 		switch (c) {
 			case '\t':
 			case '\n':
 			case '\\':
 			case '"':
-				++out_num_escapes;
+				++num_escapes;
+				unquoted = false;
+				break;
+			case ' ':
+			case '\r':
 			case '{':
 			case '}':
-			case ' ':
 			case '#':
-				ret = false;
+				unquoted = false;
 				break;
 			default:
 				break;
 		}
-		++out_length;
 	}
-	return ret;
+
+	if (unquoted) {
+		return {tml_representation::unquoted, 0};
+	}
+
+	const size_t quoted_length = 2 + str.size() + num_escapes;
+
+	// a string cannot be written as a raw string if it is empty or starts or
+	// ends with a quote: the leading / trailing quote run of the content
+	// would merge with the delimiters, so the parsed value would not match
+	// the original
+	size_t min_raw = 0;
+
+	if (str.empty() == false && str.front() != '"' && str.back() != '"') {
+		min_raw = std::max(min_raw_string_delimeter_length, max_num_quotes_in_a_row + 1);
+	}
+
+	if (min_raw != 0 && 2 * min_raw + str.size() < quoted_length) {
+		return {tml_representation::raw, min_raw};
+	}
+
+	return {tml_representation::quoted, 0};
 }
 
 void make_escaped_string(
@@ -170,10 +218,10 @@ void write_internal(const tml::forest& roots, fsif::file& fi, formatting fmt, un
 	const std::array<uint8_t, 1> tab = {{'\t'}};
 	const std::array<uint8_t, 1> new_line = {{'\n'}};
 
-	// used to detect case of two adjacent unquoted strings without children, need to insert space between them
-	bool prev_was_unquoted_without_children = false;
-
-	bool prev_had_children = true;
+	// remembers the representation of the previous leaf node, used to decide
+	// whether a separator space is needed between adjacent leaves in minimal formatting
+	tml_representation prev_rep = tml_representation::unquoted;
+	bool prev_was_leaf = false;
 
 	for (auto& n : roots) {
 		// indent
@@ -184,27 +232,59 @@ void write_internal(const tml::forest& roots, fsif::file& fi, formatting fmt, un
 		}
 
 		// write node value
+		const auto& str = n.value.string;
+		const size_t length = str.size();
+		const auto [rep, raw_delimiter_length] = get_best_tml_representation(str);
 
-		//		TRACE(<< "writing node: " << n.value.string.c_str() << std::endl)
+		// in minimal formatting a space is needed between adjacent leaves when
+		// they would otherwise merge:
+		// - two unquoted strings merge into one token
+		// - a raw string adjacent to a quoted or raw string produces a run of
+		//   more quotes than the raw string's delimiter length
+		if (fmt != formatting::normal && prev_was_leaf) {
+			const bool cur_starts_with_quote = (rep == tml_representation::quoted || rep == tml_representation::raw);
+			const bool prev_ends_with_quote =
+				(prev_rep == tml_representation::quoted || prev_rep == tml_representation::raw);
+			const bool need_space = (rep == tml_representation::unquoted && prev_rep == tml_representation::unquoted) ||
+				(cur_starts_with_quote && prev_ends_with_quote &&
+				 (rep == tml_representation::raw || prev_rep == tml_representation::raw));
+			if (need_space) {
+				fi.write(utki::make_span(space));
+			}
+		}
 
-		unsigned num_escapes = 0;
-		size_t length = 0;
-		bool unqouted = can_string_be_unquoted(
-			n.value.string, //
-			length,
-			num_escapes
-		);
+		if (rep == tml_representation::unquoted) {
+			fi.write(utki::make_span(str.c_str(), length));
 
-		if (!unqouted) {
+			if (n.children.size() == 0 && length == 1 && n.value[0] == 'R') {
+				fi.write(utki::make_span(space));
+			}
+		} else if (rep == tml_representation::raw) {
+			for (size_t i = 0; i != raw_delimiter_length; ++i) {
+				fi.write(utki::make_span(quote));
+			}
+			fi.write(utki::make_span(str.c_str(), length));
+			for (size_t i = 0; i != raw_delimiter_length; ++i) {
+				fi.write(utki::make_span(quote));
+			}
+		} else {
+			unsigned num_escapes = 0;
+
+			for (const auto c : str) {
+				if (c == '\t' || c == '\n' || c == '\\' || c == '"') {
+					++num_escapes;
+				}
+			}
+
 			fi.write(utki::make_span(quote));
 
 			if (num_escapes == 0) {
-				fi.write(utki::make_span(n.value.string.c_str(), length));
+				fi.write(utki::make_span(str.c_str(), length));
 			} else {
 				std::vector<uint8_t> buf(length + num_escapes);
 
 				make_escaped_string(
-					n.value.string, //
+					str, //
 					utki::make_span(buf)
 				);
 
@@ -212,45 +292,17 @@ void write_internal(const tml::forest& roots, fsif::file& fi, formatting fmt, un
 			}
 
 			fi.write(utki::make_span(quote));
-		} else {
-			bool is_quoted_empty_string = false;
-
-			if (length == 0) {
-				if (n.children.size() == 0 || !prev_had_children) {
-					is_quoted_empty_string = true;
-				}
-			}
-
-			// if the string is unquoted then write space in case the output is unformatted
-			if (fmt != formatting::normal && prev_was_unquoted_without_children && !is_quoted_empty_string) {
-				fi.write(utki::make_span(space));
-			}
-
-			if (length == 0) {
-				if (is_quoted_empty_string) {
-					fi.write(utki::make_span(quote));
-					fi.write(utki::make_span(quote));
-				}
-			} else {
-				utki::assert(num_escapes == 0, SL);
-				fi.write(utki::make_span(n.value.string.c_str(), length));
-				utki::assert(n.value.length() != 0, SL);
-				if (n.children.size() == 0 && length == 1 && n.value[0] == 'R') {
-					fi.write(utki::make_span(space));
-				}
-			}
 		}
-
-		prev_had_children = (n.children.size() != 0);
 
 		if (n.children.size() == 0) {
 			if (fmt == formatting::normal) {
 				fi.write(utki::make_span(new_line));
 			}
-			prev_was_unquoted_without_children = (unqouted && length != 0);
+			prev_was_leaf = true;
+			prev_rep = rep;
 			continue;
 		} else {
-			prev_was_unquoted_without_children = false;
+			prev_was_leaf = false;
 		}
 
 		if (fmt != formatting::normal) {
