@@ -405,11 +405,9 @@ void parser::process_char_in_raw_quotes_string_opening_sequence(char c, listener
 					this->raw_string_delimiter_length = this->sequence_index;
 					this->sequence_index = 0;
 					this->info.flags.set(flag::raw);
-					if (c == '(') {
-						this->cur_state = state::raw_quotes_string;
-					} else if (c == '\0') {
-						// end of data: the raw string is left incomplete; end_of_data()
-						// will detect the non-idle state and report an error
+					if (c == '(' || c == '\0') {
+						// c == '\0': end of data, the raw string is left incomplete;
+						// end_of_data() will detect the non-idle state and report an error
 						this->cur_state = state::raw_quotes_string;
 					} else {
 						throw std::invalid_argument(utki::cat(
