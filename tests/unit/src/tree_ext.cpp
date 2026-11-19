@@ -83,7 +83,7 @@ const tst::set set("tree_ext", [](auto& suite) {
 		tml::write(f, fi, tml::formatting::minimal);
 		auto data = fi.reset_data();
 
-		tst::check_eq(utki::make_string(data), std::string("\"\"\"hello world\"\"\""), SL);
+		tst::check_eq(utki::make_string(data), std::string("\"\"\"(hello world)\"\"\""), SL);
 	});
 
 	suite.add("write_ext_curly_braces_empty", []() {
@@ -148,7 +148,7 @@ const tst::set set("tree_ext", [](auto& suite) {
 	});
 
 	suite.add("write_ext_roundtrip_minimal", []() {
-		const auto input = std::string("hello \"world\" \"\"\"raw\"\"\" foo{}");
+		const auto input = std::string("hello \"world\" \"\"\"(raw)\"\"\" foo{}");
 
 		auto f = tml::read_ext(input);
 

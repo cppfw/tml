@@ -155,30 +155,37 @@ which is a quoted string whose content is empty.
 
 ## Raw string
 
-A raw string is opened by a run of N consecutive double quotes (N >= 3) and
-closed by a run of exactly N consecutive double quotes. N is fixed by the
-opening run. Its value is byte-exact: exactly the bytes between the opening
-and closing quote runs, with nothing stripped and no escape processing.
+A raw string is opened by a run of N consecutive double quotes (N >= 3)
+immediately followed by an opening parenthesis `(`, and closed by a closing
+parenthesis `)` immediately followed by a run of exactly N consecutive double
+quotes. N is fixed by the opening run. The parentheses are delimiters, not
+content. Its value is byte-exact: exactly the bytes between the opening `(`
+and the closing `)`, with nothing stripped and no escape processing.
 
 Inside the raw string body:
 
-- a run of fewer than N consecutive double quotes is literal content;
-- a run of exactly N consecutive double quotes closes the string;
-- a run of more than N consecutive double quotes is a syntax error.
+- a double quote is literal content; quote runs of any length are allowed as
+  long as they do not immediately follow a `)`;
+- a `)` immediately followed by a run of fewer than N double quotes is literal
+  content (the parenthesis and the quotes are all part of the value);
+- a `)` immediately followed by a run of exactly N double quotes closes the
+  string;
+- a `)` immediately followed by a run of more than N double quotes is a syntax
+  error.
 
-Raw-string bodies are lexical (they depend on the maximal run of consecutive
-quotes, a lookahead concern), so they are defined as a lexical rule rather than
-a pure BNF production.
+The closing delimiter is lexical (it depends on the maximal run of consecutive
+quotes following a `)`, a lookahead concern), so the raw string is defined as
+a lexical rule rather than a pure BNF production.
 
 ```
-raw-string       = raw-open(N) raw-body(N) .
-raw-open(N)      = "\"" {N}        where N >= 3 .
-raw-body(N)      = raw-content(N) raw-close(N) .
-raw-content(N)   = ( raw-char / "\"" {1,N-1} )*     ; runs of < N quotes are content
-raw-close(N)     = "\"" {N}          ; exactly N quotes close the string
+raw-string(N)    = "\"" {N} "(" raw-body(N) .            N >= 3
+raw-body(N)      = ( raw-char / ")" "\"" {0,N-1} )* ")" "\"" {N} .
+raw-char         = any character other than ")" .
 ```
 
-A run of more than N consecutive quotes is a syntax error.
+A `)` followed by a run of more than N consecutive quotes is a syntax error.
+A quote run of 3 or more at the start of a token that is not immediately
+followed by `(` is a syntax error.
 
 ---
 

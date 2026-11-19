@@ -70,30 +70,40 @@ An empty quoted string is written as `""`.
 
 ### Raw strings
 
-A raw string is opened by a run of **N ≥ 3** consecutive double quotes and
-closed by a run of exactly N consecutive double quotes. Inside the raw string,
-**nothing is processed** — no escapes, no stripping. The value is exactly the
-bytes between the delimiters.
+A raw string is opened by a run of **N ≥ 3** consecutive double quotes
+immediately followed by an opening parenthesis `(`, and closed by a closing
+parenthesis `)` immediately followed by a run of exactly N consecutive double
+quotes. Inside the raw string, **nothing is processed** — no escapes, no
+stripping. The value is exactly the bytes between `(` and `)`; the parentheses
+are delimiters, not content.
 
 ```
-"""hello "world" """     # one string: hello "world" 
-"""a{}b"""               # one string: a{}b
+"""(hello "world")"""   # one string: hello "world"
+"""(a{}b)"""            # one string: a{}b
+"""()"""                # one string: (empty)
 ```
 
 Rules for the content:
 
-- A run of **fewer** than N quotes is literal content.
-- A run of **exactly** N quotes closes the string.
-- A run of **more** than N quotes is a syntax error.
+- Quotes are always literal content, in runs of any length, as long as they do
+  not immediately follow a `)`.
+- A `)` immediately followed by a run of **fewer** than N quotes is literal
+  content (the parenthesis and the quotes are part of the value).
+- A `)` immediately followed by a run of **exactly** N quotes closes the
+  string.
+- A `)` immediately followed by a run of **more** than N quotes is a syntax
+  error.
 
-A longer opening run lets you embed shorter quote runs in the content:
+Every value has a raw form. The delimiter length N only has to be large
+enough that no `)` in the value is followed by a quote run of length N or
+more (N is at least 3):
 
 ```
-"""""it has "" quotes"""""
+""""(it has )""" quotes)""""
 ```
 
-This is a raw string with N=5; the `""` in the middle is just two literal
-quotes.
+This is a raw string with N=4: the `)` followed by three quotes is content,
+the `)` followed by four quotes closes the string.
 
 ### Comparing the three kinds
 
@@ -104,7 +114,7 @@ quotes.
 | `#` in value | No (starts comment) | Yes (literal) | Yes (literal) |
 | Newline in value | No | Yes (literal) | Yes (literal) |
 | Escape sequences | Yes | Yes | No |
-| Delimiter | none | `"` | `"""` or longer |
+| Delimiter | none | `"` | `"""( ... )"""` or longer |
 
 ## Escape sequences
 
@@ -147,7 +157,7 @@ no block comments.
 # this is a comment
 value1 # this is also a comment (value1 is the only token on this line)
 "value # not a comment"   # the # inside quotes is literal
-"""raw # also literal"""  # the # inside a raw string is literal
+"""(raw # also literal)"""  # the # inside a raw string is literal
 ```
 
 `#` is recognized **unconditionally** outside strings: it starts a comment
@@ -191,7 +201,7 @@ Each node has:
 |---|---|
 | `space` | There is whitespace between this node and the previous sibling. Always false for the first node in a document or the first child in a brace group. |
 | `quoted` | The node was written as a quoted string (e.g. `"hello"`). Mutually exclusive with `raw`. |
-| `raw` | The node was written as a raw string (e.g. `"""hello"""`). Mutually exclusive with `quoted`. |
+| `raw` | The node was written as a raw string (e.g. `"""(hello)"""`). Mutually exclusive with `quoted`. |
 | `first_on_line` | The node is at the beginning of the line (only whitespace before it on that line). |
 | `curly_braces` | The node has a children list in the source (e.g. `hello{...}`), even if the list is empty. |
 
@@ -232,18 +242,19 @@ string_four"string five"
 		"Escape sequences: \" \n \t \\"
 
 		# raw string: byte-exact, nothing is stripped
-		"""raw string content " { } \ /"""
-		"""bla bla {} "" and "quoted" bla bla"""
+		"""(raw string content " { } \ /)"""
+		"""(bla bla {} "" and "quoted" bla bla)"""
 
-		# a raw string's value is exactly the bytes between the delimiters
-"""
+		# a raw string's value is exactly the bytes between '(' and ')'
+"""(
 multiline
 verbatim text
 block
-"""
+)"""
 
-		# a longer opening run allows shorter quote runs in the content
-"""""it has "" quotes"""""
+		# a longer opening run is needed when the content has a quote run
+		# immediately after a ')'
+""""(it has )""" quotes)""""
 	}
 }
 ```

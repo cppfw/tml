@@ -93,7 +93,7 @@ const tst::set set("parser_correctness", [](tst::suite& suite) {
 	);
 
 	suite.add("only_quotes_style_raw_string_in_the_document", []() {
-		auto r = tml::read("\"\"\"hello\"\"\"");
+		auto r = tml::read("\"\"\"(hello)\"\"\"");
 		tst::check_eq(r.size(), size_t(1), SL);
 		tst::check_eq(r.front().children.size(), size_t(0), SL);
 		tst::check_eq(r.front().value.string, std::string("hello"), SL);
@@ -103,40 +103,40 @@ const tst::set set("parser_correctness", [](tst::suite& suite) {
 		"parsed_tree_is_as_expected",
 		{
 			// quotes-style raw strings: N-quote delimiters (N >= 3), values are byte-exact
-			{								  "\"\"\"hello\"\"\"",{{"hello"}}																   }, // 0
-			{								 " \"\"\"hello\"\"\"",                       {{"hello"}}},
-			{							   "\n\"\"\"hello\"\"\" ",                       {{"hello"}}},
-			{							   "\t\"\"\"hello\"\"\" ",                       {{"hello"}}},
-			{							  "pre\"\"\"hello\"\"\" ",              {{"pre"}, {"hello"}}},
-			{					 "pre{}\"\"\"hello\"\"\"{child} ", {{"pre"}, {"hello", {{"child"}}}}}, // 5
-			{				   "pre{} \"\"\"hello\"\"\" {child} ", {{"pre"}, {"hello", {{"child"}}}}},
-			{				  "pre{} \"\"\"hello\"\"\"\n{child} ", {{"pre"}, {"hello", {{"child"}}}}},
-			{				  "pre{} \"\"\"hello\"\"\"\t{child} ", {{"pre"}, {"hello", {{"child"}}}}},
-			{						  "\"pre\"\"\"\"hello\"\"\" ",              {{"pre"}, {"hello"}}},
-			{						 "\"pre\" \"\"\"hello\"\"\" ",              {{"pre"}, {"hello"}}}, // 10
-			{							"\"\" \"\"\"hello\"\"\" ",                 {{""}, {"hello"}}},
-			{								 "\"\"\"hello \"\"\"",                      {{"hello "}}},
-			{							  "\"\"\"he\"\"llo\"\"\"",                   {{"he\"\"llo"}}},
-			{						   "\"\"\"hello\nworld\"\"\"",                {{"hello\nworld"}}}, // 15
+			{								  "\"\"\"(hello)\"\"\"",{{"hello"}}																   }, // 0
+			{								 " \"\"\"(hello)\"\"\"",                       {{"hello"}}},
+			{							   "\n\"\"\"(hello)\"\"\" ",                       {{"hello"}}},
+			{							   "\t\"\"\"(hello)\"\"\" ",                       {{"hello"}}},
+			{							  "pre\"\"\"(hello)\"\"\" ",              {{"pre"}, {"hello"}}},
+			{					 "pre{}\"\"\"(hello)\"\"\"{child} ", {{"pre"}, {"hello", {{"child"}}}}}, // 5
+			{				   "pre{} \"\"\"(hello)\"\"\" {child} ", {{"pre"}, {"hello", {{"child"}}}}},
+			{				  "pre{} \"\"\"(hello)\"\"\"\n{child} ", {{"pre"}, {"hello", {{"child"}}}}},
+			{				  "pre{} \"\"\"(hello)\"\"\"\t{child} ", {{"pre"}, {"hello", {{"child"}}}}},
+			{						  "\"pre\"\"\"\"(hello)\"\"\" ",              {{"pre"}, {"hello"}}},
+			{						 "\"pre\" \"\"\"(hello)\"\"\" ",              {{"pre"}, {"hello"}}}, // 10
+			{							"\"\" \"\"\"(hello)\"\"\" ",                 {{""}, {"hello"}}},
+			{								 "\"\"\"(hello )\"\"\"",                      {{"hello "}}},
+			{							  "\"\"\"(he\"\"llo)\"\"\"",                   {{"he\"\"llo"}}},
+			{						   "\"\"\"(hello\nworld)\"\"\"",                {{"hello\nworld"}}}, // 15
 
 			// raw string values are byte-exact: a leading/trailing newline is NOT stripped
-			{								"\"\"\"\nhello\"\"\"",                     {{"\nhello"}}},
-			{								"\"\"\"hello\n\"\"\"",                     {{"hello\n"}}},
-			{							  "\"\"\"h\nello\n\"\"\"",                   {{"h\nello\n"}}},
-			{							  "\"\"\"\nhello\n\"\"\"",                   {{"\nhello\n"}}},
-			{								  "\"\"\" \n\t\"\"\"",                       {{" \n\t"}}}, // 20
-			{							  "\"\"\"\r\nhello\"\"\"",                   {{"\r\nhello"}}},
-			{							  "\"\"\"hello\r\n\"\"\"",                   {{"hello\r\n"}}},
-			{							 "\"\"\"\r \nhello\"\"\"",                  {{"\r \nhello"}}},
-			{							 "\"\"\"hello\r \n\"\"\"",                  {{"hello\r \n"}}},
-			{				  "\"\"\"\r\n\r\nhello\r\n\r\n\"\"\"",       {{"\r\n\r\nhello\r\n\r\n"}}}, // 25
+			{								"\"\"\"(\nhello)\"\"\"",                     {{"\nhello"}}},
+			{								"\"\"\"(hello\n)\"\"\"",                     {{"hello\n"}}},
+			{							  "\"\"\"(h\nello\n)\"\"\"",                   {{"h\nello\n"}}},
+			{							  "\"\"\"(\nhello\n)\"\"\"",                   {{"\nhello\n"}}},
+			{								  "\"\"\"( \n\t)\"\"\"",                       {{" \n\t"}}}, // 20
+			{							  "\"\"\"(\r\nhello)\"\"\"",                   {{"\r\nhello"}}},
+			{							  "\"\"\"(hello\r\n)\"\"\"",                   {{"hello\r\n"}}},
+			{							 "\"\"\"(\r \nhello)\"\"\"",                  {{"\r \nhello"}}},
+			{							 "\"\"\"(hello\r \n)\"\"\"",                  {{"hello\r \n"}}},
+			{				  "\"\"\"(\r\n\r\nhello\r\n\r\n)\"\"\"",       {{"\r\n\r\nhello\r\n\r\n"}}}, // 25
 
 			// a raw string opened with a longer (5-quote) delimiter may hold a run of 3 quotes in its content
-			{					   "\"\"\"\"\"a\"\"\"b\"\"\"\"\"",                    {{"a\"\"\"b"}}},
-			{							"\"\"\"\"\"abc\"\"\"\"\"",                         {{"abc"}}},
-			{								   "\"\"\"a\"b\"\"\"",                        {{"a\"b"}}},
-			{								 "\"\"\"a\"\"b\"\"\"",                      {{"a\"\"b"}}},
-			{				"\"\"\"hello\"\"\" \"\"\"world\"\"\"",            {{"hello"}, {"world"}}}, // 30
+			{					   "\"\"\"\"\"(a\"\"\"b)\"\"\"\"\"",                    {{"a\"\"\"b"}}},
+			{							"\"\"\"\"\"(abc)\"\"\"\"\"",                         {{"abc"}}},
+			{								   "\"\"\"(a\"b)\"\"\"",                        {{"a\"b"}}},
+			{								 "\"\"\"(a\"\"b)\"\"\"",                      {{"a\"\"b"}}},
+			{				"\"\"\"(hello)\"\"\" \"\"\"(world)\"\"\"",            {{"hello"}, {"world"}}}, // 30
 
 			// / and // are ordinary characters in unquoted strings (URLs, slashes)
 			{											"hello//",                     {{"hello//"}}},
@@ -201,8 +201,9 @@ const tst::set set("parser_correctness", [](tst::suite& suite) {
 			" {qw}",
 			"asdf{{}}",
 			"afd{}{}",
-			// raw strings: a run of more than N consecutive quotes is malformed
-			"\"\"\"abc\"\"\"\"",
+			// raw strings: a run of more than N consecutive quotes after ')' is malformed,
+			// and a quote run of >= 3 at a token start must be followed by '('
+			"\"\"\"(abc)\"\"\"\"",
 			"\"\"\"\"\"abc\"\"\"",
 			"\"\"\"\"\"\"",
 

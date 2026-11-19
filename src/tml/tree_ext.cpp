@@ -26,6 +26,7 @@ SOFTWARE.
 
 #include "tree_ext.hpp"
 
+#include <algorithm>
 #include <stack>
 
 #include <fsif/span_file.hpp>
@@ -104,6 +105,35 @@ forest tml::to_non_ext(const forest_ext& f)
 }
 
 namespace {
+// the minimal number of quotes in a raw string delimiter that makes the
+// given string round-trippable: no quote run following ')' in the string
+// may look like a closing delimiter
+size_t calc_raw_string_delimiter_length(std::string_view str)
+{
+	constexpr size_t min_raw_string_delimeter_length = 3;
+
+	size_t max_num_quotes_after_close_paren = 0;
+	size_t num_quotes_after_close_paren = 0;
+	bool close_paren_seen = false;
+
+	for (const auto c : str) {
+		if (c == ')') {
+			close_paren_seen = true;
+			num_quotes_after_close_paren = 0;
+		} else if (c == '"') {
+			if (close_paren_seen) {
+				++num_quotes_after_close_paren;
+				if (num_quotes_after_close_paren > max_num_quotes_after_close_paren) {
+					max_num_quotes_after_close_paren = num_quotes_after_close_paren;
+				}
+			}
+		} else {
+			close_paren_seen = false;
+		}
+	}
+
+	return std::max(min_raw_string_delimeter_length, max_num_quotes_after_close_paren + 1);
+}
 
 void make_escaped_string_ext(
 	std::string_view str, //
@@ -156,14 +186,13 @@ void write_ext_internal(
 )
 {
 	const std::array<uint8_t, 1> quote = {{'"'}};
+	const std::array<uint8_t, 1> lparen = {{'('}};
+	const std::array<uint8_t, 1> rparen = {{')'}};
 	const std::array<uint8_t, 1> lcurly = {{'{'}};
 	const std::array<uint8_t, 1> rcurly = {{'}'}};
 	const std::array<uint8_t, 1> space = {{' '}};
 	const std::array<uint8_t, 1> tab = {{'\t'}};
 	const std::array<uint8_t, 1> new_line = {{'\n'}};
-	const std::array<uint8_t, 3> raw_quote = {
-		{'"', '"', '"'}
-	};
 
 	bool first = true;
 
@@ -185,9 +214,17 @@ void write_ext_internal(
 		// write node value
 		if (info.flags.get(tml::flag::raw)) {
 			// write as raw string
-			fi.write(utki::make_span(raw_quote));
-			fi.write(utki::make_span(n.value.string.c_str(), n.value.string.size()));
-			fi.write(utki::make_span(raw_quote));
+			const auto& str = n.value.string;
+			const size_t num_quotes = calc_raw_string_delimiter_length(str);
+			for (size_t i = 0; i != num_quotes; ++i) {
+				fi.write(utki::make_span(quote));
+			}
+			fi.write(utki::make_span(lparen));
+			fi.write(utki::make_span(str.c_str(), str.size()));
+			fi.write(utki::make_span(rparen));
+			for (size_t i = 0; i != num_quotes; ++i) {
+				fi.write(utki::make_span(quote));
+			}
 		} else if (info.flags.get(tml::flag::quoted)) {
 			// write as quoted string
 			const auto& str = n.value.string;

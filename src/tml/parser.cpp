@@ -400,13 +400,22 @@ void parser::process_char_in_raw_quotes_string_opening_sequence(char c, listener
 					this->process_char_in_string_parsed(c, listener);
 					break;
 				default:
-					// N >= 3 consecutive quotes: a raw string with an N-quote delimiter
+					// N >= 3 consecutive quotes: the opening delimiter of a raw string;
+					// the character terminating the run must be '('
 					this->raw_string_delimiter_length = this->sequence_index;
 					this->sequence_index = 0;
-					this->cur_state = state::raw_quotes_string;
 					this->info.flags.set(flag::raw);
-					if (c != '\0') {
-						this->buf.push_back(c);
+					if (c == '(') {
+						this->cur_state = state::raw_quotes_string;
+					} else if (c == '\0') {
+						// end of data: the raw string is left incomplete; end_of_data()
+						// will detect the non-idle state and report an error
+						this->cur_state = state::raw_quotes_string;
+					} else {
+						throw std::invalid_argument(utki::cat(
+							"Malformed tml document fed. A raw string must be opened by a run of quotes followed by '(', line: ",
+							this->cur_loc.line
+						));
 					}
 					break;
 			}
@@ -418,11 +427,14 @@ void parser::process_char_in_raw_quotes_string(char c, listener& listener)
 {
 	utki::assert(this->cur_state == state::raw_quotes_string, SL);
 	switch (c) {
-		case '"':
+		case ')':
 			this->cur_state = state::raw_quotes_string_closing_sequence;
-			this->sequence_index = 1;
+			this->sequence_index = 0;
 			break;
 		default:
+			// byte-exact content: any character (quotes and parentheses alike) is
+			// part of the value; only ')' followed by the closing quote run
+			// terminates the raw string
 			this->buf.push_back(c);
 			break;
 	}
@@ -433,8 +445,9 @@ void parser::process_char_in_raw_quotes_string_closing_sequence(char c, listener
 	utki::assert(this->cur_state == state::raw_quotes_string_closing_sequence, SL);
 	switch (c) {
 		case '"':
-			// count the run of consecutive quotes; it is either the closing delimiter
-			// (exactly N quotes), part of the content (fewer than N), or malformed (more than N)
+			// count the run of consecutive quotes following ')'; it is either the
+			// closing delimiter (exactly N quotes), part of the content (fewer than N),
+			// or malformed (more than N)
 			++this->sequence_index;
 			break;
 		default:
@@ -442,21 +455,22 @@ void parser::process_char_in_raw_quotes_string_closing_sequence(char c, listener
 				throw std::invalid_argument(utki::cat(
 					"Malformed tml document fed. A run of more than ",
 					this->raw_string_delimiter_length,
-					" consecutive quotes in a raw string at line: ",
+					" consecutive quotes after ')' in a raw string at line: ",
 					this->cur_loc.line
 				));
 			}
 			if (this->sequence_index == this->raw_string_delimiter_length) {
-				// a run of exactly N quotes: the raw string is closed
+				// ')' followed by a run of exactly N quotes: the raw string is closed
 				this->set_string_parsed_state();
 				this->process_char_in_string_parsed(c, listener);
 			} else {
-				// a run of fewer than N quotes: they are part of the raw string content
+				// fewer than N quotes after ')': the parenthesis and the quotes are
+				// part of the raw string content; the current character is
+				// reprocessed in the content state (it may be another ')')
+				this->buf.push_back(')');
 				this->buf.insert(this->buf.end(), this->sequence_index, '"');
-				if (c != '\0') {
-					this->buf.push_back(c);
-				}
 				this->cur_state = state::raw_quotes_string;
+				this->process_char_in_raw_quotes_string(c, listener);
 			}
 			break;
 	}

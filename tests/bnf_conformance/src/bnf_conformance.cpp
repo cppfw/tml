@@ -171,21 +171,26 @@ const tst::set set("bnf_conformance", [](auto& suite) {
 			{"\"\\a\"", "unlisted escape a in quoted"},
 
 			// --- Group 8: raw strings (should conform) ---
-			{"\"\"\"abc\"\"\"", "raw N=3"},
-			{"\"\"\"a\"b\"\"\"", "raw with inner single quote"},
-			{"\"\"\"\"\"it has \"\" quotes\"\"\"\"\"", "raw N=5 with inner 2-quote run"},
-			{"\"\"\"a\\nb\"\"\"", "raw with backslash-n (no escape processing)"},
-			{"\"\"\"a\"\"b\"\"\"", "raw with 2-quote run in middle (N=3)"},
-			{"\"\"\"a\nb\"\"\"", "raw with literal newline (byte-exact)"},
+			{"\"\"\"(abc)\"\"\"", "raw N=3"},
+			{"\"\"\"(a\"b)\"\"\"", "raw with inner single quote"},
+			{"\"\"\"(it has \"\" quotes)\"\"\"", "raw with 2-quote run in content (N=3)"},
+			{"\"\"\"(a\\nb)\"\"\"", "raw with backslash-n (no escape processing)"},
+			{"\"\"\"(a\"\"b)\"\"\"", "raw with 2-quote run in middle (N=3)"},
+			{"\"\"\"(a\nb)\"\"\"", "raw with literal newline (byte-exact)"},
+			{"\"\"\"()\"\"\"", "empty raw string"},
+			{"\"\"\"(a))\"\"\"", "value ends with ')' (re-dispatch)"},
+			{"\"\"\"\"(x)\"\"\"\")\"\"\"\"", "raw N=4: ')' + 3 quotes is content, ')' + 4 quotes closes"},
 
 			// --- Group 9: raw string errors (both reject) ---
-			{"\"\"\"abc", "unterminated raw"},
-			{"\"\"\"abc\"\"\"\"", "raw with 4-quote run after content (N=3)"},
+			{"\"\"\"(abc", "unterminated raw"},
+			{"\"\"\"abc\"\"\"", "raw run of 3 quotes not followed by '('"},
+			{"\"\"\"(abc)\"\"\"\"\"", "run of 5 quotes after ')' (N=3)"},
+			{"\"\"\"\"\"\"\"", "quote run at EOF without '('"},
 
 			// --- Group 10: quote runs at token boundary (should conform) ---
 			{"abc\"def\"", "unquoted then quoted"},
 			{"abc\"\"", "unquoted then empty quoted"},
-			{"abc\"\"\"def\"\"\"", "unquoted then raw"},
+			{"abc\"\"\"(def)\"\"\"", "unquoted then raw"},
 
 			// --- Group 11: NUL byte terminates the document (should conform) ---
 			// A NUL byte (\0) is the end-of-document marker: parsing stops
@@ -199,7 +204,7 @@ const tst::set set("bnf_conformance", [](auto& suite) {
 			{std::string("abc\0", 4), "nul terminates document (at end)"},
 			{std::string("\"ab\0c\"", 6), "nul in quoted: string discarded"},
 			{std::string("\"ab\0", 4), "nul then eof in quoted: discarded"},
-			{std::string("\"\"\"ab\0c\"\"\"", 10), "nul in raw: string discarded"},
+			{std::string("\"\"\"(ab\0c)\"\"\"", 13), "nul in raw: string discarded"},
 
 			// --- Group 12: structural and unicode edges (should conform) ---
 			{"a { b { c { d { e } } } }", "deep nesting"},

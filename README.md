@@ -31,14 +31,14 @@ unquoted_string
 		# escape sequences inside a quoted string
 		"Escape sequences: \" \n \t \\"
 
-		# a raw string is delimited by 3 or more double quotes,
-		# its content is byte-exact and no escape is processed,
-		# a run of fewer than 3 quotes in the content is literal
-		"""raw string content " "" { } \ /"""
+		# a raw string is delimited by a run of 3 or more double quotes
+		# followed by '(', and closed by ')' followed by a matching run
+		# of quotes; its content is byte-exact and no escape is processed
+		"""(raw string content " "" { } \ /)"""
 
-		# a longer opening run allows shorter quote runs in the content,
-		# up to N-1 consecutive quotes for an N-quote delimiter
-		"""""it has """" quotes"""""
+		# a longer opening run is needed when the content has a quote run
+		# immediately after a ')' that could look like a closing delimiter
+		"""(it has """" quotes)"""
 	}
 }
 ```

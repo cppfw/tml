@@ -96,7 +96,7 @@ class parser
 	size_t sequence_index = 0;
 
 	// for raw strings: the number of consecutive quotes forming the
-	// opening/closing delimiter (N in """...""" for N >= 3)
+	// opening/closing delimiter (N in """( )""" for N >= 3)
 	size_t raw_string_delimiter_length = 0;
 
 	// this variable is used for tracking current nesting level to make checks for detecting malformed tml document

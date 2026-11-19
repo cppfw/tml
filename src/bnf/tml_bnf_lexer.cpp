@@ -97,6 +97,11 @@ void lexer::process(std::string_view input)
 				} else if (quotes == 2) {
 					this->emit_value(std::string{}); // empty quoted string
 				} else {
+					// a raw string is opened by a run of N >= 3 quotes followed by '('
+					if (this->peek() != '(') {
+						throw std::invalid_argument(line_prefix(this->line_) + "raw string must be opened by '('");
+					}
+					this->consume();
 					this->emit_value(this->parse_raw(quotes));
 				}
 			} catch (nul_byte&) {
@@ -236,7 +241,8 @@ std::string lexer::parse_raw(std::size_t n)
 			// A NUL byte terminates the document.
 			throw nul_byte{};
 		}
-		if (c == '"') {
+		if (c == ')') {
+			this->consume();
 			std::size_t run = 0;
 			while (this->peek() == '"') {
 				this->consume();
@@ -245,13 +251,23 @@ std::string lexer::parse_raw(std::size_t n)
 			if (run > n) {
 				throw std::invalid_argument(
 					line_prefix(this->line_) + "a run of more than " + std::to_string(n) +
-					" consecutive quotes in a raw string"
+					" consecutive quotes after ')' in a raw string"
 				);
 			}
 			if (run == n) {
-				break; // the closing quote run
+				break; // the closing delimiter: ')' followed by exactly n quotes
 			}
-			value.append(run, '"'); // run of < n quotes: literal content
+			// run of < n quotes: the ')' and the quotes are literal content
+			value += ')';
+			value.append(run, '"');
+		} else if (c == '"') {
+			// quotes not preceded by ')' are literal content, in runs of any length
+			std::size_t run = 0;
+			while (this->peek() == '"') {
+				this->consume();
+				++run;
+			}
+			value.append(run, '"');
 		} else {
 			this->consume();
 			value += c;

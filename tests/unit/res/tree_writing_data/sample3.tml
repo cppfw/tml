@@ -1,26 +1,32 @@
-# writer representation selection
+# writer representation selection with the """( )""" raw syntax
 
-# raw is chosen when it is shorter than quoted
-"x\"a\"\"b\"\"cx"
-"x\\\\\\\"\\\\\\\"y"
-"q\"\"q\"\"\"q\"\"\"\"q"
-
-# quoted is chosen when it is shorter than raw
+# 7 quotes: raw wins (15 < 16), N=3
+"""(""""""")"""
+# 6a + 6q + ) + 3q: raw wins (26 < 27), N=4
+""""(aaaaaa"""""")""")""""
+# 7q + )): ends with ), raw wins (17 < 18), re-dispatch
+"""(""""""")))"""
+# space: quoted wins (6 < 11)
 "a b"
-
-# tie (15 vs 15): quoted is chosen
-"x\"a\"b\\\"cx"
-
-# values starting / ending with a quote cannot be raw: only quoted
+# 6 quotes: tie 15 = 15, quoted wins
+"\"\"\"a\"\"\""
+# starts with quote: quoted wins (7 < 12)
 "\"abc"
+# ends with quote: quoted wins (7 < 12)
 "abc\""
+# two quotes: quoted wins (4 < 8)
 "\"\""
-
-# carriage return: quoted (5) is shorter than raw (9)
+# carriage return: quoted wins (6 < 11)
 "a\rb"
-
-# empty string
+# empty string: quoted wins (2 < 8)
 ""
-
-# unquoted node with children
+# empty quoted followed by quoted: space needed in minimal
+"a b"
+# quoted followed by raw: no space needed in minimal
+"a b"
+# raw after non-empty quoted: butts directly
+"""(""""""")"""
+# unquoted with children
 child{value}
+# raw in input, writer switches to quoted
+"""(it has """" quotes)"""
