@@ -31,11 +31,10 @@
 		</context>
 
 		<context id="RawString" style-ref="def:string">
-			<start>R"([^"\(]*)(\()</start>
-			<end>(\)\%{1@start})"</end>
+			<start>("{3,})\(</start>
+			<end>\)(\%{1@start})</end>
 			<include>
 				<context id="Delimeter_highlight" sub-pattern="1" where="start" style-ref="def:special-char"/>
-				<context id="Delimeter_highlight" sub-pattern="2" where="start" style-ref="def:special-char"/>
 				<context id="Delimeter_highlight" sub-pattern="1" where="end" style-ref="def:special-char"/>
 			</include>
 		</context>
@@ -93,8 +92,8 @@
 			<include>
 				<context ref="Comment"/>
 				<context ref="MultilineComment"/>
-				<context ref="QuotedString"/>
 				<context ref="RawString"/>
+				<context ref="QuotedString"/>
 				<context ref="Property"/>
 				<context ref="Child"/>
 				<context ref="Numbers"/>

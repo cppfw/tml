@@ -1,14 +1,14 @@
 ttt"test string" "anot/her string" unqu/otedString
 
-R"qwer(qwdqwdwqd wdqw wq dqw d \n \" "  
-	\t } { )qwer"
+"""(qwdqwdwqd wdqw wq dqw d \n \" "  
+	\t } { )"""
 
-R"werwe"wer(
+"""(werwe"(
 
-	R"werwe"wer(
- =R"qweqw("
+	"""(werwe"(
+ ="""(qweqw(
 
- R"qwertc( qdoihowi
+ """( qdoihowi
 
 ef
 few
@@ -17,7 +17,7 @@ ewdwe
 ew 
 ew 
 fwe 
-ehf)qwertc"
+ehf)"""
 
 "string with empty children list"{}unquoted_string_with_empt""y_children_list{qweqw{true}=wewd{true}}afef{}
 

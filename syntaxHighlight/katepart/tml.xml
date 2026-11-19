@@ -17,7 +17,7 @@
       <context name="Normal" lineEndContext="#stay" attribute="Style_Normal">
         <IncludeRules context="Comments"/>
 
-        <RegExpr String="R&quot;([^&quot;\(]*)\(" context="RawStringOpen" lookAhead="true" dynamic="true"/>
+        <RegExpr String="(&quot;{3,})\(" context="RawStringOpen" lookAhead="true" dynamic="true"/>
 
         <DetectChar char="&quot;" context="QuotedString" attribute="Style_QuotedString" />
 
@@ -59,16 +59,12 @@
 
       <context name="RawString" lineEndContext="#stay" attribute="Style_QuotedString" dynamic="true">
         <StringDetect
-           String=")%1&quot;"
+           String=")%1"
            lookAhead="true"
-           context="RawStringClose"
+           context="#pop#pop"
            attribute="Style_QuotedStringEscape"
            dynamic="true"
         />
-      </context>
-
-      <context name="RawStringClose" lineEndContext="#stay" attribute="Style_QuotedStringEscape" dynamic="true">
-        <DetectChar char="&quot;" context="#pop#pop#pop" attribute="Style_QuotedString"/>
       </context>
 
       <context name="Property" attribute="Style_Property">
