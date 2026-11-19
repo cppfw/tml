@@ -34,9 +34,9 @@ std::function<void(const std::string&)> make_test_proc()
 
 		// the etalon must parse back to the same forest
 		const auto etalon_roots = tml::read(
-			std::string_view(
-				reinterpret_cast<const char*>(expected_data.data()), //
-				expected_data.size()
+			std::string(
+				expected_data.begin(),
+				expected_data.end()
 			)
 		);
 
