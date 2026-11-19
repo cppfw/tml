@@ -1,0 +1,31 @@
+"quoted string"
+unquoted_string
+"string with children"{
+	"child 1"
+	Child2
+	"child three"{
+		SubChild1
+		"Subchild two"
+
+		# properties can be expressed as a string with just one child
+		Property1 {Value1}
+		"Property two" {"Value 2"}
+
+		# a # opens a line comment, it runs to the end of the line
+
+		# / is an ordinary character, so URLs can be written without quotes:
+		http://website.com/some/url/*
+
+		# escape sequences inside a quoted string
+		"Escape sequences: \" \n \t \\"
+
+		# a raw string is delimited by 3 or more double quotes,
+		# its content is byte-exact and no escape is processed,
+		# a run of fewer than 3 quotes in the content is literal
+		"""raw string content " "" { } \ /"""
+
+		# a longer opening run allows shorter quote runs in the content,
+		# up to N-1 consecutive quotes for an N-quote delimiter
+		"""""it has """" quotes"""""
+	}
+}

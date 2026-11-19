@@ -1,0 +1,1 @@
+"quoted string"unquoted_string"string with children"{"child 1"Child2"child three"{SubChild1"Subchild two"Property1{Value1}"Property two"{"Value 2"}http://website.com/some/url/*"Escape sequences: \" \n \t \\""raw string content \" \"\" { } \\ /""it has \"\"\"\" quotes"}}

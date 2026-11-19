@@ -4,6 +4,9 @@ tml (text markup language) describes a tree of text strings. The syntax is
 deliberately minimal: there is only one kind of element — a string — and the
 only structure is parent/child nesting via curly braces.
 
+This document is the prose specification. The formal BNF specification of the
+language is in [bnf.md](bnf.md).
+
 ## The basic idea
 
 A **document** is a (possibly empty) sequence of **nodes**. A **node** is a
@@ -229,7 +232,7 @@ string_four"string five"
 		"Escape sequences: \" \n \t \\"
 
 		# raw string: byte-exact, nothing is stripped
-		"""raw string content " """ { } \ / """
+		"""raw string content " { } \ /"""
 		"""bla bla {} "" and "quoted" bla bla"""
 
 		# a raw string's value is exactly the bytes between the delimiters
