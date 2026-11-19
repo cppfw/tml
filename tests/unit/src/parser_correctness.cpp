@@ -138,6 +138,15 @@ const tst::set set("parser_correctness", [](tst::suite& suite) {
 			{								 "\"\"\"(a\"\"b)\"\"\"",                      {{"a\"\"b"}}},
 			{				"\"\"\"(hello)\"\"\" \"\"\"(world)\"\"\"",            {{"hello"}, {"world"}}}, // 30
 
+			// raw strings: parentheses and quotes at the boundaries of the content
+			{						"\"\"\"(hi))\"\"\"",                    {{"hi)"}}},
+			{						"\"\"\"((hello)\"\"\"",                  {{"(hello"}}},
+			{						"\"\"\"(a\")\"\"\"",                     {{"a\""}}},
+			{						"\"\"\"(a\"))\"\"\"",                     {{"a\")"}}},
+			{						"\"\"\"(\"b)\"\"\"",                     {{"\"b"}}},
+			{						"\"\"\"())\"\"\"",                      {{")"}}}, // 36
+			{						"\"\"\"(()\"\"\"",                      {{"("}}},
+
 			// / and // are ordinary characters in unquoted strings (URLs, slashes)
 			{											"hello//",                     {{"hello//"}}},
 			{										  "hello//\n",                     {{"hello//"}}}, // 40
