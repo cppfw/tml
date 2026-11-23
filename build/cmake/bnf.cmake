@@ -10,10 +10,11 @@ if(IS_VCPKG_PORT_BUILD)
 endif()
 
 # tml-bnf is a development / testing aid that is only exercised by the bnf
-# conformance test, so skip it entirely on ios. this also avoids requiring
-# bison for the ios build: the xcode generator runs custom commands in script
-# phases with a minimal PATH in which only the ancient system bison is found.
-if(IOS)
+# conformance test, so build it only on linux. this also avoids requiring
+# bison on macos / windows / ios: the xcode generator runs custom commands in
+# script phases with a minimal PATH in which only the ancient system bison is
+# found, and bison is not pre-installed on the windows image.
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
     return()
 endif()
 
