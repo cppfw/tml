@@ -14,7 +14,7 @@ endif()
 # bison on macos / windows / ios: the xcode generator runs custom commands in
 # script phases with a minimal PATH in which only the ancient system bison is
 # found, and bison is not pre-installed on the windows image.
-if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
+if(NOT LINUX)
     return()
 endif()
 
