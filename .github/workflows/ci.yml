@@ -481,7 +481,16 @@ jobs:
     defaults:
       run:
         shell: powershell
-    name: vcpkg - windows
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - Debug
+          - Release
+        arch:
+          - Win32
+          - x64
+    name: vcpkg - windows - ${{ matrix.arch }} | ${{ matrix.config }}
     steps:
     - name: git clone
       uses: actions/checkout@v4
@@ -508,18 +517,17 @@ jobs:
     - name: test vcpkg port - build
       run: |
         cd build/vcpkg/test
-        cmake .
-        cmake --build . --parallel
-
+        cmake . -A ${{ matrix.arch }}
+        cmake --build . --parallel --config ${{ matrix.config }}
     - name: test vcpkg port - test
       run: |
         cd build/vcpkg/test
-        cmake --build . --target run-library-tests
+        cmake --build . --config ${{ matrix.config }} --target run-library-tests
     - name: upload vcpkg logs to artifacts
       if: always() # even if previous steps fail, this one needs to be run
       uses: actions/upload-artifact@v4
       with:
-        name: vcpkg_windows_logs
+        name: vcpkg_windows_${{ matrix.arch }}_${{ matrix.config }}_logs
         # NOTE: upload only first level buildtrees subdir logs: on windows actions/upload-artifact fails with a stat() EPERM error when traversing too deep into dependency source trees
         path: |
           vcpkg-installation/buildtrees/*/*.log
