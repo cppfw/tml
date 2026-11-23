@@ -9,6 +9,14 @@ if(IS_VCPKG_PORT_BUILD)
     return()
 endif()
 
+# tml-bnf is a development / testing aid that is only exercised by the bnf
+# conformance test, so skip it entirely on ios. this also avoids requiring
+# bison for the ios build: the xcode generator runs custom commands in script
+# phases with a minimal PATH in which only the ancient system bison is found.
+if(IOS)
+    return()
+endif()
+
 set(bnf_src_dir ${CMAKE_CURRENT_LIST_DIR}/../../src/bnf)
 set(bnf_bin_dir ${CMAKE_CURRENT_BINARY_DIR}/bnf)
 
@@ -59,10 +67,6 @@ set_target_properties(tml-bnf PROPERTIES SKIP_INSTALL TRUE)
 
 # ================
 # = bnf tests    =
-
-if(IOS)
-    return()
-endif()
 
 set(bnf_tests_srcs)
 myci_add_source_files(bnf_tests_srcs

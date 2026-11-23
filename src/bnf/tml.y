@@ -23,6 +23,17 @@
 %define api.parser.class { tml_bnf_parser }
 %define parse.error verbose
 
+%code top {
+	// bison 3.x generates an error counter member (yynerrs_) that is written
+	// but never read, which triggers -Wunused-but-set-variable; this project
+	// builds with warnings as errors, so suppress it for the generated file.
+	// MSVC is excluded because it does not diagnose this and would warn about
+	// the unknown GCC pragma.
+#  if defined(__GNUC__) || defined(__clang__)
+#    pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#  endif
+}
+
 %code requires {
 	#include <string>
 	#include <tml/tree.hpp>
