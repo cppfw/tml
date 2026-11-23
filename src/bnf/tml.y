@@ -23,6 +23,10 @@
 %define api.parser.class { tml_bnf_parser }
 %define parse.error verbose
 
+%code top {
+	#include <utki/debug.hpp>
+}
+
 %code requires {
 	#include <string>
 	#include <tml/tree.hpp>
@@ -58,6 +62,13 @@
 document
 	: forest
 		{
+			// read yynerrs_ (the number of syntax errors): it is set by the
+			// generated parse() but otherwise unused, and this project builds
+			// with warnings as errors, so clang would reject the generated
+			// file with -Wunused-but-set-variable. at this point it is always
+			// 0, as any syntax error aborts the parse via error() before this
+			// action runs
+			utki::logcat_debug("number of syntax errors:", yynerrs_);
 			if (yy::current_grammar) {
 				yy::current_grammar->result = std::move($1);
 			}
