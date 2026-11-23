@@ -24,14 +24,7 @@
 %define parse.error verbose
 
 %code top {
-	// bison 3.x generates an error counter member (yynerrs_) that is written
-	// but never read, which triggers -Wunused-but-set-variable; this project
-	// builds with warnings as errors, so suppress it for the generated file.
-	// MSVC is excluded because it does not diagnose this and would warn about
-	// the unknown GCC pragma.
-#  if defined(__GNUC__) || defined(__clang__)
-#    pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#  endif
+	#include <utki/debug.hpp>
 }
 
 %code requires {
@@ -69,6 +62,13 @@
 document
 	: forest
 		{
+			// read yynerrs_ (the number of syntax errors): it is set by the
+			// generated parse() but otherwise unused, and this project builds
+			// with warnings as errors, so clang would reject the generated
+			// file with -Wunused-but-set-variable. at this point it is always
+			// 0, as any syntax error aborts the parse via error() before this
+			// action runs
+			utki::logcat_debug("number of syntax errors:", yynerrs_);
 			if (yy::current_grammar) {
 				yy::current_grammar->result = std::move($1);
 			}
